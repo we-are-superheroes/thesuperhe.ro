@@ -1,0 +1,322 @@
+// =============================================================================
+// Climate Collaboration Platform — Prisma Schema
+// Stack: Next.js · PostgreSQL · Prisma ORM
+// =============================================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// =============================================================================
+// ENUMS
+// =============================================================================
+
+enum UserRole {
+  member
+  admin
+}
+
+enum OrgType {
+  ngo
+  academic
+  corporate
+  government
+  community
+  other
+}
+
+enum OrgRole {
+  owner
+  admin
+  member
+}
+
+enum Proficiency {
+  beginner
+  intermediate
+  expert
+}
+
+enum ProjectStatus {
+  draft
+  active
+  completed
+  archived
+}
+
+enum StepStatus {
+  not_started
+  in_progress
+  needs_help
+  done
+  skipped
+}
+
+enum ContributionStatus {
+  pending
+  active
+  completed
+  withdrawn
+}
+
+enum ContributionRole {
+  lead
+  contributor
+  advisor
+  observer
+}
+
+// =============================================================================
+// USERS
+// =============================================================================
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  name       String
+  avatarUrl  String?  @map("avatar_url")
+  bio        String?
+  location   String?
+  timezone   String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  skills          UserSkill[]
+  organisations   UserOrganisation[]
+  contributions   Contribution[]
+  blueprints      Blueprint[]
+  assignedSteps   ProjectStep[]      @relation("AssignedSteps")
+
+  @@map("users")
+}
+
+// =============================================================================
+// SKILLS
+// =============================================================================
+
+model Skill {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  category    String
+  description String?
+
+  userSkills  UserSkill[]
+  stepSkills  StepSkill[]
+
+  @@map("skills")
+}
+
+// Junction: users ↔ skills
+model UserSkill {
+  userId    String   @map("user_id")
+  skillId   String   @map("skill_id")
+
+  proficiency Proficiency
+  isSeeking   Boolean  @default(true) @map("is_seeking")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  skill Skill @relation(fields: [skillId], references: [id], onDelete: Cascade)
+
+  @@id([userId, skillId])
+  @@map("user_skills")
+}
+
+// =============================================================================
+// ORGANISATIONS
+// =============================================================================
+
+model Organisation {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  type        OrgType
+  description String?
+  logoUrl     String?  @map("logo_url")
+  website     String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  members  UserOrganisation[]
+  projects Project[]
+
+  @@map("organisations")
+}
+
+// Junction: users ↔ organisations
+model UserOrganisation {
+  userId String @map("user_id")
+  orgId  String @map("org_id")
+
+  role     OrgRole
+  joinedAt DateTime @default(now()) @map("joined_at")
+
+  user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  org  Organisation @relation(fields: [orgId], references: [id], onDelete: Cascade)
+
+  @@id([userId, orgId])
+  @@map("user_organisations")
+}
+
+// =============================================================================
+// PROJECT TYPES
+// =============================================================================
+
+model ProjectType {
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
+  icon        String?
+
+  blueprints Blueprint[]
+  projects   Project[]
+
+  @@map("project_types")
+}
+
+// =============================================================================
+// BLUEPRINTS
+// =============================================================================
+
+model Blueprint {
+  id            String   @id @default(uuid())
+  createdById   String   @map("created_by")
+  projectTypeId String?  @map("project_type_id")
+
+  title        String
+  description  String
+  estimatedHrs Int?     @map("estimated_hrs")
+  reuseCount   Int      @default(0) @map("reuse_count")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  createdBy   User         @relation(fields: [createdById], references: [id])
+  projectType ProjectType? @relation(fields: [projectTypeId], references: [id])
+  steps       BlueprintStep[]
+  projects    Project[]
+
+  @@map("blueprints")
+}
+
+model BlueprintStep {
+  id          String @id @default(uuid())
+  blueprintId String @map("blueprint_id")
+
+  title         String
+  description   String?
+  order         Int
+  estimatedHrs  Int?       @map("estimated_hrs")
+  statusDefault StepStatus @default(not_started) @map("status_default")
+  createdAt     DateTime   @default(now()) @map("created_at")
+  updatedAt     DateTime   @updatedAt @map("updated_at")
+
+  blueprint    Blueprint     @relation(fields: [blueprintId], references: [id], onDelete: Cascade)
+  skills       StepSkill[]
+  projectSteps ProjectStep[]
+
+  @@map("blueprint_steps")
+}
+
+// =============================================================================
+// PROJECTS
+// =============================================================================
+
+model Project {
+  id            String  @id @default(uuid())
+  orgId         String? @map("organisation_id")
+  blueprintId   String? @map("blueprint_id")
+  projectTypeId String? @map("project_type_id")
+
+  title             String
+  description       String
+  status            ProjectStatus @default(draft)
+  location          String?
+  remoteOk          Boolean  @default(true) @map("remote_ok")
+  timeCommitmentHrs Int?     @map("time_commitment_hrs")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  organisation Organisation? @relation(fields: [orgId], references: [id])
+  blueprint    Blueprint?    @relation(fields: [blueprintId], references: [id])
+  projectType  ProjectType?  @relation(fields: [projectTypeId], references: [id])
+  steps        ProjectStep[]
+  contributions Contribution[]
+
+  @@map("projects")
+}
+
+// Live steps on a specific project.
+// blueprintStepId traces origin when instantiated from a blueprint; null if ad hoc.
+model ProjectStep {
+  id              String  @id @default(uuid())
+  projectId       String  @map("project_id")
+  blueprintStepId String? @map("blueprint_step_id")
+  assignedToId    String? @map("assigned_to")
+
+  title        String
+  description  String?
+  order        Int
+  estimatedHrs Int?       @map("estimated_hrs")
+  status       StepStatus @default(not_started)
+  dueDate      DateTime?  @map("due_date")
+  completedAt  DateTime?  @map("completed_at")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  project       Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  blueprintStep BlueprintStep? @relation(fields: [blueprintStepId], references: [id])
+  assignedTo    User?          @relation("AssignedSteps", fields: [assignedToId], references: [id])
+  skills        StepSkill[]
+  contributions Contribution[]
+
+  @@map("project_steps")
+}
+
+// =============================================================================
+// STEP SKILLS
+// Exactly one of blueprintStepId or projectStepId will be non-null.
+// =============================================================================
+
+model StepSkill {
+  id              String  @id @default(uuid())
+  skillId         String  @map("skill_id")
+  blueprintStepId String? @map("blueprint_step_id")
+  projectStepId   String? @map("project_step_id")
+
+  context String?
+
+  skill         Skill          @relation(fields: [skillId], references: [id], onDelete: Cascade)
+  blueprintStep BlueprintStep? @relation(fields: [blueprintStepId], references: [id], onDelete: Cascade)
+  projectStep   ProjectStep?   @relation(fields: [projectStepId], references: [id], onDelete: Cascade)
+
+  @@map("step_skills")
+}
+
+// =============================================================================
+// CONTRIBUTIONS
+// =============================================================================
+
+model Contribution {
+  id            String  @id @default(uuid())
+  userId        String  @map("user_id")
+  projectId     String  @map("project_id")
+  projectStepId String? @map("project_step_id")
+
+  role             ContributionRole
+  status           ContributionStatus @default(pending)
+  hoursContributed Int                @default(0) @map("hours_contributed")
+  joinedAt         DateTime           @default(now()) @map("joined_at")
+  updatedAt        DateTime           @updatedAt @map("updated_at")
+
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectStep ProjectStep? @relation(fields: [projectStepId], references: [id])
+
+  @@unique([userId, projectId, projectStepId])
+  @@map("contributions")
+}
