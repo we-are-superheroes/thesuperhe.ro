@@ -11,7 +11,7 @@ export type {
   ProjectStep,
   StepSkill,
   Contribution,
-} from '@/app/generated/prisma'
+} from '@prisma/client'
 
 export type {
   UserRole,
@@ -22,7 +22,7 @@ export type {
   StepStatus,
   ContributionStatus,
   ContributionRole,
-} from '@/app/generated/prisma'
+} from '@prisma/client'
 
 export type ServerActionResult<T = void> =
   | { success: true; data: T }
