@@ -1,26 +1,137 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* ============================================================
+   THE SUPERHERO — Design System Tokens (Tailwind v4)
+   ============================================================ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* --- Font Families --- */
+  --font-display: var(--font-dm-serif-display), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-dm-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), "Courier New", monospace;
+
+  /* --- Primary Blue Scale --- */
+  --color-blue-950: #060D18;
+  --color-blue-900: #0E1A2B;
+  --color-blue-800: #152236;
+  --color-blue-700: #1E3148;
+  --color-blue-600: #1B3A6B;
+  --color-blue-500: #2E5FAA;
+  --color-blue-400: #4A7FD4;
+  --color-blue-300: #7AAEE8;
+  --color-blue-200: #B2D0F5;
+  --color-blue-100: #E0ECFD;
+
+  /* --- Amber / Accent Scale --- */
+  --color-amber-900: #2E1A00;
+  --color-amber-800: #5C3600;
+  --color-amber-700: #8A5200;
+  --color-amber-600: #B86E00;
+  --color-amber-500: #F4A535;
+  --color-amber-400: #F7BD64;
+  --color-amber-300: #FAD08F;
+  --color-amber-200: #FCE4BB;
+  --color-amber-100: #FEF4E2;
+
+  /* --- Neutral Blue-Gray Scale --- */
+  --color-neutral-950: #080C12;
+  --color-neutral-900: #111825;
+  --color-neutral-800: #1C2739;
+  --color-neutral-700: #2A3A52;
+  --color-neutral-600: #3D5170;
+  --color-neutral-500: #5A7090;
+  --color-neutral-400: #8097B5;
+  --color-neutral-300: #A8BCCE;
+  --color-neutral-200: #CDDAE8;
+  --color-neutral-100: #EBF1F7;
+  --color-neutral-50: #F5F8FB;
+
+  /* --- Green / Success --- */
+  --color-green-700: #1A5C40;
+  --color-green-500: #3DAF7C;
+  --color-green-300: #7DD3B0;
+  --color-green-100: #D4F3E8;
+
+  /* --- Red / Error --- */
+  --color-red-700: #7A1A1A;
+  --color-red-500: #E05252;
+  --color-red-300: #F09898;
+  --color-red-100: #FDEAEA;
+
+  /* --- Border Radius --- */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --radius-xl: 8px;
+  --radius-2xl: 12px;
+  --radius-pill: 999px;
+
+  /* --- Shadows (blue-tinted) --- */
+  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.25);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.45);
+  --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.55);
+  --shadow-glow-blue: 0 0 24px rgba(46, 95, 170, 0.4);
+  --shadow-glow-amber: 0 0 24px rgba(244, 165, 53, 0.35);
+
+  /* --- Animation --- */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-standard: 250ms;
+  --duration-slow: 400ms;
+
+  /* --- Semantic Colors (CSS vars referenced via arbitrary values) --- */
+  --color-bg-base: #0E1A2B;
+  --color-bg-surface: #152236;
+  --color-bg-surface-2: #1E3148;
+  --color-bg-surface-3: #1B3A6B;
+  --color-fg-primary: #EBF1F7;
+  --color-fg-secondary: #A8BCCE;
+  --color-fg-tertiary: #8097B5;
+  --color-fg-muted: #5A7090;
+  --color-fg-faint: #3D5170;
+  --color-brand-primary: #2E5FAA;
+  --color-brand-accent: #F4A535;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg-base);
+  color: var(--color-fg-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-neutral-700);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neutral-600);
+}
+
+/* Focus ring */
+:focus-visible {
+  outline: 2px solid var(--color-brand-accent);
+  outline-offset: 2px;
 }
