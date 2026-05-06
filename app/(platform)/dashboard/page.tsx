@@ -1,246 +1,746 @@
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
-import {
-  FolderOpen,
-  Clock,
-  Zap,
-  Target,
-  ArrowRight,
-  Leaf,
-  Waves,
-  Globe,
-  Users,
-} from 'lucide-react'
 import Link from 'next/link'
+import {
+  Search,
+  Bell,
+  Settings,
+  Plus,
+  ArrowRight,
+  Clock,
+  FolderOpen,
+  CheckSquare,
+  Star,
+  Check,
+} from 'lucide-react'
+
+/* ================================================================
+   DATA FETCHING
+   ================================================================ */
+
+async function getDashboardData(userId: string) {
+  const [user, contributions] = await Promise.all([
+    db.user.findUnique({
+      where: { id: userId },
+      select: {
+        name: true,
+        createdAt: true,
+        skills: {
+          where: { isSeeking: true },
+          select: {
+            skill: { select: { id: true, name: true } },
+          },
+        },
+      },
+    }),
+    db.contribution.findMany({
+      where: { userId, status: { in: ['active', 'pending'] } },
+      select: {
+        role: true,
+        hoursContributed: true,
+        projectId: true,
+        projectStepId: true,
+        project: {
+          select: {
+            id: true,
+            title: true,
+            location: true,
+            projectType: { select: { name: true } },
+            steps: {
+              select: { id: true, status: true },
+            },
+          },
+        },
+      },
+    }),
+  ])
+
+  // Unique projects the user contributes to
+  const projectMap = new Map<string, typeof contributions[number]>()
+  for (const c of contributions) {
+    if (!projectMap.has(c.projectId)) {
+      projectMap.set(c.projectId, c)
+    }
+  }
+  const pinnedProjects = Array.from(projectMap.values()).slice(0, 3)
+
+  // Quick stats
+  const projectCount = projectMap.size
+  const totalHours = contributions.reduce((s, c) => s + c.hoursContributed, 0)
+
+  // Get steps from contributed projects for "next steps"
+  const projectIds = Array.from(projectMap.keys())
+  let mySteps: Array<{
+    id: string
+    title: string
+    status: string
+    estimatedHrs: number | null
+    project: { title: string }
+    skills: Array<{ skill: { name: string } }>
+  }> = []
+
+  if (projectIds.length > 0) {
+    mySteps = await db.projectStep.findMany({
+      where: {
+        projectId: { in: projectIds },
+        status: { in: ['needs_help', 'in_progress', 'not_started'] },
+      },
+      select: {
+        id: true,
+        title: true,
+        status: true,
+        estimatedHrs: true,
+        project: { select: { title: true } },
+        skills: { select: { skill: { select: { name: true } } } },
+      },
+      orderBy: { order: 'asc' },
+      take: 5,
+    })
+  }
+
+  // Sort steps by status priority: needs_help > in_progress > not_started
+  const statusPriority: Record<string, number> = {
+    needs_help: 0,
+    in_progress: 1,
+    not_started: 2,
+  }
+  mySteps.sort((a, b) => (statusPriority[a.status] ?? 99) - (statusPriority[b.status] ?? 99))
+
+  // Open steps count (across all contributed projects)
+  let openStepCount = 0
+  for (const c of pinnedProjects) {
+    openStepCount += c.project.steps.filter(
+      (s) => s.status === 'needs_help' || s.status === 'in_progress' || s.status === 'not_started',
+    ).length
+  }
+
+  // Suggested projects (skill match) — only if user has skills
+  const userSkillIds = user?.skills.map((us) => us.skill.id) ?? []
+  let suggestedProjects: Array<{
+    id: string
+    title: string
+    location: string | null
+    projectType: { name: string } | null
+    matchingSkills: string[]
+    totalSkillsNeeded: number
+    matchPercent: number
+  }> = []
+
+  if (userSkillIds.length > 0) {
+    // Find projects that need the user's skills and they're not already contributing to
+    const candidateProjects = await db.project.findMany({
+      where: {
+        status: 'active',
+        id: { notIn: projectIds.length > 0 ? projectIds : ['__none__'] },
+        steps: {
+          some: {
+            status: 'needs_help',
+            skills: {
+              some: { skillId: { in: userSkillIds } },
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        location: true,
+        projectType: { select: { name: true } },
+        steps: {
+          select: {
+            skills: {
+              select: {
+                skill: { select: { id: true, name: true } },
+              },
+            },
+          },
+        },
+      },
+      take: 6,
+    })
+
+    suggestedProjects = candidateProjects.map((p) => {
+      const allSkillIds = new Set<string>()
+      const allSkillNames = new Map<string, string>()
+      const matchingSkillNames: string[] = []
+
+      for (const step of p.steps) {
+        for (const ss of step.skills) {
+          allSkillIds.add(ss.skill.id)
+          allSkillNames.set(ss.skill.id, ss.skill.name)
+          if (userSkillIds.includes(ss.skill.id) && !matchingSkillNames.includes(ss.skill.name)) {
+            matchingSkillNames.push(ss.skill.name)
+          }
+        }
+      }
+
+      const matchPercent = allSkillIds.size > 0
+        ? Math.round((matchingSkillNames.length / allSkillIds.size) * 100)
+        : 0
+
+      return {
+        id: p.id,
+        title: p.title,
+        location: p.location,
+        projectType: p.projectType,
+        matchingSkills: matchingSkillNames,
+        totalSkillsNeeded: allSkillIds.size,
+        matchPercent,
+      }
+    }).sort((a, b) => b.matchPercent - a.matchPercent).slice(0, 3)
+  }
+
+  // Get some sample skills for the empty state skill chips
+  const sampleSkills = await db.skill.findMany({
+    select: { name: true },
+    take: 8,
+  })
+
+  return {
+    user,
+    pinnedProjects,
+    mySteps,
+    suggestedProjects,
+    projectCount,
+    openStepCount,
+    totalHours,
+    userSkillIds,
+    sampleSkills,
+  }
+}
+
+/* ================================================================
+   PAGE COMPONENT
+   ================================================================ */
 
 export default async function DashboardPage() {
   const { userId } = await auth()
-  const user = await db.user.findUnique({
-    where: { id: userId! },
-    select: { name: true },
-  })
+
+  const {
+    user,
+    pinnedProjects,
+    mySteps,
+    suggestedProjects,
+    projectCount,
+    openStepCount,
+    totalHours,
+    userSkillIds,
+    sampleSkills,
+  } = await getDashboardData(userId!)
 
   const firstName = user?.name?.split(' ')[0] ?? 'Hero'
+  const hasSkills = userSkillIds.length > 0
+  const hasProjects = projectCount > 0
+  const isNewUser = !hasSkills && !hasProjects
+
+  // Determine setup checklist completion
+  const checklistDone = {
+    account: true, // they're logged in
+    skills: hasSkills,
+    project: hasProjects,
+  }
+  const checklistCount = [checklistDone.account, checklistDone.skills, checklistDone.project].filter(Boolean).length
 
   return (
-    <div className="p-7 pb-16">
-      {/* Greeting */}
-      <div className="mb-7">
-        <h1 className="mb-1 font-display text-[28px] text-fg-primary">
-          Welcome back,{' '}
-          <span className="italic text-amber-500">{firstName}</span>
-        </h1>
-        <p className="text-sm text-neutral-400">
-          You&apos;re making an impact. Keep going.
-        </p>
-      </div>
-
-      {/* Stats */}
-      <div className="mb-7 flex flex-wrap gap-3">
-        <StatCard
-          value="0"
-          suffix=" active"
-          label="Projects"
-          icon={FolderOpen}
-          accentColor="#4A7FD4"
-        />
-        <StatCard
-          value="0"
-          suffix="h"
-          label="Contributed"
-          icon={Clock}
-          accentColor="#3DAF7C"
-        />
-        <StatCard
-          value="0"
-          suffix=""
-          label="Impact score"
-          icon={Zap}
-          accentColor="#F4A535"
-        />
-        <StatCard
-          value="--"
-          suffix="%"
-          label="Match rate"
-          icon={Target}
-          accentColor="#3DAF7C"
-        />
-      </div>
-
-      {/* Getting started */}
-      <div className="mb-6">
-        <div className="mb-3.5 text-[13px] font-semibold uppercase tracking-[0.05em] text-neutral-300">
-          Get started
+    <>
+      {/* Topbar */}
+      <div className="flex items-center justify-between gap-6 border-b border-white/[0.08] px-10 py-5">
+        <div className="relative max-w-[480px] flex-1">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-tertiary" />
+          <input
+            type="text"
+            placeholder="Search projects, steps, or people..."
+            className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
+          />
         </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <ActionCard
-            title="Complete your profile"
-            description="Add your skills and availability to get matched"
-            href="/profile"
-            icon={Target}
-          />
-          <ActionCard
-            title="Discover projects"
-            description="Browse open sustainability missions"
-            href="/projects"
-            icon={Globe}
-          />
-          <ActionCard
-            title="Browse blueprints"
-            description="Start a proven project in your community"
-            href="/blueprints"
-            icon={Leaf}
-          />
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            className="relative flex size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
+            title="Notifications"
+          >
+            <Bell className="size-[18px]" />
+          </button>
+          <button
+            type="button"
+            className="flex size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
+            title="Settings"
+          >
+            <Settings className="size-[18px]" />
+          </button>
+          <Link
+            href="/projects/new"
+            className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
+          >
+            <Plus className="size-3.5" strokeWidth={2.5} />
+            Start a project
+          </Link>
         </div>
       </div>
 
-      {/* Featured projects placeholder */}
-      <div>
-        <div className="mb-3.5 text-[13px] font-semibold uppercase tracking-[0.05em] text-neutral-300">
-          Recommended for you
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {SAMPLE_PROJECTS.map((p) => (
-            <div
-              key={p.title}
-              className="group cursor-pointer overflow-hidden rounded-[14px] border border-white/[0.08] bg-bg-surface-2 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/[0.13] hover:shadow-md"
-            >
-              <div
-                className="flex h-[88px] items-center justify-center"
-                style={{ background: p.grad }}
-              >
-                <p.icon
-                  className="size-9 text-white/15"
-                  strokeWidth={1.5}
-                />
-              </div>
-              <div className="p-4">
-                <div className="mb-1.5">
-                  <span className="inline-flex items-center rounded-full border border-blue-400/30 bg-blue-400/15 px-2.5 py-0.5 text-[10px] font-semibold tracking-wide text-blue-300">
-                    {p.category}
-                  </span>
-                </div>
-                <div className="mb-1 text-sm font-semibold text-fg-primary">
-                  {p.title}
-                </div>
-                <div className="mb-3 text-xs leading-relaxed text-neutral-400">
-                  {p.desc}
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 text-[11px] text-neutral-500">
-                    <Users className="size-3" />
-                    {p.contributors} contributors
-                  </div>
-                  <span className="inline-flex items-center gap-1 rounded-full border border-green-500/25 bg-green-500/[0.12] px-2 py-0.5 text-[10px] font-semibold text-green-500">
-                    <span className="size-[5px] rounded-full bg-green-500" />
-                    Open
-                  </span>
-                </div>
-              </div>
+      {/* Content */}
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-12 overflow-y-auto p-10">
+        {/* ── Greeting ── */}
+        <section className="flex items-end justify-between gap-8">
+          <div>
+            <h1 className="mb-3 font-display text-[clamp(36px,4vw,52px)] font-normal leading-none tracking-tight">
+              {hasProjects ? 'Welcome back,' : 'Welcome,'}
+              <br />
+              <em className="italic text-amber-500">{firstName}.</em>
+            </h1>
+            {hasProjects ? (
+              <p className="max-w-[560px] text-lg leading-relaxed text-fg-secondary">
+                You have {openStepCount} step{openStepCount !== 1 ? 's' : ''} across {projectCount} project{projectCount !== 1 ? 's' : ''}.
+                {openStepCount > 0 && (
+                  <strong className="font-semibold text-amber-500">
+                    {' '}Some need help right now.
+                  </strong>
+                )}
+              </p>
+            ) : (
+              <p className="max-w-[560px] text-lg leading-relaxed text-fg-secondary">
+                You&apos;re all set up — now let&apos;s find you something to work on. Tell us what you&apos;re good at, and we&apos;ll match you to projects that need exactly that.
+              </p>
+            )}
+          </div>
+          <div className="flex gap-8 rounded-2xl border border-white/[0.08] bg-bg-surface px-6 py-5">
+            <QuickStat value={projectCount} label="Projects" dimIfZero />
+            <QuickStat value={openStepCount} label="Open steps" dimIfZero />
+            <QuickStat value={totalHours} label="Contributed" suffix="h" dimIfZero />
+          </div>
+        </section>
+
+        {/* ── Setup Checklist (new users only) ── */}
+        {isNewUser && (
+          <section>
+            <SectionHeader
+              eyebrow="Get started"
+              title={<>Three quick things, and you&apos;re <em className="italic text-amber-500">in</em>.</>}
+              rightContent={
+                <span className="text-sm text-fg-tertiary">{checklistCount} of 3 done</span>
+              }
+            />
+            <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface">
+              <ChecklistRow
+                done={checklistDone.account}
+                title="Create your account"
+                description={`Welcome, ${firstName}.`}
+                ctaLabel="Done"
+              />
+              <ChecklistRow
+                done={checklistDone.skills}
+                title="Add your skills"
+                description="Pick the things you're good at — and want to use. Takes ~2 minutes."
+                ctaLabel="Add skills"
+                href="/profile"
+              />
+              <ChecklistRow
+                done={checklistDone.project}
+                title="Join your first project"
+                description="Browse open projects, or claim a single step to start small."
+                ctaLabel="Browse projects"
+                href="/projects"
+                isLast
+              />
             </div>
-          ))}
-        </div>
+          </section>
+        )}
+
+        {/* ── Pinned Projects ── */}
+        <section>
+          {hasProjects ? (
+            <>
+              <SectionHeader
+                eyebrow="Pinned projects"
+                title={<>The work you&apos;re <em className="italic text-amber-500">closest</em> to.</>}
+                linkLabel="See all my projects"
+                linkHref="/my-projects"
+              />
+              <div className="grid grid-cols-3 gap-5">
+                {pinnedProjects.map((c, i) => {
+                  const steps = c.project.steps
+                  const doneCount = steps.filter((s) => s.status === 'done').length
+                  const totalSteps = steps.length
+                  const progressPct = totalSteps > 0 ? Math.round((doneCount / totalSteps) * 100) : 0
+                  const needsHelpCount = steps.filter((s) => s.status === 'needs_help').length
+
+                  return (
+                    <Link
+                      key={c.projectId}
+                      href={`/projects/${c.projectId}`}
+                      className="group flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface transition-all duration-standard hover:-translate-y-0.5 hover:border-neutral-600 hover:shadow-md"
+                    >
+                      <div className={`relative aspect-[16/8] overflow-hidden ${PIN_GRADIENTS[i % PIN_GRADIENTS.length]}`}>
+                        <span className="absolute left-3 top-3 rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
+                          {c.role}
+                        </span>
+                        {needsHelpCount > 0 && (
+                          <span className="absolute right-3 top-3 flex items-center gap-[5px] rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[11px] font-semibold text-amber-500 backdrop-blur-sm">
+                            <span className="size-[5px] rounded-full bg-amber-500 shadow-[0_0_5px_var(--color-amber-500)]" />
+                            {needsHelpCount} need{needsHelpCount === 1 ? 's' : ''} help
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex flex-1 flex-col gap-3 p-5">
+                        <span className="text-xs tracking-tight text-fg-tertiary">
+                          {c.project.projectType?.name ?? 'Project'}{c.project.location ? ` · ${c.project.location}` : ''}
+                        </span>
+                        <h3 className="font-display text-xl leading-tight">{c.project.title}</h3>
+                        <div className="mt-auto flex flex-col gap-2">
+                          <div className="flex justify-between text-xs text-fg-tertiary">
+                            <span>Progress</span>
+                            <span>
+                              <strong className="font-semibold text-fg-primary">{progressPct}%</strong> · {doneCount} of {totalSteps} steps
+                            </span>
+                          </div>
+                          <div className="h-1 overflow-hidden rounded-sm bg-bg-surface-2">
+                            <div
+                              className="h-full rounded-sm bg-gradient-to-r from-amber-500 to-amber-400"
+                              style={{ width: `${progressPct}%` }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
+            </>
+          ) : (
+            <>
+              <SectionHeader eyebrow="Pinned projects" title="No projects yet." />
+              <EmptyState
+                icon={FolderOpen}
+                title="Pin a project to keep it close."
+                description="Once you join a project, pin it here for quick access. You can also browse what's live right now and find one that fits."
+                actions={
+                  <>
+                    <Link
+                      href="/projects"
+                      className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
+                    >
+                      Browse projects
+                      <ArrowRight className="size-3.5" strokeWidth={2.5} />
+                    </Link>
+                    <Link
+                      href="/projects/new"
+                      className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
+                    >
+                      Start your own project
+                    </Link>
+                  </>
+                }
+              />
+            </>
+          )}
+        </section>
+
+        {/* ── Next Steps ── */}
+        <section>
+          {mySteps.length > 0 ? (
+            <>
+              <SectionHeader
+                eyebrow="Your next steps"
+                title="Pick one, ship one."
+                linkLabel={`View all ${openStepCount} steps`}
+                linkHref="/my-steps"
+              />
+              <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface">
+                {mySteps.map((step, i) => (
+                  <div
+                    key={step.id}
+                    className={`grid cursor-pointer grid-cols-[auto_1fr_auto_auto_auto] items-center gap-5 px-6 py-5 transition-colors duration-fast hover:bg-bg-surface-2 ${i < mySteps.length - 1 ? 'border-b border-white/[0.08]' : ''}`}
+                  >
+                    <StepStatusIndicator status={step.status} />
+                    <div className="flex min-w-0 flex-col gap-1">
+                      <span className="truncate text-base font-medium text-fg-primary">
+                        {step.title}
+                      </span>
+                      <span className="truncate text-xs text-fg-tertiary">
+                        {step.project.title}
+                      </span>
+                    </div>
+                    {step.skills[0] && (
+                      <span className="whitespace-nowrap rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-1 text-xs text-fg-secondary">
+                        {step.skills[0].skill.name}
+                      </span>
+                    )}
+                    {step.estimatedHrs != null && (
+                      <span className="flex items-center gap-[5px] whitespace-nowrap text-xs text-fg-tertiary">
+                        <Clock className="size-3" />
+                        ~{step.estimatedHrs}h
+                      </span>
+                    )}
+                    <span className="flex items-center gap-1 text-sm font-medium text-amber-500">
+                      Open
+                      <ArrowRight className="size-3" strokeWidth={2.5} />
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <SectionHeader eyebrow="Your next steps" title="Nothing on your plate yet." />
+              <EmptyState
+                icon={CheckSquare}
+                title="Your steps will show up here."
+                description="Once you claim a step on a project, it'll appear here so you can track what's next. Even a 1-hour task counts."
+              />
+            </>
+          )}
+        </section>
+
+        {/* ── Suggested / Skill Matches ── */}
+        <section>
+          {hasSkills && suggestedProjects.length > 0 ? (
+            <>
+              <SectionHeader
+                eyebrow="Matched to your skills"
+                title={<>Projects that <em className="italic text-amber-500">need</em> you.</>}
+                linkLabel="Browse all matches"
+                linkHref="/skill-matches"
+              />
+              <div className="grid grid-cols-3 gap-4">
+                {suggestedProjects.map((p) => (
+                  <Link
+                    key={p.id}
+                    href={`/projects/${p.id}`}
+                    className="flex flex-col gap-3 rounded-xl border border-white/[0.08] bg-bg-surface p-5 transition-all duration-standard hover:-translate-y-0.5 hover:border-neutral-600"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-xs tracking-tight text-fg-tertiary">
+                        {p.projectType?.name ?? 'Project'}{p.location ? ` · ${p.location}` : ''}
+                      </span>
+                      <div className="text-right">
+                        <div className="font-display text-2xl leading-none text-amber-500">
+                          {p.matchPercent}%
+                        </div>
+                        <div className="text-[10px] uppercase tracking-widest text-fg-tertiary">
+                          Match
+                        </div>
+                      </div>
+                    </div>
+                    <h4 className="font-display text-lg leading-snug">{p.title}</h4>
+                    <div className="flex flex-wrap gap-1.5">
+                      {p.matchingSkills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-[3px] text-[11px] text-fg-secondary"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              <SectionHeader
+                eyebrow="Matched to your skills"
+                title={<>Tell us what you&apos;re <em className="italic text-amber-500">good at</em>.</>}
+              />
+              <EmptyState
+                icon={Star}
+                title="Add your skills to see matches."
+                description="We'll line up projects looking for exactly what you bring. It's also fine to pick skills you want to use, even if they're not your day job."
+                actions={
+                  <Link
+                    href="/profile"
+                    className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
+                  >
+                    Add my skills
+                    <ArrowRight className="size-3.5" strokeWidth={2.5} />
+                  </Link>
+                }
+              >
+                {sampleSkills.length > 0 && (
+                  <div className="mt-3 flex max-w-[480px] flex-wrap justify-center gap-2">
+                    {sampleSkills.map((s) => (
+                      <span
+                        key={s.name}
+                        className="cursor-pointer rounded-full border border-white/[0.08] bg-bg-surface-2 px-3 py-1.5 text-xs text-fg-secondary transition-colors duration-fast hover:border-amber-500 hover:text-amber-500"
+                      >
+                        + {s.name}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </EmptyState>
+            </>
+          )}
+        </section>
       </div>
-    </div>
+    </>
   )
 }
 
-/* ── Stat Card ───────────────────────────────────────────────── */
+/* ================================================================
+   SUB-COMPONENTS
+   ================================================================ */
 
-function StatCard({
+const PIN_GRADIENTS = [
+  'bg-gradient-to-br from-[#1a3d2c] to-[#6b9d7e]',
+  'bg-gradient-to-br from-[#5C3600] to-[#B86E00]',
+  'bg-gradient-to-br from-[#0E1A2B] to-[#2E5FAA]',
+]
+
+function QuickStat({
   value,
-  suffix,
   label,
-  icon: Icon,
-  accentColor,
+  suffix,
+  dimIfZero,
 }: {
-  value: string
-  suffix: string
+  value: number
   label: string
-  icon: React.ComponentType<{ className?: string; color?: string }>
-  accentColor: string
+  suffix?: string
+  dimIfZero?: boolean
 }) {
+  const isDim = dimIfZero && value === 0
   return (
-    <div className="min-w-[120px] flex-1 rounded-[14px] border border-white/[0.08] bg-bg-surface p-5">
-      <div className="mb-2.5">
-        <div
-          className="flex size-[34px] items-center justify-center rounded-[9px]"
-          style={{
-            background: `${accentColor}20`,
-            border: `1px solid ${accentColor}35`,
-          }}
-        >
-          <Icon className="size-4" color={accentColor} />
-        </div>
-      </div>
-      <div className="font-display text-[28px] leading-none text-fg-primary">
+    <div>
+      <div className={`font-display text-3xl leading-none ${isDim ? 'text-fg-tertiary' : 'text-amber-500'}`}>
         {value}
-        <span className="text-xl" style={{ color: accentColor }}>
-          {suffix}
-        </span>
+        {suffix && <span className="text-[0.6em]">{suffix}</span>}
       </div>
-      <div className="mt-1 text-[11px] font-medium text-neutral-500">
+      <div className="mt-1 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
         {label}
       </div>
     </div>
   )
 }
 
-/* ── Action Card ─────────────────────────────────────────────── */
-
-function ActionCard({
+function SectionHeader({
+  eyebrow,
   title,
-  description,
-  href,
-  icon: Icon,
+  linkLabel,
+  linkHref,
+  rightContent,
 }: {
-  title: string
-  description: string
-  href: string
-  icon: React.ComponentType<{ className?: string }>
+  eyebrow: string
+  title: React.ReactNode
+  linkLabel?: string
+  linkHref?: string
+  rightContent?: React.ReactNode
 }) {
   return (
-    <Link
-      href={href}
-      className="group flex items-center gap-3.5 rounded-xl border border-white/[0.08] bg-bg-surface-2 p-4 transition-all duration-fast hover:border-white/[0.13]"
-    >
-      <div className="flex size-10 shrink-0 items-center justify-center rounded-[10px] border border-blue-400/25 bg-blue-500/15">
-        <Icon className="size-[18px] text-blue-300" />
+    <div className="mb-5 flex items-end justify-between gap-6">
+      <div>
+        <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">
+          {eyebrow}
+        </div>
+        <h2 className="font-display text-3xl font-normal leading-tight tracking-tight">
+          {title}
+        </h2>
       </div>
-      <div className="min-w-0 flex-1">
-        <div className="text-sm font-semibold text-fg-primary">{title}</div>
-        <div className="text-xs text-neutral-400">{description}</div>
-      </div>
-      <ArrowRight className="size-4 shrink-0 text-neutral-500 transition-transform duration-fast group-hover:translate-x-0.5" />
-    </Link>
+      {linkLabel && linkHref && (
+        <Link
+          href={linkHref}
+          className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-500 transition-all hover:gap-2"
+        >
+          {linkLabel}
+          <ArrowRight className="size-3.5" strokeWidth={2.5} />
+        </Link>
+      )}
+      {rightContent}
+    </div>
   )
 }
 
-/* ── Sample Data ─────────────────────────────────────────────── */
+function EmptyState({
+  icon: Icon,
+  title,
+  description,
+  actions,
+  children,
+}: {
+  icon: React.ComponentType<{ className?: string }>
+  title: string
+  description: string
+  actions?: React.ReactNode
+  children?: React.ReactNode
+}) {
+  return (
+    <div className="flex flex-col items-center gap-4 rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-[radial-gradient(ellipse_at_top,rgba(244,165,53,0.06),transparent_70%),var(--color-bg-surface)] px-8 py-12 text-center">
+      <div className="mb-2 flex size-16 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-2 text-amber-500">
+        <Icon className="size-7" />
+      </div>
+      <h3 className="font-display text-2xl leading-snug">{title}</h3>
+      <p className="max-w-[460px] leading-relaxed text-fg-secondary">{description}</p>
+      {children}
+      {actions && (
+        <div className="mt-3 flex flex-wrap justify-center gap-3">{actions}</div>
+      )}
+    </div>
+  )
+}
 
-const SAMPLE_PROJECTS = [
-  {
-    title: 'Pacific Plastic Mapping',
-    desc: 'Satellite data to track ocean plastic accumulation zones.',
-    category: 'Ocean Health',
-    contributors: 12,
-    grad: 'linear-gradient(135deg, #1B3A6B, #0E2A4A)',
-    icon: Waves,
-  },
-  {
-    title: 'Urban Pollinator Corridors',
-    desc: 'Restoring bee-friendly routes through cities.',
-    category: 'Biodiversity',
-    contributors: 8,
-    grad: 'linear-gradient(135deg, #1A5C40, #0E2A1E)',
-    icon: Leaf,
-  },
-  {
-    title: 'Solar Grid Optimisation',
-    desc: 'ML models for rural solar panel efficiency.',
-    category: 'Clean Energy',
-    contributors: 21,
-    grad: 'linear-gradient(135deg, #5C3600, #2E1A00)',
-    icon: Zap,
-  },
-]
+function StepStatusIndicator({ status }: { status: string }) {
+  if (status === 'needs_help') {
+    return (
+      <div className="flex size-[22px] items-center justify-center rounded-full border-[1.5px] border-amber-500 bg-amber-500/20 shadow-[0_0_8px_rgba(244,165,53,0.4)]">
+        <span className="font-display text-[13px] font-bold text-amber-500">!</span>
+      </div>
+    )
+  }
+  if (status === 'in_progress') {
+    return (
+      <div className="flex size-[22px] items-center justify-center rounded-full border-[1.5px] border-blue-500 bg-blue-500/15">
+        <span className="size-2 rounded-full bg-blue-300" />
+      </div>
+    )
+  }
+  // not_started
+  return (
+    <div className="size-[22px] rounded-full border-[1.5px] border-neutral-600" />
+  )
+}
+
+function ChecklistRow({
+  done,
+  title,
+  description,
+  ctaLabel,
+  href,
+  isLast,
+}: {
+  done: boolean
+  title: string
+  description: string
+  ctaLabel: string
+  href?: string
+  isLast?: boolean
+}) {
+  const content = (
+    <>
+      <div
+        className={`flex size-[22px] shrink-0 items-center justify-center rounded-full ${done ? 'border-green-500 bg-green-500 text-blue-900' : 'border-[1.5px] border-neutral-600'}`}
+      >
+        {done && <Check className="size-3" strokeWidth={3} />}
+      </div>
+      <div className="flex flex-col gap-1">
+        <span className={`text-base font-medium ${done ? 'text-fg-tertiary line-through' : 'text-fg-primary'}`}>
+          {title}
+        </span>
+        <span className="text-xs text-fg-tertiary">{description}</span>
+      </div>
+      <span className={`flex items-center gap-1 whitespace-nowrap text-sm font-medium ${done ? 'text-fg-tertiary' : 'text-amber-500'}`}>
+        {ctaLabel}
+        {!done && <ArrowRight className="size-3" strokeWidth={2.5} />}
+      </span>
+    </>
+  )
+
+  const className = `grid grid-cols-[auto_1fr_auto] items-center gap-5 px-6 py-5 transition-colors duration-fast hover:bg-bg-surface-2 ${!isLast ? 'border-b border-white/[0.08]' : ''}`
+
+  if (href && !done) {
+    return (
+      <Link href={href} className={className}>
+        {content}
+      </Link>
+    )
+  }
+  return <div className={className}>{content}</div>
+}
