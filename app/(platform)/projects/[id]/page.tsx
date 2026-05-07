@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
-import { ChevronRight, Share2, Bookmark, MapPin, Globe, Calendar, FolderOpen, Clock, User } from 'lucide-react'
+import { ChevronRight, Share2, Bookmark, MapPin, Globe, Calendar, FolderOpen, Clock, User, Pencil } from 'lucide-react'
 import { ProjectStepsList, type StepCardData } from '@/components/platform/project-steps-list'
 import { JoinProjectTopButton, JoinProjectCard } from '@/components/platform/join-project-controls'
 
@@ -115,6 +115,20 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
     ? project.steps.filter((s) => s.assignedToId === userId).length
     : 0
 
+  // Is the current user the project lead? Only the lead sees Modify project.
+  const isLead = userId
+    ? !!(await db.contribution.findFirst({
+        where: {
+          userId,
+          projectId: id,
+          projectStepId: null,
+          role: 'lead',
+          status: { in: ['active', 'pending'] },
+        },
+        select: { id: true },
+      }))
+    : false
+
   const totalSteps = project.steps.length
   const stepsByStatus = {
     needs_help: project.steps.filter((s) => s.status === 'needs_help').length,
@@ -205,6 +219,15 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           >
             <Bookmark className="size-4" />
           </button>
+          {isLead && (
+            <Link
+              href={`/projects/${id}/edit`}
+              className="inline-flex items-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/[0.12] px-4 py-2.5 text-sm font-medium text-amber-500 transition-all duration-standard hover:-translate-y-px hover:bg-amber-500/[0.18]"
+            >
+              <Pencil className="size-3.5" strokeWidth={2.5} />
+              Modify project
+            </Link>
+          )}
           <JoinProjectTopButton
             projectId={id}
             isSignedIn={!!userId}
