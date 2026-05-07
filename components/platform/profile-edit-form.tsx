@@ -392,9 +392,9 @@ export function ProfileEditForm({
             />
 
             {/* Skills table */}
-            <div className="overflow-hidden rounded-xl border border-white/[0.08] bg-bg-base">
+            <div className="rounded-xl border border-white/[0.08] bg-bg-base">
               {skills.length > 0 && (
-                <div className="grid grid-cols-[1fr_320px_130px_32px] gap-4 border-b border-white/[0.08] bg-bg-surface-2 px-5 py-3.5 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
+                <div className="grid grid-cols-[1fr_320px_130px_32px] gap-4 rounded-t-xl border-b border-white/[0.08] bg-bg-surface-2 px-5 py-3.5 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
                   <span>Skill</span>
                   <span>Level</span>
                   <span className="text-center">Match me</span>
@@ -422,7 +422,7 @@ export function ProfileEditForm({
               {/* Add a skill — typeahead with dropdown */}
               <div
                 ref={browseRef}
-                className="relative border-t border-white/[0.08] bg-bg-surface-2 px-5 py-4"
+                className="relative rounded-b-xl border-t border-white/[0.08] bg-bg-surface-2 px-5 py-4"
               >
                 <div className="grid grid-cols-[1fr_auto] items-center gap-3">
                   <div className="relative">
@@ -471,7 +471,7 @@ export function ProfileEditForm({
 
                 {/* Match dropdown */}
                 {dropdownOpen && skillAddInput.trim() && (
-                  <div className="absolute inset-x-5 top-full z-20 mt-1 max-h-[360px] overflow-y-auto rounded-xl border border-white/[0.08] bg-bg-surface shadow-lg">
+                  <div className="absolute inset-x-5 top-full z-30 mt-1 max-h-[360px] overflow-y-auto rounded-xl border border-white/[0.08] bg-bg-surface shadow-xl">
                     {searchMatches.length === 0 ? (
                       <div className="px-5 py-6 text-center text-sm text-fg-tertiary">
                         No skills in our catalogue match{' '}
