@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useMemo } from 'react'
-import { Clock, ArrowRight, ChevronDown } from 'lucide-react'
+import { useState, useMemo, useTransition } from 'react'
+import { Clock, ArrowRight, ChevronDown, Check, LogIn } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { claimStepAction } from '@/app/(platform)/projects/[id]/actions'
 
 export interface StepCardData {
   id: string
@@ -13,6 +14,7 @@ export interface StepCardData {
   totalSteps: number
   estimatedHrs: number | null
   assignedToName: string | null
+  assignedToMe: boolean
   skills: string[]
 }
 
@@ -21,11 +23,17 @@ type FilterKey = 'all' | 'needs_help' | 'in_progress' | 'done'
 const INITIAL_VISIBLE = 7
 
 export function ProjectStepsList({
+  projectId,
   steps,
   stepCounts,
+  isSignedIn,
+  isMember,
 }: {
+  projectId: string
   steps: StepCardData[]
   stepCounts: { needs_help: number; in_progress: number; done: number; not_started: number }
+  isSignedIn: boolean
+  isMember: boolean
 }) {
   const [filter, setFilter] = useState<FilterKey>('all')
   const [showAll, setShowAll] = useState(false)
@@ -76,7 +84,15 @@ export function ProjectStepsList({
             No steps in this category.
           </div>
         ) : (
-          visible.map((step) => <StepCard key={step.id} step={step} />)
+          visible.map((step) => (
+            <StepCard
+              key={step.id}
+              projectId={projectId}
+              step={step}
+              isSignedIn={isSignedIn}
+              isMember={isMember}
+            />
+          ))
         )}
 
         {hiddenCount > 0 && (
@@ -133,12 +149,26 @@ function FilterChip({
   )
 }
 
-function StepCard({ step }: { step: StepCardData }) {
+function StepCard({
+  projectId,
+  step,
+  isSignedIn,
+  isMember,
+}: {
+  projectId: string
+  step: StepCardData
+  isSignedIn: boolean
+  isMember: boolean
+}) {
+  const [pending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+
   const isNeedsHelp = step.status === 'needs_help'
   const isInProgress = step.status === 'in_progress'
   const isDone = step.status === 'done'
   const isNotStarted = step.status === 'not_started'
   const isSkipped = step.status === 'skipped'
+  const isUnassigned = !step.assignedToName
 
   const statusLabel = (() => {
     if (isNeedsHelp) return 'Needs help'
@@ -148,11 +178,18 @@ function StepCard({ step }: { step: StepCardData }) {
     return 'Upcoming'
   })()
 
+  const claim = () => {
+    setError(null)
+    startTransition(async () => {
+      const result = await claimStepAction(projectId, step.id)
+      if (!result.success) setError(result.error)
+    })
+  }
+
   return (
-    <a
-      href="#"
+    <div
       className={cn(
-        'flex cursor-pointer flex-col gap-3 rounded-2xl border bg-bg-surface px-6 py-5 transition-all duration-standard hover:-translate-y-px hover:border-neutral-600',
+        'flex flex-col gap-3 rounded-2xl border bg-bg-surface px-6 py-5 transition-all duration-standard',
         isNeedsHelp
           ? 'border-amber-500/40 bg-[radial-gradient(ellipse_at_left,rgba(244,165,53,0.08),transparent_60%),var(--color-bg-surface)]'
           : 'border-white/[0.08]',
@@ -170,7 +207,6 @@ function StepCard({ step }: { step: StepCardData }) {
         {step.estimatedHrs != null && !isDone && (
           <span className="flex items-center gap-1.5 whitespace-nowrap text-sm text-fg-tertiary">
             <Clock className="size-3.5" />~{step.estimatedHrs}h
-            {step.assignedToName && isInProgress && ` · ${step.assignedToName} is on it`}
           </span>
         )}
       </div>
@@ -198,21 +234,109 @@ function StepCard({ step }: { step: StepCardData }) {
             </span>
           )}
         </div>
-        {isNeedsHelp && !step.assignedToName && (
-          <span className="flex items-center gap-1 text-sm font-medium text-amber-500">
-            Claim this step
-            <ArrowRight className="size-3.5" strokeWidth={2.5} />
-          </span>
-        )}
-        {isInProgress && step.assignedToName && (
-          <span className="text-sm text-fg-tertiary">{step.assignedToName} is on this</span>
-        )}
-        {isDone && <span className="text-sm text-fg-tertiary">Done</span>}
-        {isNotStarted && <span className="text-sm text-fg-tertiary">Coming up</span>}
-        {isSkipped && <span className="text-sm text-fg-tertiary">Skipped</span>}
+
+        {/* Action — depends on assignment + membership */}
+        <StepAction
+          step={step}
+          isSignedIn={isSignedIn}
+          isMember={isMember}
+          isUnassigned={isUnassigned}
+          isClaimable={isNeedsHelp || isNotStarted}
+          isInProgress={isInProgress}
+          isDone={isDone}
+          isSkipped={isSkipped}
+          isNotStarted={isNotStarted}
+          pending={pending}
+          error={error}
+          onClaim={claim}
+        />
       </div>
-    </a>
+    </div>
   )
+}
+
+function StepAction({
+  step,
+  isSignedIn,
+  isMember,
+  isUnassigned,
+  isClaimable,
+  isInProgress,
+  isDone,
+  isSkipped,
+  isNotStarted,
+  pending,
+  error,
+  onClaim,
+}: {
+  step: StepCardData
+  isSignedIn: boolean
+  isMember: boolean
+  isUnassigned: boolean
+  isClaimable: boolean
+  isInProgress: boolean
+  isDone: boolean
+  isSkipped: boolean
+  isNotStarted: boolean
+  pending: boolean
+  error: string | null
+  onClaim: () => void
+}) {
+  // I'm the assignee
+  if (step.assignedToMe) {
+    return (
+      <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-300">
+        <Check className="size-3.5" strokeWidth={2.5} />
+        You’re on this
+      </span>
+    )
+  }
+  // Someone else is on it
+  if (step.assignedToName) {
+    return <span className="text-sm text-fg-tertiary">{step.assignedToName} is on this</span>
+  }
+  if (isDone) return <span className="text-sm text-fg-tertiary">Done</span>
+  if (isSkipped) return <span className="text-sm text-fg-tertiary">Skipped</span>
+
+  // Unassigned + claimable — gate behind membership
+  if (isClaimable && isUnassigned) {
+    if (!isSignedIn) {
+      return (
+        <a
+          href="/sign-in"
+          className="inline-flex items-center gap-1 text-sm font-medium text-fg-tertiary hover:text-fg-primary"
+        >
+          <LogIn className="size-3.5" />
+          Sign in to claim
+        </a>
+      )
+    }
+    if (!isMember) {
+      return (
+        <span className="text-sm text-fg-tertiary">
+          Join project to claim
+        </span>
+      )
+    }
+    return (
+      <div className="flex items-center gap-3">
+        {error && <span className="text-xs text-red-300">{error}</span>}
+        <button
+          type="button"
+          disabled={pending}
+          onClick={onClaim}
+          className="inline-flex cursor-pointer items-center gap-1 text-sm font-medium text-amber-500 transition-colors hover:text-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {pending ? 'Claiming…' : isInProgress ? 'Take this on' : 'Claim this step'}
+          {!pending && <ArrowRight className="size-3.5" strokeWidth={2.5} />}
+        </button>
+      </div>
+    )
+  }
+
+  if (isNotStarted) return <span className="text-sm text-fg-tertiary">Coming up</span>
+  if (isInProgress) return <span className="text-sm text-fg-tertiary">In progress</span>
+  return null
 }
 
 function StepStatusDot({ status }: { status: string }) {
@@ -239,6 +363,5 @@ function StepStatusDot({ status }: { status: string }) {
       </div>
     )
   }
-  // not_started or skipped
   return <div className="size-6 rounded-full border-[1.5px] border-neutral-600 bg-transparent" />
 }

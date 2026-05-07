@@ -77,6 +77,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           status: true,
           order: true,
           estimatedHrs: true,
+          assignedToId: true,
           assignedTo: { select: { name: true } },
           skills: {
             select: { skill: { select: { id: true, name: true } } },
@@ -157,6 +158,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
     totalSteps,
     estimatedHrs: s.estimatedHrs,
     assignedToName: s.assignedTo?.name ?? null,
+    assignedToMe: !!userId && s.assignedToId === userId,
     skills: s.skills.map((ss) => ss.skill.name),
   }))
 
@@ -309,7 +311,13 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               </div>
 
               {totalSteps > 0 ? (
-                <ProjectStepsList steps={stepCards} stepCounts={stepsByStatus} />
+                <ProjectStepsList
+                  projectId={id}
+                  steps={stepCards}
+                  stepCounts={stepsByStatus}
+                  isSignedIn={!!userId}
+                  isMember={isMember}
+                />
               ) : (
                 <EmptyBlock
                   title="The step list is empty."

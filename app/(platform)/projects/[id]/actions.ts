@@ -95,6 +95,80 @@ export async function joinProjectAction(
   return { success: true, data: { joined: true } }
 }
 
+export async function claimStepAction(
+  projectId: string,
+  projectStepId: string,
+): Promise<ServerActionResult<{ claimed: true }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const userCheck = await ensureUserExists(userId)
+  if (!userCheck.success) return { success: false, error: userCheck.error }
+
+  // Must be a project-level member to claim steps inside it.
+  const membership = await db.contribution.findFirst({
+    where: {
+      userId,
+      projectId,
+      projectStepId: null,
+      status: { in: ['active', 'pending'] },
+    },
+    select: { id: true },
+  })
+  if (!membership) {
+    return { success: false, error: 'Join the project before claiming a step.' }
+  }
+
+  const step = await db.projectStep.findUnique({
+    where: { id: projectStepId },
+    select: { id: true, projectId: true, assignedToId: true, status: true },
+  })
+  if (!step || step.projectId !== projectId) {
+    return { success: false, error: 'Step not found in this project.' }
+  }
+  if (step.assignedToId && step.assignedToId !== userId) {
+    return { success: false, error: 'Someone else has already claimed this step.' }
+  }
+
+  // Assign step + flip status to in_progress + record a step-level contribution.
+  try {
+    await db.$transaction([
+      db.projectStep.update({
+        where: { id: projectStepId },
+        data: {
+          assignedToId: userId,
+          status: step.status === 'needs_help' || step.status === 'not_started' ? 'in_progress' : step.status,
+        },
+      }),
+      // Step-level contribution. The unique index on [userId, projectId, projectStepId]
+      // is reliable here because projectStepId is non-null on this row.
+      db.contribution.upsert({
+        where: {
+          userId_projectId_projectStepId: {
+            userId,
+            projectId,
+            projectStepId,
+          },
+        },
+        update: { status: 'active', role: 'contributor' },
+        create: {
+          userId,
+          projectId,
+          projectStepId,
+          role: 'contributor',
+          status: 'active',
+        },
+      }),
+    ])
+  } catch {
+    return { success: false, error: 'Could not claim step.' }
+  }
+
+  revalidatePath(`/projects/${projectId}`)
+  revalidatePath('/dashboard')
+  return { success: true, data: { claimed: true } }
+}
+
 export async function leaveProjectAction(
   projectId: string,
 ): Promise<ServerActionResult<{ left: true }>> {
