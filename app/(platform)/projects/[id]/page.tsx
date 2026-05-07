@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
-import { ChevronRight, Share2, Bookmark, MapPin, Globe, Calendar, FolderOpen, Clock, User, ArrowRight } from 'lucide-react'
+import { ChevronRight, Share2, Bookmark, MapPin, Globe, Calendar, FolderOpen, Clock, User } from 'lucide-react'
 import { ProjectStepsList, type StepCardData } from '@/components/platform/project-steps-list'
+import { JoinProjectTopButton, JoinProjectCard } from '@/components/platform/join-project-controls'
 
 /* ================================================================
    PROJECT VIEW — server component
@@ -52,6 +54,7 @@ interface ProjectViewParams {
 
 export default async function ProjectViewPage({ params }: ProjectViewParams) {
   const { id } = await params
+  const { userId } = await auth()
 
   const project = await db.project.findUnique({
     where: { id },
@@ -92,6 +95,19 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   })
 
   if (!project) notFound()
+
+  // Is the current user already a project-level member?
+  const isMember = userId
+    ? !!(await db.contribution.findFirst({
+        where: {
+          userId,
+          projectId: id,
+          projectStepId: null,
+          status: { in: ['active', 'pending'] },
+        },
+        select: { id: true },
+      }))
+    : false
 
   const totalSteps = project.steps.length
   const stepsByStatus = {
@@ -182,12 +198,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           >
             <Bookmark className="size-4" />
           </button>
-          <a
-            href="#join"
-            className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
-          >
-            Join project
-          </a>
+          <JoinProjectTopButton
+            projectId={id}
+            isSignedIn={!!userId}
+            isMember={isMember}
+          />
         </div>
       </div>
 
@@ -307,28 +322,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           {/* Right rail */}
           <aside className="sticky top-6 flex flex-col gap-5">
             {/* Join CTA */}
-            <div
-              id="join"
-              className="rounded-2xl border border-amber-500/35 bg-bg-surface bg-[radial-gradient(ellipse_at_top_right,rgba(244,165,53,0.18),transparent_60%)] p-6"
-            >
-              <h3 className="mb-2 font-display text-2xl leading-tight">Want in?</h3>
-              <p className="mb-4 text-sm leading-relaxed text-fg-secondary">
-                Join the project to claim steps, see updates in your dashboard, and chat with the team.
-              </p>
-              <a
-                href="#"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
-              >
-                Join this project
-                <ArrowRight className="size-3.5" strokeWidth={2.5} />
-              </a>
-              <a
-                href="#"
-                className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
-              >
-                Just claim a step
-              </a>
-            </div>
+            <JoinProjectCard
+              projectId={id}
+              isSignedIn={!!userId}
+              isMember={isMember}
+            />
 
             {/* Stats */}
             <div className="rounded-2xl border border-white/[0.08] bg-bg-surface p-6">
