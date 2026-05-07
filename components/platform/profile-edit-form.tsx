@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useTransition, useMemo, useRef } from 'react'
+import { useState, useTransition, useMemo, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { Search, Plus, X, Check, Upload } from 'lucide-react'
+import { Search, Plus, X, Check, Upload, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { saveProfileAction, clearAvatarAction } from '@/app/(platform)/profile/actions'
 import type { Proficiency } from '@/types'
@@ -74,6 +74,8 @@ export function ProfileEditForm({
   const [avatarUrl, setAvatarUrl] = useState<string | null>(initial.avatarUrl)
   const [skillFilter, setSkillFilter] = useState('')
   const [skillAddInput, setSkillAddInput] = useState('')
+  const [browseOpen, setBrowseOpen] = useState(false)
+  const browseRef = useRef<HTMLDivElement>(null)
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [savedAt, setSavedAt] = useState<Date | null>(null)
@@ -105,18 +107,35 @@ export function ProfileEditForm({
     return s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q)
   })
 
-  // Match against existing skill catalogue when adding
-  const addCandidates = useMemo(() => {
-    if (!skillAddInput.trim()) return []
+  // Skills available to add — full catalogue minus the ones already on the profile,
+  // filtered by the search query, grouped by category.
+  const availableSkills = useMemo(
+    () => skillOptions.filter((s) => !addedSkillIds.has(s.id)),
+    [skillOptions, addedSkillIds],
+  )
+
+  const filteredAvailable = useMemo(() => {
     const q = skillAddInput.trim().toLowerCase()
-    return skillOptions
-      .filter(
-        (s) =>
-          !addedSkillIds.has(s.id) &&
-          (s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q)),
-      )
-      .slice(0, 6)
-  }, [skillAddInput, skillOptions, addedSkillIds])
+    if (!q) return availableSkills
+    return availableSkills.filter(
+      (s) =>
+        s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q),
+    )
+  }, [availableSkills, skillAddInput])
+
+  // Group filtered skills by category for display
+  const groupedAvailable = useMemo(() => {
+    const groups = new Map<string, SkillOption[]>()
+    for (const s of filteredAvailable) {
+      const list = groups.get(s.category) ?? []
+      list.push(s)
+      groups.set(s.category, list)
+    }
+    return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b))
+  }, [filteredAvailable])
+
+  // First match — Enter key or "Add" button picks this
+  const firstMatch = filteredAvailable[0] ?? null
 
   const suggestions = useMemo(() => {
     return SUGGESTION_NAMES.map((n) => skillOptions.find((s) => s.name === n))
@@ -124,6 +143,18 @@ export function ProfileEditForm({
       .filter((s) => !addedSkillIds.has(s.id))
       .slice(0, 7)
   }, [skillOptions, addedSkillIds])
+
+  // Close the browse dropdown on outside click
+  useEffect(() => {
+    if (!browseOpen) return
+    const onDown = (e: MouseEvent) => {
+      if (browseRef.current && !browseRef.current.contains(e.target as Node)) {
+        setBrowseOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', onDown)
+    return () => document.removeEventListener('mousedown', onDown)
+  }, [browseOpen])
 
   const initials = useMemo(() => {
     const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -146,6 +177,7 @@ export function ProfileEditForm({
       },
     ])
     setSkillAddInput('')
+    setBrowseOpen(false)
   }
 
   const removeSkill = (skillId: string) => {
@@ -451,54 +483,98 @@ export function ProfileEditForm({
                 )}
               </div>
 
-              {/* Add skill row */}
-              <div className="border-t border-white/[0.08] bg-bg-surface-2 px-5 py-4">
+              {/* Add skill — search & browse */}
+              <div
+                ref={browseRef}
+                className="relative border-t border-white/[0.08] bg-bg-surface-2 px-5 py-4"
+              >
                 <div className="grid grid-cols-[1fr_auto] items-center gap-3">
                   <div className="flex items-center gap-3">
                     <Plus className="size-4 shrink-0 text-amber-500" strokeWidth={2.5} />
                     <input
                       type="text"
                       value={skillAddInput}
-                      onChange={(e) => setSkillAddInput(e.target.value)}
-                      placeholder="Add another skill — e.g. Carpentry, Web development, Mandarin…"
-                      className="flex-1 border-none bg-transparent font-sans text-sm text-fg-primary outline-none placeholder:text-fg-tertiary"
+                      onChange={(e) => {
+                        setSkillAddInput(e.target.value)
+                        setBrowseOpen(true)
+                      }}
+                      onFocus={() => setBrowseOpen(true)}
+                      placeholder={
+                        availableSkills.length === 0
+                          ? 'You’ve added every skill in our catalogue.'
+                          : 'Search skills — e.g. Web development, Grant writing, Photography…'
+                      }
+                      disabled={availableSkills.length === 0}
+                      className="flex-1 border-none bg-transparent font-sans text-sm text-fg-primary outline-none placeholder:text-fg-tertiary disabled:cursor-not-allowed"
                       onKeyDown={(e) => {
-                        if (e.key === 'Enter' && addCandidates[0]) {
+                        if (e.key === 'Enter' && firstMatch) {
                           e.preventDefault()
-                          addSkill(addCandidates[0])
+                          addSkill(firstMatch)
+                        } else if (e.key === 'Escape') {
+                          setBrowseOpen(false)
                         }
                       }}
                     />
                   </div>
                   <button
                     type="button"
-                    disabled={!addCandidates[0]}
-                    onClick={() => addCandidates[0] && addSkill(addCandidates[0])}
+                    onClick={() => setBrowseOpen((o) => !o)}
+                    disabled={availableSkills.length === 0}
                     className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface px-3.5 py-2 text-sm text-fg-primary transition-colors hover:border-neutral-600 hover:bg-bg-surface-3 disabled:cursor-not-allowed disabled:opacity-50"
+                    aria-expanded={browseOpen}
                   >
-                    Add
+                    {browseOpen ? 'Close' : 'Browse all'}
+                    <ChevronDown
+                      className={cn(
+                        'size-3.5 transition-transform',
+                        browseOpen && 'rotate-180',
+                      )}
+                    />
                   </button>
                 </div>
-                {/* Live match list */}
-                {skillAddInput.trim() && (
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {addCandidates.length === 0 ? (
-                      <span className="text-xs text-fg-tertiary">
-                        No matching skill in the catalogue. Try a different name.
-                      </span>
+
+                {/* Browse / search dropdown */}
+                {browseOpen && availableSkills.length > 0 && (
+                  <div className="absolute inset-x-5 top-full z-20 mt-1 max-h-[420px] overflow-y-auto rounded-xl border border-white/[0.08] bg-bg-surface shadow-lg">
+                    {filteredAvailable.length === 0 ? (
+                      <div className="px-5 py-8 text-center text-sm text-fg-tertiary">
+                        No skills in the catalogue match{' '}
+                        <span className="text-fg-secondary">“{skillAddInput.trim()}”</span>.
+                      </div>
                     ) : (
-                      addCandidates.map((c) => (
-                        <button
-                          key={c.id}
-                          type="button"
-                          onClick={() => addSkill(c)}
-                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-white/[0.08] bg-bg-surface px-3 py-1.5 text-xs text-fg-secondary transition-colors hover:border-amber-500 hover:text-amber-500"
-                        >
-                          <Plus className="size-3" strokeWidth={2.5} />
-                          {c.name}
-                          <span className="text-fg-tertiary">· {c.category}</span>
-                        </button>
-                      ))
+                      <div className="flex flex-col">
+                        {groupedAvailable.map(([category, items]) => (
+                          <div key={category} className="border-b border-white/[0.06] last:border-b-0">
+                            <div className="bg-bg-surface-2/50 px-5 py-2 text-[11px] font-semibold uppercase tracking-widest text-fg-tertiary">
+                              {category}
+                              <span className="ml-2 font-normal normal-case tracking-normal">
+                                ({items.length})
+                              </span>
+                            </div>
+                            <div className="flex flex-col">
+                              {items.map((s) => (
+                                <button
+                                  key={s.id}
+                                  type="button"
+                                  onClick={() => addSkill(s)}
+                                  className="group flex cursor-pointer items-center justify-between gap-3 px-5 py-2.5 text-left text-sm text-fg-secondary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary"
+                                >
+                                  <span className="flex items-center gap-2">
+                                    <Plus
+                                      className="size-3.5 shrink-0 text-fg-tertiary group-hover:text-amber-500"
+                                      strokeWidth={2.5}
+                                    />
+                                    {s.name}
+                                  </span>
+                                  <span className="text-xs text-fg-tertiary opacity-0 transition-opacity group-hover:opacity-100">
+                                    Add
+                                  </span>
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     )}
                   </div>
                 )}
