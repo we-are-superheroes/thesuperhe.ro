@@ -4,7 +4,6 @@ import Link from 'next/link'
 import {
   Search,
   Bell,
-  Settings,
   Plus,
   ArrowRight,
   Clock,
@@ -260,13 +259,6 @@ export default async function DashboardPage() {
             title="Notifications"
           >
             <Bell className="size-[18px]" />
-          </button>
-          <button
-            type="button"
-            className="flex size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
-            title="Settings"
-          >
-            <Settings className="size-[18px]" />
           </button>
           <Link
             href="/projects/new"

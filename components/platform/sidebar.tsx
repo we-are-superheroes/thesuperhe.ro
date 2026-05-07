@@ -10,6 +10,7 @@ import {
   Search,
   Star,
   FileText,
+  User as UserIcon,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -57,6 +58,10 @@ export function Sidebar({
         { label: 'Skill matches', icon: Star, href: '/skill-matches' },
         { label: 'Blueprints', icon: FileText, href: '/blueprints' },
       ],
+    },
+    {
+      label: 'Account',
+      items: [{ label: 'Profile', icon: UserIcon, href: '/profile' }],
     },
   ]
 
