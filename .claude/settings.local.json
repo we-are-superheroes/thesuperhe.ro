@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@latest . --typescript --tailwind --eslint --app --src-dir=false --import-alias=\"@/*\" --yes)",
+      "PowerShell(Get-ChildItem \"C:\\\\Program Files\\\\nodejs\" -ErrorAction SilentlyContinue; Get-ChildItem \"C:\\\\Program Files \\(x86\\)\\\\nodejs\" -ErrorAction SilentlyContinue; Get-ChildItem \"$env:APPDATA\\\\npm\" -ErrorAction SilentlyContinue; Get-ChildItem \"$env:LOCALAPPDATA\\\\Programs\" -ErrorAction SilentlyContinue | Select-Object Name)",
+      "PowerShell(Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass; $env:PATH = [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"Machine\"\\) + \";\" + [System.Environment]::GetEnvironmentVariable\\(\"PATH\", \"User\"\\); npm --version; npx --version)",
+      "mcp__b4f0948d-bd03-4287-8e5c-b56f13ed69a4__list_teams",
+      "mcp__b4f0948d-bd03-4287-8e5c-b56f13ed69a4__list_projects",
+      "mcp__b4f0948d-bd03-4287-8e5c-b56f13ed69a4__get_project",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)",
+      "mcp__b4f0948d-bd03-4287-8e5c-b56f13ed69a4__get_deployment_build_logs",
+      "mcp__b4f0948d-bd03-4287-8e5c-b56f13ed69a4__search_vercel_documentation",
+      "mcp__69075e21-2e06-4013-841a-59291a4d905f__list_projects",
+      "mcp__69075e21-2e06-4013-841a-59291a4d905f__get_project_url",
+      "mcp__69075e21-2e06-4013-841a-59291a4d905f__get_publishable_keys",
+      "mcp__69075e21-2e06-4013-841a-59291a4d905f__apply_migration",
+      "mcp__69075e21-2e06-4013-841a-59291a4d905f__execute_sql",
+      "mcp__b4f0948d-bd03-4287-8e5c-b56f13ed69a4__list_deployments",
+      "WebFetch(domain:api.anthropic.com)",
+      "Bash(mkdir -p C:/Users/ayleid/Documents/Dev/thesuperhero/thesuperhe.ro/design-extract)",
+      "Bash(cp C:/Users/ayleid/.claude/projects/C--Users-ayleid-Documents-Dev-thesuperhero-thesuperhe-ro/85cf36d3-a68c-4c50-85aa-01eb7f7174a7/tool-results/webfetch-1777997179463-d5d7x4.bin C:/Users/ayleid/Documents/Dev/thesuperhero/thesuperhe.ro/design-extract/design.tar.gz)",
+      "Bash(tar -xzf design.tar.gz)",
+      "Bash(npm install *)",
+      "Bash(npx next *)",
+      "Bash(npx prisma *)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -s \"http://localhost:3000/_next/static/chunks/%5Broot-of-the-server%5D__05.b~zq._.css\")",
+      "Bash(cp C:/Users/ayleid/.claude/projects/C--Users-ayleid-Documents-Dev-thesuperhero-thesuperhe-ro/85cf36d3-a68c-4c50-85aa-01eb7f7174a7/tool-results/webfetch-1778062988457-2bey6j.bin C:/Users/ayleid/Documents/Dev/thesuperhero/thesuperhe.ro/design-extract/design.tar.gz)",
+      "Bash(npx ts-node *)",
+      "Bash(DOTENV_CONFIG_PATH=.env.local npx ts-node --compiler-options '{\"module\":\"CommonJS\"}' -r dotenv/config prisma/seed-projects.ts)",
+      "Bash(mkdir -p C:/Users/ayleid/Documents/Dev/thesuperhero/thesuperhe.ro/design-extract/dashboard C:/Users/ayleid/Documents/Dev/thesuperhero/thesuperhe.ro/design-extract/empty)",
+      "Bash(cp C:/Users/ayleid/.claude/projects/C--Users-ayleid-Documents-Dev-thesuperhero-thesuperhe-ro/85cf36d3-a68c-4c50-85aa-01eb7f7174a7/tool-results/webfetch-1778070134941-zrevpx.bin C:/Users/ayleid/Documents/Dev/thesuperhero/thesuperhe.ro/design-extract/dashboard/design.tar.gz)",
+      "Bash(cp C:/Users/ayleid/.claude/projects/C--Users-ayleid-Documents-Dev-thesuperhero-thesuperhe-ro/85cf36d3-a68c-4c50-85aa-01eb7f7174a7/tool-results/webfetch-1778070135200-ccb1ap.bin C:/Users/ayleid/Documents/Dev/thesuperhero/thesuperhe.ro/design-extract/empty/design.tar.gz)"
+    ]
+  }
+}

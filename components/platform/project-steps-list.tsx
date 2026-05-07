@@ -197,7 +197,7 @@ function StepCard({
   return (
     <div
       className={cn(
-        'flex flex-col gap-3 rounded-2xl border bg-bg-surface px-6 py-5 transition-all duration-standard',
+        'flex flex-col gap-3 rounded-2xl border bg-bg-surface px-4 py-4 transition-all duration-standard sm:px-6 sm:py-5',
         isNeedsHelp
           ? 'border-amber-500/40 bg-[radial-gradient(ellipse_at_left,rgba(244,165,53,0.08),transparent_60%),var(--color-bg-surface)]'
           : 'border-white/[0.08]',
@@ -221,11 +221,11 @@ function StepCard({
 
       {/* Description (only for active/needing-help/upcoming) */}
       {step.description && !isDone && (
-        <p className="pl-10 text-sm leading-relaxed text-fg-secondary">{step.description}</p>
+        <p className="pl-0 text-sm leading-relaxed text-fg-secondary sm:pl-10">{step.description}</p>
       )}
 
       {/* Foot */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pl-10">
+      <div className="flex flex-wrap items-center justify-between gap-3 pl-0 sm:pl-10">
         <div className="flex flex-wrap gap-1.5">
           {step.skills.length > 0 ? (
             step.skills.map((s) => (

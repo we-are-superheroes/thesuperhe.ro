@@ -11,6 +11,7 @@ import {
   Star,
   FileText,
   User as UserIcon,
+  X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -32,12 +33,16 @@ export function Sidebar({
   projectCount,
   stepCount,
   hoursContributed,
+  drawerOpen = false,
+  onDrawerClose,
 }: {
   userName: string | null
   userInitials: string
   projectCount: number
   stepCount: number
   hoursContributed: number
+  drawerOpen?: boolean
+  onDrawerClose?: () => void
 }) {
   const pathname = usePathname()
 
@@ -70,7 +75,30 @@ export function Sidebar({
     : `New here · 0h`
 
   return (
-    <aside className="flex w-[260px] shrink-0 flex-col gap-6 border-r border-white/[0.08] bg-bg-surface px-5 py-6">
+    <aside
+      className={cn(
+        // Base layout
+        'flex w-[280px] shrink-0 flex-col gap-6 overflow-y-auto border-r border-white/[0.08] bg-bg-surface px-5 py-6',
+        // Mobile: fixed full-height drawer that slides in from the left.
+        'fixed inset-y-0 left-0 z-50 transition-transform duration-200 ease-out',
+        // Desktop: static, always-visible column.
+        'lg:static lg:z-auto lg:translate-x-0 lg:transition-none',
+        drawerOpen ? 'translate-x-0 shadow-xl' : '-translate-x-full lg:translate-x-0',
+      )}
+      aria-label="Primary navigation"
+    >
+      {/* Mobile close button */}
+      {onDrawerClose && (
+        <button
+          type="button"
+          onClick={onDrawerClose}
+          className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-lg border border-white/[0.08] bg-bg-surface-2 text-fg-secondary transition-colors hover:text-fg-primary lg:hidden"
+          aria-label="Close menu"
+        >
+          <X className="size-4" />
+        </button>
+      )}
+
       {/* Logo */}
       <Link href="/" className="flex items-center gap-3 px-2 font-display text-xl tracking-tight">
         <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-amber-400 font-display text-lg font-bold text-blue-900 shadow-glow-amber">
@@ -94,7 +122,8 @@ export function Sidebar({
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-fast',
+                  // Note: min-h gives a comfortable touch target on mobile.
+                  'flex min-h-[44px] items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-fast',
                   isActive
                     ? 'bg-gradient-to-r from-amber-500 to-amber-400 font-semibold text-amber-900 shadow-glow-amber'
                     : 'text-fg-secondary hover:bg-bg-surface-2 hover:text-fg-primary',

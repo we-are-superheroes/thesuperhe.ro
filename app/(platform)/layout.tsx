@@ -1,7 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
-import { Sidebar } from '@/components/platform/sidebar'
+import { PlatformShell } from '@/components/platform/platform-shell'
 
 export default async function PlatformLayout({
   children,
@@ -43,15 +43,14 @@ export default async function PlatformLayout({
   const hoursContributed = user?.contributions?.reduce((sum, c) => sum + c.hoursContributed, 0) ?? 0
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      <Sidebar
-        userName={name}
-        userInitials={initials}
-        projectCount={projectCount}
-        stepCount={stepCount}
-        hoursContributed={hoursContributed}
-      />
-      <main className="flex min-w-0 flex-1 flex-col">{children}</main>
-    </div>
+    <PlatformShell
+      userName={name}
+      userInitials={initials}
+      projectCount={projectCount}
+      stepCount={stepCount}
+      hoursContributed={hoursContributed}
+    >
+      {children}
+    </PlatformShell>
   )
 }

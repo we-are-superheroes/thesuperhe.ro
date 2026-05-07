@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Superhero — Project: Pocket Forest, Hackney Wick</title>
+<link rel="stylesheet" href="ds/colors_and_type.css" />
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg-base);
+    color: var(--fg-primary);
+    font-family: var(--font-sans);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+  a { color: inherit; text-decoration: none; }
+
+  /* ─── App layout ─── */
+  .app {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: 100vh;
+  }
+
+  /* ─── Sidebar (mirrors Dashboard) ─── */
+  .sidebar {
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border-subtle);
+    padding: var(--space-6) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-snug);
+    padding: var(--space-2);
+  }
+  .logo-mark {
+    width: 32px; height: 32px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--color-amber-500), var(--color-amber-400));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-blue-900);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    box-shadow: var(--shadow-glow-amber);
+  }
+  .nav-group { display: flex; flex-direction: column; gap: 2px; }
+  .nav-label {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--fg-tertiary);
+    padding: 0 var(--space-3);
+    margin-bottom: var(--space-2);
+  }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: 10px var(--space-3);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
+    color: var(--fg-secondary);
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-standard);
+  }
+  .nav-item:hover { background: var(--bg-surface-2); color: var(--fg-primary); }
+  .nav-item.active {
+    background: linear-gradient(135deg, var(--color-amber-500), var(--color-amber-400));
+    color: var(--color-amber-900);
+    font-weight: var(--weight-semibold);
+    box-shadow: var(--shadow-glow-amber);
+  }
+  .nav-item svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .nav-badge {
+    margin-left: auto;
+    font-size: 11px;
+    background: var(--bg-surface-3);
+    color: var(--fg-secondary);
+    padding: 2px 7px;
+    border-radius: var(--radius-pill);
+    font-weight: var(--weight-semibold);
+  }
+  .sidebar-foot {
+    margin-top: auto;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4a8b6e, #3DAF7C);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--color-blue-900);
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-sm);
+    flex-shrink: 0;
+  }
+  .who { display: flex; flex-direction: column; line-height: 1.25; }
+  .who-name { font-size: var(--text-sm); font-weight: var(--weight-semibold); }
+  .who-meta { font-size: var(--text-xs); color: var(--fg-tertiary); }
+
+  /* ─── Main ─── */
+  .main { display: flex; flex-direction: column; min-width: 0; }
+
+  /* Topbar */
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-5) var(--space-10);
+    border-bottom: 1px solid var(--border-subtle);
+    gap: var(--space-6);
+  }
+  .breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    color: var(--fg-tertiary);
+  }
+  .breadcrumbs a { transition: color var(--duration-fast) var(--ease-standard); }
+  .breadcrumbs a:hover { color: var(--fg-primary); }
+  .breadcrumbs svg { width: 12px; height: 12px; }
+  .breadcrumbs .current { color: var(--fg-primary); }
+  .topbar-right { display: flex; gap: var(--space-3); align-items: center; }
+  .icon-btn {
+    width: 38px; height: 38px;
+    border-radius: var(--radius-lg);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-default);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--fg-secondary);
+    cursor: pointer;
+  }
+  .icon-btn:hover { color: var(--fg-primary); border-color: var(--border-strong); }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-sans);
+    font-weight: var(--weight-medium);
+    font-size: var(--text-sm);
+    padding: 10px 16px;
+    border-radius: var(--radius-lg);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all var(--duration-standard) var(--ease-standard);
+    white-space: nowrap;
+  }
+  .btn-primary {
+    color: var(--fg-on-accent);
+    background: var(--brand-accent);
+    border-color: var(--brand-accent);
+  }
+  .btn-primary:hover {
+    background: var(--brand-accent-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-glow-amber);
+  }
+  .btn-ghost {
+    color: var(--fg-primary);
+    background: transparent;
+    border-color: var(--border-default);
+  }
+  .btn-ghost:hover { border-color: var(--border-strong); background: rgba(255,255,255,0.04); }
+
+  /* Hero / cover */
+  .cover {
+    position: relative;
+    min-height: 360px;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border-subtle);
+    background:
+      radial-gradient(circle at 70% 60%, #4a8b6e 0%, transparent 60%),
+      linear-gradient(135deg, #1a3d2c 0%, #6b9d7e 100%);
+    display: flex;
+    align-items: flex-end;
+  }
+  .cover::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(14,26,43,0.92));
+    pointer-events: none;
+  }
+  .cover-content {
+    position: relative;
+    width: 100%;
+    padding: var(--space-12) var(--space-10) var(--space-8);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+  .cover-meta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .type-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest);
+    font-weight: var(--weight-bold);
+    background: rgba(244,165,53,0.16);
+    color: var(--color-amber-400);
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(244,165,53,0.35);
+    backdrop-filter: blur(8px);
+  }
+  .type-pill::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--color-amber-500);
+    box-shadow: 0 0 5px var(--color-amber-500);
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest);
+    font-weight: var(--weight-bold);
+    background: rgba(61,175,124,0.16);
+    color: var(--color-green-300);
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid rgba(61,175,124,0.35);
+    backdrop-filter: blur(8px);
+  }
+  .status-pill::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--color-green-500);
+    box-shadow: 0 0 5px var(--color-green-500);
+  }
+  .cover h1 {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 5vw, 60px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-weight: 400;
+    margin: var(--space-2) 0;
+  }
+  .cover-tag {
+    font-size: var(--text-base);
+    color: var(--fg-secondary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .cover-tag svg { width: 14px; height: 14px; }
+  .cover-tag .dot {
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: var(--fg-tertiary);
+  }
+
+  /* Content body */
+  .body {
+    max-width: 1240px;
+    width: 100%;
+    margin: 0 auto;
+    padding: var(--space-10);
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: var(--space-10);
+    align-items: start;
+  }
+
+  /* Section title */
+  .sec-eyebrow {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--brand-accent);
+    margin-bottom: var(--space-2);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  .sec-eyebrow::before {
+    content: '';
+    width: 20px; height: 1px;
+    background: var(--brand-accent);
+  }
+  .sec-title {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    line-height: 1.1;
+    letter-spacing: var(--tracking-snug);
+    font-weight: 400;
+    margin-bottom: var(--space-2);
+  }
+  .sec-title em { color: var(--brand-accent); font-style: italic; }
+  .sec-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-6);
+    margin-bottom: var(--space-6);
+  }
+
+  /* About */
+  .about p {
+    font-size: var(--text-lg);
+    color: var(--fg-secondary);
+    line-height: var(--leading-relaxed);
+    margin-bottom: var(--space-4);
+  }
+  .about p:last-child { margin-bottom: 0; }
+  .about p strong { color: var(--fg-primary); font-weight: var(--weight-semibold); }
+
+  /* Steps */
+  .steps {
+    margin-top: var(--space-12);
+  }
+  .steps-summary {
+    display: flex;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+    flex-wrap: wrap;
+  }
+  .step-filter {
+    font-size: var(--text-xs);
+    padding: 6px 12px;
+    border-radius: var(--radius-pill);
+    background: var(--bg-surface);
+    color: var(--fg-secondary);
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .step-filter.active {
+    background: rgba(244,165,53,0.12);
+    color: var(--brand-accent);
+    border-color: var(--brand-accent);
+  }
+  .step-filter .count {
+    background: var(--bg-surface-2);
+    padding: 1px 7px;
+    border-radius: var(--radius-pill);
+    font-size: 10px;
+    font-weight: var(--weight-semibold);
+  }
+  .step-filter.active .count {
+    background: rgba(244,165,53,0.2);
+  }
+
+  .step-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .step-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-5) var(--space-6);
+    cursor: pointer;
+    transition: all var(--duration-standard) var(--ease-standard);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+  .step-card:hover {
+    border-color: var(--border-strong);
+    transform: translateY(-1px);
+  }
+  .step-card.needs_help {
+    border-color: rgba(244,165,53,0.4);
+    background:
+      radial-gradient(ellipse at left, rgba(244,165,53,0.08), transparent 60%),
+      var(--bg-surface);
+  }
+  .step-head {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .step-status {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid;
+  }
+  .step-status.needs_help {
+    border-color: var(--brand-accent);
+    background: rgba(244,165,53,0.18);
+    box-shadow: 0 0 8px rgba(244,165,53,0.4);
+  }
+  .step-status.needs_help::after {
+    content: '!';
+    color: var(--brand-accent);
+    font-weight: 700;
+    font-size: 13px;
+    font-family: var(--font-display);
+  }
+  .step-status.in_progress {
+    border-color: var(--brand-primary);
+    background: rgba(74,127,212,0.15);
+  }
+  .step-status.in_progress::after {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--color-blue-300);
+  }
+  .step-status.complete {
+    border-color: var(--color-green-500);
+    background: var(--color-green-500);
+  }
+  .step-status.complete::after {
+    content: '✓';
+    color: var(--color-blue-900);
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .step-status.not_started {
+    border-color: var(--border-strong);
+    background: transparent;
+  }
+  .step-num {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    color: var(--fg-tertiary);
+    letter-spacing: var(--tracking-widest);
+    font-weight: var(--weight-semibold);
+  }
+  .step-name {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    line-height: 1.2;
+    flex: 1;
+  }
+  .step-time {
+    font-size: var(--text-sm);
+    color: var(--fg-tertiary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+  }
+  .step-time svg { width: 14px; height: 14px; }
+  .step-desc {
+    font-size: var(--text-sm);
+    color: var(--fg-secondary);
+    line-height: var(--leading-relaxed);
+    padding-left: 40px;
+  }
+  .step-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding-left: 40px;
+    flex-wrap: wrap;
+  }
+  .step-skills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .skill-tag {
+    font-size: var(--text-xs);
+    padding: 4px 10px;
+    border-radius: var(--radius-pill);
+    background: var(--bg-surface-2);
+    color: var(--fg-secondary);
+    border: 1px solid var(--border-subtle);
+  }
+  .skill-tag.match {
+    background: rgba(244,165,53,0.12);
+    color: var(--brand-accent);
+    border-color: rgba(244,165,53,0.4);
+  }
+  .step-action {
+    font-size: var(--text-sm);
+    color: var(--brand-accent);
+    font-weight: var(--weight-medium);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .step-action.dim { color: var(--fg-tertiary); font-weight: normal; }
+
+  /* Sidebar (right rail) */
+  .rail {
+    position: sticky;
+    top: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+  .rail-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-2xl);
+    padding: var(--space-5) var(--space-6);
+  }
+  .rail-cta {
+    background:
+      radial-gradient(ellipse at top right, rgba(244,165,53,0.18), transparent 60%),
+      var(--bg-surface);
+    border-color: rgba(244,165,53,0.35);
+  }
+  .rail-cta h3 {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    line-height: 1.15;
+    margin-bottom: var(--space-2);
+  }
+  .rail-cta p {
+    font-size: var(--text-sm);
+    color: var(--fg-secondary);
+    margin-bottom: var(--space-4);
+    line-height: var(--leading-relaxed);
+  }
+  .rail-cta .btn { width: 100%; justify-content: center; }
+  .rail-cta .btn + .btn { margin-top: var(--space-2); }
+
+  /* Stats grid */
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border-subtle);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    border: 1px solid var(--border-subtle);
+    margin-top: var(--space-5);
+  }
+  .stat {
+    background: var(--bg-surface);
+    padding: var(--space-4) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    line-height: 1;
+    color: var(--brand-accent);
+  }
+  .stat-num .unit { font-size: 0.6em; color: var(--fg-tertiary); }
+  .stat-lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest);
+    color: var(--fg-tertiary);
+    font-weight: var(--weight-semibold);
+  }
+
+  /* Detail rows */
+  .rail-title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+  }
+  .detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .detail-row:first-of-type { padding-top: 0; }
+  .detail-icon {
+    width: 32px; height: 32px;
+    border-radius: var(--radius-md);
+    background: var(--bg-surface-2);
+    border: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fg-secondary);
+    flex-shrink: 0;
+  }
+  .detail-icon svg { width: 14px; height: 14px; }
+  .detail-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+  .detail-lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-widest);
+    color: var(--fg-tertiary);
+    font-weight: var(--weight-semibold);
+  }
+  .detail-val {
+    font-size: var(--text-sm);
+    color: var(--fg-primary);
+    line-height: 1.3;
+  }
+  .detail-val.muted { color: var(--fg-secondary); }
+
+  /* Contributors avatars */
+  .contributors {
+    display: flex;
+    align-items: center;
+    margin-top: var(--space-3);
+  }
+  .contributor-av {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-blue-900);
+    font-weight: var(--weight-semibold);
+    font-size: 11px;
+    flex-shrink: 0;
+    margin-left: -8px;
+  }
+  .contributor-av:first-child { margin-left: 0; }
+  .contributor-av.more {
+    background: var(--bg-surface-3);
+    color: var(--fg-secondary);
+    font-family: var(--font-sans);
+  }
+
+  /* Reveal animation */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .rise { animation: rise 700ms var(--ease-standard) backwards; }
+  .rise-1 { animation-delay: 60ms; }
+  .rise-2 { animation-delay: 140ms; }
+  .rise-3 { animation-delay: 220ms; }
+</style>
+</head>
+<body data-screen-label="Project View">
+
+<div class="app">
+
+  <!-- ─── SIDEBAR ─── -->
+  <aside class="sidebar">
+    <a class="logo" href="/">
+      <div class="logo-mark">S</div>
+      <span>The Superhero</span>
+    </a>
+
+    <div class="nav-group">
+      <div class="nav-label">Overview</div>
+      <a class="nav-item" href="Dashboard.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        My dashboard
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        My projects
+        <span class="nav-badge">3</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        My steps
+        <span class="nav-badge">7</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        Notifications
+        <span class="nav-badge">2</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-label">Discover</div>
+      <a class="nav-item active" href="Browse Projects.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Browse projects
+      </a>
+      <a class="nav-item" href="#">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Skill matches
+      </a>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="avatar">A</div>
+      <div class="who">
+        <span class="who-name">Alex Mercer</span>
+        <span class="who-meta">3 projects · 42h</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ─── MAIN ─── -->
+  <main class="main">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="breadcrumbs">
+        <a href="Browse Projects.html">Browse projects</a>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        <span class="current">Pocket Forest, Hackney Wick</span>
+      </div>
+      <div class="topbar-right">
+        <button class="icon-btn" title="Share">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+        </button>
+        <button class="icon-btn" title="Pin">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="17" x2="12" y2="22"/><path d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"/></svg>
+        </button>
+        <a class="btn btn-primary" href="#join">
+          Join project
+        </a>
+      </div>
+    </div>
+
+    <!-- Cover -->
+    <div class="cover">
+      <div class="cover-content rise rise-1">
+        <div class="cover-meta">
+          <span class="type-pill">Urban Rewilding</span>
+          <span class="status-pill">Active · in progress</span>
+        </div>
+        <h1>Pocket Forest, Hackney Wick</h1>
+        <div class="cover-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Hackney Wick, London
+          <span class="dot"></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Remote contributors welcome
+          <span class="dot"></span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Started 14 March 2026
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="body">
+
+      <!-- Left column -->
+      <div>
+
+        <section class="about rise rise-2">
+          <div class="sec-eyebrow">About this project</div>
+          <h2 class="sec-title">A <em>Miyawaki</em> forest, planted by hand, on a square of asphalt.</h2>
+          <p style="margin-top: var(--space-5);">Hackney Wick has 7% canopy cover — half the London average. We're turning a 200m² disused car park behind the community centre into a dense, native pocket forest using the <strong>Miyawaki method</strong>: 30 species, packed shoulder-to-shoulder, that will grow ten times faster than a conventional plantation.</p>
+          <p>The land has been secured. Council planning has signed off. We have funding for the saplings. What we still need: a few more hands for soil prep weekends, someone to design our launch poster, and a writer to turn our progress into a quarterly update for the local paper.</p>
+          <p>This is a long project — the forest will take 3 years to establish — but most steps are short, self-contained, and don't require you to be there in person.</p>
+        </section>
+
+        <!-- Steps section -->
+        <section class="steps rise rise-3">
+          <div class="sec-head">
+            <div>
+              <div class="sec-eyebrow">Steps to take</div>
+              <h2 class="sec-title">20 steps. <em>3 need help</em> right now.</h2>
+            </div>
+          </div>
+
+          <div class="steps-summary">
+            <span class="step-filter active">All <span class="count">20</span></span>
+            <span class="step-filter">Needs help <span class="count">3</span></span>
+            <span class="step-filter">In progress <span class="count">4</span></span>
+            <span class="step-filter">Complete <span class="count">13</span></span>
+          </div>
+
+          <div class="step-list">
+
+            <!-- Step 1: needs help -->
+            <a class="step-card needs_help" href="#">
+              <div class="step-head">
+                <div class="step-status needs_help"></div>
+                <div style="display:flex; flex-direction:column; gap: 2px; flex:1;">
+                  <span class="step-num">Step 14 of 20 · Needs help</span>
+                  <span class="step-name">Design launch event poster</span>
+                </div>
+                <span class="step-time">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  ~2h
+                </span>
+              </div>
+              <p class="step-desc">A4 poster for the planting weekend on 13 June. Should feel hopeful, hand-made, neighbourhood-y — not corporate. We'll get it printed at the local copy shop. Brand colours and project photos in the brief.</p>
+              <div class="step-foot">
+                <div class="step-skills">
+                  <span class="skill-tag match">Graphic design</span>
+                  <span class="skill-tag">Illustration</span>
+                </div>
+                <span class="step-action">Claim this step <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+              </div>
+            </a>
+
+            <!-- Step 2: needs help -->
+            <a class="step-card needs_help" href="#">
+              <div class="step-head">
+                <div class="step-status needs_help"></div>
+                <div style="display:flex; flex-direction:column; gap: 2px; flex:1;">
+                  <span class="step-num">Step 15 of 20 · Needs help · Remote OK</span>
+                  <span class="step-name">Write Q2 update for the local paper</span>
+                </div>
+                <span class="step-time">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  ~3h
+                </span>
+              </div>
+              <p class="step-desc">600-word piece for the Hackney Citizen covering planning approval, funding, and the planting weekend. We have all the source material; we need someone to shape it into a piece that actually gets read.</p>
+              <div class="step-foot">
+                <div class="step-skills">
+                  <span class="skill-tag">Writing</span>
+                  <span class="skill-tag">Communications</span>
+                </div>
+                <span class="step-action">Claim this step <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+              </div>
+            </a>
+
+            <!-- Step 3: needs help -->
+            <a class="step-card needs_help" href="#">
+              <div class="step-head">
+                <div class="step-status needs_help"></div>
+                <div style="display:flex; flex-direction:column; gap: 2px; flex:1;">
+                  <span class="step-num">Step 16 of 20 · Needs help</span>
+                  <span class="step-name">Soil preparation weekend — 6 June</span>
+                </div>
+                <span class="step-time">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  ~6h on the day
+                </span>
+              </div>
+              <p class="step-desc">Breaking up compacted ground, mixing in mulch and biochar, and prepping plant-ready beds. We'll provide tools, gloves, and lunch. Need 8–12 people. No experience required — there's a 20-minute briefing on arrival.</p>
+              <div class="step-foot">
+                <div class="step-skills">
+                  <span class="skill-tag">No skills required</span>
+                  <span class="skill-tag">In-person</span>
+                </div>
+                <span class="step-action">RSVP <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg></span>
+              </div>
+            </a>
+
+            <!-- Step 4: in progress -->
+            <a class="step-card" href="#">
+              <div class="step-head">
+                <div class="step-status in_progress"></div>
+                <div style="display:flex; flex-direction:column; gap: 2px; flex:1;">
+                  <span class="step-num">Step 13 of 20 · In progress</span>
+                  <span class="step-name">Source 30 native species saplings</span>
+                </div>
+                <span class="step-time">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  ~5h · Maya is on it
+                </span>
+              </div>
+              <p class="step-desc">Coordinating with Trees for Cities and a Suffolk nursery. Final order goes in next week.</p>
+              <div class="step-foot">
+                <div class="step-skills">
+                  <span class="skill-tag">Logistics</span>
+                </div>
+                <span class="step-action dim">Maya Fernandes is on this</span>
+              </div>
+            </a>
+
+            <!-- Step 5: complete -->
+            <a class="step-card" href="#">
+              <div class="step-head">
+                <div class="step-status complete"></div>
+                <div style="display:flex; flex-direction:column; gap: 2px; flex:1;">
+                  <span class="step-num">Step 12 of 20 · Complete</span>
+                  <span class="step-name">Council planning approval</span>
+                </div>
+                <span class="step-time">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Done in 28 days
+                </span>
+              </div>
+              <div class="step-foot">
+                <div class="step-skills">
+                  <span class="skill-tag">Community organising</span>
+                  <span class="skill-tag">Writing</span>
+                </div>
+                <span class="step-action dim">Approved 2 April</span>
+              </div>
+            </a>
+
+            <!-- Step 6: complete -->
+            <a class="step-card" href="#">
+              <div class="step-head">
+                <div class="step-status complete"></div>
+                <div style="display:flex; flex-direction:column; gap: 2px; flex:1;">
+                  <span class="step-num">Step 11 of 20 · Complete</span>
+                  <span class="step-name">Secure £8,000 from Lottery Community Fund</span>
+                </div>
+                <span class="step-time">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Done
+                </span>
+              </div>
+              <div class="step-foot">
+                <div class="step-skills">
+                  <span class="skill-tag match">Grant writing</span>
+                </div>
+                <span class="step-action dim">Awarded 18 March</span>
+              </div>
+            </a>
+
+            <!-- Step 7: not started -->
+            <a class="step-card" href="#">
+              <div class="step-head">
+                <div class="step-status not_started"></div>
+                <div style="display:flex; flex-direction:column; gap: 2px; flex:1;">
+                  <span class="step-num">Step 17 of 20 · Upcoming</span>
+                  <span class="step-name">Run planting day — 13 June</span>
+                </div>
+                <span class="step-time">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Full day
+                </span>
+              </div>
+              <p class="step-desc">The big one. Planting all 1,200 saplings with the community. Locked once we hit 40 RSVPs and the soil prep is done.</p>
+              <div class="step-foot">
+                <div class="step-skills">
+                  <span class="skill-tag">Event organising</span>
+                </div>
+                <span class="step-action dim">Opens after step 16</span>
+              </div>
+            </a>
+
+            <a class="step-card" href="#" style="justify-content:center; align-items:center; padding: var(--space-5); border-style: dashed; color: var(--fg-tertiary); font-size: var(--text-sm);">
+              <span style="display:flex; align-items:center; gap: var(--space-2);">
+                Show all 20 steps
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </span>
+            </a>
+
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right rail -->
+      <aside class="rail">
+
+        <!-- Join CTA -->
+        <div class="rail-card rail-cta" id="join">
+          <h3>Want in?</h3>
+          <p>Join the project to claim steps, see updates in your dashboard, and chat with the team.</p>
+          <a class="btn btn-primary" href="#">
+            Join this project
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="#">Just claim a step</a>
+        </div>
+
+        <!-- Project stats -->
+        <div class="rail-card">
+          <div class="rail-title">By the numbers</div>
+          <div class="stats">
+            <div class="stat">
+              <div class="stat-num">14</div>
+              <div class="stat-lbl">Contributors</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">186<span class="unit">h</span></div>
+              <div class="stat-lbl">Hours given</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">13<span style="color: var(--fg-tertiary); font-size: 0.6em;">/20</span></div>
+              <div class="stat-lbl">Steps done</div>
+            </div>
+            <div class="stat">
+              <div class="stat-num">54<span class="unit">d</span></div>
+              <div class="stat-lbl">In motion</div>
+            </div>
+          </div>
+          <div class="contributors">
+            <div class="contributor-av" style="background: linear-gradient(135deg, #4a8b6e, #3DAF7C);">M</div>
+            <div class="contributor-av" style="background: linear-gradient(135deg, #F4A535, #F7BD64);">J</div>
+            <div class="contributor-av" style="background: linear-gradient(135deg, #4A7FD4, #7AAEE8);">P</div>
+            <div class="contributor-av" style="background: linear-gradient(135deg, #B86E00, #F4A535);">R</div>
+            <div class="contributor-av" style="background: linear-gradient(135deg, #2E5FAA, #4A7FD4);">S</div>
+            <div class="contributor-av more">+9</div>
+          </div>
+        </div>
+
+        <!-- Project details -->
+        <div class="rail-card">
+          <div class="rail-title">Details</div>
+          <div class="detail-row">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <div class="detail-info">
+              <span class="detail-lbl">Type</span>
+              <span class="detail-val">Urban Rewilding</span>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="detail-info">
+              <span class="detail-lbl">Status</span>
+              <span class="detail-val">Active · in progress</span>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="detail-info">
+              <span class="detail-lbl">Location</span>
+              <span class="detail-val">Hackney Wick, London E9</span>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <div class="detail-info">
+              <span class="detail-lbl">Remote contributions</span>
+              <span class="detail-val">Welcome — most steps work remote</span>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <div class="detail-info">
+              <span class="detail-lbl">Created</span>
+              <span class="detail-val">14 March 2026 <span class="muted">· 54 days ago</span></span>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="detail-info">
+              <span class="detail-lbl">Lead</span>
+              <span class="detail-val">Maya Fernandes</span>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

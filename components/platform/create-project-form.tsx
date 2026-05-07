@@ -229,7 +229,7 @@ export function CreateProjectForm({
   return (
     <div className="flex h-full flex-1 flex-col overflow-y-auto">
       {/* Topbar */}
-      <div className="sticky top-0 z-10 flex items-center justify-between gap-6 border-b border-white/[0.08] bg-bg-base px-10 py-5">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] bg-bg-base px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
         <div className="flex items-center gap-2 text-sm text-fg-tertiary">
           <Link href="/my-projects" className="transition-colors duration-fast hover:text-fg-primary">
             My projects
@@ -264,7 +264,7 @@ export function CreateProjectForm({
         </div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-10 p-10">
+      <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-8 p-4 sm:p-6 sm:gap-10 lg:p-10">
         {phase === 'choose' ? (
           <ChooserPhase
             blueprints={filteredBlueprints}
@@ -459,7 +459,7 @@ function StartCard({
     <button
       type="button"
       onClick={onClick}
-      className="group relative flex cursor-pointer flex-col items-start gap-5 overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface p-8 text-left text-fg-primary transition-all duration-standard hover:-translate-y-0.5 hover:border-amber-500 hover:shadow-md"
+      className="group relative flex cursor-pointer flex-col items-start gap-5 overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface p-6 text-left text-fg-primary transition-all duration-standard hover:-translate-y-0.5 hover:border-amber-500 hover:shadow-md sm:p-8"
     >
       <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(244,165,53,0.08),transparent_60%)] opacity-0 transition-opacity duration-standard group-hover:opacity-100" />
       <span className="relative flex size-14 items-center justify-center rounded-xl border border-neutral-700 bg-bg-surface-2 text-amber-500">
@@ -690,7 +690,7 @@ function EditorPhase({
       </Card>
 
       {/* Save bar */}
-      <div className="sticky bottom-0 -mx-10 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-bg-base from-25% to-transparent px-10 py-6">
+      <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-bg-base from-25% to-transparent px-4 py-5 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10 lg:py-6">
         <div className="flex items-center gap-3 text-xs text-fg-tertiary">
           {error ? (
             <span className="text-red-300">{error}</span>
@@ -784,11 +784,11 @@ function StepRow({
   const selectedSkill = step.skillId ? skills.find((s) => s.id === step.skillId) : null
 
   return (
-    <div className="grid grid-cols-[28px_1fr_200px_32px] items-start gap-3 rounded-xl border border-white/[0.08] bg-bg-base p-4 transition-colors duration-fast hover:border-neutral-700 focus-within:border-amber-500">
-      <div className="mt-1 flex size-7 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-3 font-mono text-xs font-semibold text-fg-secondary">
+    <div className="grid grid-cols-[28px_1fr_32px] items-start gap-3 rounded-xl border border-white/[0.08] bg-bg-base p-4 transition-colors duration-fast hover:border-neutral-700 focus-within:border-amber-500 sm:grid-cols-[28px_1fr_200px_32px]">
+      <div className="col-start-1 row-start-1 mt-1 flex size-7 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-3 font-mono text-xs font-semibold text-fg-secondary">
         {index + 1}
       </div>
-      <div className="flex min-w-0 flex-col gap-1.5">
+      <div className="col-start-2 row-start-1 flex min-w-0 flex-col gap-1.5">
         <input
           type="text"
           value={step.title}
@@ -806,8 +806,8 @@ function StepRow({
         />
       </div>
 
-      {/* Skill picker */}
-      <div ref={skillRef} className="relative">
+      {/* Skill picker — wraps below on mobile, stays in row 1 on desktop */}
+      <div ref={skillRef} className="relative col-start-2 row-start-2 sm:col-start-3 sm:row-start-1">
         <button
           type="button"
           onClick={() => setSkillOpen((o) => !o)}
@@ -880,7 +880,7 @@ function StepRow({
         onClick={onRemove}
         disabled={!canRemove}
         title="Remove step"
-        className="mt-1 flex size-7 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-fg-tertiary transition-colors hover:bg-red-500/[0.12] hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-fg-tertiary"
+        className="col-start-3 row-start-1 mt-1 flex size-7 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-fg-tertiary transition-colors hover:bg-red-500/[0.12] hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-fg-tertiary sm:col-start-4"
       >
         <X className="size-3.5" />
       </button>
@@ -894,7 +894,7 @@ function StepRow({
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <section className="rounded-2xl border border-white/[0.08] bg-bg-surface p-8">{children}</section>
+    <section className="rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6 lg:p-8">{children}</section>
   )
 }
 

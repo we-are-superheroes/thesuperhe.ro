@@ -10,6 +10,7 @@ import {
   MapPin,
   LayoutGrid,
   List,
+  SlidersHorizontal,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -88,6 +89,7 @@ export function BrowseProjectsClient({
   const [selectedLocations, setSelectedLocations] = useState<Set<string>>(new Set())
   const [sort, setSort] = useState<SortKey>('recent')
   const [view, setView] = useState<'grid' | 'list'>('grid')
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
   const filtered = useMemo(() => {
     return projects
@@ -164,21 +166,21 @@ export function BrowseProjectsClient({
   return (
     <>
       {/* Topbar */}
-      <div className="flex items-center justify-between gap-6 border-b border-white/[0.08] px-10 py-5">
-        <div className="relative max-w-[560px] flex-1">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
+        <div className="relative order-2 w-full min-w-0 max-w-[560px] flex-1 sm:order-1 sm:w-auto">
           <Search className="absolute left-3.5 top-1/2 size-[18px] -translate-y-1/2 text-fg-tertiary" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search projects by name, place, or what they're trying to do..."
+            placeholder="Search projects..."
             className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-3 pl-11 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
           />
         </div>
-        <div className="flex items-center gap-3">
+        <div className="order-1 flex items-center gap-3 sm:order-2">
           <button
             type="button"
-            className="flex size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
+            className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
             title="Notifications"
           >
             <Bell className="size-[18px]" />
@@ -188,28 +190,52 @@ export function BrowseProjectsClient({
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
           >
             <Plus className="size-3.5" strokeWidth={2.5} />
-            Start a project
+            <span className="hidden sm:inline">Start a project</span>
+            <span className="sm:hidden">Start</span>
           </Link>
         </div>
       </div>
 
       {/* Content */}
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 overflow-y-auto p-10">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 overflow-y-auto p-4 sm:p-6 lg:p-10">
         {/* Page header */}
         <section>
-          <h1 className="mb-3 font-display text-[clamp(36px,4vw,52px)] font-normal leading-none tracking-tight">
+          <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
             Find a project<br />
             that <em className="italic text-amber-500">needs</em> you.
           </h1>
-          <p className="max-w-[560px] text-lg leading-relaxed text-fg-secondary">
+          <p className="max-w-[560px] text-base leading-relaxed text-fg-secondary sm:text-lg">
             Every project here is real, in motion, and looking for help. Filter by where you are, what you&apos;re good at, or what kind of work moves you.
           </p>
         </section>
 
+        {/* Mobile filters toggle */}
+        <button
+          type="button"
+          onClick={() => setMobileFiltersOpen((o) => !o)}
+          className="flex items-center justify-between gap-2 rounded-lg border border-neutral-700 bg-bg-surface px-4 py-2.5 text-sm text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary lg:hidden"
+        >
+          <span className="inline-flex items-center gap-2">
+            <SlidersHorizontal className="size-4" />
+            {mobileFiltersOpen ? 'Hide filters' : 'Show filters'}
+          </span>
+          {activeChips.length > 0 && (
+            <span className="inline-flex items-center gap-1 text-xs text-amber-500">
+              {activeChips.length} active
+            </span>
+          )}
+        </button>
+
         {/* Browse layout */}
-        <section className="grid grid-cols-[280px_1fr] items-start gap-8">
+        <section className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[280px_1fr] lg:gap-8">
           {/* Filters */}
-          <aside className="sticky top-6 flex flex-col gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface p-6">
+          <aside
+            className={cn(
+              'flex flex-col gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6',
+              'lg:sticky lg:top-6',
+              mobileFiltersOpen ? 'flex' : 'hidden lg:flex',
+            )}
+          >
             <div className="flex items-baseline justify-between">
               <h3 className="font-display text-xl font-normal">Filters</h3>
               <button
@@ -338,7 +364,7 @@ export function BrowseProjectsClient({
                 </p>
               </div>
             ) : view === 'grid' ? (
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 {filtered.map((p) => (
                   <ProjectCard key={p.id} project={p} />
                 ))}

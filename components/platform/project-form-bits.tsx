@@ -51,7 +51,7 @@ export const REMOTE_OPTIONS: Array<{
 
 export function Card({ children }: { children: React.ReactNode }) {
   return (
-    <section className="rounded-2xl border border-white/[0.08] bg-bg-surface p-8">
+    <section className="rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6 lg:p-8">
       {children}
     </section>
   )
@@ -154,11 +154,11 @@ export function StepRow({
   const selectedSkill = step.skillId ? skills.find((s) => s.id === step.skillId) : null
 
   return (
-    <div className="grid grid-cols-[28px_1fr_200px_32px] items-start gap-3 rounded-xl border border-white/[0.08] bg-bg-base p-4 transition-colors duration-fast hover:border-neutral-700 focus-within:border-amber-500">
-      <div className="mt-1 flex size-7 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-3 font-mono text-xs font-semibold text-fg-secondary">
+    <div className="grid grid-cols-[28px_1fr_32px] items-start gap-3 rounded-xl border border-white/[0.08] bg-bg-base p-4 transition-colors duration-fast hover:border-neutral-700 focus-within:border-amber-500 sm:grid-cols-[28px_1fr_200px_32px]">
+      <div className="col-start-1 row-start-1 mt-1 flex size-7 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-3 font-mono text-xs font-semibold text-fg-secondary">
         {index + 1}
       </div>
-      <div className="flex min-w-0 flex-col gap-1.5">
+      <div className="col-start-2 row-start-1 flex min-w-0 flex-col gap-1.5">
         <input
           type="text"
           value={step.title}
@@ -176,8 +176,8 @@ export function StepRow({
         />
       </div>
 
-      {/* Skill picker */}
-      <div ref={skillRef} className="relative">
+      {/* Skill picker — wraps below on mobile */}
+      <div ref={skillRef} className="relative col-start-2 row-start-2 sm:col-start-3 sm:row-start-1">
         <button
           type="button"
           onClick={() => setSkillOpen((o) => !o)}
@@ -252,7 +252,7 @@ export function StepRow({
         onClick={onRemove}
         disabled={!canRemove}
         title="Remove step"
-        className="mt-1 flex size-7 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-fg-tertiary transition-colors hover:bg-red-500/[0.12] hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-fg-tertiary"
+        className="col-start-3 row-start-1 mt-1 flex size-7 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-fg-tertiary transition-colors hover:bg-red-500/[0.12] hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-fg-tertiary sm:col-start-4"
       >
         <X className="size-3.5" />
       </button>

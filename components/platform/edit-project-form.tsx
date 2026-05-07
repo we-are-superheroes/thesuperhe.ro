@@ -145,7 +145,7 @@ export function EditProjectForm({
   return (
     <div className="flex h-full flex-1 flex-col overflow-y-auto">
       {/* Topbar */}
-      <div className="sticky top-0 z-10 flex items-center justify-between gap-6 border-b border-white/[0.08] bg-bg-base px-10 py-5">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] bg-bg-base px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
         <div className="flex items-center gap-2 text-sm text-fg-tertiary">
           <Link
             href="/my-projects"
@@ -174,7 +174,7 @@ export function EditProjectForm({
         </div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-10 p-10">
+      <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-8 p-4 sm:gap-10 sm:p-6 lg:p-10">
         {/* Editor header */}
         <header>
           <span className="mb-2 inline-flex items-center gap-2 text-xs text-fg-tertiary">
@@ -313,7 +313,7 @@ export function EditProjectForm({
         </Card>
 
         {/* Save bar */}
-        <div className="sticky bottom-0 -mx-10 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-bg-base from-25% to-transparent px-10 py-6">
+        <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-bg-base from-25% to-transparent px-4 py-5 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10 lg:py-6">
           <div className="flex items-center gap-3 text-xs text-fg-tertiary">
             {error ? (
               <span className="text-red-300">{error}</span>

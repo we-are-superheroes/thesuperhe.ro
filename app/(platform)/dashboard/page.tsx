@@ -243,8 +243,8 @@ export default async function DashboardPage() {
   return (
     <>
       {/* Topbar */}
-      <div className="flex items-center justify-between gap-6 border-b border-white/[0.08] px-10 py-5">
-        <div className="relative max-w-[480px] flex-1">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
+        <div className="relative order-2 w-full min-w-0 max-w-[480px] flex-1 sm:order-1 sm:w-auto">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-tertiary" />
           <input
             type="text"
@@ -252,10 +252,10 @@ export default async function DashboardPage() {
             className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
           />
         </div>
-        <div className="flex items-center gap-3">
+        <div className="order-1 flex items-center gap-3 sm:order-2">
           <button
             type="button"
-            className="relative flex size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
+            className="relative hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
             title="Notifications"
           >
             <Bell className="size-[18px]" />
@@ -265,23 +265,24 @@ export default async function DashboardPage() {
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
           >
             <Plus className="size-3.5" strokeWidth={2.5} />
-            Start a project
+            <span className="hidden sm:inline">Start a project</span>
+            <span className="sm:hidden">Start</span>
           </Link>
         </div>
       </div>
 
       {/* Content */}
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-12 overflow-y-auto p-10">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10 overflow-y-auto p-4 sm:gap-12 sm:p-6 lg:p-10">
         {/* ── Greeting ── */}
-        <section className="flex items-end justify-between gap-8">
+        <section className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div>
-            <h1 className="mb-3 font-display text-[clamp(36px,4vw,52px)] font-normal leading-none tracking-tight">
+            <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
               {hasProjects ? 'Welcome back,' : 'Welcome,'}
               <br />
               <em className="italic text-amber-500">{firstName}.</em>
             </h1>
             {hasProjects ? (
-              <p className="max-w-[560px] text-lg leading-relaxed text-fg-secondary">
+              <p className="max-w-[560px] text-base leading-relaxed text-fg-secondary sm:text-lg">
                 You have {openStepCount} step{openStepCount !== 1 ? 's' : ''} across {projectCount} project{projectCount !== 1 ? 's' : ''}.
                 {openStepCount > 0 && (
                   <strong className="font-semibold text-amber-500">
@@ -290,12 +291,12 @@ export default async function DashboardPage() {
                 )}
               </p>
             ) : (
-              <p className="max-w-[560px] text-lg leading-relaxed text-fg-secondary">
+              <p className="max-w-[560px] text-base leading-relaxed text-fg-secondary sm:text-lg">
                 You&apos;re all set up — now let&apos;s find you something to work on. Tell us what you&apos;re good at, and we&apos;ll match you to projects that need exactly that.
               </p>
             )}
           </div>
-          <div className="flex gap-8 rounded-2xl border border-white/[0.08] bg-bg-surface px-6 py-5">
+          <div className="flex w-full flex-wrap gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface px-5 py-4 sm:gap-8 sm:px-6 sm:py-5 lg:w-auto">
             <QuickStat value={projectCount} label="Projects" dimIfZero />
             <QuickStat value={openStepCount} label="Open steps" dimIfZero />
             <QuickStat value={totalHours} label="Contributed" suffix="h" dimIfZero />
@@ -348,7 +349,7 @@ export default async function DashboardPage() {
                 linkLabel="See all my projects"
                 linkHref="/my-projects"
               />
-              <div className="grid grid-cols-3 gap-5">
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {pinnedProjects.map((c, i) => {
                   const steps = c.project.steps
                   const doneCount = steps.filter((s) => s.status === 'done').length
@@ -441,10 +442,10 @@ export default async function DashboardPage() {
                 {mySteps.map((step, i) => (
                   <div
                     key={step.id}
-                    className={`grid cursor-pointer grid-cols-[auto_1fr_auto_auto_auto] items-center gap-5 px-6 py-5 transition-colors duration-fast hover:bg-bg-surface-2 ${i < mySteps.length - 1 ? 'border-b border-white/[0.08]' : ''}`}
+                    className={`flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-2 px-4 py-4 transition-colors duration-fast hover:bg-bg-surface-2 sm:px-6 sm:py-5 ${i < mySteps.length - 1 ? 'border-b border-white/[0.08]' : ''}`}
                   >
                     <StepStatusIndicator status={step.status} />
-                    <div className="flex min-w-0 flex-col gap-1">
+                    <div className="flex min-w-0 flex-1 flex-col gap-1">
                       <span className="truncate text-base font-medium text-fg-primary">
                         {step.title}
                       </span>
@@ -453,17 +454,17 @@ export default async function DashboardPage() {
                       </span>
                     </div>
                     {step.skills[0] && (
-                      <span className="whitespace-nowrap rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-1 text-xs text-fg-secondary">
+                      <span className="hidden whitespace-nowrap rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-1 text-xs text-fg-secondary sm:inline">
                         {step.skills[0].skill.name}
                       </span>
                     )}
                     {step.estimatedHrs != null && (
-                      <span className="flex items-center gap-[5px] whitespace-nowrap text-xs text-fg-tertiary">
+                      <span className="hidden items-center gap-[5px] whitespace-nowrap text-xs text-fg-tertiary sm:flex">
                         <Clock className="size-3" />
                         ~{step.estimatedHrs}h
                       </span>
                     )}
-                    <span className="flex items-center gap-1 text-sm font-medium text-amber-500">
+                    <span className="flex items-center gap-1 whitespace-nowrap text-sm font-medium text-amber-500">
                       Open
                       <ArrowRight className="size-3" strokeWidth={2.5} />
                     </span>
@@ -493,7 +494,7 @@ export default async function DashboardPage() {
                 linkLabel="Browse all matches"
                 linkHref="/skill-matches"
               />
-              <div className="grid grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {suggestedProjects.map((p) => (
                   <Link
                     key={p.id}
@@ -655,7 +656,7 @@ function EmptyState({
   children?: React.ReactNode
 }) {
   return (
-    <div className="flex flex-col items-center gap-4 rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-[radial-gradient(ellipse_at_top,rgba(244,165,53,0.06),transparent_70%),var(--color-bg-surface)] px-8 py-12 text-center">
+    <div className="flex flex-col items-center gap-4 rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-[radial-gradient(ellipse_at_top,rgba(244,165,53,0.06),transparent_70%),var(--color-bg-surface)] px-5 py-10 text-center sm:px-8 sm:py-12">
       <div className="mb-2 flex size-16 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-2 text-amber-500">
         <Icon className="size-7" />
       </div>
@@ -725,7 +726,7 @@ function ChecklistRow({
     </>
   )
 
-  const className = `grid grid-cols-[auto_1fr_auto] items-center gap-5 px-6 py-5 transition-colors duration-fast hover:bg-bg-surface-2 ${!isLast ? 'border-b border-white/[0.08]' : ''}`
+  const className = `grid grid-cols-[auto_1fr_auto] items-center gap-4 px-4 py-4 transition-colors duration-fast hover:bg-bg-surface-2 sm:gap-5 sm:px-6 sm:py-5 ${!isLast ? 'border-b border-white/[0.08]' : ''}`
 
   if (href && !done) {
     return (

@@ -157,8 +157,8 @@ export function MyProjectsClient({
   return (
     <>
       {/* Topbar */}
-      <div className="flex items-center justify-between gap-6 border-b border-white/[0.08] px-10 py-5">
-        <div className="relative max-w-[480px] flex-1">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
+        <div className="relative order-2 w-full min-w-0 max-w-[480px] flex-1 sm:order-1 sm:w-auto">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-tertiary" />
           <input
             type="text"
@@ -168,10 +168,10 @@ export function MyProjectsClient({
             className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
           />
         </div>
-        <div className="flex items-center gap-3">
+        <div className="order-1 flex items-center gap-3 sm:order-2">
           <button
             type="button"
-            className="flex size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
+            className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
             title="Notifications"
           >
             <Bell className="size-[18px]" />
@@ -181,24 +181,25 @@ export function MyProjectsClient({
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
           >
             <Plus className="size-3.5" strokeWidth={2.5} />
-            Start a project
+            <span className="hidden sm:inline">Start a project</span>
+            <span className="sm:hidden">Start</span>
           </Link>
         </div>
       </div>
 
       {/* Content */}
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 overflow-y-auto p-10">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 overflow-y-auto p-4 sm:p-6 lg:p-10">
         {/* Page header */}
-        <section className="flex items-end justify-between gap-8">
+        <section className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div>
-            <h1 className="mb-3 font-display text-[clamp(36px,4vw,52px)] font-normal leading-none tracking-tight">
+            <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
               Your <em className="italic text-amber-500">projects</em>.
             </h1>
-            <p className="max-w-[560px] text-lg leading-relaxed text-fg-secondary">
+            <p className="max-w-[560px] text-base leading-relaxed text-fg-secondary sm:text-lg">
               Everything you’re contributing to, in one place. See what’s blocked, and pick up where you left off.
             </p>
           </div>
-          <div className="flex gap-8 rounded-2xl border border-white/[0.08] bg-bg-surface px-6 py-5">
+          <div className="flex w-full flex-wrap gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface px-5 py-4 sm:gap-8 sm:px-6 sm:py-5 lg:w-auto">
             <QuickStat value={stats.active} label="Active" dimIfZero />
             <QuickStat value={stats.openSteps} label="Open steps" dimIfZero />
             <QuickStat value={stats.totalHours} label="Contributed" suffix="h" dimIfZero />
@@ -311,14 +312,14 @@ export function MyProjectsClient({
         {filtered.length === 0 ? (
           <EmptyState tab={tab} hasFilters={!!query.trim() || role !== 'all'} onReset={resetFilters} />
         ) : view === 'grid' ? (
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             {filtered.map((p) => (
               <ProjectCard key={p.id} project={p} />
             ))}
           </div>
         ) : (
           <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface">
-            <div className="grid grid-cols-[1.4fr_1fr_0.7fr_1fr] gap-4 border-b border-white/[0.08] bg-bg-surface-2 px-6 py-3.5 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
+            <div className="hidden grid-cols-[1.4fr_1fr_0.7fr_1fr] gap-4 border-b border-white/[0.08] bg-bg-surface-2 px-6 py-3.5 text-xs font-semibold uppercase tracking-widest text-fg-tertiary lg:grid">
               <span>Project</span>
               <span>Your next step</span>
               <span>Role</span>
@@ -615,7 +616,7 @@ function ProjectListRow({ project: p }: { project: MyProject }) {
     <Link
       href={`/projects/${p.id}`}
       className={cn(
-        'grid grid-cols-[1.4fr_1fr_0.7fr_1fr] items-center gap-4 border-b border-white/[0.08] px-6 py-5 transition-colors duration-fast last:border-b-0 hover:bg-bg-surface-2',
+        'flex flex-col gap-3 border-b border-white/[0.08] px-4 py-4 transition-colors duration-fast last:border-b-0 hover:bg-bg-surface-2 sm:px-6 sm:py-5 lg:grid lg:grid-cols-[1.4fr_1fr_0.7fr_1fr] lg:items-center lg:gap-4',
         p.status === 'archived' && 'opacity-65',
       )}
     >

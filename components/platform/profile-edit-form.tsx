@@ -232,24 +232,27 @@ export function ProfileEditForm({
   return (
     <form onSubmit={onSubmit} className="flex h-full flex-1 flex-col overflow-y-auto">
       {/* Topbar */}
-      <div className="sticky top-0 z-10 flex items-center justify-between gap-6 border-b border-white/[0.08] bg-bg-base px-10 py-5">
-        <div className="flex items-center gap-2 text-sm text-fg-tertiary">
-          <Link href="/dashboard" className="transition-colors duration-fast hover:text-fg-primary">
+      <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] bg-bg-base px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
+        <div className="flex min-w-0 items-center gap-2 text-sm text-fg-tertiary">
+          <Link
+            href="/dashboard"
+            className="hidden transition-colors duration-fast hover:text-fg-primary sm:inline"
+          >
             Dashboard
           </Link>
-          <span className="opacity-50">/</span>
+          <span className="hidden opacity-50 sm:inline">/</span>
           <span className="font-medium text-fg-primary">Edit profile</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {error && <span className="text-xs text-red-300">{error}</span>}
           {!error && isDirty && (
-            <span className="flex items-center gap-1.5 text-xs text-fg-tertiary">
+            <span className="hidden items-center gap-1.5 text-xs text-fg-tertiary sm:flex">
               <span className="size-[7px] animate-pulse rounded-full bg-amber-500 shadow-[0_0_8px_var(--color-amber-500)]" />
               Unsaved changes
             </span>
           )}
           {!error && savedAt && !isDirty && (
-            <span className="flex items-center gap-1.5 text-xs text-fg-tertiary">
+            <span className="hidden items-center gap-1.5 text-xs text-fg-tertiary sm:flex">
               <span className="size-[7px] rounded-full bg-green-500 shadow-[0_0_6px_var(--color-green-500)]" />
               Saved just now
             </span>
@@ -265,22 +268,25 @@ export function ProfileEditForm({
       </div>
 
       {/* Content */}
-      <div className="mx-auto grid w-full max-w-[1100px] grid-cols-[220px_1fr] items-start gap-12 p-10">
+      <div className="mx-auto grid w-full max-w-[1100px] grid-cols-1 items-start gap-8 p-4 sm:p-6 lg:grid-cols-[220px_1fr] lg:gap-12 lg:p-10">
         {/* Page header */}
-        <header className="col-span-2 mb-4 flex items-end justify-between gap-8">
+        <header className="mb-4 flex items-end justify-between gap-8 lg:col-span-2">
           <div>
-            <h1 className="mb-3 font-display text-[clamp(36px,4vw,52px)] font-normal leading-none tracking-tight">
+            <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
               Your <em className="italic text-amber-500">profile</em>.
             </h1>
-            <p className="max-w-[540px] text-lg leading-relaxed text-fg-secondary">
+            <p className="max-w-[540px] text-base leading-relaxed text-fg-secondary sm:text-lg">
               This is what project leads see when you raise your hand. Make it real — the more honest, the better the matches.
             </p>
           </div>
         </header>
 
         {/* TOC */}
-        <nav className="sticky top-[110px] flex flex-col gap-0.5" aria-label="Profile sections">
-          <span className="mb-2 px-3 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
+        <nav
+          className="flex flex-row flex-wrap gap-0.5 lg:sticky lg:top-[110px] lg:flex-col"
+          aria-label="Profile sections"
+        >
+          <span className="hidden w-full px-3 text-xs font-semibold uppercase tracking-widest text-fg-tertiary lg:mb-2 lg:inline">
             On this page
           </span>
           <TocLink href="#sec-identity">About you</TocLink>
@@ -289,7 +295,7 @@ export function ProfileEditForm({
         </nav>
 
         {/* Sections */}
-        <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-6 sm:gap-8">
           {/* About you */}
           <Card id="sec-identity">
             <CardHead
@@ -300,7 +306,7 @@ export function ProfileEditForm({
             <div className="flex flex-col gap-5">
               {/* Avatar */}
               <Field label="Profile picture">
-                <div className="flex items-center gap-6">
+                <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
                   <div
                     className="relative flex size-28 shrink-0 items-center justify-center overflow-hidden rounded-full border-[3px] border-bg-surface bg-gradient-to-br from-[#4a8b6e] to-[#3DAF7C] font-display text-[44px] text-blue-900 shadow-md after:absolute after:inset-0 after:rounded-full after:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]"
                     style={
@@ -394,7 +400,7 @@ export function ProfileEditForm({
             {/* Skills table */}
             <div className="rounded-xl border border-white/[0.08] bg-bg-base">
               {skills.length > 0 && (
-                <div className="grid grid-cols-[1fr_320px_130px_32px] gap-4 rounded-t-xl border-b border-white/[0.08] bg-bg-surface-2 px-5 py-3.5 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
+                <div className="hidden grid-cols-[1fr_320px_130px_32px] gap-4 rounded-t-xl border-b border-white/[0.08] bg-bg-surface-2 px-5 py-3.5 text-xs font-semibold uppercase tracking-widest text-fg-tertiary lg:grid">
                   <span>Skill</span>
                   <span>Level</span>
                   <span className="text-center">Match me</span>
@@ -538,7 +544,7 @@ export function ProfileEditForm({
               desc="Used to surface local projects and to coordinate calls. We never show your exact address — just your city."
             />
             <div className="flex flex-col gap-5">
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <Field label="City" htmlFor="fld-city">
                   <input
                     id="fld-city"
@@ -581,7 +587,7 @@ function TocLink({ href, children }: { href: string; children: React.ReactNode }
   return (
     <a
       href={href}
-      className="ml-1.5 rounded-lg border-l-2 border-transparent px-3 py-2 text-sm text-fg-secondary transition-colors hover:text-fg-primary"
+      className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-3 py-1.5 text-xs text-fg-secondary transition-colors hover:text-fg-primary lg:ml-1.5 lg:rounded-lg lg:border-none lg:border-l-2 lg:border-transparent lg:bg-transparent lg:px-3 lg:py-2 lg:text-sm"
     >
       {children}
     </a>
@@ -592,7 +598,7 @@ function Card({ id, children }: { id?: string; children: React.ReactNode }) {
   return (
     <section
       id={id}
-      className="scroll-mt-[110px] rounded-2xl border border-white/[0.08] bg-bg-surface p-8"
+      className="scroll-mt-[110px] rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6 lg:p-8"
     >
       {children}
     </section>
@@ -667,8 +673,8 @@ function SkillRow({
   onRemove: () => void
 }) {
   return (
-    <div className="grid grid-cols-[1fr_320px_130px_32px] items-center gap-4 border-b border-white/[0.08] px-5 py-4 transition-colors duration-fast last:border-b-0 hover:bg-bg-surface-2">
-      <div className="flex items-center gap-3 text-sm font-medium text-fg-primary">
+    <div className="flex flex-col gap-3 border-b border-white/[0.08] px-4 py-4 transition-colors duration-fast last:border-b-0 hover:bg-bg-surface-2 sm:px-5 lg:grid lg:grid-cols-[1fr_320px_130px_32px] lg:items-center lg:gap-4">
+      <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-fg-primary">
         {skill.name}
         <span className="rounded-full border border-white/[0.08] bg-bg-surface-3 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-fg-secondary">
           {skill.category}
@@ -693,7 +699,7 @@ function SkillRow({
               type="button"
               onClick={() => onLevel(l.value)}
               className={cn(
-                'cursor-pointer rounded-md px-1 py-1.5 text-xs font-medium transition-all duration-fast',
+                'cursor-pointer rounded-md px-1 py-2 text-xs font-medium transition-all duration-fast',
                 checked ? checkedClass : 'text-fg-tertiary hover:text-fg-secondary',
               )}
             >
@@ -703,15 +709,16 @@ function SkillRow({
         })}
       </div>
 
-      {/* Seeking toggle */}
-      <div className="flex justify-center">
+      {/* Seeking toggle (with label on mobile) */}
+      <div className="flex items-center justify-between gap-3 lg:justify-center">
+        <span className="text-xs text-fg-tertiary lg:hidden">Match me to projects</span>
         <button
           type="button"
           role="switch"
           aria-checked={skill.isSeeking}
           onClick={() => onSeeking(!skill.isSeeking)}
           className={cn(
-            'relative inline-block h-[22px] w-10 cursor-pointer rounded-full border transition-all duration-fast',
+            'relative inline-block h-[22px] w-10 shrink-0 cursor-pointer rounded-full border transition-all duration-fast',
             skill.isSeeking
               ? 'border-amber-500 bg-amber-500/[0.18]'
               : 'border-neutral-700 bg-bg-surface-3',
@@ -733,10 +740,11 @@ function SkillRow({
       <button
         type="button"
         onClick={onRemove}
-        className="flex size-7 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-fg-tertiary transition-colors hover:bg-red-500/[0.12] hover:text-red-300"
+        className="flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-md border border-white/[0.08] bg-transparent text-xs text-fg-tertiary transition-colors hover:border-red-500/40 hover:bg-red-500/[0.12] hover:text-red-300 lg:size-7 lg:border-none lg:text-base"
         title="Remove skill"
       >
         <X className="size-3.5" />
+        <span className="lg:hidden">Remove skill</span>
       </button>
     </div>
   )

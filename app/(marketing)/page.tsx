@@ -109,17 +109,17 @@ type ProjectSummary = Awaited<ReturnType<typeof getRecentProjects>>[number]
 function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
   return (
     <nav className="sticky top-0 z-50 border-b border-white/[0.07] bg-blue-900/[0.78] backdrop-blur-2xl backdrop-saturate-[1.4]">
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-8 px-8 py-4">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex size-8 items-center justify-center rounded-md bg-gradient-to-br from-amber-500 to-amber-400 font-display text-lg font-bold text-blue-900 shadow-glow-amber">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-4 px-4 py-3 sm:gap-8 sm:px-8 sm:py-4">
+        <Link href="/" className="flex items-center gap-2 sm:gap-3">
+          <div className="flex size-7 items-center justify-center rounded-md bg-gradient-to-br from-amber-500 to-amber-400 font-display text-base font-bold text-blue-900 shadow-glow-amber sm:size-8 sm:text-lg">
             S
           </div>
-          <span className="font-display text-xl tracking-tight">
+          <span className="font-display text-base tracking-tight sm:text-xl">
             The Superhero
           </span>
         </Link>
 
-        <div className="flex gap-8 text-sm text-neutral-300">
+        <div className="hidden gap-8 text-sm text-neutral-300 lg:flex">
           <Link href="/projects" className="transition-colors duration-fast hover:text-fg-primary">
             Browse projects
           </Link>
@@ -128,12 +128,12 @@ function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
           </Link>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
           {isSignedIn ? (
             <>
               <Link
                 href="/dashboard"
-                className="inline-flex items-center gap-2 rounded-md border border-white/[0.13] bg-transparent px-[18px] py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-white/[0.04]"
+                className="inline-flex items-center gap-2 rounded-md border border-white/[0.13] bg-transparent px-3 py-2 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-white/[0.04] sm:px-[18px] sm:py-2.5"
               >
                 Dashboard
               </Link>
@@ -142,20 +142,14 @@ function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
           ) : (
             <>
               <Link
-                href="/dashboard"
-                className="inline-flex items-center gap-2 rounded-md border border-white/[0.13] bg-transparent px-[18px] py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-white/[0.04]"
-              >
-                Dashboard
-              </Link>
-              <Link
                 href="/sign-in"
-                className="inline-flex items-center gap-2 rounded-md border border-white/[0.13] bg-transparent px-[18px] py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-white/[0.04]"
+                className="hidden items-center gap-2 rounded-md border border-white/[0.13] bg-transparent px-[18px] py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-white/[0.04] sm:inline-flex"
               >
                 Sign in
               </Link>
               <Link
                 href="/sign-up"
-                className="inline-flex items-center gap-2 rounded-md border border-amber-500 bg-amber-500 px-[18px] py-2.5 text-sm font-medium text-blue-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
+                className="inline-flex items-center gap-2 rounded-md border border-amber-500 bg-amber-500 px-3 py-2 text-sm font-medium text-blue-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber sm:px-[18px] sm:py-2.5"
               >
                 Get started
               </Link>
@@ -174,7 +168,7 @@ import { SignOutButton as ClerkSignOutButton } from '@clerk/nextjs'
 function SignOutButton() {
   return (
     <ClerkSignOutButton>
-      <button className="inline-flex items-center gap-2 rounded-md border border-amber-500 bg-amber-500 px-[18px] py-2.5 text-sm font-medium text-blue-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber cursor-pointer">
+      <button className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-amber-500 bg-amber-500 px-3 py-2 text-sm font-medium text-blue-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber sm:px-[18px] sm:py-2.5">
         Sign out
       </button>
     </ClerkSignOutButton>
@@ -188,7 +182,7 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
   const collageProjects = projects.slice(0, 2)
 
   return (
-    <section className="relative overflow-hidden py-24 pb-20">
+    <section className="relative overflow-hidden py-14 pb-12 sm:py-24 sm:pb-20">
       {/* Background radials */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -212,7 +206,7 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
         }}
       />
 
-      <div className="relative mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-16 px-8 lg:grid-cols-[1.15fr_1fr]">
+      <div className="relative mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-10 px-4 sm:gap-16 sm:px-8 lg:grid-cols-[1.15fr_1fr]">
         {/* Left — copy */}
         <div>
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/[0.13] px-3.5 py-1.5 text-xs font-medium uppercase tracking-[0.12em] text-neutral-300 animate-[rise_800ms_ease-out_100ms_backwards]">
@@ -381,8 +375,8 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
 
 function EntryPoints({ isSignedIn }: { isSignedIn: boolean }) {
   return (
-    <section className="border-t border-white/[0.07] py-20">
-      <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-4 px-8 md:grid-cols-3">
+    <section className="border-t border-white/[0.07] py-12 sm:py-20">
+      <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-4 px-4 sm:px-8 md:grid-cols-3">
         {/* Browse — featured */}
         <Link
           href="/projects"
@@ -459,8 +453,8 @@ function EntryPoints({ isSignedIn }: { isSignedIn: boolean }) {
 
 function NewProjects({ projects }: { projects: ProjectSummary[] }) {
   return (
-    <section className="border-t border-white/[0.07] py-20" id="browse">
-      <div className="mx-auto max-w-[1280px] px-8">
+    <section className="border-t border-white/[0.07] py-12 sm:py-20" id="browse">
+      <div className="mx-auto max-w-[1280px] px-4 sm:px-8">
         {/* Section header */}
         <div className="mb-12 flex items-end justify-between gap-8">
           <div>
@@ -612,8 +606,8 @@ const STEPS = [
 
 function HowItWorks() {
   return (
-    <section className="border-t border-white/[0.07] py-20" id="how">
-      <div className="mx-auto max-w-[1280px] px-8">
+    <section className="border-t border-white/[0.07] py-12 sm:py-20" id="how">
+      <div className="mx-auto max-w-[1280px] px-4 sm:px-8">
         <div className="mb-12">
           <div className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.12em] text-amber-500">
             <span className="h-px w-6 bg-amber-500" />
@@ -652,7 +646,7 @@ function HowItWorks() {
 
 function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
   return (
-    <section className="mx-auto max-w-[1280px] px-8">
+    <section className="mx-auto max-w-[1280px] px-4 sm:px-8">
       <div
         className="relative my-20 overflow-hidden rounded-2xl border border-white/[0.13] p-20 text-center"
         style={{
@@ -710,7 +704,7 @@ function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
 function Footer() {
   return (
     <footer className="border-t border-white/[0.07] py-10 pb-8 text-sm text-neutral-400">
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 px-8">
+      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 px-4 sm:px-8">
         <div>&copy; 2026 The Superhero · climate &amp; sustainability collaboration</div>
         <div className="flex gap-6">
           <Link href="#" className="hover:text-fg-primary">

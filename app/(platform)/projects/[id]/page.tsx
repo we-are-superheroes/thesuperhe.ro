@@ -196,25 +196,28 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   return (
     <>
       {/* Topbar */}
-      <div className="flex items-center justify-between gap-6 border-b border-white/[0.08] px-10 py-5">
-        <div className="flex items-center gap-2 text-sm text-fg-tertiary">
-          <Link href="/projects" className="transition-colors duration-fast hover:text-fg-primary">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
+        <div className="flex min-w-0 items-center gap-2 text-sm text-fg-tertiary">
+          <Link
+            href="/projects"
+            className="hidden transition-colors duration-fast hover:text-fg-primary sm:inline"
+          >
             Browse projects
           </Link>
-          <ChevronRight className="size-3" />
-          <span className="text-fg-primary">{project.title}</span>
+          <ChevronRight className="hidden size-3 sm:inline" />
+          <span className="truncate text-fg-primary">{project.title}</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
           <button
             type="button"
-            className="flex size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
+            className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
             title="Share"
           >
             <Share2 className="size-4" />
           </button>
           <button
             type="button"
-            className="flex size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
+            className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
             title="Pin"
           >
             <Bookmark className="size-4" />
@@ -222,10 +225,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           {isLead && (
             <Link
               href={`/projects/${id}/edit`}
-              className="inline-flex items-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/[0.12] px-4 py-2.5 text-sm font-medium text-amber-500 transition-all duration-standard hover:-translate-y-px hover:bg-amber-500/[0.18]"
+              className="inline-flex items-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/[0.12] px-3 py-2 text-sm font-medium text-amber-500 transition-all duration-standard hover:-translate-y-px hover:bg-amber-500/[0.18] sm:px-4 sm:py-2.5"
             >
               <Pencil className="size-3.5" strokeWidth={2.5} />
-              Modify project
+              <span className="hidden sm:inline">Modify project</span>
+              <span className="sm:hidden">Modify</span>
             </Link>
           )}
           <JoinProjectTopButton
@@ -239,11 +243,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       <div className="overflow-y-auto">
         {/* Cover */}
         <div
-          className="relative flex min-h-[360px] items-end overflow-hidden border-b border-white/[0.08]"
+          className="relative flex min-h-[280px] items-end overflow-hidden border-b border-white/[0.08] sm:min-h-[360px]"
           style={{ background: coverGradient }}
         >
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent from-30% to-blue-900/[0.92]" />
-          <div className="relative z-[1] mx-auto flex w-full max-w-[1240px] flex-col gap-3 px-10 pb-8 pt-12">
+          <div className="relative z-[1] mx-auto flex w-full max-w-[1240px] flex-col gap-3 px-4 pb-6 pt-10 sm:px-10 sm:pb-8 sm:pt-12">
             <div className="flex flex-wrap items-center gap-3">
               {project.projectType?.name && (
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/[0.16] px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-amber-400 backdrop-blur-sm">
@@ -287,7 +291,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
         </div>
 
         {/* Body */}
-        <div className="mx-auto grid w-full max-w-[1240px] grid-cols-[1fr_340px] items-start gap-10 p-10">
+        <div className="mx-auto grid w-full max-w-[1240px] grid-cols-1 items-start gap-8 p-4 sm:p-6 lg:grid-cols-[1fr_340px] lg:gap-10 lg:p-10">
           {/* Left column */}
           <div>
             {/* About */}
@@ -356,7 +360,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           </div>
 
           {/* Right rail */}
-          <aside className="sticky top-6 flex flex-col gap-5">
+          <aside className="flex flex-col gap-5 lg:sticky lg:top-6">
             {/* Join CTA */}
             <JoinProjectCard
               projectId={id}
