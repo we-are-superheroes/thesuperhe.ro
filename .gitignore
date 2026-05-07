@@ -41,3 +41,14 @@ yarn-error.log*
 next-env.d.ts
 
 /app/generated/prisma
+
+# Local editor / IDE state
+/.vs
+/.claude
+.commit-msg.tmp
+
+# Working directories used during this session — design source bundles
+# and one-off Prisma snapshots that shouldn't be checked in.
+/design-extract
+/existing_prisma
+
