@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useMemo, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { Search, Plus, X, Check, Upload, ChevronDown } from 'lucide-react'
+import { Search, Plus, X, Upload, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { saveProfileAction, clearAvatarAction } from '@/app/(platform)/profile/actions'
 import type { Proficiency } from '@/types'
@@ -234,7 +234,7 @@ export function ProfileEditForm({
   /* ── Render ─────────────────────────────────────────── */
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col">
+    <form onSubmit={onSubmit} className="flex h-full flex-1 flex-col overflow-y-auto">
       {/* Topbar */}
       <div className="sticky top-0 z-10 flex items-center justify-between gap-6 border-b border-white/[0.08] bg-bg-base px-10 py-5">
         <div className="flex items-center gap-2 text-sm text-fg-tertiary">
@@ -246,18 +246,18 @@ export function ProfileEditForm({
         </div>
         <div className="flex items-center gap-3">
           {error && <span className="text-xs text-red-300">{error}</span>}
+          {!error && isDirty && (
+            <span className="flex items-center gap-1.5 text-xs text-fg-tertiary">
+              <span className="size-[7px] animate-pulse rounded-full bg-amber-500 shadow-[0_0_8px_var(--color-amber-500)]" />
+              Unsaved changes
+            </span>
+          )}
           {!error && savedAt && !isDirty && (
             <span className="flex items-center gap-1.5 text-xs text-fg-tertiary">
               <span className="size-[7px] rounded-full bg-green-500 shadow-[0_0_6px_var(--color-green-500)]" />
               Saved just now
             </span>
           )}
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
-          >
-            Cancel
-          </Link>
           <button
             type="submit"
             disabled={pending || !isDirty}
@@ -601,34 +601,6 @@ export function ProfileEditForm({
           </Card>
         </div>
 
-        {/* Sticky save bar */}
-        <div className="col-span-2 mt-4 flex items-center justify-end gap-3 bg-gradient-to-t from-bg-base from-25% to-transparent py-6 sticky bottom-0">
-          {isDirty && (
-            <span className="mr-auto flex items-center gap-1.5 text-xs text-fg-tertiary">
-              <span className="size-[7px] animate-pulse rounded-full bg-amber-500 shadow-[0_0_8px_var(--color-amber-500)]" />
-              Unsaved changes
-            </span>
-          )}
-          {!isDirty && savedAt && (
-            <span className="mr-auto flex items-center gap-1.5 text-xs text-fg-tertiary">
-              <Check className="size-3.5 text-green-300" strokeWidth={2.5} />
-              Saved
-            </span>
-          )}
-          <Link
-            href="/dashboard"
-            className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
-          >
-            Cancel
-          </Link>
-          <button
-            type="submit"
-            disabled={pending || !isDirty}
-            className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
-          >
-            {pending ? 'Saving…' : 'Save changes'}
-          </button>
-        </div>
       </div>
     </form>
   )
