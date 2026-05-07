@@ -110,6 +110,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       }))
     : false
 
+  // How many steps are assigned to me on this project? (used to confirm leave)
+  const myAssignedStepCount = userId
+    ? project.steps.filter((s) => s.assignedToId === userId).length
+    : 0
+
   const totalSteps = project.steps.length
   const stepsByStatus = {
     needs_help: project.steps.filter((s) => s.status === 'needs_help').length,
@@ -334,6 +339,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               projectId={id}
               isSignedIn={!!userId}
               isMember={isMember}
+              myAssignedStepCount={myAssignedStepCount}
             />
 
             {/* Stats */}

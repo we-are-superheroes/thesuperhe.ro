@@ -169,6 +169,48 @@ export async function claimStepAction(
   return { success: true, data: { claimed: true } }
 }
 
+export async function unclaimStepAction(
+  projectId: string,
+  projectStepId: string,
+): Promise<ServerActionResult<{ unclaimed: true }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const step = await db.projectStep.findUnique({
+    where: { id: projectStepId },
+    select: { id: true, projectId: true, assignedToId: true, status: true },
+  })
+  if (!step || step.projectId !== projectId) {
+    return { success: false, error: 'Step not found in this project.' }
+  }
+  if (step.assignedToId !== userId) {
+    return { success: false, error: 'This step isn’t assigned to you.' }
+  }
+
+  try {
+    await db.$transaction([
+      db.projectStep.update({
+        where: { id: projectStepId },
+        data: {
+          assignedToId: null,
+          // If the user was actively working it, return the step to the pool.
+          status: step.status === 'in_progress' ? 'needs_help' : step.status,
+        },
+      }),
+      db.contribution.updateMany({
+        where: { userId, projectId, projectStepId },
+        data: { status: 'withdrawn' },
+      }),
+    ])
+  } catch {
+    return { success: false, error: 'Could not hand the step back.' }
+  }
+
+  revalidatePath(`/projects/${projectId}`)
+  revalidatePath('/dashboard')
+  return { success: true, data: { unclaimed: true } }
+}
+
 export async function leaveProjectAction(
   projectId: string,
 ): Promise<ServerActionResult<{ left: true }>> {
@@ -183,11 +225,44 @@ export async function leaveProjectAction(
     return { success: false, error: 'You’re not in this project.' }
   }
 
+  // Find any steps assigned to this user in this project so we can release
+  // them as part of leaving — leaving with steps still on your name would
+  // strand the work.
+  const assignedSteps = await db.projectStep.findMany({
+    where: { projectId, assignedToId: userId },
+    select: { id: true, status: true },
+  })
+
   try {
-    await db.contribution.update({
-      where: { id: existing.id },
-      data: { status: 'withdrawn' },
-    })
+    await db.$transaction([
+      // Withdraw the project-level contribution.
+      db.contribution.update({
+        where: { id: existing.id },
+        data: { status: 'withdrawn' },
+      }),
+      // Unassign every step the user had on this project.
+      db.projectStep.updateMany({
+        where: { projectId, assignedToId: userId },
+        data: { assignedToId: null },
+      }),
+      // Return any "in_progress" steps to "needs_help" so others can pick up.
+      db.projectStep.updateMany({
+        where: {
+          id: { in: assignedSteps.filter((s) => s.status === 'in_progress').map((s) => s.id) },
+        },
+        data: { status: 'needs_help' },
+      }),
+      // Mark step-level contributions in this project as withdrawn.
+      db.contribution.updateMany({
+        where: {
+          userId,
+          projectId,
+          projectStepId: { not: null },
+          status: { in: ['active', 'pending'] },
+        },
+        data: { status: 'withdrawn' },
+      }),
+    ])
   } catch {
     return { success: false, error: 'Could not leave project.' }
   }
@@ -197,3 +272,4 @@ export async function leaveProjectAction(
   revalidatePath('/projects')
   return { success: true, data: { left: true } }
 }
+

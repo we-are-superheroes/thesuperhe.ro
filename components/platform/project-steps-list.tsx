@@ -3,7 +3,7 @@
 import { useState, useMemo, useTransition } from 'react'
 import { Clock, ArrowRight, ChevronDown, Check, LogIn } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { claimStepAction } from '@/app/(platform)/projects/[id]/actions'
+import { claimStepAction, unclaimStepAction } from '@/app/(platform)/projects/[id]/actions'
 
 export interface StepCardData {
   id: string
@@ -186,6 +186,14 @@ function StepCard({
     })
   }
 
+  const unclaim = () => {
+    setError(null)
+    startTransition(async () => {
+      const result = await unclaimStepAction(projectId, step.id)
+      if (!result.success) setError(result.error)
+    })
+  }
+
   return (
     <div
       className={cn(
@@ -249,6 +257,7 @@ function StepCard({
           pending={pending}
           error={error}
           onClaim={claim}
+          onUnclaim={unclaim}
         />
       </div>
     </div>
@@ -268,6 +277,7 @@ function StepAction({
   pending,
   error,
   onClaim,
+  onUnclaim,
 }: {
   step: StepCardData
   isSignedIn: boolean
@@ -281,14 +291,26 @@ function StepAction({
   pending: boolean
   error: string | null
   onClaim: () => void
+  onUnclaim: () => void
 }) {
   // I'm the assignee
   if (step.assignedToMe) {
     return (
-      <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-300">
-        <Check className="size-3.5" strokeWidth={2.5} />
-        You’re on this
-      </span>
+      <div className="flex items-center gap-3">
+        {error && <span className="text-xs text-red-300">{error}</span>}
+        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-300">
+          <Check className="size-3.5" strokeWidth={2.5} />
+          You’re on this
+        </span>
+        <button
+          type="button"
+          disabled={pending}
+          onClick={onUnclaim}
+          className="cursor-pointer text-sm text-fg-tertiary underline-offset-2 transition-colors hover:text-fg-secondary hover:underline disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {pending ? 'Handing back…' : 'Hand back step'}
+        </button>
+      </div>
     )
   }
   // Someone else is on it

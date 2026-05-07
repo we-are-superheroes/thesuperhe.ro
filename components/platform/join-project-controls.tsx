@@ -71,10 +71,12 @@ export function JoinProjectCard({
   projectId,
   isSignedIn,
   isMember,
+  myAssignedStepCount,
 }: {
   projectId: string
   isSignedIn: boolean
   isMember: boolean
+  myAssignedStepCount: number
 }) {
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -99,6 +101,12 @@ export function JoinProjectCard({
             disabled={pending}
             onClick={() => {
               setError(null)
+              if (myAssignedStepCount > 0) {
+                const ok = window.confirm(
+                  `You have ${myAssignedStepCount} step${myAssignedStepCount === 1 ? '' : 's'} assigned to you on this project. Leaving will hand ${myAssignedStepCount === 1 ? 'it' : 'them'} back to the team.\n\nAre you sure you want to leave?`,
+                )
+                if (!ok) return
+              }
               startTransition(async () => {
                 const result = await leaveProjectAction(projectId)
                 if (!result.success) setError(result.error)
