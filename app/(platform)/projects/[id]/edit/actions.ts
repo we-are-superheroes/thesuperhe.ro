@@ -3,7 +3,30 @@
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
+import { uploadImage, deleteImageByUrl } from '@/lib/storage'
 import type { ServerActionResult } from '@/types'
+
+/**
+ * Authz helper — confirm the calling user is the project's lead. Returns
+ * the project id on success so callers can chain.
+ */
+async function requireLead(
+  userId: string,
+  projectId: string,
+): Promise<ServerActionResult<{ projectId: string }>> {
+  const lead = await db.contribution.findFirst({
+    where: {
+      userId,
+      projectId,
+      projectStepId: null,
+      role: 'lead',
+      status: { in: ['active', 'pending'] },
+    },
+    select: { id: true },
+  })
+  if (!lead) return { success: false, error: 'Only the project lead can edit this project.' }
+  return { success: true, data: { projectId } }
+}
 
 export interface UpdateProjectStepInput {
   /** DB id for an existing step, or null/undefined for a brand new one. */
@@ -198,4 +221,97 @@ export async function updateProjectAction(
   revalidatePath('/projects')
   revalidatePath('/my-projects')
   return { success: true, data: { projectId } }
+}
+
+/**
+ * Upload (or replace) a project's cover image. Lead-only. Replaces any
+ * prior cover both in the DB and in storage.
+ */
+export async function uploadProjectCoverAction(
+  projectId: string,
+  formData: FormData,
+): Promise<ServerActionResult<{ url: string }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const lead = await requireLead(userId, projectId)
+  if (!lead.success) return { success: false, error: lead.error }
+
+  const file = formData.get('file')
+  if (!(file instanceof File) || file.size === 0) {
+    return { success: false, error: 'No file provided.' }
+  }
+
+  const existing = await db.project.findUnique({
+    where: { id: projectId },
+    select: { coverImageUrl: true },
+  })
+
+  let url: string
+  try {
+    const result = await uploadImage(file, 'cover')
+    url = result.url
+  } catch (e) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Could not upload image.',
+    }
+  }
+
+  try {
+    await db.project.update({
+      where: { id: projectId },
+      data: { coverImageUrl: url },
+    })
+  } catch {
+    await deleteImageByUrl(url)
+    return { success: false, error: 'Could not save cover.' }
+  }
+
+  if (existing?.coverImageUrl && existing.coverImageUrl !== url) {
+    await deleteImageByUrl(existing.coverImageUrl)
+  }
+
+  revalidatePath(`/projects/${projectId}`)
+  revalidatePath(`/projects/${projectId}/edit`)
+  revalidatePath('/projects')
+  revalidatePath('/my-projects')
+  revalidatePath('/dashboard')
+  return { success: true, data: { url } }
+}
+
+/**
+ * Clear a project's cover image (revert to the gradient placeholder).
+ */
+export async function clearProjectCoverAction(
+  projectId: string,
+): Promise<ServerActionResult<{ cleared: true }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const lead = await requireLead(userId, projectId)
+  if (!lead.success) return { success: false, error: lead.error }
+
+  const existing = await db.project.findUnique({
+    where: { id: projectId },
+    select: { coverImageUrl: true },
+  })
+
+  try {
+    await db.project.update({
+      where: { id: projectId },
+      data: { coverImageUrl: null },
+    })
+  } catch {
+    return { success: false, error: 'Could not clear cover.' }
+  }
+
+  if (existing?.coverImageUrl) await deleteImageByUrl(existing.coverImageUrl)
+
+  revalidatePath(`/projects/${projectId}`)
+  revalidatePath(`/projects/${projectId}/edit`)
+  revalidatePath('/projects')
+  revalidatePath('/my-projects')
+  revalidatePath('/dashboard')
+  return { success: true, data: { cleared: true } }
 }

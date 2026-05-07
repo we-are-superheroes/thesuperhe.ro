@@ -39,6 +39,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       description: true,
       location: true,
       remoteOk: true,
+      coverImageUrl: true,
       contributions: {
         where: {
           userId,
@@ -85,6 +86,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
     // remoteOk → yes; off → no. We can't distinguish "some" once saved, so
     // default the toggle to "yes" when remote is allowed and "no" otherwise.
     remote: project.remoteOk ? 'yes' : 'no',
+    coverImageUrl: project.coverImageUrl,
     steps: project.steps.map((s) => ({
       id: s.id,
       title: s.title,

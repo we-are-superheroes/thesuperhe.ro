@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Search,
   Bell,
@@ -26,6 +27,7 @@ export interface BrowseProject {
   type: string
   typeId: string | null
   imgKey: string
+  coverImageUrl: string | null
   skills: string[]
   skillIds: string[]
   needs: number
@@ -478,7 +480,16 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
       href={`/projects/${p.id}`}
       className="group flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface transition-all duration-standard hover:-translate-y-0.5 hover:border-neutral-600 hover:shadow-md"
     >
-      <div className={cn('relative aspect-[16/8] overflow-hidden', imgClass)}>
+      <div className={cn('relative aspect-[16/8] overflow-hidden', !p.coverImageUrl && imgClass)}>
+        {p.coverImageUrl && (
+          <Image
+            src={p.coverImageUrl}
+            alt=""
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        )}
         <span className="absolute left-3 top-3 rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
           {p.type}
         </span>

@@ -1,11 +1,16 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useRef } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowRight, FileText, ChevronLeft } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowRight, FileText, ChevronLeft, Upload, ImageIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { updateProjectAction } from '@/app/(platform)/projects/[id]/edit/actions'
+import {
+  updateProjectAction,
+  uploadProjectCoverAction,
+  clearProjectCoverAction,
+} from '@/app/(platform)/projects/[id]/edit/actions'
 import { saveBlueprintAction } from '@/app/(platform)/projects/new/actions'
 import {
   Card,
@@ -30,6 +35,7 @@ export interface EditProjectInitial {
   city: string
   country: string
   remote: 'yes' | 'some' | 'no'
+  coverImageUrl: string | null
   steps: Array<{
     id: string
     title: string
@@ -60,6 +66,9 @@ export function EditProjectForm({
     initial.country && COUNTRIES.includes(initial.country) ? initial.country : COUNTRIES[0],
   )
   const [remote, setRemote] = useState<'yes' | 'some' | 'no'>(initial.remote)
+  const [coverImageUrl, setCoverImageUrl] = useState<string | null>(initial.coverImageUrl)
+  const coverFileRef = useRef<HTMLInputElement>(null)
+  const [pendingCover, startCoverTransition] = useTransition()
   const [steps, setSteps] = useState<FormStep[]>(
     initial.steps.length > 0
       ? initial.steps.map((s) => ({
@@ -110,6 +119,28 @@ export function EditProjectForm({
         return
       }
       router.push(`/projects/${initial.id}`)
+    })
+  }
+
+  const onCoverFile = (file: File | null) => {
+    if (!file) return
+    setError(null)
+    const fd = new FormData()
+    fd.append('file', file)
+    startCoverTransition(async () => {
+      const result = await uploadProjectCoverAction(initial.id, fd)
+      if (!result.success) setError(result.error)
+      else setCoverImageUrl(result.data.url)
+    })
+    if (coverFileRef.current) coverFileRef.current.value = ''
+  }
+
+  const onClearCover = () => {
+    setError(null)
+    startCoverTransition(async () => {
+      const result = await clearProjectCoverAction(initial.id)
+      if (!result.success) setError(result.error)
+      else setCoverImageUrl(null)
     })
   }
 
@@ -220,6 +251,69 @@ export function EditProjectForm({
                 className="min-h-[130px] w-full resize-y rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm leading-relaxed text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
               />
             </Field>
+          </div>
+        </Card>
+
+        {/* Cover image */}
+        <Card>
+          <CardHead
+            eyebrow="Cover image"
+            title="A picture for your project."
+            desc="Used on the project page and the cards on Browse and My projects. Optional — a colourful gradient stands in if you skip it."
+          />
+          <input
+            ref={coverFileRef}
+            type="file"
+            accept="image/png,image/jpeg,image/webp,image/gif"
+            className="hidden"
+            onChange={(e) => onCoverFile(e.target.files?.[0] ?? null)}
+          />
+          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
+            <div className="relative aspect-[16/8] w-full max-w-[260px] shrink-0 overflow-hidden rounded-xl border border-white/[0.08] bg-bg-base">
+              {coverImageUrl ? (
+                <Image
+                  src={coverImageUrl}
+                  alt="Project cover"
+                  fill
+                  sizes="260px"
+                  className="object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-fg-tertiary">
+                  <ImageIcon className="size-8" strokeWidth={1.5} />
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => coverFileRef.current?.click()}
+                  disabled={pendingCover}
+                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-fg-primary transition-colors hover:border-neutral-600 disabled:cursor-wait disabled:opacity-60"
+                >
+                  <Upload className="size-3.5" />
+                  {pendingCover
+                    ? 'Uploading…'
+                    : coverImageUrl
+                      ? 'Replace'
+                      : 'Upload cover'}
+                </button>
+                {coverImageUrl && (
+                  <button
+                    type="button"
+                    onClick={onClearCover}
+                    disabled={pendingCover}
+                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-red-300 transition-colors hover:border-red-500 hover:text-red-500 disabled:opacity-60"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+              <span className="max-w-[320px] text-xs leading-relaxed text-fg-tertiary">
+                Wide image works best — at least 1200×600. PNG, JPG, WebP or GIF, up to 8&nbsp;MB.
+              </span>
+            </div>
           </div>
         </Card>
 

@@ -4,7 +4,11 @@ import { useState, useTransition, useMemo, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { Search, Plus, X, Upload } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { saveProfileAction, clearAvatarAction } from '@/app/(platform)/profile/actions'
+import {
+  saveProfileAction,
+  clearAvatarAction,
+  uploadAvatarAction,
+} from '@/app/(platform)/profile/actions'
 import type { Proficiency } from '@/types'
 
 /* ================================================================
@@ -227,6 +231,21 @@ export function ProfileEditForm({
     })
   }
 
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const onAvatarFile = (file: File | null) => {
+    if (!file) return
+    setError(null)
+    const fd = new FormData()
+    fd.append('file', file)
+    startTransition(async () => {
+      const result = await uploadAvatarAction(fd)
+      if (!result.success) setError(result.error)
+      else setAvatarUrl(result.data.url)
+    })
+    // Reset the input so picking the same file twice still fires onChange
+    if (fileInputRef.current) fileInputRef.current.value = ''
+  }
+
   /* ── Render ─────────────────────────────────────────── */
 
   return (
@@ -318,15 +337,22 @@ export function ProfileEditForm({
                     {!avatarUrl && initials}
                   </div>
                   <div className="flex flex-col gap-2">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/gif"
+                      className="hidden"
+                      onChange={(e) => onAvatarFile(e.target.files?.[0] ?? null)}
+                    />
                     <div className="flex gap-2">
                       <button
                         type="button"
-                        disabled
-                        title="Avatar upload coming soon"
-                        className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-fg-primary opacity-60"
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={pending}
+                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-fg-primary transition-colors hover:border-neutral-600 disabled:cursor-wait disabled:opacity-60"
                       >
                         <Upload className="size-3.5" />
-                        Upload new
+                        {pending ? 'Uploading…' : avatarUrl ? 'Replace' : 'Upload new'}
                       </button>
                       {avatarUrl && (
                         <button
@@ -340,7 +366,7 @@ export function ProfileEditForm({
                       )}
                     </div>
                     <span className="max-w-[280px] text-xs leading-relaxed text-fg-tertiary">
-                      Square, at least 256×256. PNG, JPG or WebP, up to 4&nbsp;MB. Upload coming soon.
+                      Square, at least 256×256. PNG, JPG, WebP or GIF, up to 4&nbsp;MB.
                     </span>
                   </div>
                 </div>

@@ -71,6 +71,7 @@ export default async function MyProjectsPage() {
           location: true,
           status: true,
           updatedAt: true,
+          coverImageUrl: true,
           projectType: { select: { name: true } },
           steps: {
             orderBy: { order: 'asc' },
@@ -151,6 +152,7 @@ export default async function MyProjectsPage() {
       title: p.title,
       type: p.projectType?.name ?? 'Other',
       imgKey: (p.projectType?.name && TYPE_IMG_KEY[p.projectType.name]) ?? 'rewild',
+      coverImageUrl: p.coverImageUrl ?? null,
       location: p.location ?? 'Remote',
       role: c.role,
       status: bucket,

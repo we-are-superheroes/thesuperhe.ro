@@ -1,6 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Search,
   Bell,
@@ -44,6 +45,7 @@ async function getDashboardData(userId: string) {
             id: true,
             title: true,
             location: true,
+            coverImageUrl: true,
             projectType: { select: { name: true } },
             steps: {
               select: { id: true, status: true },
@@ -363,7 +365,16 @@ export default async function DashboardPage() {
                       href={`/projects/${c.projectId}`}
                       className="group flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface transition-all duration-standard hover:-translate-y-0.5 hover:border-neutral-600 hover:shadow-md"
                     >
-                      <div className={`relative aspect-[16/8] overflow-hidden ${PIN_GRADIENTS[i % PIN_GRADIENTS.length]}`}>
+                      <div className={`relative aspect-[16/8] overflow-hidden ${c.project.coverImageUrl ? '' : PIN_GRADIENTS[i % PIN_GRADIENTS.length]}`}>
+                        {c.project.coverImageUrl && (
+                          <Image
+                            src={c.project.coverImageUrl}
+                            alt=""
+                            fill
+                            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                            className="object-cover"
+                          />
+                        )}
                         <span className="absolute left-3 top-3 rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
                           {c.role}
                         </span>

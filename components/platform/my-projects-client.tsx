@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   Search,
   Bell,
@@ -29,6 +30,7 @@ export interface MyProject {
   title: string
   type: string
   imgKey: string
+  coverImageUrl: string | null
   location: string
   role: string // ContributionRole — lead | contributor | advisor | observer
   status: 'active' | 'finished' | 'archived'
@@ -537,7 +539,16 @@ function ProjectCard({ project: p }: { project: MyProject }) {
       )}
     >
       {/* Cover */}
-      <div className={cn('relative aspect-[16/8] overflow-hidden', IMG_CLASS[p.imgKey] ?? IMG_CLASS.rewild)}>
+      <div className={cn('relative aspect-[16/8] overflow-hidden', !p.coverImageUrl && (IMG_CLASS[p.imgKey] ?? IMG_CLASS.rewild))}>
+        {p.coverImageUrl && (
+          <Image
+            src={p.coverImageUrl}
+            alt=""
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        )}
         <span className="absolute left-3 top-3 rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
           {p.type}
         </span>
@@ -622,8 +633,15 @@ function ProjectListRow({ project: p }: { project: MyProject }) {
     >
       <div className="flex min-w-0 items-center gap-3">
         <div
-          className={cn('size-10 shrink-0 rounded-lg', IMG_CLASS[p.imgKey] ?? IMG_CLASS.rewild)}
-        />
+          className={cn(
+            'relative size-10 shrink-0 overflow-hidden rounded-lg',
+            !p.coverImageUrl && (IMG_CLASS[p.imgKey] ?? IMG_CLASS.rewild),
+          )}
+        >
+          {p.coverImageUrl && (
+            <Image src={p.coverImageUrl} alt="" fill sizes="40px" className="object-cover" />
+          )}
+        </div>
         <div className="flex min-w-0 flex-col gap-0.5">
           <span className="truncate font-display text-base leading-tight text-fg-primary">
             {p.title}

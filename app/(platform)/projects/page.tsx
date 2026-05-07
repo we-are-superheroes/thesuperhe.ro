@@ -41,6 +41,7 @@ async function getBrowseData(): Promise<{
         location: true,
         remoteOk: true,
         timeCommitmentHrs: true,
+        coverImageUrl: true,
         createdAt: true,
         projectType: { select: { id: true, name: true } },
         steps: {
@@ -96,6 +97,7 @@ async function getBrowseData(): Promise<{
       type: p.projectType?.name ?? 'Other',
       typeId: p.projectType?.id ?? null,
       imgKey: (p.projectType?.name && TYPE_IMG_KEY[p.projectType.name]) ?? 'rewild',
+      coverImageUrl: p.coverImageUrl ?? null,
       skills: Array.from(skillNameSet),
       skillIds: Array.from(skillIdSet),
       needs,

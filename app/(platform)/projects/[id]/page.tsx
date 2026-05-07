@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+import Image from 'next/image'
 import { ChevronRight, Share2, Bookmark, MapPin, Globe, Calendar, FolderOpen, Clock, User, Pencil } from 'lucide-react'
 import { ProjectStepsList, type StepCardData } from '@/components/platform/project-steps-list'
 import { JoinProjectTopButton, JoinProjectCard } from '@/components/platform/join-project-controls'
@@ -66,6 +67,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       location: true,
       remoteOk: true,
       timeCommitmentHrs: true,
+      coverImageUrl: true,
       createdAt: true,
       projectType: { select: { name: true } },
       steps: {
@@ -244,8 +246,18 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
         {/* Cover */}
         <div
           className="relative flex min-h-[280px] items-end overflow-hidden border-b border-white/[0.08] sm:min-h-[360px]"
-          style={{ background: coverGradient }}
+          style={project.coverImageUrl ? undefined : { background: coverGradient }}
         >
+          {project.coverImageUrl && (
+            <Image
+              src={project.coverImageUrl}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          )}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent from-30% to-blue-900/[0.92]" />
           <div className="relative z-[1] mx-auto flex w-full max-w-[1240px] flex-col gap-3 px-4 pb-6 pt-10 sm:px-10 sm:pb-8 sm:pt-12">
             <div className="flex flex-wrap items-center gap-3">

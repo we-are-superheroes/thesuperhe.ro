@@ -237,6 +237,7 @@ model Project {
   location          String?
   remoteOk          Boolean  @default(true) @map("remote_ok")
   timeCommitmentHrs Int?     @map("time_commitment_hrs")
+  coverImageUrl     String?  @map("cover_image_url")
   createdAt         DateTime @default(now()) @map("created_at")
   updatedAt         DateTime @updatedAt @map("updated_at")
 

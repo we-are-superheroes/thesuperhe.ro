@@ -3,6 +3,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
+import { uploadImage, deleteImageByUrl } from '@/lib/storage'
 import type { ServerActionResult, Proficiency } from '@/types'
 
 export interface ProfileFormSkill {
@@ -115,11 +116,72 @@ export async function saveProfileAction(
 export async function clearAvatarAction(): Promise<ServerActionResult<{ cleared: true }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
+  // Read the existing URL so we can delete the underlying object too.
+  const existing = await db.user.findUnique({
+    where: { id: userId },
+    select: { avatarUrl: true },
+  })
   try {
     await db.user.update({ where: { id: userId }, data: { avatarUrl: null } })
   } catch {
     return { success: false, error: 'Could not clear avatar.' }
   }
+  // Best-effort: nuke the orphaned file in storage. Non-blocking.
+  if (existing?.avatarUrl) await deleteImageByUrl(existing.avatarUrl)
   revalidatePath('/profile')
+  revalidatePath('/dashboard')
   return { success: true, data: { cleared: true } }
+}
+
+/**
+ * Upload a new avatar from the profile page. The form sends the file as
+ * FormData; we accept PNG/JPEG/WebP/GIF up to 4 MB. Replaces any prior
+ * avatar both in the DB and in storage to prevent orphans.
+ */
+export async function uploadAvatarAction(
+  formData: FormData,
+): Promise<ServerActionResult<{ url: string }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const userCheck = await ensureUserExists(userId)
+  if (!userCheck.success) return { success: false, error: userCheck.error }
+
+  const file = formData.get('file')
+  if (!(file instanceof File) || file.size === 0) {
+    return { success: false, error: 'No file provided.' }
+  }
+
+  const existing = await db.user.findUnique({
+    where: { id: userId },
+    select: { avatarUrl: true },
+  })
+
+  let url: string
+  try {
+    const result = await uploadImage(file, 'avatar')
+    url = result.url
+  } catch (e) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Could not upload image.',
+    }
+  }
+
+  try {
+    await db.user.update({ where: { id: userId }, data: { avatarUrl: url } })
+  } catch {
+    // The file made it into storage but the DB write failed. Clean up.
+    await deleteImageByUrl(url)
+    return { success: false, error: 'Could not save avatar.' }
+  }
+
+  // Now that the new URL is committed, prune the old object.
+  if (existing?.avatarUrl && existing.avatarUrl !== url) {
+    await deleteImageByUrl(existing.avatarUrl)
+  }
+
+  revalidatePath('/profile')
+  revalidatePath('/dashboard')
+  return { success: true, data: { url } }
 }
