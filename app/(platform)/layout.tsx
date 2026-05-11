@@ -11,20 +11,23 @@ export default async function PlatformLayout({
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
 
-  const user = await db.user.findUnique({
-    where: { id: userId },
-    select: {
-      name: true,
-      contributions: {
-        where: { status: { in: ['active', 'pending'] } },
-        select: {
-          hoursContributed: true,
-          projectId: true,
-          projectStepId: true,
+  const [user, unreadNotifications] = await Promise.all([
+    db.user.findUnique({
+      where: { id: userId },
+      select: {
+        name: true,
+        contributions: {
+          where: { status: { in: ['active', 'pending'] } },
+          select: {
+            hoursContributed: true,
+            projectId: true,
+            projectStepId: true,
+          },
         },
       },
-    },
-  })
+    }),
+    db.notification.count({ where: { userId, readAt: null } }),
+  ])
 
   const name = user?.name ?? null
   const initials = name
@@ -49,6 +52,7 @@ export default async function PlatformLayout({
       projectCount={projectCount}
       stepCount={stepCount}
       hoursContributed={hoursContributed}
+      notificationsBadge={unreadNotifications}
     >
       {children}
     </PlatformShell>

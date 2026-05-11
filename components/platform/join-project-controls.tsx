@@ -2,7 +2,7 @@
 
 import { useTransition, useState } from 'react'
 import Link from 'next/link'
-import { ArrowRight, Check, LogIn } from 'lucide-react'
+import { ArrowRight, Check, Clock, LogIn } from 'lucide-react'
 import { joinProjectAction, leaveProjectAction } from '@/app/(platform)/projects/[id]/actions'
 
 /**
@@ -14,13 +14,17 @@ export function JoinProjectTopButton({
   projectId,
   isSignedIn,
   isMember,
+  isPendingApproval = false,
 }: {
   projectId: string
   isSignedIn: boolean
   isMember: boolean
+  /** A request to join exists but the lead hasn't accepted yet. */
+  isPendingApproval?: boolean
 }) {
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const [localPending, setLocalPending] = useState(isPendingApproval)
 
   if (!isSignedIn) {
     return (
@@ -43,6 +47,15 @@ export function JoinProjectTopButton({
     )
   }
 
+  if (localPending) {
+    return (
+      <span className="inline-flex items-center gap-2 rounded-lg border border-amber-500/35 bg-amber-500/[0.12] px-4 py-2.5 text-sm font-medium text-amber-500">
+        <Clock className="size-3.5" />
+        Request sent
+      </span>
+    )
+  }
+
   return (
     <div className="flex items-center gap-3">
       {error && <span className="text-xs text-red-300">{error}</span>}
@@ -54,6 +67,7 @@ export function JoinProjectTopButton({
           startTransition(async () => {
             const result = await joinProjectAction(projectId)
             if (!result.success) setError(result.error)
+            else if (result.data.pending) setLocalPending(true)
           })
         }}
         className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
@@ -71,15 +85,18 @@ export function JoinProjectCard({
   projectId,
   isSignedIn,
   isMember,
+  isPendingApproval = false,
   myAssignedStepCount,
 }: {
   projectId: string
   isSignedIn: boolean
   isMember: boolean
+  isPendingApproval?: boolean
   myAssignedStepCount: number
 }) {
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
+  const [localPending, setLocalPending] = useState(isPendingApproval)
 
   return (
     <div
@@ -117,6 +134,16 @@ export function JoinProjectCard({
             {pending ? 'Leaving…' : 'Leave project'}
           </button>
         </>
+      ) : localPending ? (
+        <>
+          <h3 className="mb-2 flex items-center gap-2 font-display text-2xl leading-tight">
+            <Clock className="size-5 text-amber-500" />
+            Request sent.
+          </h3>
+          <p className="text-sm leading-relaxed text-fg-secondary">
+            The project lead will get a notification. You’ll be welcomed once they accept.
+          </p>
+        </>
       ) : (
         <>
           <h3 className="mb-2 font-display text-2xl leading-tight">Want in?</h3>
@@ -133,6 +160,7 @@ export function JoinProjectCard({
                 startTransition(async () => {
                   const result = await joinProjectAction(projectId)
                   if (!result.success) setError(result.error)
+                  else if (result.data.pending) setLocalPending(true)
                 })
               }}
               className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"

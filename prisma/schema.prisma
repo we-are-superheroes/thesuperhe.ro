@@ -90,6 +90,8 @@ model User {
   contributions   Contribution[]
   blueprints      Blueprint[]
   assignedSteps   ProjectStep[]      @relation("AssignedSteps")
+  notifications   Notification[]     @relation("UserNotifications")
+  actedNotifications Notification[]  @relation("ActorNotifications")
 
   @@map("users")
 }
@@ -231,21 +233,23 @@ model Project {
   blueprintId   String? @map("blueprint_id")
   projectTypeId String? @map("project_type_id")
 
-  title             String
-  description       String
-  status            ProjectStatus @default(draft)
-  location          String?
-  remoteOk          Boolean  @default(true) @map("remote_ok")
-  timeCommitmentHrs Int?     @map("time_commitment_hrs")
-  coverImageUrl     String?  @map("cover_image_url")
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
+  title                 String
+  description           String
+  status                ProjectStatus @default(draft)
+  location              String?
+  remoteOk              Boolean  @default(true) @map("remote_ok")
+  timeCommitmentHrs     Int?     @map("time_commitment_hrs")
+  coverImageUrl         String?  @map("cover_image_url")
+  joinApprovalRequired  Boolean  @default(false) @map("join_approval_required")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
 
-  organisation Organisation? @relation(fields: [orgId], references: [id])
-  blueprint    Blueprint?    @relation(fields: [blueprintId], references: [id])
-  projectType  ProjectType?  @relation(fields: [projectTypeId], references: [id])
-  steps        ProjectStep[]
+  organisation  Organisation? @relation(fields: [orgId], references: [id])
+  blueprint     Blueprint?    @relation(fields: [blueprintId], references: [id])
+  projectType   ProjectType?  @relation(fields: [projectTypeId], references: [id])
+  steps         ProjectStep[]
   contributions Contribution[]
+  notifications Notification[]
 
   @@map("projects")
 }
@@ -319,4 +323,60 @@ model Contribution {
 
   @@unique([userId, projectId, projectStepId])
   @@map("contributions")
+}
+
+// =============================================================================
+// NOTIFICATIONS
+// =============================================================================
+
+enum NotificationType {
+  project_join
+  project_join_request
+  project_leave
+  project_updated
+  project_status_changed
+  step_claimed
+  step_unclaimed
+  step_completed
+  step_needs_help
+  step_assigned
+  blueprint_forked
+  skill_match
+  reminder_step_idle
+  // Reserved for later; schema accommodates them now.
+  message_received
+  mention
+  invite_received
+  project_milestone
+  welcome
+}
+
+model Notification {
+  id          String           @id @default(uuid())
+  userId      String           @map("user_id")
+  type        NotificationType
+
+  // Soft references — SetNull so notifications outlive deletions.
+  actorId     String?  @map("actor_id")
+  projectId   String?  @map("project_id")
+  stepId      String?  @map("step_id")
+  blueprintId String?  @map("blueprint_id")
+
+  // Snapshot copy at write time so the inbox renders without joins.
+  title       String
+  body        String?
+  data        Json?
+
+  readAt      DateTime? @map("read_at")
+  emailedAt   DateTime? @map("emailed_at")
+  resolvedAt  DateTime? @map("resolved_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  user    User     @relation("UserNotifications", fields: [userId], references: [id], onDelete: Cascade)
+  actor   User?    @relation("ActorNotifications", fields: [actorId], references: [id], onDelete: SetNull)
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([userId, readAt])
+  @@map("notifications")
 }

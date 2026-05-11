@@ -100,17 +100,17 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   if (!project) notFound()
 
   // Is the current user already a project-level member?
-  const isMember = userId
-    ? !!(await db.contribution.findFirst({
-        where: {
-          userId,
-          projectId: id,
-          projectStepId: null,
-          status: { in: ['active', 'pending'] },
-        },
-        select: { id: true },
-      }))
-    : false
+  // Active membership vs pending approval are now distinct states. A user
+  // whose join request is awaiting approval should see "Request sent", not
+  // "Joined".
+  const myContribution = userId
+    ? await db.contribution.findFirst({
+        where: { userId, projectId: id, projectStepId: null },
+        select: { status: true },
+      })
+    : null
+  const isMember = myContribution?.status === 'active'
+  const isPendingApproval = myContribution?.status === 'pending'
 
   // How many steps are assigned to me on this project? (used to confirm leave)
   const myAssignedStepCount = userId
@@ -238,6 +238,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
             projectId={id}
             isSignedIn={!!userId}
             isMember={isMember}
+            isPendingApproval={isPendingApproval}
           />
         </div>
       </div>
@@ -378,6 +379,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               projectId={id}
               isSignedIn={!!userId}
               isMember={isMember}
+              isPendingApproval={isPendingApproval}
               myAssignedStepCount={myAssignedStepCount}
             />
 

@@ -3,6 +3,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
+import { notify } from '@/lib/notifications'
 import type { ServerActionResult } from '@/types'
 
 export interface CreateProjectStepInput {
@@ -110,6 +111,10 @@ export async function launchProjectAction(
     .map((s) => ({ ...s, title: s.title.trim(), description: s.description.trim() }))
     .filter((s) => s.title.length > 0)
 
+  // Fetch the actor name (for blueprint_forked title) outside the transaction.
+  const actor = await db.user.findUnique({ where: { id: userId }, select: { name: true } })
+  const actorName = actor?.name ?? 'A contributor'
+
   try {
     const project = await db.$transaction(async (tx) => {
       const created = await tx.project.create({
@@ -126,6 +131,7 @@ export async function launchProjectAction(
       })
 
       // Create steps + their skills
+      const newStepSkillIds = new Set<string>()
       for (let i = 0; i < cleanSteps.length; i++) {
         const s = cleanSteps[i]
         const step = await tx.projectStep.create({
@@ -141,6 +147,7 @@ export async function launchProjectAction(
           await tx.stepSkill.create({
             data: { skillId: s.skillId, projectStepId: step.id },
           })
+          newStepSkillIds.add(s.skillId)
         }
       }
 
@@ -155,12 +162,57 @@ export async function launchProjectAction(
         },
       })
 
-      // Bump blueprint reuse count if forked
+      // Bump blueprint reuse count + notify the blueprint creator.
       if (blueprintId) {
-        await tx.blueprint.update({
+        const bp = await tx.blueprint.update({
           where: { id: blueprintId },
           data: { reuseCount: { increment: 1 } },
+          select: { createdById: true, title: true },
         })
+        await notify(tx, {
+          type: 'blueprint_forked',
+          recipients: [bp.createdById],
+          actorId: userId,
+          projectId: created.id,
+          blueprintId,
+          title: `${actorName} forked your “${bp.title}” blueprint as “${created.title}”.`,
+        })
+      }
+
+      // Skill-match fanout. Find users who list any of this project's step
+      // skills as seeking — excluding the creator. Keep it bounded.
+      if (newStepSkillIds.size > 0) {
+        const matchers = await tx.userSkill.findMany({
+          where: {
+            skillId: { in: Array.from(newStepSkillIds) },
+            isSeeking: true,
+            userId: { not: userId },
+          },
+          select: { userId: true, skill: { select: { name: true } } },
+          take: 200,
+        })
+        // Group: each user gets ONE notification mentioning their first matched skill.
+        const seen = new Map<string, string>()
+        for (const m of matchers) {
+          if (!seen.has(m.userId)) seen.set(m.userId, m.skill.name)
+        }
+        const recipients = Array.from(seen.keys())
+        if (recipients.length > 0) {
+          // One row per recipient, with a personalised skill name in data.
+          // We can't pass per-recipient titles through notify() in one call,
+          // so we loop — fine for the small list bound above.
+          for (const rid of recipients) {
+            const skillName = seen.get(rid)!
+            await notify(tx, {
+              type: 'skill_match',
+              recipients: [rid],
+              actorId: userId,
+              projectId: created.id,
+              title: `New project “${created.title}” needs ${skillName}.`,
+              data: { skill: skillName },
+            })
+          }
+        }
       }
 
       return created
@@ -169,6 +221,7 @@ export async function launchProjectAction(
     revalidatePath('/dashboard')
     revalidatePath('/projects')
     revalidatePath('/my-projects')
+    revalidatePath('/notifications')
     return { success: true, data: { projectId: project.id } }
   } catch {
     return { success: false, error: 'Could not launch the project.' }

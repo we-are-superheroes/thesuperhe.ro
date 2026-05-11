@@ -4,6 +4,7 @@ import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { uploadImage, deleteImageByUrl } from '@/lib/storage'
+import { notify, getActiveProjectMemberIds } from '@/lib/notifications'
 import type { ServerActionResult } from '@/types'
 
 /**
@@ -42,6 +43,7 @@ export interface UpdateProjectInput {
   city: string
   country: string
   remote: 'yes' | 'some' | 'no'
+  joinApprovalRequired: boolean
   steps: UpdateProjectStepInput[]
 }
 
@@ -137,6 +139,15 @@ export async function updateProjectAction(
     }
   }
 
+  // Capture the pre-update project for the notification title.
+  const projectBefore = await db.project.findUnique({
+    where: { id: projectId },
+    select: { title: true },
+  })
+
+  const actor = await db.user.findUnique({ where: { id: userId }, select: { name: true } })
+  const actorName = actor?.name ?? 'The project lead'
+
   try {
     await db.$transaction(async (tx) => {
       // Update project basics
@@ -147,6 +158,7 @@ export async function updateProjectAction(
           description: data.description.trim(),
           location: buildLocation(data.city, data.country),
           remoteOk: data.remote === 'yes' || data.remote === 'some',
+          joinApprovalRequired: data.joinApprovalRequired,
         },
       })
 
@@ -210,6 +222,21 @@ export async function updateProjectAction(
           })
         }
       }
+
+      // Notify all active members about the edit.
+      const recipients = await getActiveProjectMemberIds(tx, projectId)
+      const newTitle = data.title.trim()
+      const titleChanged = projectBefore?.title && projectBefore.title !== newTitle
+      const titleCopy = titleChanged
+        ? `${actorName} renamed “${projectBefore!.title}” to “${newTitle}”.`
+        : `${actorName} updated ${newTitle}.`
+      await notify(tx, {
+        type: 'project_updated',
+        recipients,
+        actorId: userId,
+        projectId,
+        title: titleCopy,
+      })
     })
   } catch {
     return { success: false, error: 'Could not save changes.' }
@@ -220,6 +247,7 @@ export async function updateProjectAction(
   revalidatePath('/dashboard')
   revalidatePath('/projects')
   revalidatePath('/my-projects')
+  revalidatePath('/notifications')
   return { success: true, data: { projectId } }
 }
 

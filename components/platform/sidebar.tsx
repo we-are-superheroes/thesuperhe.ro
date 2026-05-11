@@ -33,6 +33,7 @@ export function Sidebar({
   projectCount,
   stepCount,
   hoursContributed,
+  notificationsBadge = 0,
   drawerOpen = false,
   onDrawerClose,
 }: {
@@ -41,6 +42,7 @@ export function Sidebar({
   projectCount: number
   stepCount: number
   hoursContributed: number
+  notificationsBadge?: number
   drawerOpen?: boolean
   onDrawerClose?: () => void
 }) {
@@ -53,7 +55,12 @@ export function Sidebar({
         { label: 'My dashboard', icon: LayoutDashboard, href: '/dashboard' },
         { label: 'My projects', icon: FolderOpen, href: '/my-projects', badge: projectCount || undefined },
         { label: 'My steps', icon: CheckSquare, href: '/my-steps', badge: stepCount || undefined },
-        { label: 'Notifications', icon: Bell, href: '/notifications' },
+        {
+          label: 'Notifications',
+          icon: Bell,
+          href: '/notifications',
+          badge: notificationsBadge || undefined,
+        },
       ],
     },
     {

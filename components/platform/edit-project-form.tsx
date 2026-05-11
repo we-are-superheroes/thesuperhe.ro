@@ -36,6 +36,7 @@ export interface EditProjectInitial {
   country: string
   remote: 'yes' | 'some' | 'no'
   coverImageUrl: string | null
+  joinApprovalRequired: boolean
   steps: Array<{
     id: string
     title: string
@@ -66,6 +67,7 @@ export function EditProjectForm({
     initial.country && COUNTRIES.includes(initial.country) ? initial.country : COUNTRIES[0],
   )
   const [remote, setRemote] = useState<'yes' | 'some' | 'no'>(initial.remote)
+  const [joinApprovalRequired, setJoinApprovalRequired] = useState(initial.joinApprovalRequired)
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(initial.coverImageUrl)
   const coverFileRef = useRef<HTMLInputElement>(null)
   const [pendingCover, startCoverTransition] = useTransition()
@@ -107,6 +109,7 @@ export function EditProjectForm({
         city,
         country,
         remote,
+        joinApprovalRequired,
         steps: steps.map((s) => ({
           id: s.id.startsWith('tmp-') ? null : s.id,
           title: s.title,
@@ -379,6 +382,49 @@ export function EditProjectForm({
                   )
                 })}
               </div>
+            </Field>
+
+            {/* Membership: approval toggle */}
+            <Field label="Joining this project">
+              <label
+                className={cn(
+                  'flex cursor-pointer items-start justify-between gap-3 rounded-lg border bg-bg-base p-4 transition-colors',
+                  joinApprovalRequired
+                    ? 'border-amber-500/40 bg-amber-500/[0.06]'
+                    : 'border-neutral-700 hover:border-neutral-600',
+                )}
+              >
+                <span className="flex flex-col gap-1">
+                  <span className="text-sm font-medium text-fg-primary">
+                    Require approval to join
+                  </span>
+                  <span className="text-xs text-fg-tertiary">
+                    When on, people who hit Join show up in your inbox as a request you can accept or decline.
+                    When off, they join immediately and you just get a heads-up.
+                  </span>
+                </span>
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={joinApprovalRequired}
+                  onClick={() => setJoinApprovalRequired((v) => !v)}
+                  className={cn(
+                    'relative inline-block h-[22px] w-10 shrink-0 cursor-pointer rounded-full border transition-all duration-fast',
+                    joinApprovalRequired
+                      ? 'border-amber-500 bg-amber-500/[0.18]'
+                      : 'border-neutral-700 bg-bg-surface-3',
+                  )}
+                >
+                  <span
+                    className={cn(
+                      'absolute left-[2px] top-[2px] size-4 rounded-full transition-all duration-fast',
+                      joinApprovalRequired
+                        ? 'translate-x-[18px] bg-amber-500 shadow-[0_0_8px_rgba(244,165,53,0.6)]'
+                        : 'translate-x-0 bg-fg-secondary',
+                    )}
+                  />
+                </button>
+              </label>
             </Field>
           </div>
         </Card>
