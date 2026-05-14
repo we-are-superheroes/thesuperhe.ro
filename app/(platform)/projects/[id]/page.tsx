@@ -186,10 +186,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   // Description split by paragraph (newlines)
   const descParagraphs = project.description.split(/\n+/).map((p) => p.trim()).filter(Boolean)
 
-  // Contributors for avatar stack (deduped by user id)
-  const contributorMap = new Map<string, { name: string }>()
+  // Contributors for avatar stack (deduped by user id, with id kept so each
+  // avatar deep-links to their profile).
+  const contributorMap = new Map<string, { id: string; name: string }>()
   for (const c of project.contributions) {
-    if (c.user) contributorMap.set(c.user.id, { name: c.user.name })
+    if (c.user) contributorMap.set(c.user.id, { id: c.user.id, name: c.user.name })
   }
   const contributors = Array.from(contributorMap.values())
   const visibleContributors = contributors.slice(0, 5)
@@ -404,14 +405,15 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               {contributors.length > 0 ? (
                 <div className="mt-3 flex items-center">
                   {visibleContributors.map((c, i) => (
-                    <div
-                      key={i}
-                      className="-ml-2 flex size-[30px] shrink-0 items-center justify-center rounded-full border-2 border-bg-surface text-[11px] font-semibold text-blue-900 first:ml-0"
+                    <Link
+                      key={c.id}
+                      href={`/users/${c.id}`}
+                      className="-ml-2 flex size-[30px] shrink-0 items-center justify-center rounded-full border-2 border-bg-surface text-[11px] font-semibold text-blue-900 transition-transform first:ml-0 hover:scale-105"
                       style={{ background: AVATAR_GRADIENTS[i % AVATAR_GRADIENTS.length] }}
                       title={c.name}
                     >
                       {initial(c.name)}
-                    </div>
+                    </Link>
                   ))}
                   {moreContributors > 0 && (
                     <div className="-ml-2 flex size-[30px] shrink-0 items-center justify-center rounded-full border-2 border-bg-surface bg-bg-surface-3 font-sans text-[11px] font-semibold text-fg-secondary">

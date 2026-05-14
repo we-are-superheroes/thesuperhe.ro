@@ -63,6 +63,7 @@ export default async function NotificationsPage() {
     body: n.body ?? null,
     actor: n.actor
       ? {
+          id: n.actor.id,
           name: n.actor.name,
           initials: initialsFor(n.actor.name),
           tint: tintFor(n.actor.id),

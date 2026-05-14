@@ -57,7 +57,7 @@ export interface NotificationItem {
   resolvedAt: number | null
   title: string
   body: string | null
-  actor?: { name: string; initials: string; tint: string }
+  actor?: { id: string; name: string; initials: string; tint: string }
   project?: { id: string; name: string; tint: string }
   data: Record<string, unknown> | null
 }
@@ -511,18 +511,22 @@ function NotificationRow({
 
 function RowTitle({ item }: { item: NotificationItem }) {
   // The title was rendered at write time as plain text. If we have an actor,
-  // bolt their avatar pill in front of the line for visual recognition.
+  // bolt their avatar pill in front of the line and link it to their profile.
   if (item.actor) {
     return (
       <div className="flex flex-wrap items-center gap-2 text-sm text-fg-secondary">
-        <span className="inline-flex items-center gap-1.5 font-semibold text-fg-primary">
+        <Link
+          href={`/users/${item.actor.id}`}
+          onClick={(e) => e.stopPropagation()}
+          className="inline-flex items-center gap-1.5 font-semibold text-fg-primary transition-opacity hover:opacity-80"
+        >
           <span
             className="flex size-[22px] items-center justify-center rounded-full text-[11px] font-semibold text-blue-900"
             style={{ background: item.actor.tint }}
           >
             {item.actor.initials}
           </span>
-        </span>
+        </Link>
         <span>{item.title}</span>
       </div>
     )
