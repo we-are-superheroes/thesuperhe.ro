@@ -178,7 +178,8 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
     order: s.order,
     totalSteps,
     estimatedHrs: s.estimatedHrs,
-    assignedToName: s.assignedTo?.name ?? null,
+    // Anonymous viewers see that the step is claimed but not by whom.
+    assignedToName: s.assignedTo ? (userId ? s.assignedTo.name : 'Someone') : null,
     assignedToMe: !!userId && s.assignedToId === userId,
     skills: s.skills.map((ss) => ss.skill.name),
   }))
@@ -402,7 +403,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 <Stat value={days} unit="d" label="In motion" />
               </div>
 
-              {contributors.length > 0 ? (
+              {contributors.length === 0 ? (
+                <p className="mt-3 text-xs text-fg-tertiary">
+                  No contributors yet — be the first.
+                </p>
+              ) : userId ? (
                 <div className="mt-3 flex items-center">
                   {visibleContributors.map((c, i) => (
                     <Link
@@ -422,8 +427,16 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                   )}
                 </div>
               ) : (
+                // Anonymous viewer — hide individual identities, just hint
+                // at the team size. They'll get the full list after sign-in.
                 <p className="mt-3 text-xs text-fg-tertiary">
-                  No contributors yet — be the first.
+                  <Link
+                    href="/sign-in"
+                    className="text-amber-500 hover:underline"
+                  >
+                    Sign in
+                  </Link>{' '}
+                  to see who’s working on this.
                 </p>
               )}
             </div>
