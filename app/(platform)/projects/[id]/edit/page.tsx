@@ -40,7 +40,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       location: true,
       remoteOk: true,
       coverImageUrl: true,
-      joinApprovalRequired: true,
+      joinPolicy: true,
       contributions: {
         where: {
           userId,
@@ -88,7 +88,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
     // default the toggle to "yes" when remote is allowed and "no" otherwise.
     remote: project.remoteOk ? 'yes' : 'no',
     coverImageUrl: project.coverImageUrl,
-    joinApprovalRequired: project.joinApprovalRequired,
+    joinPolicy: project.joinPolicy,
     steps: project.steps.map((s) => ({
       id: s.id,
       title: s.title,

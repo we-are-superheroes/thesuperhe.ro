@@ -43,7 +43,7 @@ export interface UpdateProjectInput {
   city: string
   country: string
   remote: 'yes' | 'some' | 'no'
-  joinApprovalRequired: boolean
+  joinPolicy: 'open' | 'approval_required'
   steps: UpdateProjectStepInput[]
 }
 
@@ -63,6 +63,9 @@ function validate(data: UpdateProjectInput): string | null {
   const desc = data.description.trim()
   if (!desc) return 'Description can’t be empty.'
   if (!['yes', 'some', 'no'].includes(data.remote)) return 'Pick a remote option.'
+  if (!['open', 'approval_required'].includes(data.joinPolicy)) {
+    return 'Pick a join policy.'
+  }
   return null
 }
 
@@ -158,7 +161,7 @@ export async function updateProjectAction(
           description: data.description.trim(),
           location: buildLocation(data.city, data.country),
           remoteOk: data.remote === 'yes' || data.remote === 'some',
-          joinApprovalRequired: data.joinApprovalRequired,
+          joinPolicy: data.joinPolicy,
         },
       })
 

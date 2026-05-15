@@ -72,6 +72,23 @@ const REMOTE_OPTIONS: Array<{ value: 'yes' | 'some' | 'no'; label: string; icon:
   { value: 'no', label: 'No, in-person only', icon: MapPin },
 ]
 
+const JOIN_POLICY_OPTIONS: Array<{
+  value: 'open' | 'approval_required'
+  label: string
+  description: string
+}> = [
+  {
+    value: 'open',
+    label: 'Open to the world',
+    description: 'Anyone can join instantly and start contributing.',
+  },
+  {
+    value: 'approval_required',
+    label: 'Approval needed',
+    description: 'Joins land in your inbox as a request to accept or decline.',
+  },
+]
+
 function blankSteps(): FormStep[] {
   return [
     { id: `s-${Date.now()}-1`, title: '', description: '', skillId: null },
@@ -104,6 +121,7 @@ export function CreateProjectForm({
   const [city, setCity] = useState('')
   const [country, setCountry] = useState(COUNTRIES[0])
   const [remote, setRemote] = useState<'yes' | 'some' | 'no'>('yes')
+  const [joinPolicy, setJoinPolicy] = useState<'open' | 'approval_required'>('open')
   const [projectTypeId, setProjectTypeId] = useState<string | null>(null)
   const [steps, setSteps] = useState<FormStep[]>(blankSteps())
 
@@ -129,6 +147,7 @@ export function CreateProjectForm({
     setCity('')
     setCountry(COUNTRIES[0])
     setRemote('yes')
+    setJoinPolicy('open')
     setProjectTypeId(null)
     setSteps(blankSteps())
     setError(null)
@@ -143,6 +162,7 @@ export function CreateProjectForm({
     setCity('')
     setCountry(COUNTRIES[0])
     setRemote('some')
+    setJoinPolicy('open')
     setProjectTypeId(bp.projectTypeId)
     setSteps(
       bp.steps.length > 0
@@ -187,6 +207,7 @@ export function CreateProjectForm({
     city,
     country,
     remote,
+    joinPolicy,
     projectTypeId,
     blueprintId: origin?.kind === 'blueprint' ? origin.blueprint.id : null,
     steps: steps.map((s) => ({
@@ -284,6 +305,7 @@ export function CreateProjectForm({
             city={city}
             country={country}
             remote={remote}
+            joinPolicy={joinPolicy}
             steps={steps}
             skills={skills}
             error={error}
@@ -296,6 +318,7 @@ export function CreateProjectForm({
             setCity={setCity}
             setCountry={setCountry}
             setRemote={setRemote}
+            setJoinPolicy={setJoinPolicy}
             updateStep={updateStep}
             removeStep={removeStep}
             addStep={addStep}
@@ -486,6 +509,7 @@ function EditorPhase({
   city,
   country,
   remote,
+  joinPolicy,
   steps,
   skills,
   error,
@@ -498,6 +522,7 @@ function EditorPhase({
   setCity,
   setCountry,
   setRemote,
+  setJoinPolicy,
   updateStep,
   removeStep,
   addStep,
@@ -511,6 +536,7 @@ function EditorPhase({
   city: string
   country: string
   remote: 'yes' | 'some' | 'no'
+  joinPolicy: 'open' | 'approval_required'
   steps: FormStep[]
   skills: SkillOption[]
   error: string | null
@@ -523,6 +549,7 @@ function EditorPhase({
   setCity: (v: string) => void
   setCountry: (v: string) => void
   setRemote: (v: 'yes' | 'some' | 'no') => void
+  setJoinPolicy: (v: 'open' | 'approval_required') => void
   updateStep: (id: string, patch: Partial<FormStep>) => void
   removeStep: (id: string) => void
   addStep: () => void
@@ -655,6 +682,45 @@ function EditorPhase({
             <span className="mt-1 text-xs text-fg-tertiary">
               If “some steps only”, you can mark each step as remote-okay later.
             </span>
+          </Field>
+
+          <Field label="Who can join?">
+            <div
+              role="radiogroup"
+              aria-label="Join policy"
+              className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+            >
+              {JOIN_POLICY_OPTIONS.map((opt) => {
+                const checked = joinPolicy === opt.value
+                return (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    role="radio"
+                    aria-checked={checked}
+                    onClick={() => setJoinPolicy(opt.value)}
+                    className={cn(
+                      'flex flex-col items-start gap-1 rounded-lg border bg-bg-base p-4 text-left transition-colors',
+                      checked
+                        ? 'border-amber-500/40 bg-amber-500/[0.06]'
+                        : 'border-neutral-700 hover:border-neutral-600',
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        'text-sm font-medium',
+                        checked ? 'text-amber-500' : 'text-fg-primary',
+                      )}
+                    >
+                      {opt.label}
+                    </span>
+                    <span className="text-xs leading-relaxed text-fg-tertiary">
+                      {opt.description}
+                    </span>
+                  </button>
+                )
+              })}
+            </div>
           </Field>
         </div>
       </Card>

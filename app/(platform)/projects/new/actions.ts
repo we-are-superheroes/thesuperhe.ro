@@ -18,6 +18,7 @@ export interface CreateProjectInput {
   city: string
   country: string
   remote: 'yes' | 'some' | 'no'
+  joinPolicy: 'open' | 'approval_required'
   projectTypeId: string | null
   blueprintId: string | null
   steps: CreateProjectStepInput[]
@@ -63,6 +64,9 @@ function validateProject(data: CreateProjectInput): string | null {
   const desc = data.description.trim()
   if (!desc) return 'Add a short description so people know what they’re joining.'
   if (!['yes', 'some', 'no'].includes(data.remote)) return 'Pick a remote option.'
+  if (!['open', 'approval_required'].includes(data.joinPolicy)) {
+    return 'Pick a join policy.'
+  }
   return null
 }
 
@@ -125,6 +129,7 @@ export async function launchProjectAction(
           location: buildLocation(data.city, data.country),
           // 'yes' or 'some' → remote contributors welcome.
           remoteOk: data.remote === 'yes' || data.remote === 'some',
+          joinPolicy: data.joinPolicy,
           projectTypeId: data.projectTypeId,
           blueprintId,
         },

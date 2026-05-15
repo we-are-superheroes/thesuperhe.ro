@@ -70,6 +70,13 @@ enum ContributionRole {
   observer
 }
 
+enum ProjectJoinPolicy {
+  open               // Anyone can join instantly.
+  approval_required  // Joins land as `pending` Contributions; lead must accept.
+  // Future values reserved (e.g. invite_only, member_referral) — adding new
+  // ones is a column-free migration since the field is an enum.
+}
+
 // =============================================================================
 // USERS
 // =============================================================================
@@ -240,7 +247,7 @@ model Project {
   remoteOk              Boolean  @default(true) @map("remote_ok")
   timeCommitmentHrs     Int?     @map("time_commitment_hrs")
   coverImageUrl         String?  @map("cover_image_url")
-  joinApprovalRequired  Boolean  @default(false) @map("join_approval_required")
+  joinPolicy            ProjectJoinPolicy @default(open) @map("join_policy")
   createdAt             DateTime @default(now()) @map("created_at")
   updatedAt             DateTime @updatedAt @map("updated_at")
 

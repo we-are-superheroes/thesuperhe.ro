@@ -55,9 +55,10 @@ export async function joinProjectAction(
 
   const project = await db.project.findUnique({
     where: { id: projectId },
-    select: { id: true, title: true, joinApprovalRequired: true },
+    select: { id: true, title: true, joinPolicy: true },
   })
   if (!project) return { success: false, error: 'Project not found.' }
+  const approvalRequired = project.joinPolicy === 'approval_required'
 
   // Project-level uniqueness must be checked manually because Postgres treats
   // NULL != NULL in unique indexes (CLAUDE.md). Reactivate any prior withdrawal.
@@ -78,7 +79,7 @@ export async function joinProjectAction(
 
   // If approval is required, contribution starts pending and the lead has to
   // accept. Otherwise it goes straight to active (today's default behaviour).
-  const targetStatus = project.joinApprovalRequired ? 'pending' : 'active'
+  const targetStatus = approvalRequired ? 'pending' : 'active'
 
   let contributionId: string
   try {
@@ -104,7 +105,7 @@ export async function joinProjectAction(
       }
 
       const leadIds = await getProjectLeadIds(tx, projectId)
-      if (project.joinApprovalRequired) {
+      if (approvalRequired) {
         await notify(tx, {
           type: 'project_join_request',
           recipients: leadIds,
@@ -131,7 +132,7 @@ export async function joinProjectAction(
   revalidatePath('/dashboard')
   revalidatePath('/projects')
   revalidatePath('/notifications')
-  return { success: true, data: { joined: true, pending: project.joinApprovalRequired } }
+  return { success: true, data: { joined: true, pending: approvalRequired } }
 }
 
 export async function claimStepAction(
