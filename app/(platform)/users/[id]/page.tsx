@@ -280,15 +280,13 @@ export default async function UserProfilePage({ params }: Params) {
               </Link>
             ) : (
               <>
-                <button
-                  type="button"
-                  disabled
-                  title="Messaging is coming soon"
-                  className="inline-flex cursor-not-allowed items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 opacity-60"
+                <Link
+                  href={`/messages?to=${user.id}`}
+                  className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 shadow-glow-amber transition-all duration-standard hover:bg-amber-400"
                 >
                   <MessageSquare className="size-3.5" strokeWidth={2.5} />
                   Send a message
-                </button>
+                </Link>
                 <button
                   type="button"
                   disabled

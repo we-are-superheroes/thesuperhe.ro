@@ -7,6 +7,7 @@ import {
   FolderOpen,
   CheckSquare,
   Bell,
+  MessageSquare,
   Search,
   Star,
   FileText,
@@ -34,6 +35,7 @@ export function Sidebar({
   stepCount,
   hoursContributed,
   notificationsBadge = 0,
+  messagesBadge = 0,
   drawerOpen = false,
   onDrawerClose,
 }: {
@@ -43,6 +45,7 @@ export function Sidebar({
   stepCount: number
   hoursContributed: number
   notificationsBadge?: number
+  messagesBadge?: number
   drawerOpen?: boolean
   onDrawerClose?: () => void
 }) {
@@ -55,6 +58,12 @@ export function Sidebar({
         { label: 'My dashboard', icon: LayoutDashboard, href: '/dashboard' },
         { label: 'My projects', icon: FolderOpen, href: '/my-projects', badge: projectCount || undefined },
         { label: 'My steps', icon: CheckSquare, href: '/my-steps', badge: stepCount || undefined },
+        {
+          label: 'Messages',
+          icon: MessageSquare,
+          href: '/messages',
+          badge: messagesBadge || undefined,
+        },
         {
           label: 'Notifications',
           icon: Bell,

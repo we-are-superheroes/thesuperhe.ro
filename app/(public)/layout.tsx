@@ -1,5 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+import { countUnreadConversations } from '@/lib/messages'
 import { PlatformShell } from '@/components/platform/platform-shell'
 import { PublicNavbar } from '@/components/public/navbar'
 
@@ -26,9 +27,15 @@ export default async function PublicLayout({
     )
   }
 
+  // Presence ping (fire-and-forget) so the "online" dot stays accurate
+  // even while the user is browsing public routes.
+  void db.user
+    .update({ where: { id: userId }, data: { lastSeenAt: new Date() } })
+    .catch(() => {})
+
   // Signed-in: load the same data the (platform) layout fetches so the
   // sidebar shows the right counts.
-  const [user, unreadNotifications] = await Promise.all([
+  const [user, unreadNotifications, messagesBadge] = await Promise.all([
     db.user.findUnique({
       where: { id: userId },
       select: {
@@ -44,6 +51,7 @@ export default async function PublicLayout({
       },
     }),
     db.notification.count({ where: { userId, readAt: null } }),
+    countUnreadConversations(db, userId),
   ])
 
   const name = user?.name ?? null
@@ -70,6 +78,7 @@ export default async function PublicLayout({
       stepCount={stepCount}
       hoursContributed={hoursContributed}
       notificationsBadge={unreadNotifications}
+      messagesBadge={messagesBadge}
     >
       {children}
     </PlatformShell>

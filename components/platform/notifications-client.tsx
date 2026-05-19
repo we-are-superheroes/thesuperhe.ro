@@ -486,8 +486,25 @@ function NotificationRow({
           </div>
         )}
 
+        {/* Deep link into a message thread for message_received rows. */}
+        {item.type === 'message_received' &&
+          (() => {
+            const convId = (item.data as { conversationId?: string } | null)?.conversationId
+            if (!convId) return null
+            return (
+              <Link
+                href={`/messages?conversation=${convId}`}
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex w-fit items-center gap-1 text-xs font-medium text-amber-500 hover:underline"
+              >
+                Open conversation
+                <ArrowRight className="size-3" strokeWidth={2.5} />
+              </Link>
+            )
+          })()}
+
         {/* Generic deep link for non-actionable rows when a project is attached */}
-        {!ACTIONABLE_TYPES.has(item.type) && item.project && (
+        {item.type !== 'message_received' && !ACTIONABLE_TYPES.has(item.type) && item.project && (
           <Link
             href={`/projects/${item.project.id}`}
             onClick={(e) => e.stopPropagation()}

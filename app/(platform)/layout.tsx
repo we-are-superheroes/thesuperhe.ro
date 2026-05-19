@@ -1,6 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
+import { countUnreadConversations } from '@/lib/messages'
 import { PlatformShell } from '@/components/platform/platform-shell'
 
 export default async function PlatformLayout({
@@ -11,7 +12,14 @@ export default async function PlatformLayout({
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
 
-  const [user, unreadNotifications] = await Promise.all([
+  // Presence ping — every authenticated render bumps lastSeenAt so the
+  // "online" dot for peers stays accurate. Fire-and-forget; failure here
+  // should never block rendering.
+  void db.user
+    .update({ where: { id: userId }, data: { lastSeenAt: new Date() } })
+    .catch(() => {})
+
+  const [user, unreadNotifications, messagesBadge] = await Promise.all([
     db.user.findUnique({
       where: { id: userId },
       select: {
@@ -27,6 +35,7 @@ export default async function PlatformLayout({
       },
     }),
     db.notification.count({ where: { userId, readAt: null } }),
+    countUnreadConversations(db, userId),
   ])
 
   const name = user?.name ?? null
@@ -53,6 +62,7 @@ export default async function PlatformLayout({
       stepCount={stepCount}
       hoursContributed={hoursContributed}
       notificationsBadge={unreadNotifications}
+      messagesBadge={messagesBadge}
     >
       {children}
     </PlatformShell>

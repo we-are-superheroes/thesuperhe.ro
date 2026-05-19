@@ -20,6 +20,7 @@ export function PlatformShell({
   stepCount,
   hoursContributed,
   notificationsBadge,
+  messagesBadge,
 }: {
   children: React.ReactNode
   userName: string | null
@@ -28,6 +29,7 @@ export function PlatformShell({
   stepCount: number
   hoursContributed: number
   notificationsBadge: number
+  messagesBadge: number
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const pathname = usePathname()
@@ -98,6 +100,7 @@ export function PlatformShell({
         stepCount={stepCount}
         hoursContributed={hoursContributed}
         notificationsBadge={notificationsBadge}
+        messagesBadge={messagesBadge}
         drawerOpen={drawerOpen}
         onDrawerClose={() => setDrawerOpen(false)}
       />

@@ -92,6 +92,10 @@ model User {
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
+  // Presence ping — bumped by the platform layout on every fetch so we can
+  // surface "Online" indicators (last seen within ~5 minutes).
+  lastSeenAt DateTime? @map("last_seen_at")
+
   skills          UserSkill[]
   organisations   UserOrganisation[]
   contributions   Contribution[]
@@ -99,6 +103,8 @@ model User {
   assignedSteps   ProjectStep[]      @relation("AssignedSteps")
   notifications   Notification[]     @relation("UserNotifications")
   actedNotifications Notification[]  @relation("ActorNotifications")
+  conversations   ConversationParticipant[]
+  messagesSent    Message[]          @relation("MessageSender")
 
   @@map("users")
 }
@@ -386,4 +392,59 @@ model Notification {
   @@index([userId, createdAt(sort: Desc)])
   @@index([userId, readAt])
   @@map("notifications")
+}
+
+// =============================================================================
+// MESSAGING
+// =============================================================================
+
+model Conversation {
+  id              String   @id @default(uuid())
+  // ":"-joined sorted user ids for 1-to-1 conversations. Lets a single
+  // upsert do find-or-create. Null for future group conversations.
+  participantsKey String?  @unique @map("participants_key")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  participants ConversationParticipant[]
+  messages     Message[]
+
+  @@index([updatedAt(sort: Desc)])
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  conversationId String   @map("conversation_id")
+  userId         String   @map("user_id")
+
+  joinedAt    DateTime  @default(now()) @map("joined_at")
+  // unread = messages.createdAt > lastReadAt (or lastReadAt IS NULL)
+  lastReadAt  DateTime? @map("last_read_at")
+  mutedAt     DateTime? @map("muted_at")
+  archivedAt  DateTime? @map("archived_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([conversationId, userId])
+  @@index([userId, archivedAt])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id             String    @id @default(uuid())
+  conversationId String    @map("conversation_id")
+  // SetNull on sender deletion: the message survives, renders as "Deleted user".
+  senderId       String?   @map("sender_id")
+  body           String
+  createdAt      DateTime  @default(now()) @map("created_at")
+  editedAt       DateTime? @map("edited_at")
+  // Soft delete: the message stays but renders as "[deleted]" to all viewers.
+  deletedAt      DateTime? @map("deleted_at")
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User?        @relation("MessageSender", fields: [senderId], references: [id], onDelete: SetNull)
+
+  @@index([conversationId, createdAt(sort: Desc)])
+  @@map("messages")
 }
