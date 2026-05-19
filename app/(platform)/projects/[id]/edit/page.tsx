@@ -57,8 +57,16 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
           id: true,
           title: true,
           description: true,
+          coordinatorId: true,
           skills: {
             select: { skill: { select: { id: true } } },
+          },
+          contributions: {
+            where: { status: 'active' },
+            orderBy: { joinedAt: 'asc' },
+            select: {
+              user: { select: { id: true, name: true } },
+            },
           },
         },
       },
@@ -96,6 +104,10 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       title: s.title,
       description: s.description ?? '',
       skillId: s.skills[0]?.skill.id ?? null,
+      coordinatorId: s.coordinatorId,
+      joiners: s.contributions
+        .filter((c) => c.user)
+        .map((c) => ({ id: c.user!.id, name: c.user!.name })),
     })),
   }
 

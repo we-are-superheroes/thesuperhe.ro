@@ -81,8 +81,11 @@ export default async function MyProjectsPage() {
               title: true,
               status: true,
               order: true,
-              assignedToId: true,
               dueDate: true,
+              contributions: {
+                where: { userId, status: 'active' },
+                select: { id: true },
+              },
             },
           },
           contributions: {
@@ -108,11 +111,13 @@ export default async function MyProjectsPage() {
     else if (p.status === 'completed') bucket = 'finished'
     else bucket = 'active'
 
-    // My next step: assigned to me, not completed, ordered by status priority then order
+    // My next step: any step I've joined that isn't done, ordered by status
+    // priority then order. With multi-joiner steps, "joined" is determined by
+    // whether the user has an active step-level contribution.
     const mySteps = p.steps
       .filter(
         (s) =>
-          s.assignedToId === userId &&
+          s.contributions.length > 0 &&
           (s.status === 'needs_help' ||
             s.status === 'in_progress' ||
             s.status === 'defining' ||

@@ -3,7 +3,7 @@
 import { useState, useMemo, useTransition, useEffect, useRef } from 'react'
 import { ArrowRight, ChevronDown, Check, LogIn } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { claimStepAction, unclaimStepAction } from '@/app/(platform)/projects/[id]/actions'
+import { joinStepAction, leaveStepAction } from '@/app/(platform)/projects/[id]/actions'
 import { setStepStatusAction } from '@/app/(platform)/projects/[id]/step-actions'
 
 /* ================================================================
@@ -52,6 +52,14 @@ const STATUS_HINT: Record<StepStatusKey, string> = {
 
 type FilterKey = 'all' | StepStatusKey
 
+export interface StepJoiner {
+  id: string
+  name: string
+  initials: string
+  isCoordinator: boolean
+  isMe: boolean
+}
+
 export interface StepCardData {
   id: string
   title: string
@@ -60,8 +68,8 @@ export interface StepCardData {
   order: number
   totalSteps: number
   estimatedHrs: number | null
-  assignedToName: string | null
-  assignedToMe: boolean
+  joiners: StepJoiner[]
+  meOnStep: boolean
   skills: string[]
 }
 
@@ -275,20 +283,19 @@ function StepCard({
   const isDone = status === 'completed'
   const isDefining = status === 'defining'
   const isOpen = status === 'open'
-  const isUnassigned = !step.assignedToName
 
-  const claim = () => {
+  const join = () => {
     setError(null)
     startTransition(async () => {
-      const result = await claimStepAction(projectId, step.id)
+      const result = await joinStepAction(projectId, step.id)
       if (!result.success) setError(result.error)
     })
   }
 
-  const unclaim = () => {
+  const leave = () => {
     setError(null)
     startTransition(async () => {
-      const result = await unclaimStepAction(projectId, step.id)
+      const result = await leaveStepAction(projectId, step.id)
       if (!result.success) setError(result.error)
     })
   }
@@ -336,42 +343,108 @@ function StepCard({
 
       {/* Foot */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex flex-wrap gap-1.5">
-          {step.skills.length > 0 ? (
-            step.skills.map((s) => (
-              <span
-                key={s}
-                className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-1 text-xs text-fg-secondary"
-              >
-                {s}
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap gap-1.5">
+            {step.skills.length > 0 ? (
+              step.skills.map((s) => (
+                <span
+                  key={s}
+                  className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-1 text-xs text-fg-secondary"
+                >
+                  {s}
+                </span>
+              ))
+            ) : (
+              <span className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-1 text-xs text-fg-secondary">
+                No skills required
               </span>
-            ))
-          ) : (
-            <span className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-1 text-xs text-fg-secondary">
-              No skills required
-            </span>
-          )}
+            )}
+          </div>
+          {step.joiners.length > 0 && <JoinersStack joiners={step.joiners} />}
         </div>
 
-        {/* Action — depends on assignment + state */}
         <StepAction
           step={step}
           isSignedIn={isSignedIn}
           isMember={isMember}
-          isUnassigned={isUnassigned}
-          isClaimable={isNeedsHelp || isOpen}
+          isJoinable={isNeedsHelp || isOpen || isDefining || isInProgress}
           isInProgress={isInProgress}
           isDone={isDone}
           isDefining={isDefining}
           isOpen={isOpen}
           pending={pending}
           error={error}
-          onClaim={claim}
-          onUnclaim={unclaim}
+          onJoin={join}
+          onLeave={leave}
         />
       </div>
     </div>
   )
+}
+
+/* ================================================================
+   Joiners — avatar stack with coordinator pip + overflow chip
+   ================================================================ */
+
+const AVATAR_GRADIENTS = [
+  'bg-[linear-gradient(135deg,#B86E00,#F4A535_55%,#FAD08F)]',
+  'bg-[linear-gradient(135deg,#1A5C40,#3DAF7C_60%,#7DD3B0)]',
+  'bg-[linear-gradient(135deg,#2E5FAA,#4A7FD4_60%,#B2D0F5)]',
+  'bg-[linear-gradient(135deg,#5C3600,#B86E00_60%,#F7BD64)]',
+  'bg-[linear-gradient(135deg,#1B3A6B,#2E5FAA_60%,#7AAEE8)]',
+  'bg-[linear-gradient(135deg,#7A1A1A,#E05252_60%,#F09898)]',
+]
+
+function gradientFor(id: string): string {
+  let h = 0
+  for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0
+  return AVATAR_GRADIENTS[Math.abs(h) % AVATAR_GRADIENTS.length]
+}
+
+function JoinersStack({ joiners }: { joiners: StepJoiner[] }) {
+  const maxVisible = 4
+  const visible = joiners.slice(0, maxVisible)
+  const overflow = joiners.length - visible.length
+  const coordinator = joiners.find((j) => j.isCoordinator)
+
+  const titleParts = joiners.map((j) =>
+    j.isCoordinator ? `${j.name} (coordinator)` : j.name,
+  )
+
+  return (
+    <div className="flex items-center gap-2" title={titleParts.join(', ')}>
+      <div className="flex -space-x-1.5">
+        {visible.map((j) => (
+          <div
+            key={j.id}
+            className={cn(
+              'relative flex size-6 items-center justify-center rounded-full text-[10px] font-semibold text-blue-900 ring-2 ring-bg-surface',
+              gradientFor(j.id),
+            )}
+          >
+            {j.initials}
+            {j.isCoordinator && (
+              <span className="absolute -bottom-0.5 -right-0.5 flex size-2.5 items-center justify-center rounded-full bg-amber-500 ring-[1.5px] ring-bg-surface" />
+            )}
+          </div>
+        ))}
+        {overflow > 0 && (
+          <div className="flex size-6 items-center justify-center rounded-full bg-bg-surface-2 text-[10px] font-semibold text-fg-secondary ring-2 ring-bg-surface">
+            +{overflow}
+          </div>
+        )}
+      </div>
+      {coordinator && (
+        <span className="text-xs text-fg-tertiary">
+          {coordinator.isMe ? 'You coordinate' : `${firstName(coordinator.name)} coordinates`}
+        </span>
+      )}
+    </div>
+  )
+}
+
+function firstName(name: string): string {
+  return name.split(/\s+/)[0] ?? name
 }
 
 /* ================================================================
@@ -602,33 +675,31 @@ function StepAction({
   step,
   isSignedIn,
   isMember,
-  isUnassigned,
-  isClaimable,
+  isJoinable,
   isInProgress,
   isDone,
   isDefining,
   isOpen,
   pending,
   error,
-  onClaim,
-  onUnclaim,
+  onJoin,
+  onLeave,
 }: {
   step: StepCardData
   isSignedIn: boolean
   isMember: boolean
-  isUnassigned: boolean
-  isClaimable: boolean
+  isJoinable: boolean
   isInProgress: boolean
   isDone: boolean
   isDefining: boolean
   isOpen: boolean
   pending: boolean
   error: string | null
-  onClaim: () => void
-  onUnclaim: () => void
+  onJoin: () => void
+  onLeave: () => void
 }) {
-  // I'm the assignee
-  if (step.assignedToMe) {
+  // I'm on the step.
+  if (step.meOnStep) {
     return (
       <div className="flex items-center gap-3">
         {error && <span className="text-xs text-red-300">{error}</span>}
@@ -639,22 +710,18 @@ function StepAction({
         <button
           type="button"
           disabled={pending}
-          onClick={onUnclaim}
+          onClick={onLeave}
           className="cursor-pointer text-sm text-fg-tertiary underline-offset-2 transition-colors hover:text-fg-secondary hover:underline disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {pending ? 'Handing back…' : 'Hand back step'}
+          {pending ? 'Leaving…' : 'Leave step'}
         </button>
       </div>
     )
   }
-  // Someone else is on it
-  if (step.assignedToName) {
-    return <span className="text-sm text-fg-tertiary">{step.assignedToName} is on this</span>
-  }
   if (isDone) return <span className="text-sm text-fg-tertiary">Done</span>
 
-  // Unassigned + claimable — gate behind membership
-  if (isClaimable && isUnassigned) {
+  // Anyone who's not on it can join (steps are multi-joiner now).
+  if (isJoinable) {
     if (!isSignedIn) {
       return (
         <a
@@ -662,13 +729,13 @@ function StepAction({
           className="inline-flex items-center gap-1 text-sm font-medium text-fg-tertiary hover:text-fg-primary"
         >
           <LogIn className="size-3.5" />
-          Sign in to claim
+          Sign in to join
         </a>
       )
     }
     if (!isMember) {
       return (
-        <span className="text-sm text-fg-tertiary">Join project to claim</span>
+        <span className="text-sm text-fg-tertiary">Join project to join step</span>
       )
     }
     return (
@@ -677,10 +744,14 @@ function StepAction({
         <button
           type="button"
           disabled={pending}
-          onClick={onClaim}
+          onClick={onJoin}
           className="inline-flex cursor-pointer items-center gap-1 text-sm font-medium text-amber-500 transition-colors hover:text-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {pending ? 'Claiming…' : isInProgress ? 'Take this on' : 'Claim this step'}
+          {pending
+            ? 'Joining…'
+            : step.joiners.length === 0
+              ? 'Join this step'
+              : 'Join too'}
           {!pending && <ArrowRight className="size-3.5" strokeWidth={2.5} />}
         </button>
       </div>

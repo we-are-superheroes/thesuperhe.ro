@@ -100,7 +100,8 @@ model User {
   organisations   UserOrganisation[]
   contributions   Contribution[]
   blueprints      Blueprint[]
-  assignedSteps   ProjectStep[]      @relation("AssignedSteps")
+  coordinatedSteps ProjectStep[]     @relation("CoordinatedSteps")
+  timeLogs         TimeLog[]
   notifications   Notification[]     @relation("UserNotifications")
   actedNotifications Notification[]  @relation("ActorNotifications")
   conversations   ConversationParticipant[]
@@ -273,7 +274,11 @@ model ProjectStep {
   id              String  @id @default(uuid())
   projectId       String  @map("project_id")
   blueprintStepId String? @map("blueprint_step_id")
-  assignedToId    String? @map("assigned_to")
+  // Coordinator — single user the project lead designates as the point of
+  // contact for this step. The actual joiners are tracked many-to-many via
+  // Contribution(projectStepId). Auto-set to the first joiner; project leads
+  // can reassign from /modify.
+  coordinatorId   String? @map("coordinator_id")
 
   title        String
   description  String?
@@ -287,9 +292,10 @@ model ProjectStep {
 
   project       Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
   blueprintStep BlueprintStep? @relation(fields: [blueprintStepId], references: [id])
-  assignedTo    User?          @relation("AssignedSteps", fields: [assignedToId], references: [id])
+  coordinator   User?          @relation("CoordinatedSteps", fields: [coordinatorId], references: [id])
   skills        StepSkill[]
   contributions Contribution[]
+  timeLogs      TimeLog[]
 
   @@map("project_steps")
 }
@@ -326,7 +332,7 @@ model Contribution {
 
   role             ContributionRole
   status           ContributionStatus @default(pending)
-  hoursContributed Int                @default(0) @map("hours_contributed")
+  hoursContributed Float              @default(0) @map("hours_contributed")
   joinedAt         DateTime           @default(now()) @map("joined_at")
   updatedAt        DateTime           @updatedAt @map("updated_at")
 
@@ -336,6 +342,31 @@ model Contribution {
 
   @@unique([userId, projectId, projectStepId])
   @@map("contributions")
+}
+
+// =============================================================================
+// TIME LOGS
+// Per-entry hours logged against a step. Sum is denormalised onto
+// Contribution.hoursContributed for cheap dashboard reads; the action layer
+// keeps the two in sync inside a transaction.
+// =============================================================================
+
+model TimeLog {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  projectStepId String   @map("project_step_id")
+
+  hours    Float
+  note     String?
+  loggedOn DateTime @default(now()) @map("logged_on")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectStep ProjectStep @relation(fields: [projectStepId], references: [id], onDelete: Cascade)
+
+  @@index([userId, loggedOn(sort: Desc)])
+  @@index([projectStepId, loggedOn(sort: Desc)])
+  @@map("time_logs")
 }
 
 // =============================================================================

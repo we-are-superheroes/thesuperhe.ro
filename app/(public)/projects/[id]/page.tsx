@@ -79,15 +79,25 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           status: true,
           order: true,
           estimatedHrs: true,
-          assignedToId: true,
-          assignedTo: { select: { name: true } },
+          coordinatorId: true,
+          coordinator: { select: { id: true, name: true } },
           skills: {
             select: { skill: { select: { id: true, name: true } } },
+          },
+          contributions: {
+            where: { status: 'active' },
+            orderBy: { joinedAt: 'asc' },
+            select: {
+              user: { select: { id: true, name: true } },
+            },
           },
         },
       },
       contributions: {
-        where: { status: { in: ['active', 'pending'] } },
+        where: {
+          status: { in: ['active', 'pending'] },
+          projectStepId: null,
+        },
         select: {
           role: true,
           hoursContributed: true,
@@ -112,9 +122,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   const isMember = myContribution?.status === 'active'
   const isPendingApproval = myContribution?.status === 'pending'
 
-  // How many steps are assigned to me on this project? (used to confirm leave)
+  // How many steps am I on for this project? (used to confirm leave)
   const myAssignedStepCount = userId
-    ? project.steps.filter((s) => s.assignedToId === userId).length
+    ? project.steps.filter((s) =>
+        s.contributions.some((c) => c.user?.id === userId),
+      ).length
     : 0
 
   // Is the current user the project lead? Only the lead sees Modify project.
@@ -171,19 +183,40 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
     TYPE_COVER_GRADIENT['Urban Rewilding']
 
   // Shape steps for the client component
-  const stepCards: StepCardData[] = project.steps.map((s) => ({
-    id: s.id,
-    title: s.title,
-    description: s.description,
-    status: s.status,
-    order: s.order,
-    totalSteps,
-    estimatedHrs: s.estimatedHrs,
-    // Anonymous viewers see that the step is claimed but not by whom.
-    assignedToName: s.assignedTo ? (userId ? s.assignedTo.name : 'Someone') : null,
-    assignedToMe: !!userId && s.assignedToId === userId,
-    skills: s.skills.map((ss) => ss.skill.name),
-  }))
+  const stepCards: StepCardData[] = project.steps.map((s) => {
+    // Joiners are the active step-level contributions. For anonymous viewers
+    // we keep the count + coordinator flag but anonymise the names.
+    const joiners = s.contributions.map((c) => {
+      const name = c.user?.name ?? 'Someone'
+      const initials =
+        name
+          .split(/\s+/)
+          .filter(Boolean)
+          .slice(0, 2)
+          .map((p) => p[0]?.toUpperCase() ?? '')
+          .join('') || '?'
+      return {
+        id: c.user?.id ?? 'anon',
+        name: userId ? name : 'Someone',
+        initials: userId ? initials : '?',
+        isCoordinator: !!s.coordinatorId && s.coordinatorId === c.user?.id,
+        isMe: !!userId && c.user?.id === userId,
+      }
+    })
+    const meOnStep = !!userId && joiners.some((j) => j.isMe)
+    return {
+      id: s.id,
+      title: s.title,
+      description: s.description,
+      status: s.status,
+      order: s.order,
+      totalSteps,
+      estimatedHrs: s.estimatedHrs,
+      joiners,
+      meOnStep,
+      skills: s.skills.map((ss) => ss.skill.name),
+    }
+  })
 
   // Description split by paragraph (newlines)
   const descParagraphs = project.description.split(/\n+/).map((p) => p.trim()).filter(Boolean)

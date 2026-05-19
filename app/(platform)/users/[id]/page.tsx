@@ -110,8 +110,15 @@ export default async function UserProfilePage({ params }: Params) {
         },
       },
     }),
-    db.projectStep.count({
-      where: { assignedToId: id, status: 'completed' },
+    // "Completed" steps stat — count steps that are done *and* that the user
+    // was actively on. With the multi-joiner model this is a contribution
+    // count, not a step-assignee count.
+    db.contribution.count({
+      where: {
+        userId: id,
+        projectStepId: { not: null },
+        status: 'completed',
+      },
     }),
     db.blueprint.aggregate({
       where: { createdById: id },

@@ -47,7 +47,6 @@ export async function setStepStatusAction(
       projectId: true,
       title: true,
       status: true,
-      assignedToId: true,
       project: { select: { id: true, title: true } },
     },
   })
@@ -89,19 +88,19 @@ export async function setStepStatusAction(
         },
       })
 
-      // Keep the step-level contribution status in sync for the assignee.
-      if (step.assignedToId) {
-        await tx.contribution.updateMany({
-          where: {
-            userId: step.assignedToId,
-            projectId,
-            projectStepId: stepId,
-          },
-          data: {
-            status: next === 'completed' ? 'completed' : 'active',
-          },
-        })
-      }
+      // Keep all step-level contributions on this step in sync — every
+      // joiner's row moves to "completed" when the step is done, and back to
+      // "active" if the step is re-opened.
+      await tx.contribution.updateMany({
+        where: {
+          projectId,
+          projectStepId: stepId,
+          status: { in: ['active', 'completed'] },
+        },
+        data: {
+          status: next === 'completed' ? 'completed' : 'active',
+        },
+      })
 
       // step_completed fans out on the open → done transition.
       if (next === 'completed' && prev !== 'completed') {
@@ -139,4 +138,71 @@ export async function setStepStatusAction(
   revalidatePath('/dashboard')
   revalidatePath('/notifications')
   return { success: true, data: { status: next } }
+}
+
+/* ================================================================
+   setStepCoordinatorAction — project-lead-only.
+   The coordinator must be one of the step's current active joiners (or
+   `null` to clear). UI on /modify offers exactly those choices.
+   ================================================================ */
+
+export async function setStepCoordinatorAction(
+  projectId: string,
+  stepId: string,
+  nextCoordinatorId: string | null,
+): Promise<ServerActionResult<{ coordinatorId: string | null }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  // Authz: project lead only.
+  const lead = await db.contribution.findFirst({
+    where: {
+      userId,
+      projectId,
+      projectStepId: null,
+      role: 'lead',
+      status: { in: ['active', 'pending'] },
+    },
+    select: { id: true },
+  })
+  if (!lead) {
+    return { success: false, error: 'Only the project lead can change coordinators.' }
+  }
+
+  const step = await db.projectStep.findUnique({
+    where: { id: stepId },
+    select: { id: true, projectId: true },
+  })
+  if (!step || step.projectId !== projectId) {
+    return { success: false, error: 'Step not found.' }
+  }
+
+  // If a non-null coordinator is requested, they must currently be on the
+  // step. This guards against picking someone who left.
+  if (nextCoordinatorId) {
+    const onStep = await db.contribution.findFirst({
+      where: {
+        userId: nextCoordinatorId,
+        projectId,
+        projectStepId: stepId,
+        status: 'active',
+      },
+      select: { id: true },
+    })
+    if (!onStep) {
+      return {
+        success: false,
+        error: 'That user isn’t currently on this step.',
+      }
+    }
+  }
+
+  await db.projectStep.update({
+    where: { id: stepId },
+    data: { coordinatorId: nextCoordinatorId },
+  })
+
+  revalidatePath(`/projects/${projectId}`)
+  revalidatePath(`/projects/${projectId}/edit`)
+  return { success: true, data: { coordinatorId: nextCoordinatorId } }
 }

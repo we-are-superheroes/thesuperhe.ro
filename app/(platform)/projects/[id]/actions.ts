@@ -135,10 +135,10 @@ export async function joinProjectAction(
   return { success: true, data: { joined: true, pending: approvalRequired } }
 }
 
-export async function claimStepAction(
+export async function joinStepAction(
   projectId: string,
   projectStepId: string,
-): Promise<ServerActionResult<{ claimed: true }>> {
+): Promise<ServerActionResult<{ joined: true }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
 
@@ -165,7 +165,7 @@ export async function claimStepAction(
     select: {
       id: true,
       projectId: true,
-      assignedToId: true,
+      coordinatorId: true,
       status: true,
       title: true,
       project: { select: { title: true } },
@@ -174,8 +174,14 @@ export async function claimStepAction(
   if (!step || step.projectId !== projectId) {
     return { success: false, error: 'Step not found in this project.' }
   }
-  if (step.assignedToId && step.assignedToId !== userId) {
-    return { success: false, error: 'Someone else has already claimed this step.' }
+
+  // Already an active joiner? No-op — joining is idempotent.
+  const existingStepContribution = await db.contribution.findFirst({
+    where: { userId, projectId, projectStepId, status: 'active' },
+    select: { id: true },
+  })
+  if (existingStepContribution) {
+    return { success: true, data: { joined: true } }
   }
 
   const actor = await db.user.findUnique({ where: { id: userId }, select: { name: true } })
@@ -183,18 +189,6 @@ export async function claimStepAction(
 
   try {
     await db.$transaction(async (tx) => {
-      await tx.projectStep.update({
-        where: { id: projectStepId },
-        data: {
-          assignedToId: userId,
-          status:
-            step.status === 'needs_help' ||
-            step.status === 'open' ||
-            step.status === 'defining'
-              ? 'in_progress'
-              : step.status,
-        },
-      })
       await tx.contribution.upsert({
         where: {
           userId_projectId_projectStepId: { userId, projectId, projectStepId },
@@ -209,6 +203,19 @@ export async function claimStepAction(
         },
       })
 
+      // First joiner becomes the coordinator + flips an idle step into motion.
+      const stepUpdate: { coordinatorId?: string; status?: typeof step.status } = {}
+      if (!step.coordinatorId) stepUpdate.coordinatorId = userId
+      if (step.status === 'open' || step.status === 'defining') {
+        stepUpdate.status = 'in_progress'
+      }
+      if (Object.keys(stepUpdate).length > 0) {
+        await tx.projectStep.update({
+          where: { id: projectStepId },
+          data: stepUpdate,
+        })
+      }
+
       const leadIds = await getProjectLeadIds(tx, projectId)
       await notify(tx, {
         type: 'step_claimed',
@@ -216,23 +223,24 @@ export async function claimStepAction(
         actorId: userId,
         projectId,
         stepId: projectStepId,
-        title: `${actorName} claimed “${step.title}” in ${step.project.title}.`,
+        title: `${actorName} joined “${step.title}” in ${step.project.title}.`,
       })
     })
   } catch {
-    return { success: false, error: 'Could not claim step.' }
+    return { success: false, error: 'Could not join step.' }
   }
 
   revalidatePath(`/projects/${projectId}`)
   revalidatePath('/dashboard')
+  revalidatePath('/my-steps')
   revalidatePath('/notifications')
-  return { success: true, data: { claimed: true } }
+  return { success: true, data: { joined: true } }
 }
 
-export async function unclaimStepAction(
+export async function leaveStepAction(
   projectId: string,
   projectStepId: string,
-): Promise<ServerActionResult<{ unclaimed: true }>> {
+): Promise<ServerActionResult<{ left: true }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
 
@@ -241,7 +249,7 @@ export async function unclaimStepAction(
     select: {
       id: true,
       projectId: true,
-      assignedToId: true,
+      coordinatorId: true,
       status: true,
       title: true,
       project: { select: { title: true } },
@@ -250,8 +258,13 @@ export async function unclaimStepAction(
   if (!step || step.projectId !== projectId) {
     return { success: false, error: 'Step not found in this project.' }
   }
-  if (step.assignedToId !== userId) {
-    return { success: false, error: 'This step isn’t assigned to you.' }
+
+  const mine = await db.contribution.findFirst({
+    where: { userId, projectId, projectStepId, status: 'active' },
+    select: { id: true },
+  })
+  if (!mine) {
+    return { success: false, error: 'You’re not on this step.' }
   }
 
   const actor = await db.user.findUnique({ where: { id: userId }, select: { name: true } })
@@ -259,18 +272,35 @@ export async function unclaimStepAction(
 
   try {
     await db.$transaction(async (tx) => {
-      await tx.projectStep.update({
-        where: { id: projectStepId },
-        data: {
-          assignedToId: null,
-          // If they were actively working it, return it to the pool.
-          status: step.status === 'in_progress' ? 'needs_help' : step.status,
-        },
-      })
-      await tx.contribution.updateMany({
-        where: { userId, projectId, projectStepId },
+      await tx.contribution.update({
+        where: { id: mine.id },
         data: { status: 'withdrawn' },
       })
+
+      // Decide whether to transfer the coordinator + whether the step should
+      // fall back to "needs help" because the team thinned out.
+      const remainingJoiners = await tx.contribution.findMany({
+        where: { projectId, projectStepId, status: 'active' },
+        orderBy: { joinedAt: 'asc' },
+        select: { userId: true },
+      })
+
+      const stepUpdate: {
+        coordinatorId?: string | null
+        status?: typeof step.status
+      } = {}
+      if (step.coordinatorId === userId) {
+        stepUpdate.coordinatorId = remainingJoiners[0]?.userId ?? null
+      }
+      if (remainingJoiners.length === 0 && step.status === 'in_progress') {
+        stepUpdate.status = 'needs_help'
+      }
+      if (Object.keys(stepUpdate).length > 0) {
+        await tx.projectStep.update({
+          where: { id: projectStepId },
+          data: stepUpdate,
+        })
+      }
 
       const leadIds = await getProjectLeadIds(tx, projectId)
       await notify(tx, {
@@ -279,18 +309,20 @@ export async function unclaimStepAction(
         actorId: userId,
         projectId,
         stepId: projectStepId,
-        title: `${actorName} handed back “${step.title}” in ${step.project.title}.`,
+        title: `${actorName} left “${step.title}” in ${step.project.title}.`,
       })
     })
   } catch {
-    return { success: false, error: 'Could not hand the step back.' }
+    return { success: false, error: 'Could not leave step.' }
   }
 
   revalidatePath(`/projects/${projectId}`)
   revalidatePath('/dashboard')
+  revalidatePath('/my-steps')
   revalidatePath('/notifications')
-  return { success: true, data: { unclaimed: true } }
+  return { success: true, data: { left: true } }
 }
+
 
 export async function leaveProjectAction(
   projectId: string,
@@ -306,12 +338,15 @@ export async function leaveProjectAction(
     return { success: false, error: 'You’re not in this project.' }
   }
 
-  // Find any steps assigned to this user in this project so we can release
-  // them as part of leaving — leaving with steps still on your name would
-  // strand the work.
-  const assignedSteps = await db.projectStep.findMany({
-    where: { projectId, assignedToId: userId },
-    select: { id: true, status: true },
+  // Find any steps this user joined or coordinates so we can release them
+  // as part of leaving the project — leaving with steps still on your name
+  // would strand the work.
+  const joinedSteps = await db.projectStep.findMany({
+    where: {
+      projectId,
+      contributions: { some: { userId, status: 'active' } },
+    },
+    select: { id: true, status: true, coordinatorId: true },
   })
 
   const project = await db.project.findUnique({
@@ -330,22 +365,8 @@ export async function leaveProjectAction(
         where: { id: existing.id },
         data: { status: 'withdrawn' },
       })
-      // Unassign every step the user had on this project.
-      await tx.projectStep.updateMany({
-        where: { projectId, assignedToId: userId },
-        data: { assignedToId: null },
-      })
-      // Return any "in_progress" steps to "needs_help" so others can pick up.
-      const inProgressIds = assignedSteps
-        .filter((s) => s.status === 'in_progress')
-        .map((s) => s.id)
-      if (inProgressIds.length > 0) {
-        await tx.projectStep.updateMany({
-          where: { id: { in: inProgressIds } },
-          data: { status: 'needs_help' },
-        })
-      }
-      // Withdraw step-level contributions.
+      // Withdraw step-level contributions first so the remaining-joiners
+      // counts below are accurate.
       await tx.contribution.updateMany({
         where: {
           userId,
@@ -355,6 +376,31 @@ export async function leaveProjectAction(
         },
         data: { status: 'withdrawn' },
       })
+
+      // For each step the user was on: if they were coordinator, hand the
+      // baton to the next remaining joiner (or null). If they were the last
+      // joiner on an in-progress step, fall it back to needs_help.
+      for (const s of joinedSteps) {
+        const remaining = await tx.contribution.findMany({
+          where: {
+            projectId,
+            projectStepId: s.id,
+            status: 'active',
+          },
+          orderBy: { joinedAt: 'asc' },
+          select: { userId: true },
+        })
+        const update: { coordinatorId?: string | null; status?: typeof s.status } = {}
+        if (s.coordinatorId === userId) {
+          update.coordinatorId = remaining[0]?.userId ?? null
+        }
+        if (remaining.length === 0 && s.status === 'in_progress') {
+          update.status = 'needs_help'
+        }
+        if (Object.keys(update).length > 0) {
+          await tx.projectStep.update({ where: { id: s.id }, data: update })
+        }
+      }
 
       const leadIds = await getProjectLeadIds(tx, projectId)
       await notify(tx, {
