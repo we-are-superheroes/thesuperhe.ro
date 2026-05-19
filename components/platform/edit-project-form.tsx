@@ -24,6 +24,7 @@ import {
   type FormStep,
   type SkillOption,
 } from '@/components/platform/project-form-bits'
+import { COUNTRIES as ISO_COUNTRIES, LANGUAGES as ISO_LANGUAGES } from '@/lib/locales'
 
 const JOIN_POLICY_OPTIONS: Array<{
   value: 'open' | 'approval_required'
@@ -57,6 +58,10 @@ export interface EditProjectInitial {
   address: string
   /** Optional "lat, lng" string (pre-filled from saved Float columns). */
   coordinates: string
+  /** ISO 3166-1 alpha-2 country code. */
+  countryCode: string | null
+  /** ISO 639-1 language code. */
+  languageCode: string | null
   coverImageUrl: string | null
   joinPolicy: 'open' | 'approval_required'
   status: ProjectStatus
@@ -132,6 +137,8 @@ export function EditProjectForm({
   const [remote, setRemote] = useState<'yes' | 'some' | 'no'>(initial.remote)
   const [address, setAddress] = useState(initial.address)
   const [coordinates, setCoordinates] = useState(initial.coordinates)
+  const [countryCode, setCountryCode] = useState<string | null>(initial.countryCode)
+  const [languageCode, setLanguageCode] = useState<string | null>(initial.languageCode)
   const [joinPolicy, setJoinPolicy] = useState<'open' | 'approval_required'>(initial.joinPolicy)
   const [status, setStatus] = useState<ProjectStatus>(initial.status)
   const [activeSection, setActiveSection] = useState<string>(TOC_SECTIONS[0].id)
@@ -192,6 +199,8 @@ export function EditProjectForm({
         country,
         address,
         coordinates,
+        countryCode,
+        languageCode,
         remote,
         joinPolicy,
         status,
@@ -247,6 +256,10 @@ export function EditProjectForm({
         // the project that's forked, not the template.
         address: '',
         coordinates: '',
+        // Carry the project's locale forward when saving its template; the
+        // user can re-localise from the blueprint create flow later.
+        countryCode,
+        languageCode,
         remote,
         // Blueprints don't carry a join policy at runtime — projects forked
         // from them pick their own. Pass a valid default to satisfy the
@@ -254,6 +267,7 @@ export function EditProjectForm({
         joinPolicy: 'open',
         projectTypeId: null,
         blueprintId: null,
+        parentBlueprintId: null,
         steps: steps.map((s) => ({
           title: s.title,
           description: s.description,
@@ -554,6 +568,48 @@ export function EditProjectForm({
                 className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-mono text-sm tabular-nums text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
               />
             </Field>
+
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <Field
+                label="Country tag (optional)"
+                htmlFor="fld-country-code"
+                help="Used by the browse-page country filter. Independent from the free-text country above."
+              >
+                <select
+                  id="fld-country-code"
+                  value={countryCode ?? ''}
+                  onChange={(e) => setCountryCode(e.target.value || null)}
+                  className="w-full appearance-none rounded-lg border border-neutral-700 bg-bg-surface-2 py-2.5 pl-3.5 pr-9 font-sans text-sm text-fg-primary outline-none transition-all duration-fast focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)] [background-image:url('data:image/svg+xml;utf8,<svg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_24_24%22_fill=%22none%22_stroke=%22%238097B5%22_stroke-width=%222.5%22_stroke-linecap=%22round%22_stroke-linejoin=%22round%22><polyline_points=%226_9_12_15_18_9%22/></svg>')] [background-position:right_14px_center] [background-repeat:no-repeat]"
+                >
+                  <option value="">— none —</option>
+                  {ISO_COUNTRIES.map((c) => (
+                    <option key={c.code} value={c.code}>
+                      {c.flag ? `${c.flag} ` : ''}
+                      {c.label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field
+                label="Working language (optional)"
+                htmlFor="fld-lang"
+                help="Used by the browse-page language filter."
+              >
+                <select
+                  id="fld-lang"
+                  value={languageCode ?? ''}
+                  onChange={(e) => setLanguageCode(e.target.value || null)}
+                  className="w-full appearance-none rounded-lg border border-neutral-700 bg-bg-surface-2 py-2.5 pl-3.5 pr-9 font-sans text-sm text-fg-primary outline-none transition-all duration-fast focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)] [background-image:url('data:image/svg+xml;utf8,<svg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_24_24%22_fill=%22none%22_stroke=%22%238097B5%22_stroke-width=%222.5%22_stroke-linecap=%22round%22_stroke-linejoin=%22round%22><polyline_points=%226_9_12_15_18_9%22/></svg>')] [background-position:right_14px_center] [background-repeat:no-repeat]"
+                >
+                  <option value="">— none —</option>
+                  {ISO_LANGUAGES.map((l) => (
+                    <option key={l.code} value={l.code}>
+                      {l.label}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            </div>
 
             <Field label="Can people contribute remotely?">
               <div

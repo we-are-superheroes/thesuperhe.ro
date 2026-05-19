@@ -1,5 +1,9 @@
 import { db } from '@/lib/db'
 import { BrowseProjectsClient, type BrowseProject } from '@/components/platform/browse-projects-client'
+import {
+  COUNTRIES as ISO_COUNTRIES,
+  LANGUAGES as ISO_LANGUAGES,
+} from '@/lib/locales'
 
 /* ================================================================
    BROWSE PROJECTS — server component
@@ -29,6 +33,8 @@ async function getBrowseData(): Promise<{
   projectTypes: { id: string; name: string; count: number }[]
   skills: { id: string; name: string; count: number }[]
   locations: { name: string; count: number }[]
+  countries: { code: string; label: string; count: number }[]
+  languages: { code: string; label: string; count: number }[]
 }> {
   const [projects, projectTypes, skills] = await Promise.all([
     db.project.findMany({
@@ -39,6 +45,8 @@ async function getBrowseData(): Promise<{
         title: true,
         description: true,
         location: true,
+        country: true,
+        language: true,
         remoteOk: true,
         timeCommitmentHrs: true,
         coverImageUrl: true,
@@ -94,6 +102,8 @@ async function getBrowseData(): Promise<{
       title: p.title,
       description: p.description,
       location: p.location ?? 'Remote',
+      country: p.country,
+      language: p.language,
       type: p.projectType?.name ?? 'Other',
       typeId: p.projectType?.id ?? null,
       imgKey: (p.projectType?.name && TYPE_IMG_KEY[p.projectType.name]) ?? 'rewild',
@@ -114,10 +124,14 @@ async function getBrowseData(): Promise<{
   const typeCount = new Map<string, number>()
   const skillCount = new Map<string, number>()
   const locationCount = new Map<string, number>()
+  const countryCount = new Map<string, number>()
+  const languageCount = new Map<string, number>()
   for (const p of browseProjects) {
     if (p.typeId) typeCount.set(p.typeId, (typeCount.get(p.typeId) ?? 0) + 1)
     for (const sid of p.skillIds) skillCount.set(sid, (skillCount.get(sid) ?? 0) + 1)
     locationCount.set(p.location, (locationCount.get(p.location) ?? 0) + 1)
+    if (p.country) countryCount.set(p.country, (countryCount.get(p.country) ?? 0) + 1)
+    if (p.language) languageCount.set(p.language, (languageCount.get(p.language) ?? 0) + 1)
   }
 
   const typesWithCounts = projectTypes
@@ -134,11 +148,29 @@ async function getBrowseData(): Promise<{
     .map(([name, count]) => ({ name, count }))
     .sort((a, b) => b.count - a.count)
 
+  const countriesWithCounts = ISO_COUNTRIES.map((c) => ({
+    code: c.code,
+    label: c.label,
+    count: countryCount.get(c.code) ?? 0,
+  }))
+    .filter((c) => c.count > 0)
+    .sort((a, b) => b.count - a.count)
+
+  const languagesWithCounts = ISO_LANGUAGES.map((l) => ({
+    code: l.code,
+    label: l.label,
+    count: languageCount.get(l.code) ?? 0,
+  }))
+    .filter((l) => l.count > 0)
+    .sort((a, b) => b.count - a.count)
+
   return {
     projects: browseProjects,
     projectTypes: typesWithCounts,
     skills: skillsWithCounts,
     locations: locationsWithCounts,
+    countries: countriesWithCounts,
+    languages: languagesWithCounts,
   }
 }
 
@@ -151,6 +183,8 @@ export default async function BrowseProjectsPage() {
       projectTypes={data.projectTypes}
       skills={data.skills}
       locations={data.locations}
+      countries={data.countries}
+      languages={data.languages}
     />
   )
 }

@@ -15,6 +15,8 @@ export default async function CreateProjectPage() {
         description: true,
         reuseCount: true,
         projectTypeId: true,
+        country: true,
+        language: true,
         projectType: { select: { id: true, name: true } },
         steps: {
           orderBy: { order: 'asc' },
@@ -72,6 +74,8 @@ export default async function CreateProjectPage() {
     stepCount: bp.steps.length,
     projectTypeId: bp.projectTypeId,
     projectTypeName: bp.projectType?.name ?? null,
+    country: bp.country,
+    language: bp.language,
     emoji: (bp.projectType?.name && TYPE_EMOJI[bp.projectType.name]) ?? '✨',
     color: (bp.projectType?.name && TYPE_COLOR[bp.projectType.name]) ?? '#F4A535',
     steps: bp.steps.map((s) => ({

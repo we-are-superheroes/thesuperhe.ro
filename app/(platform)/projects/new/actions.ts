@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { notify } from '@/lib/notifications'
 import { parseCoords } from '@/lib/location'
+import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
 import type { ServerActionResult } from '@/types'
 
 export interface CreateProjectStepInput {
@@ -18,15 +19,22 @@ export interface CreateProjectInput {
   title: string
   description: string
   city: string
+  /** Free-form country label used in the location string. */
   country: string
   /** Optional precise street address or place name. */
   address: string
   /** Optional "lat, lng" string. Parsed + validated server-side. */
   coordinates: string
+  /** ISO 3166-1 alpha-2 code; nullable + filterable on the browse page. */
+  countryCode: string | null
+  /** ISO 639-1 code; nullable + filterable on the browse page. */
+  languageCode: string | null
   remote: 'yes' | 'some' | 'no'
   joinPolicy: 'open' | 'approval_required'
   projectTypeId: string | null
   blueprintId: string | null
+  /** Parent blueprint when saving a new blueprint as a localised variant. */
+  parentBlueprintId: string | null
   steps: CreateProjectStepInput[]
 }
 
@@ -106,15 +114,31 @@ export async function launchProjectAction(
     }
   }
 
-  // Verify blueprint id if supplied
+  // Validate the locale codes (or fall back to the blueprint's later).
+  let countryCode: string | null = null
+  let languageCode: string | null = null
+  try {
+    countryCode = data.countryCode ? normaliseCountry(data.countryCode) : null
+    languageCode = data.languageCode ? normaliseLanguage(data.languageCode) : null
+  } catch (e) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Locale code not recognised.',
+    }
+  }
+
+  // Verify blueprint id if supplied, and inherit its locale when the user
+  // didn't override it on the form.
   let blueprintId: string | null = null
   if (data.blueprintId) {
     const bp = await db.blueprint.findUnique({
       where: { id: data.blueprintId },
-      select: { id: true },
+      select: { id: true, language: true, country: true },
     })
     if (!bp) return { success: false, error: 'Blueprint not found.' }
     blueprintId = bp.id
+    if (!languageCode && bp.language) languageCode = bp.language
+    if (!countryCode && bp.country) countryCode = bp.country
   }
 
   // Verify all requested skill ids exist (across every step's skillIds).
@@ -165,6 +189,8 @@ export async function launchProjectAction(
           address: data.address.trim() || null,
           latitude: coords.latitude,
           longitude: coords.longitude,
+          language: languageCode,
+          country: countryCode,
           // 'yes' or 'some' → remote contributors welcome.
           remoteOk: data.remote === 'yes' || data.remote === 'some',
           joinPolicy: data.joinPolicy,
@@ -287,6 +313,45 @@ export async function saveBlueprintAction(
   const validationError = validateProject(data)
   if (validationError) return { success: false, error: validationError }
 
+  // Validate the locale codes.
+  let countryCode: string | null = null
+  let languageCode: string | null = null
+  try {
+    countryCode = data.countryCode ? normaliseCountry(data.countryCode) : null
+    languageCode = data.languageCode ? normaliseLanguage(data.languageCode) : null
+  } catch (e) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Locale code not recognised.',
+    }
+  }
+
+  // Resolve the optional parent. Strict 1-level: a child cannot itself
+  // have a parent. Children must declare at least one of language/country.
+  let parentBlueprintId: string | null = null
+  if (data.parentBlueprintId) {
+    const parent = await db.blueprint.findUnique({
+      where: { id: data.parentBlueprintId },
+      select: { id: true, parentBlueprintId: true },
+    })
+    if (!parent) return { success: false, error: 'Parent blueprint not found.' }
+    if (parent.parentBlueprintId) {
+      return {
+        success: false,
+        error:
+          'You can only adapt root blueprints — that one is already a variant.',
+      }
+    }
+    parentBlueprintId = parent.id
+    if (!languageCode && !countryCode) {
+      return {
+        success: false,
+        error:
+          'A variant needs a language or a country so people can tell it apart.',
+      }
+    }
+  }
+
   // Same skill validation as launch — every per-step skillId must exist.
   const requestedSkillIds = Array.from(
     new Set(data.steps.flatMap((s) => s.skillIds)),
@@ -327,6 +392,9 @@ export async function saveBlueprintAction(
           projectTypeId: data.projectTypeId,
           title: data.title.trim(),
           description: data.description.trim(),
+          parentBlueprintId,
+          language: languageCode,
+          country: countryCode,
         },
       })
 

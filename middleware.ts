@@ -14,6 +14,7 @@ const isPublicRoute = createRouteMatcher([
   '/api/webhooks(.*)',
   '/projects',
   '/projects/(.*)',
+  '/blueprints',
 ])
 
 const isProtectedProjectSubroute = createRouteMatcher([

@@ -202,9 +202,16 @@ model Blueprint {
   id            String   @id @default(uuid())
   createdById   String   @map("created_by")
   projectTypeId String?  @map("project_type_id")
+  // Parent of a variant blueprint. Self-FK; null on family roots. A child
+  // can't itself have children (one level deep — enforced server-side).
+  parentBlueprintId String? @map("parent_blueprint_id")
 
   title        String
   description  String
+  // ISO 639-1 language code (e.g. "en", "de") + ISO 3166-1 alpha-2 country
+  // code (e.g. "GB", "CH"). Optional on roots; required on children.
+  language     String?
+  country      String?
   estimatedHrs Int?     @map("estimated_hrs")
   reuseCount   Int      @default(0) @map("reuse_count")
   createdAt    DateTime @default(now()) @map("created_at")
@@ -212,9 +219,14 @@ model Blueprint {
 
   createdBy   User         @relation(fields: [createdById], references: [id])
   projectType ProjectType? @relation(fields: [projectTypeId], references: [id])
+  parent      Blueprint?   @relation("BlueprintVariants", fields: [parentBlueprintId], references: [id], onDelete: SetNull)
+  variants    Blueprint[]  @relation("BlueprintVariants")
   steps       BlueprintStep[]
   projects    Project[]
 
+  @@index([parentBlueprintId])
+  @@index([country])
+  @@index([language])
   @@map("blueprints")
 }
 
@@ -258,6 +270,10 @@ model Project {
   address               String?
   latitude              Float?
   longitude             Float?
+  // ISO codes for browse-page filters. Pre-filled from the source blueprint
+  // when a project is forked, editable from the project form.
+  language              String?
+  country               String?
   remoteOk              Boolean  @default(true) @map("remote_ok")
   timeCommitmentHrs     Int?     @map("time_commitment_hrs")
   coverImageUrl         String?  @map("cover_image_url")
@@ -272,6 +288,8 @@ model Project {
   contributions Contribution[]
   notifications Notification[]
 
+  @@index([country])
+  @@index([language])
   @@map("projects")
 }
 

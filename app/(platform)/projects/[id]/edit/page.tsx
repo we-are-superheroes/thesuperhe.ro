@@ -42,6 +42,8 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       address: true,
       latitude: true,
       longitude: true,
+      country: true,
+      language: true,
       remoteOk: true,
       coverImageUrl: true,
       joinPolicy: true,
@@ -98,6 +100,8 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       project.latitude != null && project.longitude != null
         ? formatCoords(project.latitude, project.longitude)
         : '',
+    countryCode: project.country,
+    languageCode: project.language,
     coverImageUrl: project.coverImageUrl,
     joinPolicy: project.joinPolicy,
     status: project.status,

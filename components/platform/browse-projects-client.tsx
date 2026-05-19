@@ -24,6 +24,8 @@ export interface BrowseProject {
   title: string
   description: string
   location: string
+  country: string | null
+  language: string | null
   type: string
   typeId: string | null
   imgKey: string
@@ -47,6 +49,12 @@ interface FilterOption {
 
 interface LocationOption {
   name: string
+  count: number
+}
+
+interface CodeOption {
+  code: string
+  label: string
   count: number
 }
 
@@ -77,18 +85,25 @@ export function BrowseProjectsClient({
   projectTypes,
   skills,
   locations,
+  countries,
+  languages,
 }: {
   projects: BrowseProject[]
   projectTypes: FilterOption[]
   skills: FilterOption[]
   locations: LocationOption[]
+  countries: CodeOption[]
+  languages: CodeOption[]
 }) {
   const [query, setQuery] = useState('')
   const [skillSearch, setSkillSearch] = useState('')
   const [locationSearch, setLocationSearch] = useState('')
+  const [countrySearch, setCountrySearch] = useState('')
   const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set())
   const [selectedSkills, setSelectedSkills] = useState<Set<string>>(new Set())
   const [selectedLocations, setSelectedLocations] = useState<Set<string>>(new Set())
+  const [selectedCountries, setSelectedCountries] = useState<Set<string>>(new Set())
+  const [selectedLanguages, setSelectedLanguages] = useState<Set<string>>(new Set())
   const [sort, setSort] = useState<SortKey>('recent')
   const [view, setView] = useState<'grid' | 'list'>('grid')
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
@@ -106,6 +121,8 @@ export function BrowseProjectsClient({
           if (!hasMatch) return false
         }
         if (selectedLocations.size && !selectedLocations.has(p.location)) return false
+        if (selectedCountries.size && (!p.country || !selectedCountries.has(p.country))) return false
+        if (selectedLanguages.size && (!p.language || !selectedLanguages.has(p.language))) return false
         return true
       })
       .sort((a, b) => {
@@ -114,7 +131,16 @@ export function BrowseProjectsClient({
         if (sort === 'progress') return b.sortProgress - a.sortProgress
         return 0
       })
-  }, [projects, query, selectedTypes, selectedSkills, selectedLocations, sort])
+  }, [
+    projects,
+    query,
+    selectedTypes,
+    selectedSkills,
+    selectedLocations,
+    selectedCountries,
+    selectedLanguages,
+    sort,
+  ])
 
   const toggle = (set: Set<string>, setSet: (s: Set<string>) => void, key: string) => {
     const next = new Set(set)
@@ -127,9 +153,12 @@ export function BrowseProjectsClient({
     setQuery('')
     setSkillSearch('')
     setLocationSearch('')
+    setCountrySearch('')
     setSelectedTypes(new Set())
     setSelectedSkills(new Set())
     setSelectedLocations(new Set())
+    setSelectedCountries(new Set())
+    setSelectedLanguages(new Set())
   }
 
   // Active chips derived from current state
@@ -146,12 +175,22 @@ export function BrowseProjectsClient({
   for (const loc of selectedLocations) {
     activeChips.push({ kind: 'location', key: loc, label: loc })
   }
+  for (const code of selectedCountries) {
+    const c = countries.find((x) => x.code === code)
+    if (c) activeChips.push({ kind: 'country', key: code, label: c.label })
+  }
+  for (const code of selectedLanguages) {
+    const l = languages.find((x) => x.code === code)
+    if (l) activeChips.push({ kind: 'language', key: code, label: l.label })
+  }
 
   const removeChip = (kind: string, key: string) => {
     if (kind === 'query') setQuery('')
     else if (kind === 'type') toggle(selectedTypes, setSelectedTypes, key)
     else if (kind === 'skill') toggle(selectedSkills, setSelectedSkills, key)
     else if (kind === 'location') toggle(selectedLocations, setSelectedLocations, key)
+    else if (kind === 'country') toggle(selectedCountries, setSelectedCountries, key)
+    else if (kind === 'language') toggle(selectedLanguages, setSelectedLanguages, key)
   }
 
   // Apply skill / location search filters to the visible filter list
@@ -160,6 +199,9 @@ export function BrowseProjectsClient({
   )
   const visibleLocations = locations.filter((l) =>
     l.name.toLowerCase().includes(locationSearch.trim().toLowerCase()),
+  )
+  const visibleCountries = countries.filter((c) =>
+    c.label.toLowerCase().includes(countrySearch.trim().toLowerCase()),
   )
 
   const total = projects.length
@@ -285,6 +327,41 @@ export function BrowseProjectsClient({
                 onToggle={(k) => toggle(selectedLocations, setSelectedLocations, k)}
               />
             </FilterGroup>
+
+            {/* Country (ISO) */}
+            {countries.length > 0 && (
+              <FilterGroup label="Country">
+                <FilterSearchInput
+                  value={countrySearch}
+                  onChange={setCountrySearch}
+                  placeholder="Search countries..."
+                />
+                <CheckList
+                  items={visibleCountries.map((c) => ({
+                    id: c.code,
+                    label: c.label,
+                    count: c.count,
+                  }))}
+                  selected={selectedCountries}
+                  onToggle={(k) => toggle(selectedCountries, setSelectedCountries, k)}
+                />
+              </FilterGroup>
+            )}
+
+            {/* Language */}
+            {languages.length > 0 && (
+              <FilterGroup label="Language">
+                <CheckList
+                  items={languages.map((l) => ({
+                    id: l.code,
+                    label: l.label,
+                    count: l.count,
+                  }))}
+                  selected={selectedLanguages}
+                  onToggle={(k) => toggle(selectedLanguages, setSelectedLanguages, k)}
+                />
+              </FilterGroup>
+            )}
           </aside>
 
           {/* Results */}

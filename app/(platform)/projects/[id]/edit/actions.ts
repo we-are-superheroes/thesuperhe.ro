@@ -7,6 +7,7 @@ import { db } from '@/lib/db'
 import { uploadImage, deleteImageByUrl } from '@/lib/storage'
 import { notify, getActiveProjectMemberIds } from '@/lib/notifications'
 import { parseCoords } from '@/lib/location'
+import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
 import type { ServerActionResult } from '@/types'
 
 /**
@@ -49,6 +50,10 @@ export interface UpdateProjectInput {
   address: string
   /** Optional "lat, lng" string. Parsed + validated server-side. */
   coordinates: string
+  /** ISO 3166-1 alpha-2 country code (or null to clear). Browse-page filter. */
+  countryCode: string | null
+  /** ISO 639-1 language code (or null to clear). Browse-page filter. */
+  languageCode: string | null
   remote: 'yes' | 'some' | 'no'
   joinPolicy: 'open' | 'approval_required'
   status: ProjectStatus
@@ -123,6 +128,19 @@ export async function updateProjectAction(
     return {
       success: false,
       error: e instanceof Error ? e.message : 'Coordinates couldn’t be parsed.',
+    }
+  }
+
+  // Validate locale codes (used by browse filters).
+  let countryCode: string | null = null
+  let languageCode: string | null = null
+  try {
+    countryCode = data.countryCode ? normaliseCountry(data.countryCode) : null
+    languageCode = data.languageCode ? normaliseLanguage(data.languageCode) : null
+  } catch (e) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Locale code not recognised.',
     }
   }
 
@@ -210,6 +228,8 @@ export async function updateProjectAction(
           address: data.address.trim() || null,
           latitude: coords.latitude,
           longitude: coords.longitude,
+          country: countryCode,
+          language: languageCode,
           remoteOk: data.remote === 'yes' || data.remote === 'some',
           joinPolicy: data.joinPolicy,
           status: data.status,
