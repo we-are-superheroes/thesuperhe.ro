@@ -486,6 +486,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                   stepCounts={stepsByStatus}
                   isSignedIn={!!userId}
                   isMember={isMember}
+                  isLead={isLead}
                 />
               ) : (
                 <EmptyBlock

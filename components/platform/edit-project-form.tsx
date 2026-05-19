@@ -12,7 +12,6 @@ import {
   uploadProjectCoverAction,
   clearProjectCoverAction,
 } from '@/app/(platform)/projects/[id]/edit/actions'
-import { setStepCoordinatorAction } from '@/app/(platform)/projects/[id]/step-actions'
 import { saveBlueprintAction } from '@/app/(platform)/projects/new/actions'
 import {
   Card,
@@ -62,8 +61,6 @@ export interface EditProjectInitial {
     title: string
     description: string
     skillId: string | null
-    coordinatorId: string | null
-    joiners: Array<{ id: string; name: string }>
   }>
 }
 
@@ -104,7 +101,6 @@ const TOC_SECTIONS: Array<{ id: string; label: string }> = [
   { id: 'sec-cover', label: 'Cover' },
   { id: 'sec-location', label: 'Location & access' },
   { id: 'sec-steps', label: 'Steps' },
-  { id: 'sec-coordinators', label: 'Coordinators' },
 ]
 
 /* ================================================================
@@ -591,12 +587,6 @@ export function EditProjectForm({
           </div>
         </Card>
 
-        {/* Coordinators */}
-        <CoordinatorsCard
-          projectId={initial.id}
-          steps={initial.steps.filter((s) => !s.id.startsWith('tmp-'))}
-        />
-
             {/* Save bar */}
             <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-bg-base from-25% to-transparent px-4 py-5 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10 lg:py-6">
           <div className="flex items-center gap-3 text-xs text-fg-tertiary">
@@ -773,100 +763,3 @@ function PreviewGlyph({ status }: { status: ProjectStatus }) {
   )
 }
 
-/* ================================================================
-   CoordinatorsCard — per-step coordinator picker (lead-only).
-   Each step that has at least one active joiner gets a dropdown
-   listing those joiners + "No coordinator" (clears). Changes fire
-   immediately via setStepCoordinatorAction; no save button.
-   ================================================================ */
-
-function CoordinatorsCard({
-  projectId,
-  steps,
-}: {
-  projectId: string
-  steps: EditProjectInitial['steps']
-}) {
-  const stepsWithJoiners = steps.filter((s) => s.joiners.length > 0)
-  return (
-    <Card id="sec-coordinators">
-      <CardHead
-        eyebrow="Coordinators"
-        title="Who keeps each step on track?"
-        desc="The first joiner is the coordinator by default. Switch it to anyone else who's on the step — they become the point of contact and get the amber pip on the avatar stack."
-      />
-      {stepsWithJoiners.length === 0 ? (
-        <p className="text-sm text-fg-tertiary">
-          No steps have joiners yet. Once people join, you can pick a coordinator
-          for each step here.
-        </p>
-      ) : (
-        <div className="flex flex-col gap-2">
-          {stepsWithJoiners.map((s) => (
-            <CoordinatorRow key={s.id} projectId={projectId} step={s} />
-          ))}
-        </div>
-      )}
-    </Card>
-  )
-}
-
-function CoordinatorRow({
-  projectId,
-  step,
-}: {
-  projectId: string
-  step: EditProjectInitial['steps'][number]
-}) {
-  const [coordinatorId, setCoordinatorId] = useState<string | null>(
-    step.coordinatorId,
-  )
-  const [pending, startTransition] = useTransition()
-  const [error, setError] = useState<string | null>(null)
-
-  const change = (next: string) => {
-    const value = next === '' ? null : next
-    const prev = coordinatorId
-    setCoordinatorId(value)
-    setError(null)
-    startTransition(async () => {
-      const result = await setStepCoordinatorAction(projectId, step.id, value)
-      if (!result.success) {
-        setCoordinatorId(prev)
-        setError(result.error)
-      }
-    })
-  }
-
-  return (
-    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/[0.08] bg-bg-base p-4">
-      <div className="flex min-w-0 flex-col gap-1">
-        <span className="truncate text-sm font-medium text-fg-primary">
-          {step.title || '(untitled step)'}
-        </span>
-        <span className="text-xs text-fg-tertiary">
-          {step.joiners.length} joiner{step.joiners.length === 1 ? '' : 's'}
-          {error && (
-            <>
-              {' · '}
-              <span className="text-red-300">{error}</span>
-            </>
-          )}
-        </span>
-      </div>
-      <select
-        value={coordinatorId ?? ''}
-        onChange={(e) => change(e.target.value)}
-        disabled={pending}
-        className="min-w-[180px] cursor-pointer appearance-none rounded-lg border border-neutral-700 bg-bg-surface py-2 pl-3 pr-8 text-sm text-fg-primary outline-none focus:border-amber-500 disabled:cursor-wait disabled:opacity-60 [background-image:url('data:image/svg+xml;utf8,<svg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_24_24%22_fill=%22none%22_stroke=%22%23A8BCCE%22_stroke-width=%222.5%22><polyline_points=%226_9_12_15_18_9%22/></svg>')] [background-position:right_10px_center] [background-repeat:no-repeat]"
-      >
-        <option value="">No coordinator</option>
-        {step.joiners.map((j) => (
-          <option key={j.id} value={j.id}>
-            {j.name}
-          </option>
-        ))}
-      </select>
-    </div>
-  )
-}

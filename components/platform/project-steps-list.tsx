@@ -1,10 +1,13 @@
 'use client'
 
 import { useState, useMemo, useTransition, useEffect, useRef } from 'react'
-import { ArrowRight, ChevronDown, Check, LogIn } from 'lucide-react'
+import { ArrowRight, ChevronDown, Check, LogIn, Pencil } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { joinStepAction, leaveStepAction } from '@/app/(platform)/projects/[id]/actions'
-import { setStepStatusAction } from '@/app/(platform)/projects/[id]/step-actions'
+import {
+  setStepStatusAction,
+  setStepCoordinatorAction,
+} from '@/app/(platform)/projects/[id]/step-actions'
 import {
   StepTimeLog,
   type StepTimeLogData,
@@ -86,6 +89,7 @@ export function ProjectStepsList({
   stepCounts,
   isSignedIn,
   isMember,
+  isLead,
 }: {
   projectId: string
   steps: StepCardData[]
@@ -98,6 +102,7 @@ export function ProjectStepsList({
   }
   isSignedIn: boolean
   isMember: boolean
+  isLead: boolean
 }) {
   const [filter, setFilter] = useState<FilterKey>('all')
   const [showAll, setShowAll] = useState(false)
@@ -202,6 +207,7 @@ export function ProjectStepsList({
               status={statusOf(step)}
               isSignedIn={isSignedIn}
               isMember={isMember}
+              isLead={isLead}
               onStatusChange={(next) => handleStatusChange(step.id, next)}
             />
           ))
@@ -271,6 +277,7 @@ function StepCard({
   status,
   isSignedIn,
   isMember,
+  isLead,
   onStatusChange,
 }: {
   projectId: string
@@ -278,6 +285,7 @@ function StepCard({
   status: StepStatusKey
   isSignedIn: boolean
   isMember: boolean
+  isLead: boolean
   onStatusChange: (next: StepStatusKey) => void
 }) {
   const [pending, startTransition] = useTransition()
@@ -365,7 +373,14 @@ function StepCard({
               </span>
             )}
           </div>
-          {step.joiners.length > 0 && <JoinersStack joiners={step.joiners} />}
+          {step.joiners.length > 0 && (
+            <JoinersStack
+              projectId={projectId}
+              stepId={step.id}
+              joiners={step.joiners}
+              isLead={isLead}
+            />
+          )}
         </div>
 
         <StepAction
@@ -410,18 +425,67 @@ function gradientFor(id: string): string {
   return AVATAR_GRADIENTS[Math.abs(h) % AVATAR_GRADIENTS.length]
 }
 
-function JoinersStack({ joiners }: { joiners: StepJoiner[] }) {
-  const maxVisible = 4
-  const visible = joiners.slice(0, maxVisible)
-  const overflow = joiners.length - visible.length
-  const coordinator = joiners.find((j) => j.isCoordinator)
+function JoinersStack({
+  projectId,
+  stepId,
+  joiners,
+  isLead,
+}: {
+  projectId: string
+  stepId: string
+  joiners: StepJoiner[]
+  isLead: boolean
+}) {
+  // Local copy so the lead's coordinator change can be reflected
+  // optimistically. The server round-trips on the next router.refresh().
+  const [localJoiners, setLocalJoiners] = useState(joiners)
+  useEffect(() => setLocalJoiners(joiners), [joiners])
+  const [open, setOpen] = useState(false)
+  const [pending, startTransition] = useTransition()
+  const [error, setError] = useState<string | null>(null)
+  const wrapRef = useRef<HTMLDivElement>(null)
 
-  const titleParts = joiners.map((j) =>
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: MouseEvent) => {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    document.addEventListener('mousedown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const maxVisible = 4
+  const visible = localJoiners.slice(0, maxVisible)
+  const overflow = localJoiners.length - visible.length
+  const coordinator = localJoiners.find((j) => j.isCoordinator)
+
+  const titleParts = localJoiners.map((j) =>
     j.isCoordinator ? `${j.name} (coordinator)` : j.name,
   )
 
-  return (
-    <div className="flex items-center gap-2" title={titleParts.join(', ')}>
+  const pickCoordinator = (nextId: string | null) => {
+    setOpen(false)
+    setError(null)
+    const previous = localJoiners
+    setLocalJoiners((prev) =>
+      prev.map((j) => ({ ...j, isCoordinator: j.id === nextId })),
+    )
+    startTransition(async () => {
+      const result = await setStepCoordinatorAction(projectId, stepId, nextId)
+      if (!result.success) {
+        setLocalJoiners(previous)
+        setError(result.error)
+      }
+    })
+  }
+
+  const inner = (
+    <>
       <div className="flex -space-x-1.5">
         {visible.map((j) => (
           <div
@@ -447,6 +511,97 @@ function JoinersStack({ joiners }: { joiners: StepJoiner[] }) {
         <span className="text-xs text-fg-tertiary">
           {coordinator.isMe ? 'You coordinate' : `${firstName(coordinator.name)} coordinates`}
         </span>
+      )}
+    </>
+  )
+
+  if (!isLead) {
+    return (
+      <div
+        className="flex items-center gap-2"
+        title={titleParts.join(', ')}
+      >
+        {inner}
+      </div>
+    )
+  }
+
+  return (
+    <div ref={wrapRef} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        title="Change coordinator"
+        className={cn(
+          'flex items-center gap-2 rounded-full px-1.5 py-0.5 transition-colors',
+          'hover:bg-white/[0.04]',
+          open && 'bg-white/[0.04]',
+          pending && 'opacity-70',
+        )}
+      >
+        {inner}
+        <Pencil className="size-3 text-fg-tertiary" strokeWidth={2.5} />
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute right-0 top-full z-40 mt-2 flex w-[240px] flex-col gap-0.5 rounded-xl border border-neutral-700 bg-bg-surface-2 p-1.5 shadow-lg"
+        >
+          <div className="px-2 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-widest text-fg-tertiary">
+            Step coordinator
+          </div>
+          {localJoiners.map((j) => (
+            <button
+              key={j.id}
+              type="button"
+              role="menuitem"
+              onClick={() => pickCoordinator(j.id)}
+              disabled={pending}
+              className={cn(
+                'flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm text-fg-primary transition-colors hover:bg-bg-surface-3',
+                j.isCoordinator && 'bg-amber-500/[0.06]',
+              )}
+            >
+              <span
+                className={cn(
+                  'flex size-5 items-center justify-center rounded-full text-[10px] font-semibold text-blue-900',
+                  gradientFor(j.id),
+                )}
+              >
+                {j.initials}
+              </span>
+              <span className="truncate">{j.name}</span>
+              {j.isCoordinator && (
+                <Check
+                  className="ml-auto size-3.5 text-amber-500"
+                  strokeWidth={2.5}
+                />
+              )}
+            </button>
+          ))}
+          <div className="my-1 h-px bg-white/[0.08]" />
+          <button
+            type="button"
+            role="menuitem"
+            onClick={() => pickCoordinator(null)}
+            disabled={pending}
+            className={cn(
+              'flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm text-fg-secondary transition-colors hover:bg-bg-surface-3',
+              !coordinator && 'bg-amber-500/[0.06]',
+            )}
+          >
+            No coordinator
+            {!coordinator && (
+              <Check className="ml-auto size-3.5 text-amber-500" strokeWidth={2.5} />
+            )}
+          </button>
+          {error && (
+            <div className="px-2 py-1 text-xs text-red-300">{error}</div>
+          )}
+        </div>
       )}
     </div>
   )
