@@ -6,17 +6,29 @@ import { MyStepsClient, type MyStep } from '@/components/platform/my-steps-clien
 /* ================================================================
    /my-steps — server component.
    Lists every step the signed-in user has actively joined, with
-   their total hours logged and the five most recent log entries
-   for inline editing. Step status changes happen on the project
-   page; this view is about logging time and reviewing history.
+   the same time-logging UI used on the project page: a per-step
+   summary row plus a popover form that lets the user add or
+   delete log entries. Status changes happen on the project page.
    ================================================================ */
 
-const RECENT_LOGS = 5
+const RECENT_LOGS = 4
+
+function initialsOf(name: string): string {
+  return (
+    name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((p) => p[0]?.toUpperCase() ?? '')
+      .join('') || '?'
+  )
+}
 
 export default async function MyStepsPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
 
+  // Steps I've joined.
   const contributions = await db.contribution.findMany({
     where: {
       userId,
@@ -38,7 +50,6 @@ export default async function MyStepsPage() {
           project: { select: { id: true, title: true } },
           skills: { select: { skill: { select: { name: true } } } },
           timeLogs: {
-            where: { userId },
             orderBy: { loggedOn: 'desc' },
             take: RECENT_LOGS,
             select: {
@@ -46,6 +57,7 @@ export default async function MyStepsPage() {
               hours: true,
               note: true,
               loggedOn: true,
+              user: { select: { id: true, name: true } },
             },
           },
         },
@@ -53,25 +65,76 @@ export default async function MyStepsPage() {
     },
   })
 
+  // Aggregate per-step total hours + entry count across ALL contributors
+  // (not just the caller) so the summary row matches what they see on the
+  // project page.
+  const stepIds = contributions
+    .map((c) => c.projectStep?.id)
+    .filter((id): id is string => !!id)
+  const stats = stepIds.length
+    ? await db.timeLog.groupBy({
+        by: ['projectStepId'],
+        where: { projectStepId: { in: stepIds } },
+        _sum: { hours: true },
+        _count: { _all: true },
+      })
+    : []
+  const statsByStep = new Map(
+    stats.map((t) => [
+      t.projectStepId,
+      { total: t._sum.hours ?? 0, count: t._count._all },
+    ]),
+  )
+
   const steps: MyStep[] = contributions
     .filter((c) => c.projectStep != null)
     .map((c) => {
       const s = c.projectStep!
+      const stat = statsByStep.get(s.id) ?? { total: 0, count: 0 }
+      const recentLogs = s.timeLogs.map((tl) => {
+        const name = tl.user?.name ?? 'Someone'
+        return {
+          id: tl.id,
+          hours: tl.hours,
+          note: tl.note,
+          loggedOnMs: tl.loggedOn.getTime(),
+          user: tl.user
+            ? {
+                id: tl.user.id,
+                name,
+                initials: initialsOf(name),
+                isMe: tl.user.id === userId,
+              }
+            : null,
+        }
+      })
+      const seen = new Set<string>()
+      const contributors: { id: string; name: string; initials: string }[] = []
+      for (const log of recentLogs) {
+        if (!log.user) continue
+        if (seen.has(log.user.id)) continue
+        seen.add(log.user.id)
+        contributors.push({
+          id: log.user.id,
+          name: log.user.name,
+          initials: log.user.initials,
+        })
+      }
       return {
         id: s.id,
-        contributionId: c.id,
         name: s.title,
         project: { id: s.project.id, title: s.project.title },
         stepStatus: s.status,
         skill: s.skills[0]?.skill.name ?? null,
         isCoordinator: s.coordinatorId === userId,
-        hoursLogged: c.hoursContributed,
-        recentLogs: s.timeLogs.map((tl) => ({
-          id: tl.id,
-          hours: tl.hours,
-          note: tl.note,
-          loggedOnMs: tl.loggedOn.getTime(),
-        })),
+        myHoursLogged: c.hoursContributed,
+        timeLog: {
+          stepId: s.id,
+          totalHours: stat.total,
+          totalEntryCount: stat.count,
+          contributors,
+          recentLogs,
+        },
       }
     })
 

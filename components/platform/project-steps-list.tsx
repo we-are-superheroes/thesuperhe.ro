@@ -5,6 +5,10 @@ import { ArrowRight, ChevronDown, Check, LogIn } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { joinStepAction, leaveStepAction } from '@/app/(platform)/projects/[id]/actions'
 import { setStepStatusAction } from '@/app/(platform)/projects/[id]/step-actions'
+import {
+  StepTimeLog,
+  type StepTimeLogData,
+} from '@/components/platform/step-time-log'
 
 /* ================================================================
    Step status — new vocabulary (matches the Project View design).
@@ -71,6 +75,7 @@ export interface StepCardData {
   joiners: StepJoiner[]
   meOnStep: boolean
   skills: string[]
+  timeLog: StepTimeLogData
 }
 
 const INITIAL_VISIBLE = 7
@@ -378,6 +383,10 @@ function StepCard({
           onLeave={leave}
         />
       </div>
+
+      {/* Time log — only joiners can log, but anyone can see the summary
+          and the recent entries. */}
+      <StepTimeLog data={step.timeLog} canLog={step.meOnStep} />
     </div>
   )
 }

@@ -91,6 +91,20 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               user: { select: { id: true, name: true } },
             },
           },
+          // For the time-log row at the bottom of each step card. Take the
+          // 4 most recent for the popover; counts/totals come from another
+          // shape below.
+          timeLogs: {
+            orderBy: { loggedOn: 'desc' },
+            take: 4,
+            select: {
+              id: true,
+              hours: true,
+              note: true,
+              loggedOn: true,
+              user: { select: { id: true, name: true } },
+            },
+          },
         },
       },
       contributions: {
@@ -108,6 +122,32 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   })
 
   if (!project) notFound()
+
+  // Aggregate time logs across all steps in one round-trip, so each card can
+  // render its own summary (total hours, contributors, entry count) without
+  // re-querying. Then we already have the 4 most recent entries embedded on
+  // each step from the main query.
+  const stepIds = project.steps.map((s) => s.id)
+  const timeStats = stepIds.length
+    ? await db.timeLog.groupBy({
+        by: ['projectStepId'],
+        where: { projectStepId: { in: stepIds } },
+        _sum: { hours: true },
+        _count: { _all: true },
+      })
+    : []
+  const timeStatsByStep = new Map(
+    timeStats.map((t) => ({
+      stepId: t.projectStepId,
+      total: t._sum.hours ?? 0,
+      count: t._count._all,
+    })).map((t) => [t.stepId, t]),
+  )
+
+  // Distinct contributors per step from the loaded recent logs. (The full
+  // contributor list is bounded by recentLogs anyway, which is fine for a
+  // 4-avatar stack; older contributors fold into the "+N earlier entries"
+  // line in the panel.)
 
   // Is the current user already a project-level member?
   // Active membership vs pending approval are now distinct states. A user
@@ -183,27 +223,61 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
     TYPE_COVER_GRADIENT['Urban Rewilding']
 
   // Shape steps for the client component
+  const initials = (name: string) =>
+    name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((p) => p[0]?.toUpperCase() ?? '')
+      .join('') || '?'
+
   const stepCards: StepCardData[] = project.steps.map((s) => {
     // Joiners are the active step-level contributions. For anonymous viewers
     // we keep the count + coordinator flag but anonymise the names.
     const joiners = s.contributions.map((c) => {
       const name = c.user?.name ?? 'Someone'
-      const initials =
-        name
-          .split(/\s+/)
-          .filter(Boolean)
-          .slice(0, 2)
-          .map((p) => p[0]?.toUpperCase() ?? '')
-          .join('') || '?'
       return {
         id: c.user?.id ?? 'anon',
         name: userId ? name : 'Someone',
-        initials: userId ? initials : '?',
+        initials: userId ? initials(name) : '?',
         isCoordinator: !!s.coordinatorId && s.coordinatorId === c.user?.id,
         isMe: !!userId && c.user?.id === userId,
       }
     })
     const meOnStep = !!userId && joiners.some((j) => j.isMe)
+
+    // Time-log shaping. Anonymise user details for anonymous viewers.
+    const stats = timeStatsByStep.get(s.id) ?? { total: 0, count: 0 }
+    const recentLogs = s.timeLogs.map((tl) => {
+      const name = tl.user?.name ?? 'Someone'
+      return {
+        id: tl.id,
+        hours: tl.hours,
+        note: tl.note,
+        loggedOnMs: tl.loggedOn.getTime(),
+        user: tl.user
+          ? {
+              id: tl.user.id,
+              name: userId ? name : 'Someone',
+              initials: userId ? initials(name) : '?',
+              isMe: !!userId && tl.user.id === userId,
+            }
+          : null,
+      }
+    })
+    const seenContrib = new Set<string>()
+    const contributors: { id: string; name: string; initials: string }[] = []
+    for (const tl of recentLogs) {
+      if (!tl.user) continue
+      if (seenContrib.has(tl.user.id)) continue
+      seenContrib.add(tl.user.id)
+      contributors.push({
+        id: tl.user.id,
+        name: tl.user.name,
+        initials: tl.user.initials,
+      })
+    }
+
     return {
       id: s.id,
       title: s.title,
@@ -215,6 +289,13 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       joiners,
       meOnStep,
       skills: s.skills.map((ss) => ss.skill.name),
+      timeLog: {
+        stepId: s.id,
+        totalHours: stats.total,
+        totalEntryCount: stats.count,
+        contributors,
+        recentLogs,
+      },
     }
   })
 

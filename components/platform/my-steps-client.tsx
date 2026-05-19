@@ -1,39 +1,30 @@
 'use client'
 
-import { useState, useMemo, useTransition } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
-import { Search, Plus, Clock, Trash2, ChevronDown, X } from 'lucide-react'
+import { Search, Plus, Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
-  logTimeAction,
-  deleteTimeLogAction,
-} from '@/app/(platform)/my-steps/actions'
+  StepTimeLog,
+  type StepTimeLogData,
+} from '@/components/platform/step-time-log'
 
 /* ================================================================
-   /my-steps — client. The page used to be a checkbox-driven
-   "mark done" list; now that steps are multi-joiner, status
-   transitions belong on the project view. This page is about
-   logging time: a per-step running total plus a small inline
-   form to add or remove entries.
+   /my-steps — client.
+   The page is now a list of steps the user has joined, with the
+   same time-logging UI (StepTimeLog) used on the project page.
+   Status pill is read-only — changes belong on the project page.
    ================================================================ */
-
-export interface TimeLogEntry {
-  id: string
-  hours: number
-  note: string | null
-  loggedOnMs: number
-}
 
 export interface MyStep {
   id: string
-  contributionId: string
   name: string
   project: { id: string; title: string }
   stepStatus: string
   skill: string | null
   isCoordinator: boolean
-  hoursLogged: number
-  recentLogs: TimeLogEntry[]
+  myHoursLogged: number
+  timeLog: StepTimeLogData
 }
 
 type FilterKey = 'open' | 'completed'
@@ -57,19 +48,13 @@ const STATUS_PILL_CLASSES: Record<string, string> = {
 }
 
 function fmtHours(h: number): string {
-  if (Number.isInteger(h)) return `${h}h`
-  return `${h.toFixed(2).replace(/\.?0+$/, '')}h`
-}
-
-function fmtDate(ms: number, now = Date.now()): string {
-  const diffDays = Math.floor((now - ms) / (1000 * 60 * 60 * 24))
-  if (diffDays <= 0) return 'today'
-  if (diffDays === 1) return 'yesterday'
-  if (diffDays < 7) return `${diffDays} days ago`
-  return new Date(ms).toLocaleDateString(undefined, {
-    day: 'numeric',
-    month: 'short',
-  })
+  if (h <= 0) return '0h'
+  if (h >= 1) {
+    const whole = Math.floor(h)
+    const min = Math.round((h - whole) * 60)
+    return min ? `${whole}h ${min}m` : `${whole}h`
+  }
+  return `${Math.round(h * 60)}m`
 }
 
 export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
@@ -78,7 +63,6 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
   const [query, setQuery] = useState('')
   const [sort, setSort] = useState<SortKey>('recent')
   const [groupBy, setGroupBy] = useState<GroupKey>('none')
-  const [openLogger, setOpenLogger] = useState<string | null>(null)
 
   const counts = useMemo(
     () => ({
@@ -88,8 +72,8 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
     [steps],
   )
 
-  const totalHours = useMemo(
-    () => steps.reduce((sum, s) => sum + s.hoursLogged, 0),
+  const totalHoursMine = useMemo(
+    () => steps.reduce((sum, s) => sum + s.myHoursLogged, 0),
     [steps],
   )
 
@@ -108,9 +92,9 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
       if (sort === 'project')
         return a.project.title.localeCompare(b.project.title) || a.name.localeCompare(b.name)
       if (sort === 'name') return a.name.localeCompare(b.name)
-      // "recent" — most recently logged on top
-      const aRecent = a.recentLogs[0]?.loggedOnMs ?? 0
-      const bRecent = b.recentLogs[0]?.loggedOnMs ?? 0
+      // "recent" = most recently logged on top
+      const aRecent = a.timeLog.recentLogs[0]?.loggedOnMs ?? 0
+      const bRecent = b.timeLog.recentLogs[0]?.loggedOnMs ?? 0
       return bRecent - aRecent
     })
   }, [steps, filter, query, sort])
@@ -128,41 +112,52 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
       .map(([label, items]) => ({ label, items }))
   }, [filtered, groupBy])
 
-  // Optimistic helpers reused by the row.
+  // Optimistic updates from the shared StepTimeLog component.
   const applyLogged = (
     stepId: string,
-    log: TimeLogEntry,
+    log: MyStep['timeLog']['recentLogs'][number],
     newTotal: number,
   ) => {
     setSteps((prev) =>
-      prev.map((s) =>
-        s.id === stepId
-          ? {
-              ...s,
-              hoursLogged: newTotal,
-              recentLogs: [log, ...s.recentLogs].slice(0, 5),
-            }
-          : s,
-      ),
+      prev.map((s) => {
+        if (s.id !== stepId) return s
+        const stat = s.timeLog
+        const myDelta = log.hours
+        return {
+          ...s,
+          myHoursLogged: s.myHoursLogged + myDelta,
+          timeLog: {
+            ...stat,
+            totalHours: newTotal,
+            totalEntryCount: stat.totalEntryCount + 1,
+            recentLogs: [log, ...stat.recentLogs].slice(0, 4),
+          },
+        }
+      }),
     )
   }
   const applyDeleted = (stepId: string, logId: string, newTotal: number) => {
     setSteps((prev) =>
-      prev.map((s) =>
-        s.id === stepId
-          ? {
-              ...s,
-              hoursLogged: newTotal,
-              recentLogs: s.recentLogs.filter((l) => l.id !== logId),
-            }
-          : s,
-      ),
+      prev.map((s) => {
+        if (s.id !== stepId) return s
+        const removed = s.timeLog.recentLogs.find((l) => l.id === logId)
+        const myDelta = removed?.user?.isMe ? removed.hours : 0
+        return {
+          ...s,
+          myHoursLogged: Math.max(0, s.myHoursLogged - myDelta),
+          timeLog: {
+            ...s.timeLog,
+            totalHours: newTotal,
+            totalEntryCount: Math.max(0, s.timeLog.totalEntryCount - 1),
+            recentLogs: s.timeLog.recentLogs.filter((l) => l.id !== logId),
+          },
+        }
+      }),
     )
   }
 
   return (
     <>
-      {/* Topbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
         <div className="relative order-2 w-full min-w-0 max-w-[480px] flex-1 sm:order-1 sm:w-auto">
           <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-tertiary" />
@@ -186,7 +181,6 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
         </div>
       </div>
 
-      {/* Content */}
       <div className="mx-auto flex w-full max-w-[960px] flex-col gap-8 overflow-y-auto p-4 sm:p-6 lg:p-10">
         <section className="flex flex-col items-start gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
           <div>
@@ -194,14 +188,14 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
               Your <em className="italic text-amber-500">time</em>, logged.
             </h1>
             <p className="max-w-[520px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-              Track the hours you&apos;ve put into each step you&apos;ve joined. Change
-              a step&apos;s status from the project page when you&apos;re ready.
+              Track the hours you&apos;ve put into each step you&apos;ve joined.
+              Change a step&apos;s status from the project page when you&apos;re ready.
             </p>
           </div>
           <div className="flex w-full flex-wrap gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface px-5 py-4 sm:w-auto">
             <Stat value={counts.open} label="Active" dimIfZero />
             <Stat value={counts.completed} label="Completed" dimIfZero />
-            <Stat value={fmtHours(totalHours)} label="Hours" />
+            <Stat value={fmtHours(totalHoursMine)} label="My hours" />
           </div>
         </section>
 
@@ -245,11 +239,11 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
         {filtered.length === 0 ? (
           <EmptyState filter={filter} query={query} />
         ) : (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             {grouped.map((group) => (
-              <div key={group.label || 'all'} className="flex flex-col gap-2">
+              <div key={group.label || 'all'} className="flex flex-col gap-3">
                 {group.label && (
-                  <div className="my-3 flex items-center gap-3 first:mt-0">
+                  <div className="my-2 flex items-center gap-3 first:mt-0">
                     <span className="text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
                       {group.label}
                     </span>
@@ -261,10 +255,6 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
                   <StepRow
                     key={s.id}
                     step={s}
-                    isOpen={openLogger === s.id}
-                    onToggleLogger={() =>
-                      setOpenLogger(openLogger === s.id ? null : s.id)
-                    }
                     onLogged={(log, total) => applyLogged(s.id, log, total)}
                     onDeleted={(logId, total) => applyDeleted(s.id, logId, total)}
                   />
@@ -341,27 +331,27 @@ function FilterPill({
 
 function StepRow({
   step,
-  isOpen,
-  onToggleLogger,
   onLogged,
   onDeleted,
 }: {
   step: MyStep
-  isOpen: boolean
-  onToggleLogger: () => void
-  onLogged: (log: TimeLogEntry, newTotal: number) => void
+  onLogged: (
+    log: MyStep['timeLog']['recentLogs'][number],
+    newTotal: number,
+  ) => void
   onDeleted: (logId: string, newTotal: number) => void
 }) {
+  const canLog = step.stepStatus !== 'completed'
   return (
     <div
       className={cn(
-        'rounded-xl border bg-bg-surface transition-all duration-fast',
+        'flex flex-col gap-3 rounded-xl border bg-bg-surface px-5 py-4 transition-all duration-fast',
         step.stepStatus === 'completed'
-          ? 'border-white/[0.06] opacity-75'
+          ? 'border-white/[0.06] opacity-80'
           : 'border-white/[0.08]',
       )}
     >
-      <div className="grid grid-cols-[1fr_auto] items-start gap-4 px-5 py-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-1.5">
           <div className="flex flex-wrap items-center gap-2">
             <Link
@@ -392,185 +382,20 @@ function StepRow({
               {step.project.title}
             </Link>
             {step.skill && <span>· {step.skill}</span>}
-            <span className="flex items-center gap-1">
+            <span className="inline-flex items-center gap-1">
               <Clock className="size-3" />
-              {fmtHours(step.hoursLogged)} logged
+              You: {fmtHours(step.myHoursLogged)}
             </span>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={onToggleLogger}
-          className={cn(
-            'inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-medium transition-colors',
-            isOpen
-              ? 'border-amber-500 bg-amber-500/[0.10] text-amber-500'
-              : 'border-neutral-700 bg-bg-surface-2 text-fg-secondary hover:border-neutral-600 hover:text-fg-primary',
-          )}
-        >
-          {isOpen ? (
-            <>
-              <X className="size-3" strokeWidth={2.5} />
-              Close
-            </>
-          ) : (
-            <>
-              <Plus className="size-3" strokeWidth={2.5} />
-              Log time
-            </>
-          )}
-        </button>
       </div>
 
-      {isOpen && (
-        <LoggerPanel step={step} onLogged={onLogged} onDeleted={onDeleted} />
-      )}
-    </div>
-  )
-}
-
-function LoggerPanel({
-  step,
-  onLogged,
-  onDeleted,
-}: {
-  step: MyStep
-  onLogged: (log: TimeLogEntry, newTotal: number) => void
-  onDeleted: (logId: string, newTotal: number) => void
-}) {
-  const [hours, setHours] = useState('1')
-  const [note, setNote] = useState('')
-  const [loggedOn, setLoggedOn] = useState(
-    () => new Date().toISOString().slice(0, 10),
-  )
-  const [error, setError] = useState<string | null>(null)
-  const [pending, startTransition] = useTransition()
-  const [showHistory, setShowHistory] = useState(false)
-
-  const submit = () => {
-    setError(null)
-    const n = Number(hours)
-    if (!Number.isFinite(n) || n <= 0) {
-      setError('Enter a positive number of hours.')
-      return
-    }
-    startTransition(async () => {
-      const result = await logTimeAction(step.id, n, note, loggedOn)
-      if (!result.success) {
-        setError(result.error)
-        return
-      }
-      onLogged(
-        {
-          id: result.data.logId,
-          hours: Math.round(n * 4) / 4,
-          note: note.trim() || null,
-          loggedOnMs: new Date(loggedOn).getTime(),
-        },
-        result.data.newTotal,
-      )
-      setHours('1')
-      setNote('')
-    })
-  }
-
-  const remove = (logId: string) => {
-    startTransition(async () => {
-      const result = await deleteTimeLogAction(logId)
-      if (result.success) {
-        onDeleted(logId, result.data.newTotal)
-      }
-    })
-  }
-
-  return (
-    <div className="flex flex-col gap-4 border-t border-white/[0.08] bg-bg-base px-5 py-4">
-      <div className="flex flex-wrap items-end gap-3">
-        <label className="flex flex-col gap-1 text-xs text-fg-tertiary">
-          Hours
-          <input
-            type="number"
-            min={0.25}
-            step={0.25}
-            value={hours}
-            onChange={(e) => setHours(e.target.value)}
-            className="w-[90px] rounded-lg border border-neutral-700 bg-bg-surface px-3 py-2 text-sm text-fg-primary outline-none focus:border-amber-500"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-xs text-fg-tertiary">
-          Date
-          <input
-            type="date"
-            value={loggedOn}
-            onChange={(e) => setLoggedOn(e.target.value)}
-            className="rounded-lg border border-neutral-700 bg-bg-surface px-3 py-2 text-sm text-fg-primary outline-none focus:border-amber-500"
-          />
-        </label>
-        <label className="flex min-w-[200px] flex-1 flex-col gap-1 text-xs text-fg-tertiary">
-          Note (optional)
-          <input
-            type="text"
-            value={note}
-            onChange={(e) => setNote(e.target.value)}
-            placeholder="What did you do?"
-            className="rounded-lg border border-neutral-700 bg-bg-surface px-3 py-2 text-sm text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
-            maxLength={500}
-          />
-        </label>
-        <button
-          type="button"
-          onClick={submit}
-          disabled={pending}
-          className="inline-flex h-[36px] items-center gap-1.5 rounded-lg bg-amber-500 px-4 text-sm font-medium text-amber-900 transition-all hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {pending ? 'Saving…' : 'Log it'}
-        </button>
-      </div>
-      {error && <div className="text-xs text-red-300">{error}</div>}
-
-      {step.recentLogs.length > 0 && (
-        <div className="flex flex-col gap-1.5">
-          <button
-            type="button"
-            onClick={() => setShowHistory((v) => !v)}
-            className="inline-flex items-center gap-1 self-start text-xs text-fg-tertiary transition-colors hover:text-fg-secondary"
-          >
-            <ChevronDown
-              className={cn('size-3 transition-transform', showHistory && 'rotate-180')}
-              strokeWidth={2.5}
-            />
-            {showHistory ? 'Hide recent entries' : `Recent entries (${step.recentLogs.length})`}
-          </button>
-          {showHistory && (
-            <ul className="flex flex-col divide-y divide-white/[0.06] overflow-hidden rounded-lg border border-white/[0.06] bg-bg-surface">
-              {step.recentLogs.map((log) => (
-                <li
-                  key={log.id}
-                  className="flex items-center justify-between gap-3 px-3 py-2 text-sm"
-                >
-                  <div className="flex min-w-0 flex-1 flex-col">
-                    <span className="text-fg-primary">
-                      {fmtHours(log.hours)} · {fmtDate(log.loggedOnMs)}
-                    </span>
-                    {log.note && (
-                      <span className="truncate text-xs text-fg-tertiary">{log.note}</span>
-                    )}
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => remove(log.id)}
-                    disabled={pending}
-                    title="Delete entry"
-                    className="text-fg-tertiary transition-colors hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    <Trash2 className="size-3.5" />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-      )}
+      <StepTimeLog
+        data={step.timeLog}
+        canLog={canLog}
+        onLogged={onLogged}
+        onDeleted={onDeleted}
+      />
     </div>
   )
 }
