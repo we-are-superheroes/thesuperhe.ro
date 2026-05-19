@@ -12,7 +12,10 @@ export interface FormStep {
   id: string // DB id for existing steps, or a temp id like `tmp-…` for new ones
   title: string
   description: string
-  skillId: string | null
+  /** Multiple skills allowed; backend uses the StepSkill junction table. */
+  skillIds: string[]
+  /** Optional estimate of total work to deliver the step, in hours. */
+  estimatedHrs: number | null
 }
 
 export interface SkillOption {
@@ -152,22 +155,49 @@ export function StepRow({
     return () => document.removeEventListener('mousedown', onDown)
   }, [skillOpen])
 
+  const skillById = useMemo(
+    () => new Map(skills.map((s) => [s.id, s])),
+    [skills],
+  )
+  const selectedSkills = step.skillIds
+    .map((id) => skillById.get(id))
+    .filter((s): s is SkillOption => !!s)
+
   const matches = useMemo(() => {
-    if (!skillQuery.trim()) return skills.slice(0, 10)
+    const selectedSet = new Set(step.skillIds)
+    const pool = skills.filter((s) => !selectedSet.has(s.id))
+    if (!skillQuery.trim()) return pool.slice(0, 10)
     const q = skillQuery.trim().toLowerCase()
-    return skills
+    return pool
       .filter((s) => s.name.toLowerCase().includes(q) || s.category.toLowerCase().includes(q))
       .slice(0, 10)
-  }, [skills, skillQuery])
+  }, [skills, skillQuery, step.skillIds])
 
-  const selectedSkill = step.skillId ? skills.find((s) => s.id === step.skillId) : null
+  const toggleSkill = (id: string) => {
+    if (step.skillIds.includes(id)) {
+      onChange({ skillIds: step.skillIds.filter((sid) => sid !== id) })
+    } else {
+      onChange({ skillIds: [...step.skillIds, id] })
+    }
+  }
+
+  const updateHours = (raw: string) => {
+    if (raw === '') {
+      onChange({ estimatedHrs: null })
+      return
+    }
+    const n = Number(raw)
+    if (!Number.isFinite(n) || n < 0) return
+    // Snap to whole hours — DB column is Int.
+    onChange({ estimatedHrs: Math.max(0, Math.round(n)) })
+  }
 
   return (
-    <div className="grid grid-cols-[28px_1fr_32px] items-start gap-3 rounded-xl border border-white/[0.08] bg-bg-base p-4 transition-colors duration-fast hover:border-neutral-700 focus-within:border-amber-500 sm:grid-cols-[28px_1fr_200px_32px]">
+    <div className="grid grid-cols-[28px_1fr_32px] items-start gap-3 rounded-xl border border-white/[0.08] bg-bg-base p-4 transition-colors duration-fast hover:border-neutral-700 focus-within:border-amber-500">
       <div className="col-start-1 row-start-1 mt-1 flex size-7 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-3 font-mono text-xs font-semibold text-fg-secondary">
         {index + 1}
       </div>
-      <div className="col-start-2 row-start-1 flex min-w-0 flex-col gap-1.5">
+      <div className="col-start-2 row-start-1 flex min-w-0 flex-col gap-2.5">
         <input
           type="text"
           value={step.title}
@@ -183,77 +213,96 @@ export function StepRow({
           placeholder='Optional detail — what does "done" look like?'
           className="min-h-[22px] w-full resize-none border-none bg-transparent p-0 font-sans text-sm leading-relaxed text-fg-secondary outline-none placeholder:text-fg-tertiary"
         />
-      </div>
 
-      {/* Skill picker — wraps below on mobile */}
-      <div ref={skillRef} className="relative col-start-2 row-start-2 sm:col-start-3 sm:row-start-1">
-        <button
-          type="button"
-          onClick={() => setSkillOpen((o) => !o)}
-          className="inline-flex w-full items-center justify-between gap-2 rounded-lg border border-white/[0.08] bg-bg-surface-2 px-3 py-2 text-xs text-fg-secondary transition-colors hover:border-neutral-600 focus:border-amber-500 focus:outline-none"
-        >
-          <span className="truncate">
-            {selectedSkill ? selectedSkill.name : '(no specific skill)'}
-          </span>
-          <ChevronDown
-            className={cn('size-3 shrink-0 transition-transform', skillOpen && 'rotate-180')}
-          />
-        </button>
-        {skillOpen && (
-          <div className="absolute right-0 top-full z-30 mt-1 w-[260px] overflow-hidden rounded-lg border border-white/[0.08] bg-bg-surface shadow-xl">
-            <div className="border-b border-white/[0.08] p-2">
-              <input
-                type="text"
-                value={skillQuery}
-                onChange={(e) => setSkillQuery(e.target.value)}
-                placeholder="Search skills…"
-                autoFocus
-                className="w-full rounded-md border border-neutral-700 bg-bg-surface-2 px-2.5 py-1.5 text-xs text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
-              />
-            </div>
-            <div className="max-h-[260px] overflow-y-auto py-1">
+        {/* Skills + hours row */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 pt-1">
+          {/* Selected skill chips */}
+          {selectedSkills.map((s) => (
+            <span
+              key={s.id}
+              className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/[0.10] px-2.5 py-1 text-xs text-amber-500"
+            >
+              {s.name}
               <button
                 type="button"
-                onClick={() => {
-                  onChange({ skillId: null })
-                  setSkillOpen(false)
-                  setSkillQuery('')
-                }}
-                className={cn(
-                  'flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs transition-colors',
-                  step.skillId === null
-                    ? 'bg-amber-500/[0.12] text-amber-500'
-                    : 'text-fg-secondary hover:bg-bg-surface-2 hover:text-fg-primary',
-                )}
+                onClick={() => toggleSkill(s.id)}
+                title="Remove skill"
+                className="-mr-0.5 flex size-4 items-center justify-center rounded-full text-amber-500/80 transition-colors hover:bg-amber-500/[0.15] hover:text-amber-500"
               >
-                (no specific skill)
+                <X className="size-2.5" strokeWidth={2.5} />
               </button>
-              {matches.map((s) => (
-                <button
-                  key={s.id}
-                  type="button"
-                  onClick={() => {
-                    onChange({ skillId: s.id })
-                    setSkillOpen(false)
-                    setSkillQuery('')
-                  }}
-                  className={cn(
-                    'flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs transition-colors',
-                    step.skillId === s.id
-                      ? 'bg-amber-500/[0.12] text-amber-500'
-                      : 'text-fg-secondary hover:bg-bg-surface-2 hover:text-fg-primary',
+            </span>
+          ))}
+
+          {/* Add-skill button + popover */}
+          <div ref={skillRef} className="relative">
+            <button
+              type="button"
+              onClick={() => setSkillOpen((o) => !o)}
+              className="inline-flex items-center gap-1 rounded-full border border-dashed border-neutral-700 bg-transparent px-2.5 py-1 text-xs text-fg-tertiary transition-colors hover:border-amber-500 hover:border-solid hover:text-amber-500 focus:border-amber-500 focus:outline-none"
+            >
+              <Plus className="size-3" strokeWidth={2.5} />
+              {selectedSkills.length === 0 ? 'Add skill' : 'Add another'}
+              <ChevronDown
+                className={cn('size-3 transition-transform', skillOpen && 'rotate-180')}
+              />
+            </button>
+            {skillOpen && (
+              <div className="absolute left-0 top-full z-30 mt-1 w-[280px] overflow-hidden rounded-lg border border-white/[0.08] bg-bg-surface shadow-xl">
+                <div className="border-b border-white/[0.08] p-2">
+                  <input
+                    type="text"
+                    value={skillQuery}
+                    onChange={(e) => setSkillQuery(e.target.value)}
+                    placeholder="Search skills…"
+                    autoFocus
+                    className="w-full rounded-md border border-neutral-700 bg-bg-surface-2 px-2.5 py-1.5 text-xs text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
+                  />
+                </div>
+                <div className="max-h-[260px] overflow-y-auto py-1">
+                  {matches.map((s) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => {
+                        toggleSkill(s.id)
+                        setSkillQuery('')
+                      }}
+                      className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left text-xs text-fg-secondary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary"
+                    >
+                      <span className="truncate">{s.name}</span>
+                      <span className="text-[10px] text-fg-tertiary">{s.category}</span>
+                    </button>
+                  ))}
+                  {matches.length === 0 && (
+                    <div className="px-3 py-3 text-center text-xs text-fg-tertiary">
+                      {step.skillIds.length === skills.length
+                        ? 'All skills added.'
+                        : 'No matches.'}
+                    </div>
                   )}
-                >
-                  <span className="truncate">{s.name}</span>
-                  <span className="text-[10px] text-fg-tertiary">{s.category}</span>
-                </button>
-              ))}
-              {matches.length === 0 && (
-                <div className="px-3 py-3 text-center text-xs text-fg-tertiary">No matches.</div>
-              )}
-            </div>
+                </div>
+              </div>
+            )}
           </div>
-        )}
+
+          {/* Estimated hours */}
+          <div className="ml-auto flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-bg-surface-2 pl-3 pr-2 text-xs text-fg-tertiary">
+            <span>Est.</span>
+            <input
+              type="number"
+              min={0}
+              step={1}
+              inputMode="numeric"
+              value={step.estimatedHrs ?? ''}
+              onChange={(e) => updateHours(e.target.value)}
+              placeholder="—"
+              aria-label="Estimated hours"
+              className="w-12 border-none bg-transparent py-1 text-right text-xs tabular-nums text-fg-primary outline-none placeholder:text-fg-tertiary [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            />
+            <span>h</span>
+          </div>
+        </div>
       </div>
 
       <button
@@ -261,7 +310,7 @@ export function StepRow({
         onClick={onRemove}
         disabled={!canRemove}
         title="Remove step"
-        className="col-start-3 row-start-1 mt-1 flex size-7 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-fg-tertiary transition-colors hover:bg-red-500/[0.12] hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-fg-tertiary sm:col-start-4"
+        className="col-start-3 row-start-1 mt-1 flex size-7 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-fg-tertiary transition-colors hover:bg-red-500/[0.12] hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-fg-tertiary"
       >
         <X className="size-3.5" />
       </button>

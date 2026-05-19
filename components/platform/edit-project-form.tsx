@@ -60,7 +60,8 @@ export interface EditProjectInitial {
     id: string
     title: string
     description: string
-    skillId: string | null
+    skillIds: string[]
+    estimatedHrs: number | null
   }>
 }
 
@@ -137,9 +138,18 @@ export function EditProjectForm({
           id: s.id,
           title: s.title,
           description: s.description,
-          skillId: s.skillId,
+          skillIds: s.skillIds,
+          estimatedHrs: s.estimatedHrs,
         }))
-      : [{ id: `tmp-${Date.now()}`, title: '', description: '', skillId: null }],
+      : [
+          {
+            id: `tmp-${Date.now()}`,
+            title: '',
+            description: '',
+            skillIds: [],
+            estimatedHrs: null,
+          },
+        ],
   )
 
   const [error, setError] = useState<string | null>(null)
@@ -156,7 +166,13 @@ export function EditProjectForm({
   const addStep = () => {
     setSteps((prev) => [
       ...prev,
-      { id: `tmp-${Date.now()}-${prev.length}`, title: '', description: '', skillId: null },
+      {
+        id: `tmp-${Date.now()}-${prev.length}`,
+        title: '',
+        description: '',
+        skillIds: [],
+        estimatedHrs: null,
+      },
     ])
   }
 
@@ -175,7 +191,8 @@ export function EditProjectForm({
           id: s.id.startsWith('tmp-') ? null : s.id,
           title: s.title,
           description: s.description,
-          skillId: s.skillId,
+          skillIds: s.skillIds,
+          estimatedHrs: s.estimatedHrs,
         })),
       })
       if (!result.success) {
@@ -228,7 +245,8 @@ export function EditProjectForm({
         steps: steps.map((s) => ({
           title: s.title,
           description: s.description,
-          skillId: s.skillId,
+          skillIds: s.skillIds,
+          estimatedHrs: s.estimatedHrs,
         })),
       })
       if (!result.success) {

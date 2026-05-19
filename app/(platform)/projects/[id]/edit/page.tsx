@@ -57,6 +57,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
           id: true,
           title: true,
           description: true,
+          estimatedHrs: true,
           skills: {
             select: { skill: { select: { id: true } } },
           },
@@ -95,7 +96,8 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       id: s.id,
       title: s.title,
       description: s.description ?? '',
-      skillId: s.skills[0]?.skill.id ?? null,
+      skillIds: s.skills.map((ss) => ss.skill.id),
+      estimatedHrs: s.estimatedHrs,
     })),
   }
 

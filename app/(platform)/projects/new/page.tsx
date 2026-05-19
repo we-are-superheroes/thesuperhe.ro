@@ -22,6 +22,7 @@ export default async function CreateProjectPage() {
             title: true,
             description: true,
             order: true,
+            estimatedHrs: true,
             skills: { select: { skill: { select: { id: true, name: true } } } },
           },
         },
@@ -76,7 +77,8 @@ export default async function CreateProjectPage() {
     steps: bp.steps.map((s) => ({
       title: s.title,
       description: s.description ?? '',
-      skillId: s.skills[0]?.skill.id ?? null,
+      skillIds: s.skills.map((ss) => ss.skill.id),
+      estimatedHrs: s.estimatedHrs,
     })),
   }))
 

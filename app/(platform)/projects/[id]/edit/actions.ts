@@ -35,7 +35,8 @@ export interface UpdateProjectStepInput {
   id: string | null
   title: string
   description: string
-  skillId: string | null
+  skillIds: string[]
+  estimatedHrs: number | null
 }
 
 export interface UpdateProjectInput {
@@ -115,9 +116,9 @@ export async function updateProjectAction(
   })
   if (!lead) return { success: false, error: 'Only the project lead can edit this project.' }
 
-  // Verify the requested skill ids exist
+  // Verify the requested skill ids exist (across every step's skillIds).
   const requestedSkillIds = Array.from(
-    new Set(data.steps.map((s) => s.skillId).filter((id): id is string => !!id)),
+    new Set(data.steps.flatMap((s) => s.skillIds)),
   )
   if (requestedSkillIds.length > 0) {
     const realSkills = await db.skill.findMany({
@@ -126,15 +127,26 @@ export async function updateProjectAction(
     })
     const realIds = new Set(realSkills.map((s) => s.id))
     for (const s of data.steps) {
-      if (s.skillId && !realIds.has(s.skillId)) {
-        return { success: false, error: 'Unknown skill on one of the steps.' }
+      for (const sid of s.skillIds) {
+        if (!realIds.has(sid)) {
+          return { success: false, error: 'Unknown skill on one of the steps.' }
+        }
       }
     }
   }
 
-  // Filter out empty step rows
+  // Filter out empty step rows + dedupe skills + sanitise hours.
   const cleanSteps = data.steps
-    .map((s) => ({ ...s, title: s.title.trim(), description: s.description.trim() }))
+    .map((s) => ({
+      ...s,
+      title: s.title.trim(),
+      description: s.description.trim(),
+      skillIds: Array.from(new Set(s.skillIds)),
+      estimatedHrs:
+        s.estimatedHrs != null && Number.isFinite(s.estimatedHrs) && s.estimatedHrs >= 0
+          ? Math.round(s.estimatedHrs)
+          : null,
+    }))
     .filter((s) => s.title.length > 0)
 
   // Verify any "existing" ids actually belong to this project
@@ -212,6 +224,7 @@ export async function updateProjectAction(
               title: s.title,
               description: s.description || null,
               order,
+              estimatedHrs: s.estimatedHrs,
             },
           })
           stepId = s.id
@@ -223,6 +236,7 @@ export async function updateProjectAction(
               title: s.title,
               description: s.description || null,
               order,
+              estimatedHrs: s.estimatedHrs,
               status: 'open',
             },
             select: { id: true },
@@ -230,11 +244,14 @@ export async function updateProjectAction(
           stepId = created.id
         }
 
-        // Replace this step's skills with the (single) selected one.
+        // Replace this step's skills with the new set.
         await tx.stepSkill.deleteMany({ where: { projectStepId: stepId } })
-        if (s.skillId) {
-          await tx.stepSkill.create({
-            data: { skillId: s.skillId, projectStepId: stepId },
+        if (s.skillIds.length > 0) {
+          await tx.stepSkill.createMany({
+            data: s.skillIds.map((sid) => ({
+              skillId: sid,
+              projectStepId: stepId,
+            })),
           })
         }
       }

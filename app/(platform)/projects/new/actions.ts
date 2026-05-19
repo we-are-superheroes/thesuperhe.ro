@@ -9,7 +9,8 @@ import type { ServerActionResult } from '@/types'
 export interface CreateProjectStepInput {
   title: string
   description: string
-  skillId: string | null
+  skillIds: string[]
+  estimatedHrs: number | null
 }
 
 export interface CreateProjectInput {
@@ -93,9 +94,9 @@ export async function launchProjectAction(
     blueprintId = bp.id
   }
 
-  // Verify the requested skill ids exist
+  // Verify all requested skill ids exist (across every step's skillIds).
   const requestedSkillIds = Array.from(
-    new Set(data.steps.map((s) => s.skillId).filter((id): id is string => !!id)),
+    new Set(data.steps.flatMap((s) => s.skillIds)),
   )
   if (requestedSkillIds.length > 0) {
     const realSkills = await db.skill.findMany({
@@ -104,15 +105,26 @@ export async function launchProjectAction(
     })
     const realIds = new Set(realSkills.map((s) => s.id))
     for (const s of data.steps) {
-      if (s.skillId && !realIds.has(s.skillId)) {
-        return { success: false, error: 'Unknown skill on one of the steps.' }
+      for (const sid of s.skillIds) {
+        if (!realIds.has(sid)) {
+          return { success: false, error: 'Unknown skill on one of the steps.' }
+        }
       }
     }
   }
 
-  // Filter out empty steps (no title)
+  // Filter out empty steps (no title) + dedupe skill ids per step.
   const cleanSteps = data.steps
-    .map((s) => ({ ...s, title: s.title.trim(), description: s.description.trim() }))
+    .map((s) => ({
+      ...s,
+      title: s.title.trim(),
+      description: s.description.trim(),
+      skillIds: Array.from(new Set(s.skillIds)),
+      estimatedHrs:
+        s.estimatedHrs != null && Number.isFinite(s.estimatedHrs) && s.estimatedHrs >= 0
+          ? Math.round(s.estimatedHrs)
+          : null,
+    }))
     .filter((s) => s.title.length > 0)
 
   // Fetch the actor name (for blueprint_forked title) outside the transaction.
@@ -145,14 +157,18 @@ export async function launchProjectAction(
             title: s.title,
             description: s.description || null,
             order: i + 1,
+            estimatedHrs: s.estimatedHrs,
             status: 'open',
           },
         })
-        if (s.skillId) {
-          await tx.stepSkill.create({
-            data: { skillId: s.skillId, projectStepId: step.id },
+        if (s.skillIds.length > 0) {
+          await tx.stepSkill.createMany({
+            data: s.skillIds.map((sid) => ({
+              skillId: sid,
+              projectStepId: step.id,
+            })),
           })
-          newStepSkillIds.add(s.skillId)
+          for (const sid of s.skillIds) newStepSkillIds.add(sid)
         }
       }
 
@@ -245,9 +261,9 @@ export async function saveBlueprintAction(
   const validationError = validateProject(data)
   if (validationError) return { success: false, error: validationError }
 
-  // Same skill validation as launch
+  // Same skill validation as launch — every per-step skillId must exist.
   const requestedSkillIds = Array.from(
-    new Set(data.steps.map((s) => s.skillId).filter((id): id is string => !!id)),
+    new Set(data.steps.flatMap((s) => s.skillIds)),
   )
   if (requestedSkillIds.length > 0) {
     const realSkills = await db.skill.findMany({
@@ -256,14 +272,25 @@ export async function saveBlueprintAction(
     })
     const realIds = new Set(realSkills.map((s) => s.id))
     for (const s of data.steps) {
-      if (s.skillId && !realIds.has(s.skillId)) {
-        return { success: false, error: 'Unknown skill on one of the steps.' }
+      for (const sid of s.skillIds) {
+        if (!realIds.has(sid)) {
+          return { success: false, error: 'Unknown skill on one of the steps.' }
+        }
       }
     }
   }
 
   const cleanSteps = data.steps
-    .map((s) => ({ ...s, title: s.title.trim(), description: s.description.trim() }))
+    .map((s) => ({
+      ...s,
+      title: s.title.trim(),
+      description: s.description.trim(),
+      skillIds: Array.from(new Set(s.skillIds)),
+      estimatedHrs:
+        s.estimatedHrs != null && Number.isFinite(s.estimatedHrs) && s.estimatedHrs >= 0
+          ? Math.round(s.estimatedHrs)
+          : null,
+    }))
     .filter((s) => s.title.length > 0)
 
   try {
@@ -285,12 +312,16 @@ export async function saveBlueprintAction(
             title: s.title,
             description: s.description || null,
             order: i + 1,
+            estimatedHrs: s.estimatedHrs,
             statusDefault: 'open',
           },
         })
-        if (s.skillId) {
-          await tx.stepSkill.create({
-            data: { skillId: s.skillId, blueprintStepId: step.id },
+        if (s.skillIds.length > 0) {
+          await tx.stepSkill.createMany({
+            data: s.skillIds.map((sid) => ({
+              skillId: sid,
+              blueprintStepId: step.id,
+            })),
           })
         }
       }
