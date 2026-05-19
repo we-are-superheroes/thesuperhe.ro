@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useTransition, useMemo, useRef } from 'react'
+import { useState, useTransition, useMemo, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
   Search,
   Plus,
@@ -111,6 +111,8 @@ export function CreateProjectForm({
   skills: SkillOption[]
 }) {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const initialBlueprintId = searchParams.get('blueprint')
   const [phase, setPhase] = useState<'choose' | 'edit'>('choose')
   const [origin, setOrigin] = useState<
     { kind: 'scratch' } | { kind: 'blueprint'; blueprint: BlueprintOption } | null
@@ -200,6 +202,17 @@ export function CreateProjectForm({
     setPhase('choose')
     window.scrollTo({ top: 0, behavior: 'instant' })
   }
+
+  // Deep-link from /blueprints: ?blueprint=<id> drops the user straight into
+  // the editor pre-filled from that blueprint, skipping the chooser. Runs
+  // once on mount; we don't react to later changes of the param.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!initialBlueprintId) return
+    const bp = blueprints.find((b) => b.id === initialBlueprintId)
+    if (bp) startFromBlueprint(bp)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   /* ── Step ops ─────────────────────────────────────── */
 
