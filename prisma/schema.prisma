@@ -250,7 +250,14 @@ model Project {
   title                 String
   description           String
   status                ProjectStatus @default(defining)
+  // Coarse "City, Country" for browse-page filters.
   location              String?
+  // Precise location (optional): a human-readable address or place name and/or
+  // a lat/lng pair. Either or both — used to build the "Open in Google Maps"
+  // link on the project page.
+  address               String?
+  latitude              Float?
+  longitude             Float?
   remoteOk              Boolean  @default(true) @map("remote_ok")
   timeCommitmentHrs     Int?     @map("time_commitment_hrs")
   coverImageUrl         String?  @map("cover_image_url")

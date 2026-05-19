@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+import { formatCoords } from '@/lib/location'
 import {
   EditProjectForm,
   type EditProjectInitial,
@@ -38,6 +39,9 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       title: true,
       description: true,
       location: true,
+      address: true,
+      latitude: true,
+      longitude: true,
       remoteOk: true,
       coverImageUrl: true,
       joinPolicy: true,
@@ -89,6 +93,11 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
     // remoteOk → yes; off → no. We can't distinguish "some" once saved, so
     // default the toggle to "yes" when remote is allowed and "no" otherwise.
     remote: project.remoteOk ? 'yes' : 'no',
+    address: project.address ?? '',
+    coordinates:
+      project.latitude != null && project.longitude != null
+        ? formatCoords(project.latitude, project.longitude)
+        : '',
     coverImageUrl: project.coverImageUrl,
     joinPolicy: project.joinPolicy,
     status: project.status,

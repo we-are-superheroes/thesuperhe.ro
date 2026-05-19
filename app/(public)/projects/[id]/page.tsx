@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import Image from 'next/image'
-import { ChevronRight, Share2, Bookmark, MapPin, Globe, Calendar, FolderOpen, Clock, User, Pencil } from 'lucide-react'
+import { ChevronRight, Share2, Bookmark, MapPin, Globe, Calendar, FolderOpen, Clock, User, Pencil, ExternalLink } from 'lucide-react'
+import { googleMapsUrl } from '@/lib/location'
 import { ProjectStepsList, type StepCardData } from '@/components/platform/project-steps-list'
 import { JoinProjectTopButton, JoinProjectCard } from '@/components/platform/join-project-controls'
 
@@ -65,6 +66,9 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       description: true,
       status: true,
       location: true,
+      address: true,
+      latitude: true,
+      longitude: true,
       remoteOk: true,
       timeCommitmentHrs: true,
       coverImageUrl: true,
@@ -122,6 +126,14 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   })
 
   if (!project) notFound()
+
+  // Build the public Google Maps URL once. Prefers coords; falls back to the
+  // free-form address; null if neither is set.
+  const mapsUrl = googleMapsUrl({
+    address: project.address,
+    latitude: project.latitude,
+    longitude: project.longitude,
+  })
 
   // Aggregate time logs across all steps in one round-trip, so each card can
   // render its own summary (total hours, contributors, entry count) without
@@ -407,7 +419,24 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                   {project.location}
                 </span>
               )}
-              {project.location && (project.remoteOk || project.createdAt) && (
+              {mapsUrl && (
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-xs font-semibold text-fg-secondary backdrop-blur-sm transition-colors hover:border-amber-500/55 hover:text-amber-500"
+                  title={
+                    project.address ??
+                    (project.latitude != null
+                      ? `${project.latitude}, ${project.longitude}`
+                      : 'Open in Google Maps')
+                  }
+                >
+                  <ExternalLink className="size-3" strokeWidth={2.5} />
+                  Open in Google Maps
+                </a>
+              )}
+              {(project.location || mapsUrl) && (project.remoteOk || project.createdAt) && (
                 <span className="size-[3px] rounded-full bg-fg-tertiary" />
               )}
               {project.remoteOk && (
@@ -424,6 +453,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 Started {formatDate(created)}
               </span>
             </div>
+            {project.address && (
+              <div className="mt-2 text-sm text-fg-tertiary">
+                {project.address}
+              </div>
+            )}
           </div>
         </div>
 
@@ -574,7 +608,29 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 {statusText}
               </DetailRow>
               <DetailRow icon={<MapPin className="size-3.5" />} label="Location">
-                {project.location ?? <Muted>Not specified</Muted>}
+                {project.location || project.address ? (
+                  <span className="flex flex-col gap-1">
+                    {project.location && <span>{project.location}</span>}
+                    {project.address && (
+                      <span className="text-xs text-fg-tertiary">
+                        {project.address}
+                      </span>
+                    )}
+                    {mapsUrl && (
+                      <a
+                        href={mapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex w-fit items-center gap-1 text-xs font-medium text-amber-500 hover:underline"
+                      >
+                        <ExternalLink className="size-3" strokeWidth={2.5} />
+                        Open in Google Maps
+                      </a>
+                    )}
+                  </span>
+                ) : (
+                  <Muted>Not specified</Muted>
+                )}
               </DetailRow>
               <DetailRow icon={<Globe className="size-3.5" />} label="Remote contributions">
                 {project.remoteOk ? 'Welcome' : 'Not at this project'}

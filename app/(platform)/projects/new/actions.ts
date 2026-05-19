@@ -4,6 +4,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { notify } from '@/lib/notifications'
+import { parseCoords } from '@/lib/location'
 import type { ServerActionResult } from '@/types'
 
 export interface CreateProjectStepInput {
@@ -18,6 +19,10 @@ export interface CreateProjectInput {
   description: string
   city: string
   country: string
+  /** Optional precise street address or place name. */
+  address: string
+  /** Optional "lat, lng" string. Parsed + validated server-side. */
+  coordinates: string
   remote: 'yes' | 'some' | 'no'
   joinPolicy: 'open' | 'approval_required'
   projectTypeId: string | null
@@ -68,6 +73,9 @@ function validateProject(data: CreateProjectInput): string | null {
   if (!['open', 'approval_required'].includes(data.joinPolicy)) {
     return 'Pick a join policy.'
   }
+  if (data.address.trim().length > 500) {
+    return 'Address is too long.'
+  }
   return null
 }
 
@@ -82,6 +90,21 @@ export async function launchProjectAction(
 
   const validationError = validateProject(data)
   if (validationError) return { success: false, error: validationError }
+
+  // Parse the optional "lat, lng" string into a coords pair (or null).
+  let coords: { latitude: number | null; longitude: number | null } = {
+    latitude: null,
+    longitude: null,
+  }
+  try {
+    const parsed = parseCoords(data.coordinates)
+    if (parsed) coords = parsed
+  } catch (e) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Coordinates couldn’t be parsed.',
+    }
+  }
 
   // Verify blueprint id if supplied
   let blueprintId: string | null = null
@@ -139,6 +162,9 @@ export async function launchProjectAction(
           description: data.description.trim(),
           status: 'defining',
           location: buildLocation(data.city, data.country),
+          address: data.address.trim() || null,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
           // 'yes' or 'some' → remote contributors welcome.
           remoteOk: data.remote === 'yes' || data.remote === 'some',
           joinPolicy: data.joinPolicy,

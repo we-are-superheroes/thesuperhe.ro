@@ -53,6 +53,10 @@ export interface EditProjectInitial {
   city: string
   country: string
   remote: 'yes' | 'some' | 'no'
+  /** Optional precise street address or place name. */
+  address: string
+  /** Optional "lat, lng" string (pre-filled from saved Float columns). */
+  coordinates: string
   coverImageUrl: string | null
   joinPolicy: 'open' | 'approval_required'
   status: ProjectStatus
@@ -126,6 +130,8 @@ export function EditProjectForm({
     initial.country && COUNTRIES.includes(initial.country) ? initial.country : COUNTRIES[0],
   )
   const [remote, setRemote] = useState<'yes' | 'some' | 'no'>(initial.remote)
+  const [address, setAddress] = useState(initial.address)
+  const [coordinates, setCoordinates] = useState(initial.coordinates)
   const [joinPolicy, setJoinPolicy] = useState<'open' | 'approval_required'>(initial.joinPolicy)
   const [status, setStatus] = useState<ProjectStatus>(initial.status)
   const [activeSection, setActiveSection] = useState<string>(TOC_SECTIONS[0].id)
@@ -184,6 +190,8 @@ export function EditProjectForm({
         description,
         city,
         country,
+        address,
+        coordinates,
         remote,
         joinPolicy,
         status,
@@ -235,6 +243,10 @@ export function EditProjectForm({
         description,
         city,
         country,
+        // Blueprints are place-agnostic — the precise location belongs to
+        // the project that's forked, not the template.
+        address: '',
+        coordinates: '',
         remote,
         // Blueprints don't carry a join policy at runtime — projects forked
         // from them pick their own. Pass a valid default to satisfy the
@@ -510,6 +522,38 @@ export function EditProjectForm({
                 </select>
               </Field>
             </div>
+
+            <Field
+              label="Specific address or place name (optional)"
+              htmlFor="fld-address"
+              help="Shown to people who join. Skip this if your meet-up spot changes or you’d rather not publish it."
+            >
+              <input
+                id="fld-address"
+                type="text"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="e.g. The Old Library, 2 Wallis Road, E9 5LH"
+                maxLength={500}
+                className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
+              />
+            </Field>
+
+            <Field
+              label="Coordinates (optional)"
+              htmlFor="fld-coords"
+              help="Paste a “lat, lng” pair (e.g. from a Google Maps share). Pins the project on the map when people open it in Google Maps."
+            >
+              <input
+                id="fld-coords"
+                type="text"
+                inputMode="decimal"
+                value={coordinates}
+                onChange={(e) => setCoordinates(e.target.value)}
+                placeholder="e.g. 51.5424, -0.0244"
+                className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-mono text-sm tabular-nums text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
+              />
+            </Field>
 
             <Field label="Can people contribute remotely?">
               <div

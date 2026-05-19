@@ -6,6 +6,7 @@ import type { ProjectStatus } from '@prisma/client'
 import { db } from '@/lib/db'
 import { uploadImage, deleteImageByUrl } from '@/lib/storage'
 import { notify, getActiveProjectMemberIds } from '@/lib/notifications'
+import { parseCoords } from '@/lib/location'
 import type { ServerActionResult } from '@/types'
 
 /**
@@ -44,6 +45,10 @@ export interface UpdateProjectInput {
   description: string
   city: string
   country: string
+  /** Optional precise street address or place name. */
+  address: string
+  /** Optional "lat, lng" string. Parsed + validated server-side. */
+  coordinates: string
   remote: 'yes' | 'some' | 'no'
   joinPolicy: 'open' | 'approval_required'
   status: ProjectStatus
@@ -79,6 +84,9 @@ function validate(data: UpdateProjectInput): string | null {
   if (!VALID_PROJECT_STATUSES.has(data.status)) {
     return 'Pick a project status.'
   }
+  if (data.address.trim().length > 500) {
+    return 'Address is too long.'
+  }
   return null
 }
 
@@ -102,6 +110,21 @@ export async function updateProjectAction(
 
   const validationError = validate(data)
   if (validationError) return { success: false, error: validationError }
+
+  // Parse the optional "lat, lng" string into a coords pair (or null).
+  let coords: { latitude: number | null; longitude: number | null } = {
+    latitude: null,
+    longitude: null,
+  }
+  try {
+    const parsed = parseCoords(data.coordinates)
+    if (parsed) coords = parsed
+  } catch (e) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Coordinates couldn’t be parsed.',
+    }
+  }
 
   // Authz: caller must be the project's lead.
   const lead = await db.contribution.findFirst({
@@ -184,6 +207,9 @@ export async function updateProjectAction(
           title: data.title.trim(),
           description: data.description.trim(),
           location: buildLocation(data.city, data.country),
+          address: data.address.trim() || null,
+          latitude: coords.latitude,
+          longitude: coords.longitude,
           remoteOk: data.remote === 'yes' || data.remote === 'some',
           joinPolicy: data.joinPolicy,
           status: data.status,

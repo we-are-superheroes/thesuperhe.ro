@@ -119,6 +119,8 @@ export function CreateProjectForm({
   const [description, setDescription] = useState('')
   const [city, setCity] = useState('')
   const [country, setCountry] = useState(COUNTRIES[0])
+  const [address, setAddress] = useState('')
+  const [coordinates, setCoordinates] = useState('')
   const [remote, setRemote] = useState<'yes' | 'some' | 'no'>('yes')
   const [joinPolicy, setJoinPolicy] = useState<'open' | 'approval_required'>('open')
   const [projectTypeId, setProjectTypeId] = useState<string | null>(null)
@@ -145,6 +147,8 @@ export function CreateProjectForm({
     setDescription('')
     setCity('')
     setCountry(COUNTRIES[0])
+    setAddress('')
+    setCoordinates('')
     setRemote('yes')
     setJoinPolicy('open')
     setProjectTypeId(null)
@@ -160,6 +164,8 @@ export function CreateProjectForm({
     setDescription(bp.description)
     setCity('')
     setCountry(COUNTRIES[0])
+    setAddress('')
+    setCoordinates('')
     setRemote('some')
     setJoinPolicy('open')
     setProjectTypeId(bp.projectTypeId)
@@ -212,6 +218,8 @@ export function CreateProjectForm({
     description,
     city,
     country,
+    address,
+    coordinates,
     remote,
     joinPolicy,
     projectTypeId,
@@ -311,6 +319,8 @@ export function CreateProjectForm({
             description={description}
             city={city}
             country={country}
+            address={address}
+            coordinates={coordinates}
             remote={remote}
             joinPolicy={joinPolicy}
             steps={steps}
@@ -324,6 +334,8 @@ export function CreateProjectForm({
             setDescription={setDescription}
             setCity={setCity}
             setCountry={setCountry}
+            setAddress={setAddress}
+            setCoordinates={setCoordinates}
             setRemote={setRemote}
             setJoinPolicy={setJoinPolicy}
             updateStep={updateStep}
@@ -515,6 +527,8 @@ function EditorPhase({
   description,
   city,
   country,
+  address,
+  coordinates,
   remote,
   joinPolicy,
   steps,
@@ -528,6 +542,8 @@ function EditorPhase({
   setDescription,
   setCity,
   setCountry,
+  setAddress,
+  setCoordinates,
   setRemote,
   setJoinPolicy,
   updateStep,
@@ -542,6 +558,8 @@ function EditorPhase({
   description: string
   city: string
   country: string
+  address: string
+  coordinates: string
   remote: 'yes' | 'some' | 'no'
   joinPolicy: 'open' | 'approval_required'
   steps: FormStep[]
@@ -555,6 +573,8 @@ function EditorPhase({
   setDescription: (v: string) => void
   setCity: (v: string) => void
   setCountry: (v: string) => void
+  setAddress: (v: string) => void
+  setCoordinates: (v: string) => void
   setRemote: (v: 'yes' | 'some' | 'no') => void
   setJoinPolicy: (v: 'open' | 'approval_required') => void
   updateStep: (id: string, patch: Partial<FormStep>) => void
@@ -658,6 +678,38 @@ function EditorPhase({
               </select>
             </Field>
           </div>
+
+          <Field
+            label="Specific address or place name (optional)"
+            htmlFor="fld-address"
+            help="Shown to people who join. Skip this if your meet-up spot changes or you’d rather not publish it."
+          >
+            <input
+              id="fld-address"
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="e.g. The Old Library, 2 Wallis Road, E9 5LH"
+              maxLength={500}
+              className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
+            />
+          </Field>
+
+          <Field
+            label="Coordinates (optional)"
+            htmlFor="fld-coords"
+            help="Paste a “lat, lng” pair (e.g. from a Google Maps share). Pins the project on the map when people open it in Google Maps."
+          >
+            <input
+              id="fld-coords"
+              type="text"
+              inputMode="decimal"
+              value={coordinates}
+              onChange={(e) => setCoordinates(e.target.value)}
+              placeholder="e.g. 51.5424, -0.0244"
+              className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-mono text-sm tabular-nums text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
+            />
+          </Field>
 
           <Field label="Can people contribute remotely?">
             <div
