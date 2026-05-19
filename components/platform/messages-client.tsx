@@ -143,11 +143,13 @@ export function MessagesClient({
   conversations,
   openConversationId,
   thread: initialThread,
+  view,
 }: {
   currentUser: CurrentUser
   conversations: ConversationListItem[]
   openConversationId: string | null
   thread: ThreadData | null
+  view: 'inbox' | 'archived'
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -297,8 +299,10 @@ export function MessagesClient({
     startMutation(async () => {
       const result = await archiveConversationAction(thread.conversationId, next)
       if (result.success) {
-        // Archived → drop out of the list. Navigate to /messages.
-        router.push('/messages')
+        // Send the user to the view where the conversation now lives so
+        // they can still see it: archived → /messages?view=archived,
+        // unarchived → /messages (inbox).
+        router.push(next ? '/messages?view=archived' : '/messages')
       }
     })
   }
@@ -359,6 +363,32 @@ export function MessagesClient({
               className="w-full rounded-lg border border-white/[0.08] bg-bg-surface py-2.5 pl-9 pr-3 text-sm text-fg-primary outline-none transition-colors placeholder:text-fg-tertiary focus:border-neutral-700"
             />
           </div>
+          {/* Inbox / Archived toggle */}
+          <div className="inline-flex shrink-0 self-start rounded-lg border border-white/[0.08] bg-bg-surface p-0.5 text-xs">
+            <Link
+              href="/messages"
+              className={cn(
+                'rounded-md px-3 py-1.5 font-medium transition-colors',
+                view === 'inbox'
+                  ? 'bg-bg-surface-2 text-fg-primary'
+                  : 'text-fg-secondary hover:text-fg-primary',
+              )}
+            >
+              Inbox
+            </Link>
+            <Link
+              href="/messages?view=archived"
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 font-medium transition-colors',
+                view === 'archived'
+                  ? 'bg-bg-surface-2 text-fg-primary'
+                  : 'text-fg-secondary hover:text-fg-primary',
+              )}
+            >
+              <Archive className="size-3" strokeWidth={2.5} />
+              Archived
+            </Link>
+          </div>
         </header>
 
         <div className="flex-1 overflow-y-auto p-2">
@@ -366,6 +396,11 @@ export function MessagesClient({
             <div className="px-5 py-16 text-center text-sm text-fg-tertiary">
               {searchQuery.trim() ? (
                 <>No matches.</>
+              ) : view === 'archived' ? (
+                <>
+                  <p className="mb-2 font-display text-base text-fg-primary">No archived conversations.</p>
+                  Archive a thread from its <MoreVertical className="inline size-3" /> menu and it&apos;ll land here.
+                </>
               ) : (
                 <>
                   <p className="mb-2 font-display text-base text-fg-primary">No conversations yet.</p>

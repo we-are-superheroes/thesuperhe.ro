@@ -19,6 +19,7 @@ interface SearchParams {
   searchParams: Promise<{
     conversation?: string
     to?: string
+    view?: string
   }>
 }
 
@@ -29,6 +30,7 @@ export default async function MessagesPage({ searchParams }: SearchParams) {
   if (!userId) redirect('/sign-in')
 
   const params = await searchParams
+  const view: 'inbox' | 'archived' = params.view === 'archived' ? 'archived' : 'inbox'
 
   // If ?to=<userId> is set, find-or-create the conversation and use it as
   // the open thread. Lets the "Send a message" button from a profile drop
@@ -49,7 +51,10 @@ export default async function MessagesPage({ searchParams }: SearchParams) {
   // user, the latest message, and the unread count derived from
   // (lastReadAt, message.createdAt).
   const myParticipants = await db.conversationParticipant.findMany({
-    where: { userId, archivedAt: null },
+    where: {
+      userId,
+      ...(view === 'archived' ? { archivedAt: { not: null } } : { archivedAt: null }),
+    },
     orderBy: { conversation: { updatedAt: 'desc' } },
     select: {
       lastReadAt: true,
@@ -242,6 +247,7 @@ export default async function MessagesPage({ searchParams }: SearchParams) {
       conversations={conversations}
       openConversationId={openConversationId}
       thread={thread}
+      view={view}
     />
   )
 }
