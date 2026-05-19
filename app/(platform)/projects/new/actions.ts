@@ -125,7 +125,7 @@ export async function launchProjectAction(
         data: {
           title: data.title.trim(),
           description: data.description.trim(),
-          status: 'active',
+          status: 'defining',
           location: buildLocation(data.city, data.country),
           // 'yes' or 'some' → remote contributors welcome.
           remoteOk: data.remote === 'yes' || data.remote === 'some',
@@ -145,7 +145,7 @@ export async function launchProjectAction(
             title: s.title,
             description: s.description || null,
             order: i + 1,
-            status: 'not_started',
+            status: 'open',
           },
         })
         if (s.skillId) {
@@ -285,7 +285,7 @@ export async function saveBlueprintAction(
             title: s.title,
             description: s.description || null,
             order: i + 1,
-            statusDefault: 'not_started',
+            statusDefault: 'open',
           },
         })
         if (s.skillId) {

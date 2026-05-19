@@ -42,18 +42,18 @@ enum Proficiency {
 }
 
 enum ProjectStatus {
-  draft
-  active
+  defining
+  needs_help
+  in_progress
   completed
-  archived
 }
 
 enum StepStatus {
-  not_started
+  open
+  defining
   in_progress
   needs_help
-  done
-  skipped
+  completed
 }
 
 enum ContributionStatus {
@@ -225,7 +225,7 @@ model BlueprintStep {
   description   String?
   order         Int
   estimatedHrs  Int?       @map("estimated_hrs")
-  statusDefault StepStatus @default(not_started) @map("status_default")
+  statusDefault StepStatus @default(open) @map("status_default")
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
 
@@ -248,7 +248,7 @@ model Project {
 
   title                 String
   description           String
-  status                ProjectStatus @default(draft)
+  status                ProjectStatus @default(defining)
   location              String?
   remoteOk              Boolean  @default(true) @map("remote_ok")
   timeCommitmentHrs     Int?     @map("time_commitment_hrs")
@@ -279,7 +279,7 @@ model ProjectStep {
   description  String?
   order        Int
   estimatedHrs Int?       @map("estimated_hrs")
-  status       StepStatus @default(not_started)
+  status       StepStatus @default(open)
   dueDate      DateTime?  @map("due_date")
   completedAt  DateTime?  @map("completed_at")
   createdAt    DateTime   @default(now()) @map("created_at")

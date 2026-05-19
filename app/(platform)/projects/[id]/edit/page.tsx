@@ -41,6 +41,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       remoteOk: true,
       coverImageUrl: true,
       joinPolicy: true,
+      status: true,
       contributions: {
         where: {
           userId,
@@ -89,6 +90,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
     remote: project.remoteOk ? 'yes' : 'no',
     coverImageUrl: project.coverImageUrl,
     joinPolicy: project.joinPolicy,
+    status: project.status,
     steps: project.steps.map((s) => ({
       id: s.id,
       title: s.title,

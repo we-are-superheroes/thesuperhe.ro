@@ -135,8 +135,9 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   const stepsByStatus = {
     needs_help: project.steps.filter((s) => s.status === 'needs_help').length,
     in_progress: project.steps.filter((s) => s.status === 'in_progress').length,
-    done: project.steps.filter((s) => s.status === 'done').length,
-    not_started: project.steps.filter((s) => s.status === 'not_started').length,
+    defining: project.steps.filter((s) => s.status === 'defining').length,
+    open: project.steps.filter((s) => s.status === 'open').length,
+    completed: project.steps.filter((s) => s.status === 'completed').length,
   }
 
   // Find the lead contributor (first contribution with role=lead, fallback to none)
@@ -151,14 +152,14 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   // Status pill text
   const statusText = (() => {
     switch (project.status) {
-      case 'active':
-        return stepsByStatus.in_progress > 0 ? 'Active · in progress' : 'Active'
-      case 'draft':
-        return 'Draft'
+      case 'defining':
+        return 'Being defined'
+      case 'needs_help':
+        return 'Needs help'
+      case 'in_progress':
+        return 'In progress'
       case 'completed':
         return 'Completed'
-      case 'archived':
-        return 'Archived'
       default:
         return project.status
     }
@@ -270,10 +271,17 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                   {project.projectType.name}
                 </span>
               )}
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-green-500/35 bg-green-500/[0.16] px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-green-300 backdrop-blur-sm">
-                <span className="size-[5px] rounded-full bg-green-500 shadow-[0_0_5px_var(--color-green-500)]" />
-                {statusText}
-              </span>
+              <ProjectStatusPill status={project.status} label={statusText} />
+              {isLead && (
+                <Link
+                  href={`/projects/${id}/edit#sec-status`}
+                  className="inline-flex items-center gap-1 rounded-full border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-fg-tertiary backdrop-blur-sm transition-colors hover:border-amber-500/50 hover:text-amber-500"
+                  title="Change project status"
+                >
+                  <Pencil className="size-3" strokeWidth={2.5} />
+                  Change
+                </Link>
+              )}
             </div>
             <h1 className="my-2 font-display text-[clamp(40px,5vw,60px)] font-normal leading-none tracking-tight">
               {project.title}
@@ -392,7 +400,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 <Stat value={contributors.length} label="Contributors" />
                 <Stat value={totalHours} unit="h" label="Hours given" />
                 <Stat
-                  value={stepsByStatus.done}
+                  value={stepsByStatus.completed}
                   trailing={
                     totalSteps > 0 ? (
                       <span className="text-fg-tertiary text-[0.6em]">/{totalSteps}</span>
@@ -532,6 +540,82 @@ function DetailRow({
 
 function Muted({ children }: { children: React.ReactNode }) {
   return <span className="text-fg-secondary">{children}</span>
+}
+
+/**
+ * Hero status pill — matches the four-state project vocabulary defined in
+ * the design (Being defined · Needs help · In progress · Completed). Each
+ * state gets its own colour palette + glyph so the eye can tell at a glance
+ * whether a project is asking for hands or just chugging along.
+ */
+function ProjectStatusPill({
+  status,
+  label,
+}: {
+  status: string
+  label: string
+}) {
+  const palette =
+    status === 'needs_help'
+      ? 'border-amber-500/55 bg-amber-500/[0.18] text-amber-300 shadow-[0_0_18px_rgba(244,165,53,0.25)]'
+      : status === 'in_progress'
+        ? 'border-green-500/40 bg-green-500/[0.16] text-green-300'
+        : status === 'defining'
+          ? 'border-blue-400/40 bg-blue-500/[0.16] text-blue-200'
+          : status === 'completed'
+            ? 'border-green-500/30 bg-green-500/[0.10] text-green-300'
+            : 'border-white/[0.12] bg-white/[0.04] text-fg-secondary'
+
+  return (
+    <span
+      className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-bold uppercase tracking-widest backdrop-blur-sm ${palette}`}
+    >
+      <ProjectStatusGlyph status={status} />
+      {label}
+    </span>
+  )
+}
+
+function ProjectStatusGlyph({ status }: { status: string }) {
+  if (status === 'needs_help') {
+    return (
+      <span className="inline-flex size-3 items-center justify-center rounded-full bg-amber-500 font-display text-[9px] font-bold leading-none text-amber-900 shadow-[0_0_8px_rgba(244,165,53,0.6)]">
+        !
+      </span>
+    )
+  }
+  if (status === 'in_progress') {
+    return (
+      <span className="relative inline-flex size-3 items-center justify-center rounded-full border-[1.5px] border-green-500">
+        <span className="size-1.5 animate-pulse rounded-full bg-green-300" />
+      </span>
+    )
+  }
+  if (status === 'defining') {
+    return (
+      <span className="relative size-3 rounded-full border-[1.5px] border-dashed border-blue-300">
+        <span className="absolute left-1/2 top-1/2 h-px w-1.5 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-blue-300" />
+      </span>
+    )
+  }
+  if (status === 'completed') {
+    return (
+      <span className="inline-flex size-3 items-center justify-center rounded-full bg-green-500 text-blue-900">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="size-2"
+        >
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      </span>
+    )
+  }
+  return <span className="size-[5px] rounded-full bg-fg-tertiary" />
 }
 
 function EmptyInline({ text }: { text: string }) {

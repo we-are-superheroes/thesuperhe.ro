@@ -22,7 +22,7 @@ import {
 
 async function getRecentProjects() {
   const projects = await db.project.findMany({
-    where: { status: 'active' },
+    where: { status: { in: ['defining', 'needs_help', 'in_progress'] } },
     orderBy: { createdAt: 'desc' },
     take: 6,
     select: {

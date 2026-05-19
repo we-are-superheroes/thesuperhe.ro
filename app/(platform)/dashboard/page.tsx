@@ -84,7 +84,7 @@ async function getDashboardData(userId: string) {
     mySteps = await db.projectStep.findMany({
       where: {
         projectId: { in: projectIds },
-        status: { in: ['needs_help', 'in_progress', 'not_started'] },
+        status: { in: ['needs_help', 'in_progress', 'defining', 'open'] },
       },
       select: {
         id: true,
@@ -103,7 +103,8 @@ async function getDashboardData(userId: string) {
   const statusPriority: Record<string, number> = {
     needs_help: 0,
     in_progress: 1,
-    not_started: 2,
+    defining: 2,
+    open: 3,
   }
   mySteps.sort((a, b) => (statusPriority[a.status] ?? 99) - (statusPriority[b.status] ?? 99))
 
@@ -111,7 +112,7 @@ async function getDashboardData(userId: string) {
   let openStepCount = 0
   for (const c of pinnedProjects) {
     openStepCount += c.project.steps.filter(
-      (s) => s.status === 'needs_help' || s.status === 'in_progress' || s.status === 'not_started',
+      (s) => s.status === 'needs_help' || s.status === 'in_progress' || s.status === 'defining' || s.status === 'open',
     ).length
   }
 
@@ -131,7 +132,7 @@ async function getDashboardData(userId: string) {
     // Find projects that need the user's skills and they're not already contributing to
     const candidateProjects = await db.project.findMany({
       where: {
-        status: 'active',
+        status: { in: ['defining', 'needs_help', 'in_progress'] },
         id: { notIn: projectIds.length > 0 ? projectIds : ['__none__'] },
         steps: {
           some: {
@@ -354,7 +355,7 @@ export default async function DashboardPage() {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {pinnedProjects.map((c, i) => {
                   const steps = c.project.steps
-                  const doneCount = steps.filter((s) => s.status === 'done').length
+                  const doneCount = steps.filter((s) => s.status === 'completed').length
                   const totalSteps = steps.length
                   const progressPct = totalSteps > 0 ? Math.round((doneCount / totalSteps) * 100) : 0
                   const needsHelpCount = steps.filter((s) => s.status === 'needs_help').length

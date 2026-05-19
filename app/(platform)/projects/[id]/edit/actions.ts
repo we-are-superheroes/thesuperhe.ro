@@ -2,6 +2,7 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import type { ProjectStatus } from '@prisma/client'
 import { db } from '@/lib/db'
 import { uploadImage, deleteImageByUrl } from '@/lib/storage'
 import { notify, getActiveProjectMemberIds } from '@/lib/notifications'
@@ -44,8 +45,16 @@ export interface UpdateProjectInput {
   country: string
   remote: 'yes' | 'some' | 'no'
   joinPolicy: 'open' | 'approval_required'
+  status: ProjectStatus
   steps: UpdateProjectStepInput[]
 }
+
+const VALID_PROJECT_STATUSES = new Set<ProjectStatus>([
+  'defining',
+  'needs_help',
+  'in_progress',
+  'completed',
+])
 
 function buildLocation(city: string, country: string): string | null {
   const c = city.trim()
@@ -65,6 +74,9 @@ function validate(data: UpdateProjectInput): string | null {
   if (!['yes', 'some', 'no'].includes(data.remote)) return 'Pick a remote option.'
   if (!['open', 'approval_required'].includes(data.joinPolicy)) {
     return 'Pick a join policy.'
+  }
+  if (!VALID_PROJECT_STATUSES.has(data.status)) {
+    return 'Pick a project status.'
   }
   return null
 }
@@ -162,6 +174,7 @@ export async function updateProjectAction(
           location: buildLocation(data.city, data.country),
           remoteOk: data.remote === 'yes' || data.remote === 'some',
           joinPolicy: data.joinPolicy,
+          status: data.status,
         },
       })
 
@@ -210,7 +223,7 @@ export async function updateProjectAction(
               title: s.title,
               description: s.description || null,
               order,
-              status: 'not_started',
+              status: 'open',
             },
             select: { id: true },
           })

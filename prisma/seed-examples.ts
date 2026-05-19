@@ -67,7 +67,7 @@ async function main() {
       description: string
       order: number
       estimatedHrs: number
-      status: 'needs_help' | 'not_started' | 'in_progress'
+      status: 'needs_help' | 'open' | 'in_progress'
       skillIds: Array<string | undefined>
     }>
   }
@@ -85,7 +85,7 @@ async function main() {
         { title: 'Map sampling sites along the lakefront', description: 'Identify 12 stable monitoring points from Vidy to Pully using GIS data.', order: 1, estimatedHrs: 5, status: 'needs_help', skillIds: [gis?.id, envScience?.id] },
         { title: 'Recruit volunteer samplers', description: 'Run an info evening at the Lausanne Maker Space to onboard 20 volunteers.', order: 2, estimatedHrs: 4, status: 'needs_help', skillIds: [communityOrganising?.id, eventCoord?.id] },
         { title: 'Build the open data dashboard', description: 'A simple Next.js dashboard so the public can see live readings.', order: 3, estimatedHrs: 12, status: 'needs_help', skillIds: [webDev?.id, dataAnalysis?.id] },
-        { title: 'Draft sampling protocol', description: 'A one-page protocol that any volunteer can follow in 20 minutes.', order: 4, estimatedHrs: 3, status: 'not_started', skillIds: [envScience?.id, copywriting?.id] },
+        { title: 'Draft sampling protocol', description: 'A one-page protocol that any volunteer can follow in 20 minutes.', order: 4, estimatedHrs: 3, status: 'open', skillIds: [envScience?.id, copywriting?.id] },
       ],
     },
     {
@@ -99,8 +99,8 @@ async function main() {
       steps: [
         { title: 'Find a recurring venue', description: 'Approach venues in the Flon for a free Saturday slot once a month.', order: 1, estimatedHrs: 3, status: 'needs_help', skillIds: [communityOrganising?.id] },
         { title: 'Recruit repair volunteers', description: 'We need 6 fixers across electronics, bikes, and textiles.', order: 2, estimatedHrs: 4, status: 'needs_help', skillIds: [communityOrganising?.id, socialMedia?.id] },
-        { title: 'Translate signage to FR/DE/EN', description: 'Triple-language signage so the café is accessible to all of Lausanne.', order: 3, estimatedHrs: 2, status: 'not_started', skillIds: [copywriting?.id] },
-        { title: 'Run the launch event', description: 'Coordinate the first Saturday: setup, volunteer briefing, visitor flow.', order: 4, estimatedHrs: 6, status: 'not_started', skillIds: [eventCoord?.id, projectMgmt?.id] },
+        { title: 'Translate signage to FR/DE/EN', description: 'Triple-language signage so the café is accessible to all of Lausanne.', order: 3, estimatedHrs: 2, status: 'open', skillIds: [copywriting?.id] },
+        { title: 'Run the launch event', description: 'Coordinate the first Saturday: setup, volunteer briefing, visitor flow.', order: 4, estimatedHrs: 6, status: 'open', skillIds: [eventCoord?.id, projectMgmt?.id] },
       ],
     },
     {
@@ -114,8 +114,8 @@ async function main() {
       steps: [
         { title: 'Survey existing pollinator habitat', description: 'Walk the proposed corridor and map current flowering species and gaps.', order: 1, estimatedHrs: 6, status: 'needs_help', skillIds: [biology?.id, gis?.id] },
         { title: 'Choose native species mix', description: 'Pick 15 species suited to Vaud altitudes and well-loved by local pollinators.', order: 2, estimatedHrs: 4, status: 'needs_help', skillIds: [biology?.id, envScience?.id] },
-        { title: 'Submit proposal to the city', description: 'Formal proposal to the Service des parcs et domaines.', order: 3, estimatedHrs: 6, status: 'not_started', skillIds: [grantWriting?.id, copywriting?.id] },
-        { title: 'Run a community planting day', description: 'A Saturday in May with families from neighbouring quartiers.', order: 4, estimatedHrs: 5, status: 'not_started', skillIds: [eventCoord?.id, communityOrganising?.id] },
+        { title: 'Submit proposal to the city', description: 'Formal proposal to the Service des parcs et domaines.', order: 3, estimatedHrs: 6, status: 'open', skillIds: [grantWriting?.id, copywriting?.id] },
+        { title: 'Run a community planting day', description: 'A Saturday in May with families from neighbouring quartiers.', order: 4, estimatedHrs: 5, status: 'open', skillIds: [eventCoord?.id, communityOrganising?.id] },
       ],
     },
     {
@@ -130,7 +130,7 @@ async function main() {
         { title: 'Map suitable rooftops', description: 'Use Swisstopo solar potential data to identify 40+ candidate addresses.', order: 1, estimatedHrs: 8, status: 'needs_help', skillIds: [gis?.id, dataAnalysis?.id] },
         { title: 'Negotiate group rate with installers', description: 'Get bids from 3 Vaud-based MCS-equivalent installers.', order: 2, estimatedHrs: 6, status: 'needs_help', skillIds: [projectMgmt?.id] },
         { title: 'Build sign-up website', description: 'Bilingual FR/EN landing page where households register interest.', order: 3, estimatedHrs: 8, status: 'in_progress', skillIds: [webDev?.id] },
-        { title: 'Outreach to neighbourhood associations', description: 'Brief Société de développement Sous-Gare and similar groups.', order: 4, estimatedHrs: 4, status: 'not_started', skillIds: [communityOrganising?.id, facilitation?.id] },
+        { title: 'Outreach to neighbourhood associations', description: 'Brief Société de développement Sous-Gare and similar groups.', order: 4, estimatedHrs: 4, status: 'open', skillIds: [communityOrganising?.id, facilitation?.id] },
       ],
     },
     {
@@ -144,8 +144,8 @@ async function main() {
       steps: [
         { title: 'Recruit volunteer cycling instructors', description: 'Six confident cyclists, ideally multilingual.', order: 1, estimatedHrs: 4, status: 'needs_help', skillIds: [communityOrganising?.id, facilitation?.id] },
         { title: 'Plan beginner-friendly routes', description: 'Map quiet routes from Vidy to Bellerive avoiding main roads.', order: 2, estimatedHrs: 5, status: 'needs_help', skillIds: [gis?.id] },
-        { title: 'Translate safety briefing', description: 'A short video script in FR, EN, AR, FA and TI.', order: 3, estimatedHrs: 3, status: 'not_started', skillIds: [copywriting?.id] },
-        { title: 'Coordinate with EVAM', description: 'Get on the activities calendar of the cantonal asylum support office.', order: 4, estimatedHrs: 2, status: 'not_started', skillIds: [communityOrganising?.id] },
+        { title: 'Translate safety briefing', description: 'A short video script in FR, EN, AR, FA and TI.', order: 3, estimatedHrs: 3, status: 'open', skillIds: [copywriting?.id] },
+        { title: 'Coordinate with EVAM', description: 'Get on the activities calendar of the cantonal asylum support office.', order: 4, estimatedHrs: 2, status: 'open', skillIds: [communityOrganising?.id] },
       ],
     },
     {
@@ -159,7 +159,7 @@ async function main() {
       steps: [
         { title: 'Audit existing community plots', description: 'Visit each garden, note size, soil type, current crops.', order: 1, estimatedHrs: 8, status: 'needs_help', skillIds: [envScience?.id, biology?.id] },
         { title: 'Build a seed library exchange', description: 'A shared online catalogue + monthly physical swap meet.', order: 2, estimatedHrs: 10, status: 'needs_help', skillIds: [webDev?.id, projectMgmt?.id] },
-        { title: 'Draft a shared harvest data form', description: 'Track yields and pest pressure across plots — open dataset.', order: 3, estimatedHrs: 4, status: 'not_started', skillIds: [dataAnalysis?.id, copywriting?.id] },
+        { title: 'Draft a shared harvest data form', description: 'Track yields and pest pressure across plots — open dataset.', order: 3, estimatedHrs: 4, status: 'open', skillIds: [dataAnalysis?.id, copywriting?.id] },
       ],
     },
     {
@@ -173,7 +173,7 @@ async function main() {
       steps: [
         { title: 'Co-design first lesson with teachers', description: 'A 2-hour workshop at Gymnase de la Cité.', order: 1, estimatedHrs: 6, status: 'needs_help', skillIds: [facilitation?.id, eventCoord?.id] },
         { title: 'Illustrate the worksheet pack', description: 'Approachable infographics — printable in BW for school printers.', order: 2, estimatedHrs: 8, status: 'needs_help', skillIds: [copywriting?.id] },
-        { title: 'Pilot with two classes', description: 'Run the lesson, gather student feedback forms, iterate.', order: 3, estimatedHrs: 6, status: 'not_started', skillIds: [facilitation?.id, dataAnalysis?.id] },
+        { title: 'Pilot with two classes', description: 'Run the lesson, gather student feedback forms, iterate.', order: 3, estimatedHrs: 6, status: 'open', skillIds: [facilitation?.id, dataAnalysis?.id] },
       ],
     },
   ]
@@ -194,7 +194,7 @@ async function main() {
       data: {
         title: proj.title,
         description: proj.description,
-        status: 'active',
+        status: 'in_progress',
         location: proj.location,
         remoteOk: proj.remoteOk,
         timeCommitmentHrs: proj.timeCommitmentHrs,

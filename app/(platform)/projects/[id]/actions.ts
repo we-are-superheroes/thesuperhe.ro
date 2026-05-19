@@ -188,7 +188,9 @@ export async function claimStepAction(
         data: {
           assignedToId: userId,
           status:
-            step.status === 'needs_help' || step.status === 'not_started'
+            step.status === 'needs_help' ||
+            step.status === 'open' ||
+            step.status === 'defining'
               ? 'in_progress'
               : step.status,
         },

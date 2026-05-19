@@ -32,7 +32,7 @@ async function getBrowseData(): Promise<{
 }> {
   const [projects, projectTypes, skills] = await Promise.all([
     db.project.findMany({
-      where: { status: 'active' },
+      where: { status: { in: ['defining', 'needs_help', 'in_progress'] } },
       orderBy: { createdAt: 'desc' },
       select: {
         id: true,
@@ -75,7 +75,7 @@ async function getBrowseData(): Promise<{
   // Shape projects for the client
   const browseProjects: BrowseProject[] = projects.map((p) => {
     const totalSteps = p.steps.length
-    const doneSteps = p.steps.filter((s) => s.status === 'done').length
+    const doneSteps = p.steps.filter((s) => s.status === 'completed').length
     const progress = totalSteps > 0 ? Math.round((doneSteps / totalSteps) * 100) : 0
     const needs = p.steps.filter((s) => s.status === 'needs_help').length
 

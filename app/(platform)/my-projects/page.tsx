@@ -50,7 +50,8 @@ function dueLabel(due: Date | null): { text: string; urgent: boolean; sort: numb
 const STEP_PRIORITY: Record<string, number> = {
   needs_help: 0,
   in_progress: 1,
-  not_started: 2,
+  defining: 2,
+  open: 3,
 }
 
 export default async function MyProjectsPage() {
@@ -98,21 +99,24 @@ export default async function MyProjectsPage() {
   const projects: MyProject[] = contributions.map((c) => {
     const p = c.project
     const totalSteps = p.steps.length
-    const doneSteps = p.steps.filter((s) => s.status === 'done').length
+    const doneSteps = p.steps.filter((s) => s.status === 'completed').length
     const progress = totalSteps > 0 ? Math.round((doneSteps / totalSteps) * 100) : 0
 
     // Status bucket
     let bucket: 'active' | 'finished' | 'archived'
-    if (c.status === 'withdrawn' || p.status === 'archived') bucket = 'archived'
+    if (c.status === 'withdrawn') bucket = 'archived'
     else if (p.status === 'completed') bucket = 'finished'
     else bucket = 'active'
 
-    // My next step: assigned to me, not done/skipped, ordered by status priority then order
+    // My next step: assigned to me, not completed, ordered by status priority then order
     const mySteps = p.steps
       .filter(
         (s) =>
           s.assignedToId === userId &&
-          (s.status === 'needs_help' || s.status === 'in_progress' || s.status === 'not_started'),
+          (s.status === 'needs_help' ||
+            s.status === 'in_progress' ||
+            s.status === 'defining' ||
+            s.status === 'open'),
       )
       .sort(
         (a, b) =>

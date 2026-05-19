@@ -34,8 +34,8 @@ export async function toggleStepDoneAction(
     return { success: false, error: 'This step isn’t assigned to you.' }
   }
 
-  const wasDone = step.status === 'done'
-  const nextStatus = wasDone ? 'in_progress' : 'done'
+  const wasDone = step.status === 'completed'
+  const nextStatus = wasDone ? 'in_progress' : 'completed'
 
   const actor = await db.user.findUnique({ where: { id: userId }, select: { name: true } })
   const actorName = actor?.name ?? 'A contributor'

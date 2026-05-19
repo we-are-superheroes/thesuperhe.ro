@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useTransition, useRef } from 'react'
+import { useState, useTransition, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { ArrowRight, FileText, ChevronLeft, Upload, ImageIcon } from 'lucide-react'
+import type { ProjectStatus } from '@prisma/client'
 import { cn } from '@/lib/utils'
 import {
   updateProjectAction,
@@ -54,6 +55,7 @@ export interface EditProjectInitial {
   remote: 'yes' | 'some' | 'no'
   coverImageUrl: string | null
   joinPolicy: 'open' | 'approval_required'
+  status: ProjectStatus
   steps: Array<{
     id: string
     title: string
@@ -61,6 +63,45 @@ export interface EditProjectInitial {
     skillId: string | null
   }>
 }
+
+const STATUS_OPTIONS: Array<{
+  value: ProjectStatus
+  label: string
+  description: string
+}> = [
+  {
+    value: 'defining',
+    label: 'Being defined',
+    description:
+      'Still working out the plan. Not ready for contributors yet — people can follow along, but there’s nothing to do.',
+  },
+  {
+    value: 'needs_help',
+    label: 'Needs help',
+    description:
+      'You need more people. Pushes the project to the top of skill matches and the home page.',
+  },
+  {
+    value: 'in_progress',
+    label: 'In progress',
+    description:
+      'Work is happening and the team is mostly set. The normal state for most live projects.',
+  },
+  {
+    value: 'completed',
+    label: 'Completed',
+    description:
+      'The work is done. Moves to the “Finished” tab. You can reopen the project at any time.',
+  },
+]
+
+const TOC_SECTIONS: Array<{ id: string; label: string }> = [
+  { id: 'sec-status', label: 'Status' },
+  { id: 'sec-basics', label: 'Basics' },
+  { id: 'sec-cover', label: 'Cover' },
+  { id: 'sec-location', label: 'Location & access' },
+  { id: 'sec-steps', label: 'Steps' },
+]
 
 /* ================================================================
    Component
@@ -85,6 +126,8 @@ export function EditProjectForm({
   )
   const [remote, setRemote] = useState<'yes' | 'some' | 'no'>(initial.remote)
   const [joinPolicy, setJoinPolicy] = useState<'open' | 'approval_required'>(initial.joinPolicy)
+  const [status, setStatus] = useState<ProjectStatus>(initial.status)
+  const [activeSection, setActiveSection] = useState<string>(TOC_SECTIONS[0].id)
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(initial.coverImageUrl)
   const coverFileRef = useRef<HTMLInputElement>(null)
   const [pendingCover, startCoverTransition] = useTransition()
@@ -127,6 +170,7 @@ export function EditProjectForm({
         country,
         remote,
         joinPolicy,
+        status,
         steps: steps.map((s) => ({
           id: s.id.startsWith('tmp-') ? null : s.id,
           title: s.title,
@@ -229,9 +273,9 @@ export function EditProjectForm({
         </div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-8 p-4 sm:gap-10 sm:p-6 lg:p-10">
+      <div className="mx-auto w-full max-w-[1200px] p-4 sm:p-6 lg:p-10">
         {/* Editor header */}
-        <header>
+        <header className="mb-8 sm:mb-10">
           <span className="mb-2 inline-flex items-center gap-2 text-xs text-fg-tertiary">
             Modifying
             <span className="rounded-full border border-amber-500/40 bg-amber-500/[0.12] px-2.5 py-[3px] font-medium text-amber-500">
@@ -243,8 +287,81 @@ export function EditProjectForm({
           </h1>
         </header>
 
-        {/* The basics */}
-        <Card>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[180px_1fr] lg:gap-12">
+          {/* In-page nav */}
+          <SectionNav
+            sections={TOC_SECTIONS}
+            activeId={activeSection}
+            onActiveChange={setActiveSection}
+          />
+
+          {/* Sections column */}
+          <div className="flex min-w-0 flex-col gap-8 sm:gap-10">
+            {/* Status — the hero of the modify page */}
+            <Card id="sec-status">
+              <CardHead
+                eyebrow="Project status"
+                title="What's happening, in one word?"
+                desc={
+                  'This appears at the top of the project page, in listings, and in everyone’s dashboard. Set it honestly — "Needs help" gets more eyes than a passive "In progress" when you actually need hands.'
+                }
+              />
+              <div
+                role="radiogroup"
+                aria-label="Project status"
+                className="grid grid-cols-1 gap-3 sm:grid-cols-2"
+              >
+                {STATUS_OPTIONS.map((opt) => {
+                  const checked = status === opt.value
+                  return (
+                    <label
+                      key={opt.value}
+                      className={cn(
+                        'relative flex cursor-pointer items-start gap-4 rounded-xl border bg-bg-base p-5 transition-all',
+                        checked
+                          ? 'border-amber-500/60 bg-amber-500/[0.06] shadow-[0_0_0_3px_rgba(244,165,53,0.10)]'
+                          : 'border-neutral-700 hover:border-neutral-600',
+                      )}
+                    >
+                      <input
+                        type="radio"
+                        name="project-status"
+                        value={opt.value}
+                        checked={checked}
+                        onChange={() => setStatus(opt.value)}
+                        className="sr-only"
+                      />
+                      <span
+                        className={cn(
+                          'mt-1 flex size-[18px] shrink-0 items-center justify-center rounded-full border-[1.5px] transition-colors',
+                          checked
+                            ? 'border-amber-500'
+                            : 'border-neutral-600',
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            'size-2 rounded-full bg-amber-500 transition-transform',
+                            checked ? 'scale-100' : 'scale-0',
+                          )}
+                        />
+                      </span>
+                      <span className="flex min-w-0 flex-1 flex-col gap-1.5">
+                        <span className="flex items-center gap-2 text-base font-semibold text-fg-primary">
+                          <StatusPillPreview status={opt.value} label={opt.label} />
+                        </span>
+                        <span className="text-xs leading-relaxed text-fg-tertiary">
+                          {opt.description}
+                        </span>
+                      </span>
+                    </label>
+                  )
+                })}
+              </div>
+            </Card>
+
+            {/* The basics */}
+            <Card id="sec-basics">
           <CardHead
             eyebrow="The basics"
             title="What is it?"
@@ -279,7 +396,7 @@ export function EditProjectForm({
         </Card>
 
         {/* Cover image */}
-        <Card>
+        <Card id="sec-cover">
           <CardHead
             eyebrow="Cover image"
             title="A picture for your project."
@@ -342,7 +459,7 @@ export function EditProjectForm({
         </Card>
 
         {/* Where */}
-        <Card>
+        <Card id="sec-location">
           <CardHead
             eyebrow="Where it happens"
             title="Location & access."
@@ -448,7 +565,7 @@ export function EditProjectForm({
         </Card>
 
         {/* Steps */}
-        <Card>
+        <Card id="sec-steps">
           <CardHead
             eyebrow="The plan"
             title="Steps to make it real."
@@ -470,8 +587,8 @@ export function EditProjectForm({
           </div>
         </Card>
 
-        {/* Save bar */}
-        <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-bg-base from-25% to-transparent px-4 py-5 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10 lg:py-6">
+            {/* Save bar */}
+            <div className="sticky bottom-0 -mx-4 flex flex-wrap items-center justify-between gap-3 bg-gradient-to-t from-bg-base from-25% to-transparent px-4 py-5 sm:-mx-6 sm:px-6 lg:-mx-10 lg:px-10 lg:py-6">
           <div className="flex items-center gap-3 text-xs text-fg-tertiary">
             {error ? (
               <span className="text-red-300">{error}</span>
@@ -502,8 +619,146 @@ export function EditProjectForm({
               {!pendingSave && <ArrowRight className="size-3.5" strokeWidth={2.5} />}
             </button>
           </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+  )
+}
+
+/* ================================================================
+   Sub-components — TOC + status pill preview
+   ================================================================ */
+
+function SectionNav({
+  sections,
+  activeId,
+  onActiveChange,
+}: {
+  sections: Array<{ id: string; label: string }>
+  activeId: string
+  onActiveChange: (id: string) => void
+}) {
+  // Scroll-spy: when a section's top crosses ~120px from the viewport top,
+  // mark it as active so the nav follows the user's reading position.
+  useEffect(() => {
+    const sectionEls = sections
+      .map((s) => document.getElementById(s.id))
+      .filter((el): el is HTMLElement => !!el)
+    if (sectionEls.length === 0) return
+
+    const onScroll = () => {
+      const threshold = 140
+      let current = sectionEls[0].id
+      for (const el of sectionEls) {
+        const top = el.getBoundingClientRect().top
+        if (top <= threshold) current = el.id
+        else break
+      }
+      onActiveChange(current)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [sections, onActiveChange])
+
+  return (
+    <nav
+      aria-label="Sections"
+      className="-mx-2 flex flex-row gap-1 overflow-x-auto rounded-xl border border-white/[0.06] bg-bg-surface px-2 py-2 lg:sticky lg:top-6 lg:mx-0 lg:flex-col lg:gap-0.5 lg:overflow-visible lg:border-0 lg:bg-transparent lg:p-0"
+    >
+      <span className="hidden px-3 pb-2 text-[11px] font-semibold uppercase tracking-widest text-fg-tertiary lg:block">
+        On this page
+      </span>
+      {sections.map((s) => {
+        const active = activeId === s.id
+        return (
+          <a
+            key={s.id}
+            href={`#${s.id}`}
+            className={cn(
+              'shrink-0 whitespace-nowrap rounded-lg px-3 py-2 text-sm transition-colors lg:border-l-2 lg:border-transparent',
+              active
+                ? 'bg-bg-surface-2 text-amber-500 lg:bg-transparent lg:border-amber-500 lg:font-medium'
+                : 'text-fg-secondary hover:text-fg-primary',
+            )}
+          >
+            {s.label}
+          </a>
+        )
+      })}
+    </nav>
+  )
+}
+
+/**
+ * Inline preview pill — sits inside each radio option so the lead can see
+ * exactly how the chosen status will read on the project page.
+ */
+function StatusPillPreview({
+  status,
+  label,
+}: {
+  status: ProjectStatus
+  label: string
+}) {
+  const palette =
+    status === 'needs_help'
+      ? 'border-amber-500/55 bg-amber-500/[0.16] text-amber-400'
+      : status === 'in_progress'
+        ? 'border-green-500/40 bg-green-500/[0.14] text-green-300'
+        : status === 'defining'
+          ? 'border-blue-400/35 bg-blue-500/[0.10] text-blue-200'
+          : 'border-green-500/35 bg-green-500/[0.10] text-green-300'
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider',
+        palette,
+      )}
+    >
+      <PreviewGlyph status={status} />
+      {label}
+    </span>
+  )
+}
+
+function PreviewGlyph({ status }: { status: ProjectStatus }) {
+  if (status === 'needs_help') {
+    return (
+      <span className="inline-flex size-3 items-center justify-center rounded-full bg-amber-500 font-display text-[9px] font-bold leading-none text-amber-900">
+        !
+      </span>
+    )
+  }
+  if (status === 'in_progress') {
+    return (
+      <span className="relative inline-flex size-3 items-center justify-center rounded-full border-[1.5px] border-green-500">
+        <span className="size-1.5 rounded-full bg-green-300" />
+      </span>
+    )
+  }
+  if (status === 'defining') {
+    return (
+      <span className="relative size-3 rounded-full border-[1.5px] border-dashed border-blue-300">
+        <span className="absolute left-1/2 top-1/2 h-px w-1.5 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-blue-300" />
+      </span>
+    )
+  }
+  return (
+    <span className="inline-flex size-3 items-center justify-center rounded-full bg-green-500 text-blue-900">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="size-2"
+      >
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+    </span>
   )
 }

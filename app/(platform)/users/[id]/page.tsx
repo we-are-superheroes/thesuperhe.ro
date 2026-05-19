@@ -111,7 +111,7 @@ export default async function UserProfilePage({ params }: Params) {
       },
     }),
     db.projectStep.count({
-      where: { assignedToId: id, status: 'done' },
+      where: { assignedToId: id, status: 'completed' },
     }),
     db.blueprint.aggregate({
       where: { createdById: id },
@@ -126,7 +126,10 @@ export default async function UserProfilePage({ params }: Params) {
 
   // ─── Stats ────────────────────────────────────────────────
   const activeProjects = user.contributions.filter(
-    (c) => c.project.status === 'active' || c.project.status === 'draft',
+    (c) =>
+      c.project.status === 'defining' ||
+      c.project.status === 'needs_help' ||
+      c.project.status === 'in_progress',
   )
   const finishedProjects = user.contributions.filter(
     (c) => c.project.status === 'completed',
@@ -154,10 +157,10 @@ export default async function UserProfilePage({ params }: Params) {
   ): ProfileProject => {
     const p = c.project
     const totalSteps = p.steps.length
-    const doneSteps = p.steps.filter((s) => s.status === 'done').length
+    const doneSteps = p.steps.filter((s) => s.status === 'completed').length
     const progress = totalSteps > 0 ? Math.round((doneSteps / totalSteps) * 100) : 0
     const status: ProfileProject['status'] =
-      p.status === 'completed' ? 'finished' : p.status === 'archived' ? 'finished' : 'active'
+      p.status === 'completed' ? 'finished' : 'active'
     return {
       id: p.id,
       title: p.title,

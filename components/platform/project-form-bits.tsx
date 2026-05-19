@@ -49,9 +49,18 @@ export const REMOTE_OPTIONS: Array<{
    Card / CardHead / Field helpers
    ================================================================ */
 
-export function Card({ children }: { children: React.ReactNode }) {
+export function Card({
+  id,
+  children,
+}: {
+  id?: string
+  children: React.ReactNode
+}) {
   return (
-    <section className="rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6 lg:p-8">
+    <section
+      id={id}
+      className="scroll-mt-24 rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6 lg:p-8"
+    >
       {children}
     </section>
   )

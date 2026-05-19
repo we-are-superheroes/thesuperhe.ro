@@ -10,8 +10,7 @@ export default async function MyStepsPage() {
   const rows = await db.projectStep.findMany({
     where: {
       assignedToId: userId,
-      // Skip 'skipped' — keep only states the user might toggle
-      status: { in: ['needs_help', 'in_progress', 'not_started', 'done'] },
+      status: { in: ['needs_help', 'in_progress', 'defining', 'open', 'completed'] },
     },
     orderBy: [{ updatedAt: 'desc' }, { order: 'asc' }],
     select: {
@@ -31,7 +30,7 @@ export default async function MyStepsPage() {
     name: s.title,
     project: { id: s.project.id, title: s.project.title },
     skill: s.skills[0]?.skill.name ?? null,
-    status: s.status === 'done' ? 'closed' : 'open',
+    status: s.status === 'completed' ? 'closed' : 'open',
     addedAtMs: s.updatedAt.getTime(),
   }))
 
