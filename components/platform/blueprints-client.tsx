@@ -414,7 +414,12 @@ function FamilyCard({
               {family.projectTypeName}
             </span>
           )}
-          <h3 className="font-display text-2xl leading-tight">{family.title}</h3>
+          <Link
+            href={`/blueprints/${focused.id}`}
+            className="font-display text-2xl leading-tight transition-colors hover:text-amber-500"
+          >
+            {family.title}
+          </Link>
         </div>
         <span className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-fg-tertiary">
           {family.variants.length} variant{family.variants.length === 1 ? '' : 's'}
