@@ -2,6 +2,23 @@
 
 /* ============================================================
    THE SUPERHERO — Design System Tokens (Tailwind v4)
+
+   Theming model
+   -------------
+   Components consume *semantic* tokens (bg-bg-surface, text-fg-primary,
+   border-border-default, …). Under `@theme inline`, Tailwind copies a
+   token's *value* verbatim into the utility. By pointing each semantic
+   token at a runtime CSS variable (e.g. --color-bg-base: var(--bg-base)),
+   the generated utility becomes `background-color: var(--bg-base)`, which
+   resolves at runtime. A theme is therefore just a block that re-points
+   those runtime variables, scoped to a class on <html>:
+
+       :root            → Midnight (dark, default)
+       html.theme-daylight / .theme-paper / .theme-contrast → overrides
+
+   Because html.theme-x (0,1,1) beats :root (0,1,0), adding the class
+   flips the whole app with no per-component changes. The accent (amber)
+   and the structural white overlays are themed the same way.
    ============================================================ */
 
 @theme inline {
@@ -10,7 +27,7 @@
   --font-sans: var(--font-dm-sans), system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-jetbrains-mono), "Courier New", monospace;
 
-  /* --- Primary Blue Scale --- */
+  /* --- Primary Blue Scale (fixed palette) --- */
   --color-blue-950: #060D18;
   --color-blue-900: #0E1A2B;
   --color-blue-800: #152236;
@@ -22,18 +39,21 @@
   --color-blue-200: #B2D0F5;
   --color-blue-100: #E0ECFD;
 
-  /* --- Amber / Accent Scale --- */
+  /* --- Amber / Accent Scale ---
+     500 / 400 / 900 are the live accent touch-points, so they follow the
+     theme (accent · accent-hover · on-accent). The rest stay fixed so
+     decorative gradients/glows keep their range. */
   --color-amber-900: #2E1A00;
   --color-amber-800: #5C3600;
   --color-amber-700: #8A5200;
   --color-amber-600: #B86E00;
-  --color-amber-500: #F4A535;
-  --color-amber-400: #F7BD64;
+  --color-amber-500: var(--brand-accent);
+  --color-amber-400: var(--brand-accent-hover);
   --color-amber-300: #FAD08F;
   --color-amber-200: #FCE4BB;
   --color-amber-100: #FEF4E2;
 
-  /* --- Neutral Blue-Gray Scale --- */
+  /* --- Neutral Blue-Gray Scale (fixed palette) --- */
   --color-neutral-950: #080C12;
   --color-neutral-900: #111825;
   --color-neutral-800: #1C2739;
@@ -46,13 +66,13 @@
   --color-neutral-100: #EBF1F7;
   --color-neutral-50: #F5F8FB;
 
-  /* --- Green / Success --- */
+  /* --- Green / Success (fixed) --- */
   --color-green-700: #1A5C40;
   --color-green-500: #3DAF7C;
   --color-green-300: #7DD3B0;
   --color-green-100: #D4F3E8;
 
-  /* --- Red / Error --- */
+  /* --- Red / Error (fixed) --- */
   --color-red-700: #7A1A1A;
   --color-red-500: #E05252;
   --color-red-300: #F09898;
@@ -66,14 +86,14 @@
   --radius-2xl: 12px;
   --radius-pill: 999px;
 
-  /* --- Shadows (blue-tinted) --- */
-  --shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.25);
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 24px rgba(0, 0, 0, 0.35);
-  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.45);
-  --shadow-xl: 0 16px 64px rgba(0, 0, 0, 0.55);
-  --shadow-glow-blue: 0 0 24px rgba(46, 95, 170, 0.4);
-  --shadow-glow-amber: 0 0 24px rgba(244, 165, 53, 0.35);
+  /* --- Shadows (theme-aware → runtime vars) --- */
+  --shadow-xs: var(--sh-xs);
+  --shadow-sm: var(--sh-sm);
+  --shadow-md: var(--sh-md);
+  --shadow-lg: var(--sh-lg);
+  --shadow-xl: var(--sh-xl);
+  --shadow-glow-blue: var(--sh-glow-blue);
+  --shadow-glow-amber: var(--sh-glow-amber);
 
   /* --- Animation --- */
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
@@ -81,31 +101,314 @@
   --duration-standard: 250ms;
   --duration-slow: 400ms;
 
-  /* --- Semantic Colors (CSS vars referenced via arbitrary values) --- */
-  --color-bg-base: #0E1A2B;
-  --color-bg-surface: #152236;
-  --color-bg-surface-2: #1E3148;
-  --color-bg-surface-3: #1B3A6B;
-  --color-fg-primary: #EBF1F7;
-  --color-fg-secondary: #A8BCCE;
-  --color-fg-tertiary: #8097B5;
-  --color-fg-muted: #5A7090;
-  --color-fg-faint: #3D5170;
-  --color-brand-primary: #2E5FAA;
-  --color-brand-accent: #F4A535;
+  /* --- Semantic Colors (theme-aware → runtime vars) --- */
+  --color-bg-base: var(--bg-base);
+  --color-bg-surface: var(--bg-surface);
+  --color-bg-surface-2: var(--bg-surface-2);
+  --color-bg-surface-3: var(--bg-surface-3);
+  --color-bg-input: var(--bg-input);
+  --color-bg-glass: var(--bg-glass);
+  --color-bg-overlay: var(--bg-overlay);
+
+  --color-fg-primary: var(--fg-primary);
+  --color-fg-secondary: var(--fg-secondary);
+  --color-fg-tertiary: var(--fg-tertiary);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-faint: var(--fg-faint);
+  --color-fg-on-accent: var(--fg-on-accent);
+
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-hover: var(--brand-accent-hover);
+
+  /* Theme-aware structural tokens */
+  --color-border-subtle: var(--border-subtle);
+  --color-border-default: var(--border-default);
+  --color-border-strong: var(--border-strong);
+  --color-hover-overlay: var(--hover-overlay);
+  --color-hover-overlay-strong: var(--hover-overlay-strong);
+  --color-accent-soft: var(--accent-soft);
+  --color-scrim-strong: var(--scrim-strong);
+}
+
+/* ============================================================
+   RUNTIME SEMANTIC VARIABLES — Midnight (dark, default)
+   ============================================================ */
+:root {
+  /* Backgrounds */
+  --bg-base: #0E1A2B;
+  --bg-surface: #152236;
+  --bg-surface-2: #1E3148;
+  --bg-surface-3: #1B3A6B;
+  --bg-input: #152236;
+  --bg-overlay: rgba(14, 26, 43, 0.85);
+  --bg-glass: rgba(14, 26, 43, 0.78);
+
+  /* Foreground */
+  --fg-primary: #EBF1F7;
+  --fg-secondary: #A8BCCE;
+  --fg-tertiary: #8097B5;
+  --fg-muted: #5A7090;
+  --fg-faint: #3D5170;
+  --fg-on-accent: #2E1A00;
+
+  /* Brand */
+  --brand-primary: #2E5FAA;
+  --brand-accent: #F4A535;
+  --brand-accent-hover: #F7BD64;
+
+  /* Borders + interaction overlays */
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-default: rgba(255, 255, 255, 0.13);
+  --border-strong: rgba(255, 255, 255, 0.25);
+  --hover-overlay: rgba(255, 255, 255, 0.04);
+  --hover-overlay-strong: rgba(255, 255, 255, 0.07);
+  --accent-soft: rgba(244, 165, 53, 0.18);
+  --focus-ring: rgba(244, 165, 53, 0.18);
+  --scrim-strong: rgba(14, 26, 43, 0.85); /* pills on imagery — stays dark */
+
+  /* Shadows (blue-tinted, dark) */
+  --sh-xs: 0 1px 3px rgba(0, 0, 0, 0.25);
+  --sh-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --sh-md: 0 4px 24px rgba(0, 0, 0, 0.35);
+  --sh-lg: 0 8px 40px rgba(0, 0, 0, 0.45);
+  --sh-xl: 0 16px 64px rgba(0, 0, 0, 0.55);
+  --sh-glow-blue: 0 0 24px rgba(46, 95, 170, 0.4);
+  --sh-glow-amber: 0 0 24px rgba(244, 165, 53, 0.35);
+}
+
+/* ============================================================
+   DAYLIGHT — cool & crisp
+   ============================================================ */
+html.theme-daylight {
+  --bg-base: #F4F7FB;
+  --bg-surface: #FFFFFF;
+  --bg-surface-2: #ECF1F8;
+  --bg-surface-3: #DCE5F1;
+  --bg-input: #FFFFFF;
+  --bg-overlay: rgba(18, 32, 54, 0.45);
+  --bg-glass: rgba(255, 255, 255, 0.72);
+
+  --fg-primary: #14233B;
+  --fg-secondary: #465875;
+  --fg-tertiary: #74859E;
+  --fg-muted: #8696AE;
+  --fg-faint: #A6B3C6;
+  --fg-on-accent: #2E1A00;
+
+  --brand-accent: #BE7400;
+  --brand-accent-hover: #9A5D00;
+
+  --border-subtle: rgba(18, 40, 72, 0.08);
+  --border-default: rgba(18, 40, 72, 0.14);
+  --border-strong: rgba(18, 40, 72, 0.26);
+  --hover-overlay: rgba(18, 40, 72, 0.045);
+  --hover-overlay-strong: rgba(18, 40, 72, 0.08);
+  --accent-soft: rgba(190, 116, 0, 0.12);
+  --focus-ring: rgba(190, 116, 0, 0.20);
+
+  --sh-xs: 0 1px 2px rgba(18, 40, 72, 0.06);
+  --sh-sm: 0 2px 8px rgba(18, 40, 72, 0.08);
+  --sh-md: 0 6px 22px rgba(18, 40, 72, 0.10);
+  --sh-lg: 0 14px 40px rgba(18, 40, 72, 0.12);
+  --sh-xl: 0 24px 64px rgba(18, 40, 72, 0.16);
+  --sh-glow-amber: 0 2px 12px rgba(190, 116, 0, 0.22);
+  --sh-glow-blue: 0 2px 12px rgba(46, 95, 170, 0.18);
+
+  /* Ink base for the white-overlay utilities (white/[x] borders & hovers) */
+  --color-white: #122848;
+}
+
+/* ============================================================
+   PAPER — warm ivory
+   ============================================================ */
+html.theme-paper {
+  --bg-base: #F6F1E8;
+  --bg-surface: #FFFDF8;
+  --bg-surface-2: #F0E9DB;
+  --bg-surface-3: #E7DCC7;
+  --bg-input: #FFFDF8;
+  --bg-overlay: rgba(46, 32, 14, 0.45);
+  --bg-glass: rgba(255, 253, 248, 0.74);
+
+  --fg-primary: #2C2317;
+  --fg-secondary: #6A5C48;
+  --fg-tertiary: #9C8E78;
+  --fg-muted: #AB9D85;
+  --fg-faint: #C3B9A4;
+  --fg-on-accent: #2E1A00;
+
+  --brand-accent: #C2740A;
+  --brand-accent-hover: #A45F00;
+
+  --border-subtle: rgba(74, 52, 16, 0.08);
+  --border-default: rgba(74, 52, 16, 0.15);
+  --border-strong: rgba(74, 52, 16, 0.26);
+  --hover-overlay: rgba(74, 52, 16, 0.05);
+  --hover-overlay-strong: rgba(74, 52, 16, 0.09);
+  --accent-soft: rgba(194, 116, 10, 0.14);
+  --focus-ring: rgba(194, 116, 10, 0.22);
+
+  --sh-xs: 0 1px 2px rgba(74, 52, 16, 0.07);
+  --sh-sm: 0 2px 8px rgba(74, 52, 16, 0.09);
+  --sh-md: 0 6px 22px rgba(74, 52, 16, 0.11);
+  --sh-lg: 0 14px 40px rgba(74, 52, 16, 0.13);
+  --sh-xl: 0 24px 64px rgba(74, 52, 16, 0.17);
+  --sh-glow-amber: 0 3px 14px rgba(194, 116, 10, 0.26);
+  --sh-glow-blue: 0 2px 12px rgba(46, 95, 170, 0.16);
+
+  --color-white: #4A3410;
+}
+
+/* ============================================================
+   HIGH CONTRAST — WCAG-AAA, for low vision
+   Near-black text on white, visible borders carry structure,
+   a dark accent that clears 7:1; strong focus outlines below.
+   ============================================================ */
+html.theme-contrast {
+  --bg-base: #FFFFFF;
+  --bg-surface: #FFFFFF;
+  --bg-surface-2: #F2F2F2;
+  --bg-surface-3: #E4E4E4;
+  --bg-input: #FFFFFF;
+  --bg-overlay: rgba(0, 0, 0, 0.62);
+  --bg-glass: rgba(255, 255, 255, 0.94);
+
+  --fg-primary: #000000; /* 21:1 */
+  --fg-secondary: #1A1A1A; /* 16.8:1 */
+  --fg-tertiary: #333333; /* 12.6:1 */
+  --fg-muted: #4A4A4A;
+  --fg-faint: #595959;
+  --fg-on-accent: #FFFFFF; /* white on --brand-accent → 7.6:1 */
+
+  --brand-accent: #6B3F00; /* 7.6:1 as text/fill on white */
+  --brand-accent-hover: #4D2D00;
+
+  --border-subtle: #767676; /* 3.0:1 — meets 1.4.11 non-text */
+  --border-default: #4A4A4A; /* 7.0:1 */
+  --border-strong: #000000;
+  --hover-overlay: rgba(0, 0, 0, 0.08);
+  --hover-overlay-strong: rgba(0, 0, 0, 0.14);
+  --accent-soft: rgba(107, 63, 0, 0.14);
+  --focus-ring: rgba(107, 63, 0, 0.40);
+
+  --sh-xs: 0 0 0 1px rgba(0, 0, 0, 0.10);
+  --sh-sm: 0 1px 4px rgba(0, 0, 0, 0.16);
+  --sh-md: 0 3px 12px rgba(0, 0, 0, 0.20);
+  --sh-lg: 0 8px 28px rgba(0, 0, 0, 0.24);
+  --sh-xl: 0 16px 48px rgba(0, 0, 0, 0.30);
+  --sh-glow-amber: 0 2px 6px rgba(0, 0, 0, 0.28);
+  --sh-glow-blue: 0 2px 6px rgba(0, 0, 0, 0.24);
+
+  --color-white: #000000;
+}
+
+/* ============================================================
+   LIGHT-THEME STRUCTURAL + LEGIBILITY OVERRIDES
+   The app expresses borders as white/[opacity] and form controls as
+   neutral-700/600. On light surfaces those need re-pointing at the
+   themed border tokens, and a few pale dark-mode text colours need
+   darkening so they don't wash out.
+   ============================================================ */
+html:is(.theme-daylight, .theme-paper, .theme-contrast) :is(
+  .border-white\/\[0\.08\],
+  .border-white\/\[0\.07\],
+  .border-white\/\[0\.06\],
+  .border-white\/\[0\.05\],
+  .border-white\/\[0\.04\],
+  .border-white\/\[0\.025\]
+) {
+  border-color: var(--border-subtle);
+}
+html:is(.theme-daylight, .theme-paper, .theme-contrast) :is(
+  .border-white\/\[0\.13\],
+  .border-white\/\[0\.12\],
+  .border-white\/\[0\.15\]
+) {
+  border-color: var(--border-default);
+}
+html:is(.theme-daylight, .theme-paper, .theme-contrast) .border-neutral-700 {
+  border-color: var(--border-default);
+}
+html:is(.theme-daylight, .theme-paper, .theme-contrast) .border-neutral-600 {
+  border-color: var(--border-strong);
+}
+
+/* Pale dark-mode text → readable on light surfaces */
+html:is(.theme-daylight, .theme-paper, .theme-contrast) .text-blue-300 { color: #2E5FAA; }
+html:is(.theme-daylight, .theme-paper, .theme-contrast) .text-blue-200 { color: #1B3A6B; }
+html:is(.theme-daylight, .theme-paper, .theme-contrast) .text-green-300 { color: #1A7A52; }
+html:is(.theme-daylight, .theme-paper, .theme-contrast) .text-red-300 { color: #C0322B; }
+html:is(.theme-daylight, .theme-paper, .theme-contrast) .text-amber-300 { color: var(--brand-accent); }
+
+/* ============================================================
+   HIGH-CONTRAST hardening (push to AAA)
+   ============================================================ */
+/* Shared light blues only clear AA — drop to navy (~9:1). */
+html.theme-contrast .text-blue-300,
+html.theme-contrast .text-blue-200 { color: #0E2E63; }
+html.theme-contrast .text-green-300 { color: #0F5C3C; }
+html.theme-contrast .text-red-300 { color: #8A1A1A; }
+
+/* On-accent text/glyphs must be white on the dark-brown accent fill — only
+   the contrast theme makes the accent dark enough to need this. Covers solid
+   fills (bg-amber-500/400) and gradient fills (from-amber-500/400), and both
+   the button-text token (amber-900) and the logo glyph token (blue-900),
+   whether the text is on the same element or a descendant. */
+html.theme-contrast
+  :is(.bg-amber-500, .bg-amber-400, .from-amber-500, .from-amber-400):is(
+    .text-amber-900,
+    .text-blue-900
+  ),
+html.theme-contrast
+  :is(.bg-amber-500, .bg-amber-400, .from-amber-500, .from-amber-400)
+  :is(.text-amber-900, .text-blue-900) {
+  color: #FFFFFF;
+}
+
+/* Always-visible focus indicator (WCAG 2.4.7 / 2.4.11) */
+html.theme-contrast
+  :is(a, button, input, select, textarea, [tabindex], [role="switch"], [role="button"]):focus-visible {
+  outline: 3px solid #000000;
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* ============================================================
+   CONTENT ON IMAGERY
+   Pills + hero text that sit on cover photos / dark scrims must stay
+   light in every theme (the scrim is a fixed dark blue, so themed
+   foreground tokens would otherwise go dark-on-dark). Re-pin the
+   relevant runtime tokens to their dark-theme values for that subtree:
+     · `.on-imagery` — explicit marker (project hero overlay)
+     · the dark cover-chip class — automatic, no component edits needed
+   ============================================================ */
+.on-imagery,
+html:is(.theme-daylight, .theme-paper, .theme-contrast)
+  :is(.bg-blue-900\/85, .bg-blue-900\/\[0\.85\]) {
+  --fg-primary: #EBF1F7;
+  --fg-secondary: #A8BCCE;
+  --fg-tertiary: #8097B5;
+  --fg-on-accent: #2E1A00;
+  --brand-accent: #F4A535;
+  --brand-accent-hover: #F7BD64;
+  --accent-soft: rgba(244, 165, 53, 0.18);
+  --border-subtle: rgba(255, 255, 255, 0.07);
+  --border-default: rgba(255, 255, 255, 0.13);
+  --border-strong: rgba(255, 255, 255, 0.25);
+  --color-white: #FFFFFF;
 }
 
 /* ============================================================
    BASE STYLES
    ============================================================ */
-
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--color-bg-base);
-  color: var(--color-fg-primary);
+  background-color: var(--bg-base);
+  color: var(--fg-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -122,16 +425,16 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-neutral-700);
+  background: var(--border-strong);
   border-radius: 999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-neutral-600);
+  background: var(--fg-tertiary);
 }
 
-/* Focus ring */
+/* Default focus ring (overridden, harder, in the contrast theme above) */
 :focus-visible {
-  outline: 2px solid var(--color-brand-accent);
+  outline: 2px solid var(--brand-accent);
   outline-offset: 2px;
 }

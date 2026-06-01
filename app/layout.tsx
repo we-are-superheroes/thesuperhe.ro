@@ -35,6 +35,13 @@ export const viewport: Viewport = {
   themeColor: '#0E1A2B',
 }
 
+/**
+ * Flash-free theme init. Runs synchronously before the first paint so the
+ * stored preference is applied to <html> with no dark→light flash. Kept in
+ * sync with the picker + the `superhero-theme` localStorage key.
+ */
+const THEME_INIT = `(function(){try{var t=localStorage.getItem('superhero-theme');if(t&&t!=='dark'){document.documentElement.classList.add('theme-'+t);}}catch(e){}})();`
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -55,8 +62,12 @@ export default function RootLayout({
     >
       <html
         lang="en"
+        suppressHydrationWarning
         className={`${dmSans.variable} ${dmSerifDisplay.variable} ${jetbrainsMono.variable} h-full antialiased`}
       >
+        <head>
+          <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
+        </head>
         <body className="min-h-full font-sans">{children}</body>
       </html>
     </ClerkProvider>

@@ -9,6 +9,7 @@ import {
   clearAvatarAction,
   uploadAvatarAction,
 } from '@/app/(platform)/profile/actions'
+import { ThemePicker } from '@/components/platform/theme-picker'
 import type { Proficiency } from '@/types'
 
 /* ================================================================
@@ -311,6 +312,7 @@ export function ProfileEditForm({
           <TocLink href="#sec-identity">About you</TocLink>
           <TocLink href="#sec-skills">Skills</TocLink>
           <TocLink href="#sec-where">Where & when</TocLink>
+          <TocLink href="#sec-appearance">Appearance</TocLink>
         </nav>
 
         {/* Sections */}
@@ -597,6 +599,16 @@ export function ProfileEditForm({
                 </Field>
               </div>
             </div>
+          </Card>
+
+          {/* Appearance — device preference, independent of Save */}
+          <Card id="sec-appearance">
+            <CardHead
+              eyebrow="Appearance"
+              title="Theme."
+              desc="Choose how The Superhero looks for you. Your choice is saved to this browser and applies across every page — it isn't tied to the Save button."
+            />
+            <ThemePicker />
           </Card>
         </div>
 

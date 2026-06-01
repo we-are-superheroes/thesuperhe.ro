@@ -389,7 +389,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
             />
           )}
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent from-30% to-blue-900/[0.92]" />
-          <div className="relative z-[1] mx-auto flex w-full max-w-[1240px] flex-col gap-3 px-4 pb-6 pt-10 sm:px-10 sm:pb-8 sm:pt-12">
+          <div className="on-imagery relative z-[1] mx-auto flex w-full max-w-[1240px] flex-col gap-3 px-4 pb-6 pt-10 sm:px-10 sm:pb-8 sm:pt-12">
             <div className="flex flex-wrap items-center gap-3">
               {project.projectType?.name && (
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/[0.16] px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-amber-400 backdrop-blur-sm">
