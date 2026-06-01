@@ -85,6 +85,10 @@ model User {
   id         String   @id @default(uuid())
   email      String   @unique
   name       String
+  // Platform-level role. Source of truth for admin powers (delete any
+  // project/blueprint). Set out-of-band (migration / DB), never from a
+  // client request, and never touched by the Clerk webhook sync.
+  role       UserRole @default(member)
   avatarUrl  String?  @map("avatar_url")
   bio        String?
   location   String?

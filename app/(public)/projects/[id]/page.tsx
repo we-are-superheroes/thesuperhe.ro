@@ -7,6 +7,8 @@ import { ChevronRight, Share2, Bookmark, MapPin, Globe, Calendar, FolderOpen, Cl
 import { googleMapsUrl } from '@/lib/location'
 import { ProjectStepsList, type StepCardData } from '@/components/platform/project-steps-list'
 import { JoinProjectTopButton, JoinProjectCard } from '@/components/platform/join-project-controls'
+import { AdminDeleteButton } from '@/components/platform/admin-delete-button'
+import { isCurrentUserAdmin } from '@/lib/auth'
 
 /* ================================================================
    PROJECT VIEW — server component
@@ -195,6 +197,10 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       }))
     : false
 
+  // Platform admins can delete any project. The button is gated here, but the
+  // delete is authorised again server-side in the action.
+  const isAdmin = await isCurrentUserAdmin()
+
   const totalSteps = project.steps.length
   const stepsByStatus = {
     needs_help: project.steps.filter((s) => s.status === 'needs_help').length,
@@ -362,6 +368,15 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               <span className="hidden sm:inline">Modify project</span>
               <span className="sm:hidden">Modify</span>
             </Link>
+          )}
+          {isAdmin && (
+            <AdminDeleteButton
+              kind="project"
+              id={id}
+              name={project.title}
+              redirectTo="/projects"
+              variant="icon"
+            />
           )}
           <JoinProjectTopButton
             projectId={id}

@@ -15,6 +15,8 @@ import {
   Zap,
 } from 'lucide-react'
 import { db } from '@/lib/db'
+import { isCurrentUserAdmin } from '@/lib/auth'
+import { AdminDeleteButton } from '@/components/platform/admin-delete-button'
 import {
   countryFlag,
   countryLabel,
@@ -99,6 +101,8 @@ export default async function BlueprintViewPage({ params }: PageParams) {
   if (!blueprint) notFound()
 
   const isCreator = !!userId && userId === blueprint.createdById
+  // Platform admins can delete any blueprint (authorised again server-side).
+  const isAdmin = await isCurrentUserAdmin()
   const totalEstimatedHrs = blueprint.steps.reduce(
     (n, s) => n + (s.estimatedHrs ?? 0),
     0,
@@ -240,6 +244,15 @@ export default async function BlueprintViewPage({ params }: PageParams) {
               <Pencil className="size-3.5" strokeWidth={2.5} />
               Modify blueprint
             </Link>
+          )}
+          {isAdmin && (
+            <AdminDeleteButton
+              kind="blueprint"
+              id={blueprint.id}
+              name={blueprint.title}
+              redirectTo="/blueprints"
+              variant="button"
+            />
           )}
         </div>
       </header>
