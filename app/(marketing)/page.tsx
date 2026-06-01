@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { Logo } from '@/components/ui/logo'
@@ -79,7 +80,12 @@ const COLLAGE_GRADIENTS = [
 
 /* ── Page component ─────────────────────────────────────────────── */
 
-export default async function MarketingHomePage() {
+/**
+ * The marketing home content. Auth-aware (nav + CTAs change when signed
+ * in). Shared by `/` (for signed-out visitors) and `/home` (reachable by
+ * anyone, including signed-in users who want the landing page).
+ */
+export async function MarketingHome() {
   const [{ userId }, projects] = await Promise.all([
     auth(),
     getRecentProjects(),
@@ -98,6 +104,16 @@ export default async function MarketingHomePage() {
       <Footer />
     </div>
   )
+}
+
+/**
+ * `/` route. Signed-in users land on their dashboard; everyone else gets
+ * the marketing home. The home page itself stays reachable at `/home`.
+ */
+export default async function MarketingHomePage() {
+  const { userId } = await auth()
+  if (userId) redirect('/dashboard')
+  return <MarketingHome />
 }
 
 /* ── Types ─────────────────────────────────────────────────────── */
