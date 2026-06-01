@@ -1,0 +1,49 @@
+name: DB migrations
+
+# Apply pending Prisma migrations to the right database when code lands:
+#   push to main    → production database  (PROD_DATABASE_URL)
+#   push to staging → staging database     (STAGING_DATABASE_URL)
+#
+# Uses the repo's idempotent runner (prisma/apply-pending-migrations.ts), which
+# only applies migrations not yet recorded in _prisma_migrations and baselines
+# the _init migration on a fresh DB. Runs in parallel with the Vercel deploy —
+# see DEPLOYMENT.md "Migration / deploy ordering" for the caveat.
+#
+# Required GitHub repo secrets:
+#   PROD_DATABASE_URL     pooled (port 6543) connection string for prod Supabase
+#   STAGING_DATABASE_URL  pooled (port 6543) connection string for staging Supabase
+
+on:
+  push:
+    branches: [main, staging]
+
+# One migration run per branch at a time — never two writers racing the same DB.
+concurrency:
+  group: db-migrate-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # The runner imports @prisma/client, so the client must be generated first.
+      - run: npx prisma generate
+
+      - name: Apply pending migrations
+        env:
+          DATABASE_URL: ${{ github.ref == 'refs/heads/main' && secrets.PROD_DATABASE_URL || secrets.STAGING_DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::warning::No database secret set for ${{ github.ref_name }} (PROD_DATABASE_URL / STAGING_DATABASE_URL). Skipping migrations until secrets are configured — see DEPLOYMENT.md."
+            exit 0
+          fi
+          npx tsx prisma/apply-pending-migrations.ts
