@@ -5,86 +5,83 @@ import {
   type SkillOption,
 } from '@/components/platform/create-project-form'
 
-export default async function CreateProjectPage() {
-  const [blueprints, skills] = await Promise.all([
-    db.blueprint.findMany({
-      orderBy: [{ reuseCount: 'desc' }, { createdAt: 'desc' }],
-      select: {
-        id: true,
-        title: true,
-        description: true,
-        reuseCount: true,
-        projectTypeId: true,
-        country: true,
-        language: true,
-        projectType: { select: { id: true, name: true } },
-        steps: {
-          orderBy: { order: 'asc' },
+/* ================================================================
+   /projects/new — the create-project editor.
+
+   Entry points:
+     · plain            → the chooser (scratch · Browse blueprints).
+     · ?blueprint=<id>  → straight to the editor, pre-filled from that
+                          blueprint ("Use blueprint").
+     · &variant=1       → same, but the blueprint-save split button
+                          defaults to "Save as blueprint variant"
+                          ("Create variant").
+
+   A saved variant must hang off a family *root* (one level deep). If
+   the source blueprint is itself a variant, we parent the new variant
+   under its root so it lands as a sibling.
+   ================================================================ */
+
+interface SearchParams {
+  searchParams: Promise<{ blueprint?: string; variant?: string }>
+}
+
+export default async function CreateProjectPage({ searchParams }: SearchParams) {
+  const params = await searchParams
+  const blueprintId = params.blueprint?.trim() || null
+  const variantIntent = params.variant === '1'
+
+  const [source, skills] = await Promise.all([
+    blueprintId
+      ? db.blueprint.findUnique({
+          where: { id: blueprintId },
           select: {
+            id: true,
             title: true,
             description: true,
-            order: true,
-            estimatedHrs: true,
-            skills: { select: { skill: { select: { id: true, name: true } } } },
+            projectTypeId: true,
+            country: true,
+            language: true,
+            parentBlueprintId: true,
+            steps: {
+              orderBy: { order: 'asc' },
+              select: {
+                title: true,
+                description: true,
+                estimatedHrs: true,
+                skills: { select: { skill: { select: { id: true } } } },
+              },
+            },
           },
-        },
-      },
-    }),
+        })
+      : Promise.resolve(null),
     db.skill.findMany({
       orderBy: [{ category: 'asc' }, { name: 'asc' }],
       select: { id: true, name: true, category: true },
     }),
   ])
 
-  // Pretty emoji per project type for the blueprint thumbnail
-  const TYPE_EMOJI: Record<string, string> = {
-    'Community Energy': '☀️',
-    'Urban Rewilding': '🌳',
-    'Repair & Reuse': '🛠',
-    'Policy Advocacy': '📜',
-    'Food & Agriculture': '🥕',
-    'Transport & Mobility': '🚲',
-    'Water & Conservation': '💧',
-    'Education & Awareness': '📚',
-    Biodiversity: '🦋',
-    'Waste Reduction': '♻️',
-    'Climate Finance': '💚',
-    'Research & Data': '🔬',
-    'Built Environment': '🏗️',
-    'Ocean & Marine': '🌊',
-  }
-  const TYPE_COLOR: Record<string, string> = {
-    'Community Energy': '#F4A535',
-    'Urban Rewilding': '#3DAF7C',
-    'Repair & Reuse': '#F7BD64',
-    'Policy Advocacy': '#B2D0F5',
-    'Food & Agriculture': '#7DD3B0',
-    'Transport & Mobility': '#FAD08F',
-    'Water & Conservation': '#7AAEE8',
-    'Education & Awareness': '#F4A535',
-    Biodiversity: '#3DAF7C',
-    'Waste Reduction': '#F7BD64',
-  }
+  const sourceBlueprint: BlueprintOption | null = source
+    ? {
+        id: source.id,
+        title: source.title,
+        description: source.description,
+        projectTypeId: source.projectTypeId,
+        country: source.country,
+        language: source.language,
+        steps: source.steps.map((s) => ({
+          title: s.title,
+          description: s.description ?? '',
+          skillIds: s.skills.map((ss) => ss.skill.id),
+          estimatedHrs: s.estimatedHrs,
+        })),
+      }
+    : null
 
-  const blueprintOptions: BlueprintOption[] = blueprints.map((bp) => ({
-    id: bp.id,
-    title: bp.title,
-    description: bp.description,
-    reuseCount: bp.reuseCount,
-    stepCount: bp.steps.length,
-    projectTypeId: bp.projectTypeId,
-    projectTypeName: bp.projectType?.name ?? null,
-    country: bp.country,
-    language: bp.language,
-    emoji: (bp.projectType?.name && TYPE_EMOJI[bp.projectType.name]) ?? '✨',
-    color: (bp.projectType?.name && TYPE_COLOR[bp.projectType.name]) ?? '#F4A535',
-    steps: bp.steps.map((s) => ({
-      title: s.title,
-      description: s.description ?? '',
-      skillIds: s.skills.map((ss) => ss.skill.id),
-      estimatedHrs: s.estimatedHrs,
-    })),
-  }))
+  // The root the new variant parents under: the source's parent if it's
+  // already a variant, otherwise the source itself.
+  const variantParentId = source
+    ? (source.parentBlueprintId ?? source.id)
+    : null
 
   const skillOptions: SkillOption[] = skills.map((s) => ({
     id: s.id,
@@ -92,5 +89,12 @@ export default async function CreateProjectPage() {
     category: s.category,
   }))
 
-  return <CreateProjectForm blueprints={blueprintOptions} skills={skillOptions} />
+  return (
+    <CreateProjectForm
+      sourceBlueprint={sourceBlueprint}
+      variantIntent={variantIntent}
+      variantParentId={variantParentId}
+      skills={skillOptions}
+    />
+  )
 }

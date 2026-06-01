@@ -1,10 +1,9 @@
 'use client'
 
-import { useState, useTransition, useMemo, useRef, useEffect } from 'react'
+import { useState, useTransition, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import {
-  Search,
   Plus,
   ArrowRight,
   FileText,
@@ -36,14 +35,9 @@ export interface BlueprintOption {
   id: string
   title: string
   description: string
-  reuseCount: number
-  stepCount: number
   projectTypeId: string | null
-  projectTypeName: string | null
   country: string | null
   language: string | null
-  emoji: string
-  color: string
   steps: Array<{
     title: string
     description: string
@@ -99,52 +93,76 @@ function blankSteps(): FormStep[] {
   ]
 }
 
+function stepsFromBlueprint(bp: BlueprintOption | null): FormStep[] {
+  if (!bp || bp.steps.length === 0) return blankSteps()
+  return bp.steps.map((s, i) => ({
+    id: `s-${Date.now()}-${i}`,
+    title: s.title,
+    description: s.description,
+    skillIds: s.skillIds,
+    estimatedHrs: s.estimatedHrs,
+  }))
+}
+
 /* ================================================================
    Component
    ================================================================ */
 
 export function CreateProjectForm({
-  blueprints,
+  sourceBlueprint,
+  variantIntent,
+  variantParentId,
   skills,
 }: {
-  blueprints: BlueprintOption[]
+  /** The blueprint the editor was opened from (via ?blueprint=), or null. */
+  sourceBlueprint: BlueprintOption | null
+  /** True when arriving via "Create variant" — defaults the blueprint-save
+   *  split button to "Save as blueprint variant". */
+  variantIntent: boolean
+  /** Family root to parent a saved variant under (resolved server-side). */
+  variantParentId: string | null
   skills: SkillOption[]
 }) {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const initialBlueprintId = searchParams.get('blueprint')
-  const [phase, setPhase] = useState<'choose' | 'edit'>('choose')
+
+  // When deep-linked from a blueprint (?blueprint=<id>), seed the editor from
+  // it on first render — no mount effect, no flash of the chooser.
+  const [phase, setPhase] = useState<'choose' | 'edit'>(
+    sourceBlueprint ? 'edit' : 'choose',
+  )
   const [origin, setOrigin] = useState<
     { kind: 'scratch' } | { kind: 'blueprint'; blueprint: BlueprintOption } | null
-  >(null)
-  const [showBlueprints, setShowBlueprints] = useState(false)
-  const [bpFilter, setBpFilter] = useState('')
+  >(sourceBlueprint ? { kind: 'blueprint', blueprint: sourceBlueprint } : null)
 
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
+  const [title, setTitle] = useState(
+    sourceBlueprint ? `${sourceBlueprint.title} — your area` : '',
+  )
+  const [description, setDescription] = useState(sourceBlueprint?.description ?? '')
   const [city, setCity] = useState('')
   const [country, setCountry] = useState(COUNTRIES[0])
   const [address, setAddress] = useState('')
   const [coordinates, setCoordinates] = useState('')
-  const [countryCode, setCountryCode] = useState<string | null>(null)
-  const [languageCode, setLanguageCode] = useState<string | null>(null)
-  const [remote, setRemote] = useState<'yes' | 'some' | 'no'>('yes')
+  // Inherit the blueprint's locale so a forked project / variant lands in the
+  // same filter buckets by default; the user can override before saving.
+  const [countryCode, setCountryCode] = useState<string | null>(
+    sourceBlueprint?.country ?? null,
+  )
+  const [languageCode, setLanguageCode] = useState<string | null>(
+    sourceBlueprint?.language ?? null,
+  )
+  const [remote, setRemote] = useState<'yes' | 'some' | 'no'>(
+    sourceBlueprint ? 'some' : 'yes',
+  )
   const [joinPolicy, setJoinPolicy] = useState<'open' | 'approval_required'>('open')
-  const [projectTypeId, setProjectTypeId] = useState<string | null>(null)
-  const [steps, setSteps] = useState<FormStep[]>(blankSteps())
+  const [projectTypeId, setProjectTypeId] = useState<string | null>(
+    sourceBlueprint?.projectTypeId ?? null,
+  )
+  const [steps, setSteps] = useState<FormStep[]>(() => stepsFromBlueprint(sourceBlueprint))
 
   const [error, setError] = useState<string | null>(null)
   const [pendingLaunch, startLaunch] = useTransition()
   const [pendingBlueprint, startBlueprintSave] = useTransition()
-  const [savedBlueprintAt, setSavedBlueprintAt] = useState<Date | null>(null)
-
-  const filteredBlueprints = useMemo(() => {
-    const q = bpFilter.trim().toLowerCase()
-    if (!q) return blueprints
-    return blueprints.filter((b) =>
-      `${b.title} ${b.description} ${b.projectTypeName ?? ''}`.toLowerCase().includes(q),
-    )
-  }, [blueprints, bpFilter])
+  const [savedBlueprintAt, setSavedBlueprintAt] = useState<'variant' | 'new' | null>(null)
 
   /* ── Phase transitions ───────────────────────────── */
 
@@ -167,52 +185,10 @@ export function CreateProjectForm({
     window.scrollTo({ top: 0, behavior: 'instant' })
   }
 
-  const startFromBlueprint = (bp: BlueprintOption) => {
-    setOrigin({ kind: 'blueprint', blueprint: bp })
-    setTitle(`${bp.title} — your area`)
-    setDescription(bp.description)
-    setCity('')
-    setCountry(COUNTRIES[0])
-    setAddress('')
-    setCoordinates('')
-    // Inherit the blueprint's locale so the project shows up in the same
-    // filter buckets by default; the user can override before launching.
-    setCountryCode(bp.country)
-    setLanguageCode(bp.language)
-    setRemote('some')
-    setJoinPolicy('open')
-    setProjectTypeId(bp.projectTypeId)
-    setSteps(
-      bp.steps.length > 0
-        ? bp.steps.map((s, i) => ({
-            id: `s-${Date.now()}-${i}`,
-            title: s.title,
-            description: s.description,
-            skillIds: s.skillIds,
-            estimatedHrs: s.estimatedHrs,
-          }))
-        : blankSteps(),
-    )
-    setError(null)
-    setPhase('edit')
-    window.scrollTo({ top: 0, behavior: 'instant' })
-  }
-
   const backToChoose = () => {
     setPhase('choose')
     window.scrollTo({ top: 0, behavior: 'instant' })
   }
-
-  // Deep-link from /blueprints: ?blueprint=<id> drops the user straight into
-  // the editor pre-filled from that blueprint, skipping the chooser. Runs
-  // once on mount; we don't react to later changes of the param.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (!initialBlueprintId) return
-    const bp = blueprints.find((b) => b.id === initialBlueprintId)
-    if (bp) startFromBlueprint(bp)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   /* ── Step ops ─────────────────────────────────────── */
 
@@ -237,7 +213,7 @@ export function CreateProjectForm({
 
   /* ── Submit ───────────────────────────────────────── */
 
-  const buildInput = (): CreateProjectInput => ({
+  const buildInput = (parentBlueprintId: string | null): CreateProjectInput => ({
     title,
     description,
     city,
@@ -249,7 +225,7 @@ export function CreateProjectForm({
     remote,
     joinPolicy,
     projectTypeId,
-    parentBlueprintId: null,
+    parentBlueprintId,
     blueprintId: origin?.kind === 'blueprint' ? origin.blueprint.id : null,
     steps: steps.map((s) => ({
       title: s.title,
@@ -261,7 +237,7 @@ export function CreateProjectForm({
 
   const onLaunch = () => {
     setError(null)
-    const input = buildInput()
+    const input = buildInput(null)
     startLaunch(async () => {
       const result = await launchProjectAction(input)
       if (!result.success) {
@@ -272,16 +248,18 @@ export function CreateProjectForm({
     })
   }
 
-  const onSaveBlueprint = () => {
+  // asVariant → save as a child of the family root; otherwise a standalone
+  // root blueprint.
+  const onSaveBlueprint = (asVariant: boolean) => {
     setError(null)
-    const input = buildInput()
+    const input = buildInput(asVariant ? variantParentId : null)
     startBlueprintSave(async () => {
       const result = await saveBlueprintAction(input)
       if (!result.success) {
         setError(result.error)
         return
       }
-      setSavedBlueprintAt(new Date())
+      setSavedBlueprintAt(asVariant ? 'variant' : 'new')
     })
   }
 
@@ -329,19 +307,13 @@ export function CreateProjectForm({
 
       <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-8 p-4 sm:p-6 sm:gap-10 lg:p-10">
         {phase === 'choose' ? (
-          <ChooserPhase
-            blueprints={filteredBlueprints}
-            totalBlueprints={blueprints.length}
-            showBlueprints={showBlueprints}
-            setShowBlueprints={setShowBlueprints}
-            bpFilter={bpFilter}
-            setBpFilter={setBpFilter}
-            onScratch={startScratch}
-            onPickBlueprint={startFromBlueprint}
-          />
+          <ChooserPhase onScratch={startScratch} />
         ) : (
           <EditorPhase
             origin={origin}
+            variantIntent={variantIntent}
+            hasSource={!!origin && origin.kind === 'blueprint'}
+            variantAvailable={variantParentId != null}
             title={title}
             description={description}
             city={city}
@@ -386,25 +358,7 @@ export function CreateProjectForm({
    Phase 1 — Chooser
    ================================================================ */
 
-function ChooserPhase({
-  blueprints,
-  totalBlueprints,
-  showBlueprints,
-  setShowBlueprints,
-  bpFilter,
-  setBpFilter,
-  onScratch,
-  onPickBlueprint,
-}: {
-  blueprints: BlueprintOption[]
-  totalBlueprints: number
-  showBlueprints: boolean
-  setShowBlueprints: (v: boolean) => void
-  bpFilter: string
-  setBpFilter: (s: string) => void
-  onScratch: () => void
-  onPickBlueprint: (bp: BlueprintOption) => void
-}) {
+function ChooserPhase({ onScratch }: { onScratch: () => void }) {
   return (
     <>
       <header>
@@ -427,90 +381,11 @@ function ChooserPhase({
         <StartCard
           icon={<FileText className="size-6" strokeWidth={2} />}
           title="Use a blueprint."
-          description="Steal shamelessly. Pre-built plans for repair cafés, pocket forests, mutual aid groups and more — fork one and adapt it to your community."
-          cta={
-            totalBlueprints === 0
-              ? 'No blueprints yet — start one'
-              : `Browse ${totalBlueprints} blueprint${totalBlueprints === 1 ? '' : 's'}`
-          }
-          onClick={() => {
-            if (totalBlueprints === 0) return
-            setShowBlueprints(true)
-            // Scroll into view next tick after render
-            setTimeout(() => {
-              document.getElementById('bp-picker')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-            }, 50)
-          }}
+          description="Steal shamelessly. Pre-built plans for repair cafés, pocket forests, mutual aid groups and more — browse the library, then fork one and adapt it to your community."
+          cta="Browse blueprints"
+          href="/blueprints"
         />
       </div>
-
-      {showBlueprints && (
-        <section id="bp-picker">
-          <div className="mb-5">
-            <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">
-              Blueprints
-            </div>
-            <h2 className="mb-2 font-display text-2xl font-normal leading-tight tracking-tight">
-              Pick one to fork.
-            </h2>
-            <p className="text-sm leading-relaxed text-fg-secondary">
-              You’ll be able to rename, edit steps, and adapt the location. Nothing’s set in stone.
-            </p>
-          </div>
-
-          <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface">
-            <div className="relative border-b border-white/[0.08] bg-bg-surface-2 px-5 py-4">
-              <Search className="absolute left-7 top-1/2 size-3.5 -translate-y-1/2 text-fg-tertiary" />
-              <input
-                type="text"
-                value={bpFilter}
-                onChange={(e) => setBpFilter(e.target.value)}
-                placeholder="Search blueprints — repair, garden, school…"
-                className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-9 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
-              />
-            </div>
-            {blueprints.length === 0 ? (
-              <div className="px-6 py-10 text-center text-sm text-fg-tertiary">
-                No blueprints match that search.
-              </div>
-            ) : (
-              blueprints.map((bp) => (
-                <button
-                  key={bp.id}
-                  type="button"
-                  onClick={() => onPickBlueprint(bp)}
-                  className="group grid w-full grid-cols-[auto_1fr_auto_auto] cursor-pointer items-center gap-5 border-b border-white/[0.08] px-6 py-5 text-left transition-colors duration-fast last:border-b-0 hover:bg-bg-surface-2"
-                >
-                  <div
-                    className="flex size-14 shrink-0 items-center justify-center rounded-xl font-display text-2xl text-blue-900"
-                    style={{ background: bp.color }}
-                  >
-                    {bp.emoji}
-                  </div>
-                  <div className="flex min-w-0 flex-col gap-1">
-                    <span className="text-base font-semibold text-fg-primary">{bp.title}</span>
-                    <span className="max-w-[460px] truncate text-xs text-fg-tertiary">
-                      {bp.description}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-3 text-xs text-fg-tertiary">
-                    <span className="rounded-full border border-white/[0.08] bg-bg-surface-3 px-2.5 py-[3px] text-fg-secondary">
-                      {bp.stepCount} step{bp.stepCount === 1 ? '' : 's'}
-                    </span>
-                    <span>
-                      {bp.reuseCount} fork{bp.reuseCount === 1 ? '' : 's'}
-                    </span>
-                  </div>
-                  <span className="flex items-center gap-1 text-sm font-medium text-amber-500 opacity-0 transition-opacity group-hover:opacity-100">
-                    Fork
-                    <ArrowRight className="size-3.5" strokeWidth={2.5} />
-                  </span>
-                </button>
-              ))
-            )}
-          </div>
-        </section>
-      )}
     </>
   )
 }
@@ -521,19 +396,19 @@ function StartCard({
   description,
   cta,
   onClick,
+  href,
 }: {
   icon: React.ReactNode
   title: string
   description: string
   cta: string
-  onClick: () => void
+  onClick?: () => void
+  href?: string
 }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="group relative flex cursor-pointer flex-col items-start gap-5 overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface p-6 text-left text-fg-primary transition-all duration-standard hover:-translate-y-0.5 hover:border-amber-500 hover:shadow-md sm:p-8"
-    >
+  const className =
+    'group relative flex cursor-pointer flex-col items-start gap-5 overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface p-6 text-left text-fg-primary transition-all duration-standard hover:-translate-y-0.5 hover:border-amber-500 hover:shadow-md sm:p-8'
+  const inner = (
+    <>
       <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(244,165,53,0.08),transparent_60%)] opacity-0 transition-opacity duration-standard group-hover:opacity-100" />
       <span className="relative flex size-14 items-center justify-center rounded-xl border border-neutral-700 bg-bg-surface-2 text-amber-500">
         {icon}
@@ -544,7 +419,130 @@ function StartCard({
         {cta}
         <ArrowRight className="size-3.5" strokeWidth={2.5} />
       </span>
+    </>
+  )
+
+  if (href) {
+    return (
+      <Link href={href} className={className}>
+        {inner}
+      </Link>
+    )
+  }
+  return (
+    <button type="button" onClick={onClick} className={className}>
+      {inner}
     </button>
+  )
+}
+
+/* ================================================================
+   Save-as-blueprint control.
+   - From scratch: a plain "Save as blueprint" button.
+   - From a blueprint: a split button. The primary action defaults to
+     "Save as blueprint variant" when arriving via "Create variant",
+     otherwise "Save as new blueprint"; the alternative lives in the
+     dropdown.
+   ================================================================ */
+
+function SaveBlueprintButton({
+  hasSource,
+  variantAvailable,
+  defaultVariant,
+  pending,
+  disabled,
+  onSave,
+}: {
+  hasSource: boolean
+  variantAvailable: boolean
+  defaultVariant: boolean
+  pending: boolean
+  disabled: boolean
+  onSave: (asVariant: boolean) => void
+}) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onDown)
+    return () => document.removeEventListener('mousedown', onDown)
+  }, [open])
+
+  const labelFor = (variant: boolean) =>
+    variant ? 'Save as blueprint variant' : 'Save as new blueprint'
+
+  const outlineBtn =
+    'inline-flex items-center gap-2 border border-neutral-700 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-60'
+
+  // No source blueprint → a single standalone save.
+  if (!hasSource || !variantAvailable) {
+    return (
+      <button
+        type="button"
+        onClick={() => onSave(false)}
+        disabled={disabled}
+        className={cn(outlineBtn, 'rounded-lg px-4 py-2.5')}
+      >
+        <FileText className="size-3.5" strokeWidth={2} />
+        {pending ? 'Saving…' : 'Save as blueprint'}
+      </button>
+    )
+  }
+
+  const primary = defaultVariant
+  const alternativeIsVariant = !primary
+
+  return (
+    <div ref={ref} className="relative flex">
+      <button
+        type="button"
+        onClick={() => onSave(primary)}
+        disabled={disabled}
+        className={cn(outlineBtn, 'rounded-l-lg px-4 py-2.5')}
+      >
+        <FileText className="size-3.5" strokeWidth={2} />
+        {pending ? 'Saving…' : labelFor(primary)}
+      </button>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        disabled={disabled}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        title="More save options"
+        className={cn(outlineBtn, '-ml-px rounded-r-lg px-2 py-2.5')}
+      >
+        <ChevronDown
+          className={cn('size-3.5 transition-transform', open && 'rotate-180')}
+          strokeWidth={2.5}
+        />
+      </button>
+
+      {open && (
+        <div
+          role="menu"
+          className="absolute bottom-full right-0 z-30 mb-2 w-[240px] overflow-hidden rounded-xl border border-neutral-700 bg-bg-surface shadow-xl"
+        >
+          <button
+            type="button"
+            role="menuitem"
+            onClick={() => {
+              setOpen(false)
+              onSave(alternativeIsVariant)
+            }}
+            disabled={disabled}
+            className="flex w-full items-center gap-2 px-4 py-3 text-left text-sm text-fg-secondary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary"
+          >
+            <FileText className="size-3.5 shrink-0" strokeWidth={2} />
+            {labelFor(alternativeIsVariant)}
+          </button>
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -554,6 +552,9 @@ function StartCard({
 
 function EditorPhase({
   origin,
+  variantIntent,
+  hasSource,
+  variantAvailable,
   title,
   description,
   city,
@@ -589,6 +590,9 @@ function EditorPhase({
   onChangeOrigin,
 }: {
   origin: { kind: 'scratch' } | { kind: 'blueprint'; blueprint: BlueprintOption } | null
+  variantIntent: boolean
+  hasSource: boolean
+  variantAvailable: boolean
   title: string
   description: string
   city: string
@@ -604,7 +608,7 @@ function EditorPhase({
   error: string | null
   pendingLaunch: boolean
   pendingBlueprint: boolean
-  savedBlueprintAt: Date | null
+  savedBlueprintAt: 'variant' | 'new' | null
   titleForPreview: string
   setTitle: (v: string) => void
   setDescription: (v: string) => void
@@ -620,7 +624,7 @@ function EditorPhase({
   removeStep: (id: string) => void
   addStep: () => void
   onLaunch: () => void
-  onSaveBlueprint: () => void
+  onSaveBlueprint: (asVariant: boolean) => void
   onChangeOrigin: () => void
 }) {
   return (
@@ -628,7 +632,11 @@ function EditorPhase({
       {/* Editor header */}
       <header>
         <span className="mb-2 inline-flex items-center gap-2 text-xs text-fg-tertiary">
-          {origin?.kind === 'blueprint' ? 'Forked from' : 'Starting from scratch'}
+          {origin?.kind === 'blueprint'
+            ? variantIntent
+              ? 'Creating a variant of'
+              : 'Forked from'
+            : 'Starting from scratch'}
           {origin?.kind === 'blueprint' && (
             <span className="rounded-full border border-amber-500/40 bg-amber-500/[0.12] px-2.5 py-[3px] font-medium text-amber-500">
               {origin.blueprint.title} blueprint
@@ -896,7 +904,9 @@ function EditorPhase({
           ) : savedBlueprintAt ? (
             <>
               <span className="size-[7px] rounded-full bg-green-500 shadow-[0_0_6px_var(--color-green-500)]" />
-              Saved as blueprint — others can fork it now.
+              {savedBlueprintAt === 'variant'
+                ? 'Saved as a blueprint variant — it now shows under the family.'
+                : 'Saved as a blueprint — others can fork it now.'}
             </>
           ) : (
             <>
@@ -906,15 +916,14 @@ function EditorPhase({
           )}
         </div>
         <div className="flex flex-wrap items-center gap-3">
-          <button
-            type="button"
-            onClick={onSaveBlueprint}
+          <SaveBlueprintButton
+            hasSource={hasSource}
+            variantAvailable={variantAvailable}
+            defaultVariant={variantIntent && variantAvailable}
+            pending={pendingBlueprint}
             disabled={pendingBlueprint || pendingLaunch}
-            className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            <FileText className="size-3.5" strokeWidth={2} />
-            {pendingBlueprint ? 'Saving…' : 'Save as blueprint'}
-          </button>
+            onSave={onSaveBlueprint}
+          />
           <button
             type="button"
             onClick={onLaunch}

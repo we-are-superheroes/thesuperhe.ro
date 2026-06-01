@@ -6,6 +6,7 @@ import {
   ChevronRight,
   Clock,
   FolderOpen,
+  GitBranch,
   Globe,
   Languages,
   MapPin,
@@ -222,6 +223,14 @@ export default async function BlueprintViewPage({ params }: PageParams) {
           >
             Use blueprint
             <ArrowRight className="size-3.5" strokeWidth={2.5} />
+          </Link>
+          <Link
+            href={`/projects/new?blueprint=${blueprint.id}&variant=1`}
+            className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 bg-bg-surface px-4 py-2.5 text-sm font-medium text-fg-primary transition-colors hover:border-neutral-600 hover:bg-white/[0.04]"
+            title="Adapt this blueprint for another place or language"
+          >
+            <GitBranch className="size-3.5" strokeWidth={2.5} />
+            Create variant
           </Link>
           {isCreator && (
             <Link
