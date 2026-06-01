@@ -409,7 +409,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 </Link>
               )}
             </div>
-            <h1 className="my-2 font-display text-[clamp(40px,5vw,60px)] font-normal leading-none tracking-tight">
+            {/* Explicit text-fg-primary so the title resolves the token at the
+                element — inside .on-imagery that's re-pinned to the light
+                (dark-mode) value, so the title stays light on the cover scrim
+                in every theme. Plain inheritance would go dark in light themes. */}
+            <h1 className="my-2 font-display text-[clamp(40px,5vw,60px)] font-normal leading-none tracking-tight text-fg-primary">
               {project.title}
             </h1>
             <div className="flex flex-wrap items-center gap-3 text-base text-fg-secondary">
