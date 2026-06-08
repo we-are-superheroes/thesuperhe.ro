@@ -1,0 +1,62 @@
+name: Seed database
+
+# Manually populate a database: ensure the schema is applied, then load
+# reference data (skills + project types) and optional sample projects.
+# Run from the Actions tab → "Seed database" → Run workflow.
+#
+# Reuses the existing scripts (idempotent reference seeds; sample-project
+# seed is create-only, so leave it off on re-runs to avoid duplicates).
+#
+# Required GitHub repo secrets (whichever target you pick):
+#   PROD_DATABASE_URL      pooled (6543) connection string for prod Supabase
+#   STAGING_DATABASE_URL   pooled (6543) connection string for staging Supabase
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Which database to seed
+        type: choice
+        options: [staging, prod]
+        default: staging
+      sample_projects:
+        description: Also create the sample projects? (off on re-runs)
+        type: boolean
+        default: true
+
+concurrency:
+  group: db-seed-${{ inputs.target }}
+  cancel-in-progress: false
+
+jobs:
+  seed:
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ inputs.target == 'prod' && secrets.PROD_DATABASE_URL || secrets.STAGING_DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate
+
+      - name: Guard — secret present
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::error::No database secret set for target '${{ inputs.target }}'. Add PROD_DATABASE_URL / STAGING_DATABASE_URL (see DEPLOYMENT.md)."
+            exit 1
+          fi
+
+      - name: Ensure schema is applied
+        run: npx tsx prisma/apply-pending-migrations.ts
+
+      - name: Seed reference data (skills + project types)
+        run: |
+          npx tsx prisma/seed.ts
+          npx tsx prisma/seed-skills-expanded.ts
+
+      - name: Seed sample projects
+        if: ${{ inputs.sample_projects }}
+        run: npx tsx prisma/seed-projects.ts

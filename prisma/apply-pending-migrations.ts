@@ -42,12 +42,21 @@ async function main() {
   )
   const applied = new Set(rows.map((r) => r.migration_name))
 
-  // The init migration was applied manually before this runner existed —
-  // the schema is already in place. If it's not yet recorded as applied,
-  // baseline-record it so we don't try to re-run it.
+  // Does the base schema already exist? The original dev DB had `_init`
+  // applied manually before this runner existed, so there we baseline-record
+  // it (mark applied without re-running). But on a truly FRESH database
+  // (e.g. a new prod/staging Supabase project) the schema isn't there yet —
+  // baselining would skip table creation and every later migration would
+  // fail. So only baseline when the schema is actually present; otherwise
+  // let `_init` run normally in the apply loop below.
+  const schemaProbe = await db.$queryRawUnsafe<Array<{ regclass: string | null }>>(
+    `SELECT to_regclass('public.users')::text AS regclass`,
+  )
+  const schemaExists = !!schemaProbe[0]?.regclass
+
   for (const name of allMigrations) {
-    if (name.endsWith('_init') && !applied.has(name)) {
-      console.log(`  baseline ${name} (assuming already applied)`)
+    if (name.endsWith('_init') && !applied.has(name) && schemaExists) {
+      console.log(`  baseline ${name} (schema already present)`)
       await db.$executeRawUnsafe(
         `INSERT INTO "_prisma_migrations" (id, checksum, migration_name, started_at, finished_at, applied_steps_count) VALUES ($1, $2, $3, NOW(), NOW(), 1)`,
         crypto.randomUUID(),
