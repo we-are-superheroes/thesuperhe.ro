@@ -49,12 +49,32 @@ export default function RootLayout({
     <ClerkProvider
       appearance={{
         baseTheme: dark,
+        // The CDN-loaded clerk-js runtime ignores the legacy appearance
+        // variable names (colorText / colorInputBackground / colorInputText /
+        // colorTextSecondary), which is why the card previously showed dark
+        // text and default-white inputs. Use the current names so the dark
+        // auth card is legible regardless of whether baseTheme applies.
         variables: {
+          // Accent
           colorPrimary: '#F4A535',
+          colorPrimaryForeground: '#0E1A2B',
+          // Surfaces
           colorBackground: '#152236',
-          colorInputBackground: '#1E3148',
-          colorText: '#EBF1F7',
-          colorTextSecondary: '#A8BCCE',
+          colorInput: '#1E3148',
+          colorMuted: '#1E3148',
+          // Text
+          colorForeground: '#EBF1F7',
+          colorInputForeground: '#EBF1F7',
+          colorMutedForeground: '#A8BCCE',
+          // Borders / focus — light neutral so field outlines, dividers and
+          // hovered surfaces are visible on the dark card (default is black).
+          colorNeutral: '#EBF1F7',
+          colorBorder: 'rgba(235, 241, 247, 0.22)',
+          colorRing: '#F4A535',
+          // Status
+          colorDanger: '#F4736B',
+          colorSuccess: '#3DAF7C',
+          colorWarning: '#F4A535',
           borderRadius: '8px',
           fontFamily: "'DM Sans', system-ui, sans-serif",
         },

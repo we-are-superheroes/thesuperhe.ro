@@ -1,7 +1,9 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { SignOutButton } from '@clerk/nextjs'
 import {
   LayoutDashboard,
   FolderOpen,
@@ -12,6 +14,8 @@ import {
   Star,
   FileText,
   User as UserIcon,
+  LogOut,
+  ChevronUp,
   X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -50,6 +54,36 @@ export function Sidebar({
   onDrawerClose?: () => void
 }) {
   const pathname = usePathname()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  // Close the account menu whenever the user navigates. Adjusting state
+  // during render (rather than in an effect) is React's recommended pattern
+  // for reacting to a changed value without an extra render pass.
+  const [lastPath, setLastPath] = useState(pathname)
+  if (pathname !== lastPath) {
+    setLastPath(pathname)
+    setMenuOpen(false)
+  }
+
+  // Close the account menu on outside click or Escape.
+  useEffect(() => {
+    if (!menuOpen) return
+    const onPointer = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setMenuOpen(false)
+      }
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMenuOpen(false)
+    }
+    document.addEventListener('mousedown', onPointer)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onPointer)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [menuOpen])
 
   const navGroups: NavGroup[] = [
     {
@@ -168,17 +202,52 @@ export function Sidebar({
       {/* Spacer */}
       <div className="flex-1" />
 
-      {/* User footer */}
-      <div className="flex items-center gap-3 border-t border-white/[0.08] pt-4">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#4a8b6e] to-[#3DAF7C] text-sm font-semibold text-blue-900">
-          {userInitials}
-        </div>
-        <div className="flex min-w-0 flex-col leading-tight">
-          <span className="text-sm font-semibold text-fg-primary">
-            {userName ?? 'Hero'}
-          </span>
-          <span className="text-xs text-fg-tertiary">{metaText}</span>
-        </div>
+      {/* User footer with account menu */}
+      <div ref={menuRef} className="relative border-t border-white/[0.08] pt-4">
+        {/* Pop-up menu (opens upward, above the trigger) */}
+        {menuOpen && (
+          <div
+            role="menu"
+            aria-label="Account menu"
+            className="absolute inset-x-0 bottom-full mb-2 overflow-hidden rounded-lg border border-white/[0.08] bg-bg-surface-2 py-1 shadow-xl"
+          >
+            <SignOutButton>
+              <button
+                type="button"
+                role="menuitem"
+                className="flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm text-fg-secondary transition-colors hover:bg-bg-surface-3 hover:text-fg-primary"
+              >
+                <LogOut className="size-[18px] shrink-0" />
+                Sign out
+              </button>
+            </SignOutButton>
+          </div>
+        )}
+
+        {/* Trigger: the user's avatar + name */}
+        <button
+          type="button"
+          onClick={() => setMenuOpen((open) => !open)}
+          aria-haspopup="menu"
+          aria-expanded={menuOpen}
+          className="flex w-full items-center gap-3 rounded-lg p-1 text-left transition-colors hover:bg-bg-surface-2"
+        >
+          <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#4a8b6e] to-[#3DAF7C] text-sm font-semibold text-blue-900">
+            {userInitials}
+          </div>
+          <div className="flex min-w-0 flex-col leading-tight">
+            <span className="truncate text-sm font-semibold text-fg-primary">
+              {userName ?? 'Hero'}
+            </span>
+            <span className="text-xs text-fg-tertiary">{metaText}</span>
+          </div>
+          <ChevronUp
+            className={cn(
+              'ml-auto size-4 shrink-0 text-fg-tertiary transition-transform duration-fast',
+              menuOpen ? 'rotate-0' : 'rotate-180',
+            )}
+          />
+        </button>
       </div>
     </aside>
   )
