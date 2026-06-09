@@ -211,14 +211,6 @@ export function Sidebar({
             aria-label="Account menu"
             className="absolute inset-x-0 bottom-full mb-2 overflow-hidden rounded-lg border border-white/[0.08] bg-bg-surface-2 py-1 shadow-xl"
           >
-            <Link
-              href="/profile"
-              role="menuitem"
-              className="flex items-center gap-3 px-3 py-2.5 text-sm text-fg-secondary transition-colors hover:bg-bg-surface-3 hover:text-fg-primary"
-            >
-              <UserIcon className="size-[18px] shrink-0" />
-              Profile
-            </Link>
             <SignOutButton>
               <button
                 type="button"

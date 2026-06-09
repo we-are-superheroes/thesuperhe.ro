@@ -49,12 +49,24 @@ export default function RootLayout({
     <ClerkProvider
       appearance={{
         baseTheme: dark,
+        // Every contrast-bearing colour is set explicitly so the auth card
+        // is legible even if the (older) @clerk/themes baseTheme defaults
+        // don't fully apply under @clerk/nextjs v7. Previously colorInputText
+        // and colorNeutral were left to the baseTheme, which produced dark
+        // input text and near-invisible input outlines on the dark card.
         variables: {
           colorPrimary: '#F4A535',
+          colorTextOnPrimaryBackground: '#0E1A2B',
           colorBackground: '#152236',
           colorInputBackground: '#1E3148',
+          colorInputText: '#EBF1F7',
           colorText: '#EBF1F7',
           colorTextSecondary: '#A8BCCE',
+          // Light neutral → visible field outlines, dividers, and icons.
+          colorNeutral: '#EBF1F7',
+          colorDanger: '#F4736B',
+          colorSuccess: '#3DAF7C',
+          colorWarning: '#F4A535',
           borderRadius: '8px',
           fontFamily: "'DM Sans', system-ui, sans-serif",
         },
