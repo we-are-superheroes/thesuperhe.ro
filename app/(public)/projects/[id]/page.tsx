@@ -8,6 +8,16 @@ import { googleMapsUrl } from '@/lib/location'
 import { ProjectStepsList, type StepCardData } from '@/components/platform/project-steps-list'
 import { JoinProjectTopButton, JoinProjectCard } from '@/components/platform/join-project-controls'
 import { AdminDeleteButton } from '@/components/platform/admin-delete-button'
+import {
+  ProjectTabsProvider,
+  ProjectTabBar,
+  ProjectTabPanel,
+} from '@/components/platform/project-tabs'
+import {
+  ProjectUpdatesPanel,
+  LatestUpdateTeaser,
+  type UpdatesFeedItem,
+} from '@/components/platform/project-updates'
 import { isCurrentUserAdmin } from '@/lib/auth'
 
 /* ================================================================
@@ -85,6 +95,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           status: true,
           order: true,
           estimatedHrs: true,
+          completedAt: true,
           coordinatorId: true,
           coordinator: { select: { id: true, name: true } },
           skills: {
@@ -120,6 +131,8 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
         },
         select: {
           role: true,
+          status: true,
+          joinedAt: true,
           hoursContributed: true,
           user: { select: { id: true, name: true } },
         },
@@ -201,6 +214,32 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   // delete is authorised again server-side in the action.
   const isAdmin = await isCurrentUserAdmin()
 
+  // ── Updates feed ────────────────────────────────────────────────
+  // Members-only posts are visible to active members and platform admins
+  // (moderation). Everyone else gets public posts plus a gate showing how
+  // many are hidden.
+  const canSeeMembersOnly = isMember || isAdmin
+  const [updates, hiddenMembersOnlyCount] = await Promise.all([
+    db.projectUpdate.findMany({
+      where: {
+        projectId: id,
+        ...(canSeeMembersOnly ? {} : { visibility: 'public' as const }),
+      },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        body: true,
+        visibility: true,
+        createdAt: true,
+        editedAt: true,
+        author: { select: { id: true, name: true } },
+      },
+    }),
+    canSeeMembersOnly
+      ? Promise.resolve(0)
+      : db.projectUpdate.count({ where: { projectId: id, visibility: 'members' } }),
+  ])
+
   const totalSteps = project.steps.length
   const stepsByStatus = {
     needs_help: project.steps.filter((s) => s.status === 'needs_help').length,
@@ -212,6 +251,63 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
 
   // Find the lead contributor (first contribution with role=lead, fallback to none)
   const lead = project.contributions.find((c) => c.role === 'lead') ?? null
+
+  // Assemble the updates feed: authored posts plus derived milestones
+  // (completed steps, members joining), newest first. Author names are always
+  // shown — posting is a deliberate public statement by the lead, whose name
+  // is already public in the Details card. Joiner names follow the page's
+  // existing anonymisation for signed-out viewers.
+  const feedItems: UpdatesFeedItem[] = updates.map((u) => ({
+    kind: 'update' as const,
+    id: u.id,
+    body: u.body,
+    visibility: u.visibility,
+    createdAtMs: u.createdAt.getTime(),
+    editedAtMs: u.editedAt?.getTime() ?? null,
+    author: u.author ? { id: u.author.id, name: u.author.name } : null,
+    isMine: !!userId && u.author?.id === userId,
+  }))
+
+  for (const s of project.steps) {
+    if (s.status === 'completed' && s.completedAt) {
+      feedItems.push({
+        kind: 'step_completed',
+        id: `step-${s.id}`,
+        stepTitle: s.title,
+        atMs: s.completedAt.getTime(),
+      })
+    }
+  }
+
+  // Group joins by calendar day so a busy weekend reads as one row. The
+  // lead's own creation-day contribution is skipped — "1 person joined —
+  // <lead>" on day one would just be noise.
+  const joinsByDay = new Map<string, { names: string[]; atMs: number }>()
+  for (const c of project.contributions) {
+    if (c.status !== 'active' || c.role === 'lead' || !c.user) continue
+    const day = c.joinedAt.toISOString().slice(0, 10)
+    const entry = joinsByDay.get(day) ?? { names: [], atMs: 0 }
+    entry.names.push(userId ? c.user.name : 'Someone')
+    entry.atMs = Math.max(entry.atMs, c.joinedAt.getTime())
+    joinsByDay.set(day, entry)
+  }
+  for (const [day, entry] of joinsByDay) {
+    feedItems.push({
+      kind: 'members_joined',
+      id: `join-${day}`,
+      names: entry.names,
+      atMs: entry.atMs,
+    })
+  }
+
+  feedItems.sort((a, b) => {
+    const ta = a.kind === 'update' ? a.createdAtMs : a.atMs
+    const tb = b.kind === 'update' ? b.createdAtMs : b.atMs
+    return tb - ta
+  })
+
+  const latestUpdate = feedItems.find((f) => f.kind === 'update')
+  const memberCount = project.contributions.filter((c) => c.status === 'active').length
 
   // Hours given across all contributions
   const totalHours = project.contributions.reduce((s, c) => s + c.hoursContributed, 0)
@@ -331,7 +427,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   const moreContributors = Math.max(0, contributors.length - visibleContributors.length)
 
   return (
-    <>
+    <ProjectTabsProvider projectId={id}>
       {/* Topbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
         <div className="flex min-w-0 items-center gap-2 text-sm text-fg-tertiary">
@@ -380,9 +476,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           )}
           <JoinProjectTopButton
             projectId={id}
+            projectTitle={project.title}
             isSignedIn={!!userId}
             isMember={isMember}
             isPendingApproval={isPendingApproval}
+            myAssignedStepCount={myAssignedStepCount}
           />
         </div>
       </div>
@@ -480,10 +578,18 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           </div>
         </div>
 
+        {/* Tabs */}
+        <ProjectTabBar
+          stepCount={totalSteps}
+          updatesCount={updates.length}
+          topOffsetClass={userId ? 'top-0' : 'top-14 sm:top-16'}
+        />
+
         {/* Body */}
         <div className="mx-auto grid w-full max-w-[1240px] grid-cols-1 items-start gap-8 p-4 sm:p-6 lg:grid-cols-[1fr_340px] lg:gap-10 lg:p-10">
           {/* Left column */}
           <div>
+            <ProjectTabPanel tab="overview">
             {/* About */}
             <section>
               <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">
@@ -505,8 +611,18 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               )}
             </section>
 
+            {latestUpdate?.kind === 'update' && (
+              <LatestUpdateTeaser
+                authorName={latestUpdate.author?.name ?? 'Former member'}
+                body={latestUpdate.body}
+                createdAtMs={latestUpdate.createdAtMs}
+              />
+            )}
+            </ProjectTabPanel>
+
+            <ProjectTabPanel tab="steps">
             {/* Steps */}
-            <section className="mt-12">
+            <section>
               <div className="mb-6 flex items-end justify-between gap-6">
                 <div>
                   <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">
@@ -548,6 +664,21 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 />
               )}
             </section>
+            </ProjectTabPanel>
+
+            <ProjectTabPanel tab="updates">
+              <ProjectUpdatesPanel
+                projectId={id}
+                projectTitle={project.title}
+                isSignedIn={!!userId}
+                isMember={isMember}
+                isLead={isLead}
+                isAdmin={isAdmin}
+                memberCount={memberCount}
+                hiddenMembersOnlyCount={hiddenMembersOnlyCount}
+                items={feedItems}
+              />
+            </ProjectTabPanel>
           </div>
 
           {/* Right rail */}
@@ -558,7 +689,6 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               isSignedIn={!!userId}
               isMember={isMember}
               isPendingApproval={isPendingApproval}
-              myAssignedStepCount={myAssignedStepCount}
             />
 
             {/* Stats */}
@@ -671,7 +801,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           </aside>
         </div>
       </div>
-    </>
+    </ProjectTabsProvider>
   )
 }
 

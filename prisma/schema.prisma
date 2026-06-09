@@ -70,6 +70,11 @@ enum ContributionRole {
   observer
 }
 
+enum UpdateVisibility {
+  public   // Anyone browsing the project can read it.
+  members  // Only active project members (and platform admins) can read it.
+}
+
 enum ProjectJoinPolicy {
   open               // Anyone can join instantly.
   approval_required  // Joins land as `pending` Contributions; lead must accept.
@@ -110,6 +115,7 @@ model User {
   actedNotifications Notification[]  @relation("ActorNotifications")
   conversations   ConversationParticipant[]
   messagesSent    Message[]          @relation("MessageSender")
+  projectUpdates  ProjectUpdate[]    @relation("UpdateAuthor")
 
   @@map("users")
 }
@@ -291,10 +297,34 @@ model Project {
   steps         ProjectStep[]
   contributions Contribution[]
   notifications Notification[]
+  updates       ProjectUpdate[]
 
   @@index([country])
   @@index([language])
   @@map("projects")
+}
+
+// Lead-authored updates shown in the project's Updates tab. Public posts are
+// readable by anyone browsing the project; members-only posts require an
+// active contribution (platform admins can also read them, for moderation).
+model ProjectUpdate {
+  id        String  @id @default(uuid())
+  projectId String  @map("project_id")
+  // SetNull on author deletion: the update is project history and survives,
+  // rendered as "Former member" (same pattern as Message.senderId).
+  authorId  String? @map("author_id")
+
+  body       String
+  visibility UpdateVisibility @default(members)
+  createdAt  DateTime  @default(now()) @map("created_at")
+  editedAt   DateTime? @map("edited_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  author  User?   @relation("UpdateAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([projectId, createdAt(sort: Desc)])
+  @@map("project_updates")
 }
 
 // Live steps on a specific project.
