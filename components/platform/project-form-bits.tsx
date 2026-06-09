@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useMemo, useRef, useEffect } from 'react'
-import { Plus, X, ChevronDown, Globe, MapPin, Settings as SettingsIcon } from 'lucide-react'
+import { Plus, X, ChevronDown, Globe, MapPin, Pencil, Settings as SettingsIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { COUNTRIES, countryFlag, countryLabel } from '@/lib/locales'
 
 /* ================================================================
    Shared types + constants for the create / edit project forms
@@ -23,20 +24,6 @@ export interface SkillOption {
   name: string
   category: string
 }
-
-export const COUNTRIES = [
-  'United Kingdom',
-  'Switzerland',
-  'Portugal',
-  'Spain',
-  'France',
-  'Germany',
-  'Netherlands',
-  'Ireland',
-  'United States',
-  'Canada',
-  'Other / multi-country',
-]
 
 export const REMOTE_OPTIONS: Array<{
   value: 'yes' | 'some' | 'no'
@@ -107,6 +94,128 @@ export function Field({
       </label>
       {children}
       {help && <span className="mt-0.5 text-xs text-fg-tertiary">{help}</span>}
+    </div>
+  )
+}
+
+/* ================================================================
+   CountrySelect — searchable single-select over the full ISO country
+   list. One field both builds the "City, Country" display string and
+   powers the browse-page country filter.
+   ================================================================ */
+
+export function CountrySelect({
+  id,
+  value,
+  onChange,
+  placeholder = 'Not set',
+}: {
+  id?: string
+  value: string | null
+  onChange: (code: string | null) => void
+  placeholder?: string
+}) {
+  const [open, setOpen] = useState(false)
+  const [query, setQuery] = useState('')
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('mousedown', onDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('mousedown', onDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  const matches = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    if (!q) return COUNTRIES
+    return COUNTRIES.filter(
+      (c) => c.label.toLowerCase().includes(q) || c.code.toLowerCase().startsWith(q),
+    )
+  }, [query])
+
+  const pick = (code: string | null) => {
+    onChange(code)
+    setOpen(false)
+    setQuery('')
+  }
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        id={id}
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        className="flex w-full items-center gap-2 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 text-left text-sm text-fg-primary transition-colors focus:border-amber-500 focus:outline-none"
+      >
+        {value ? (
+          <span className="flex min-w-0 items-center gap-2">
+            <span aria-hidden>{countryFlag(value)}</span>
+            <span className="truncate">{countryLabel(value) ?? value}</span>
+          </span>
+        ) : (
+          <span className="text-fg-tertiary">{placeholder}</span>
+        )}
+        <ChevronDown
+          className={cn('ml-auto size-3.5 shrink-0 text-fg-tertiary transition-transform', open && 'rotate-180')}
+        />
+      </button>
+      {open && (
+        <div className="absolute left-0 right-0 top-full z-30 mt-1 overflow-hidden rounded-lg border border-white/[0.08] bg-bg-surface shadow-xl">
+          <div className="border-b border-white/[0.08] p-2">
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search countries…"
+              autoFocus
+              className="w-full rounded-md border border-neutral-700 bg-bg-surface-2 px-2.5 py-1.5 text-xs text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
+            />
+          </div>
+          <div role="listbox" className="max-h-[260px] overflow-y-auto py-1">
+            <button
+              type="button"
+              role="option"
+              aria-selected={value === null}
+              onClick={() => pick(null)}
+              className="flex w-full items-center px-3 py-2 text-left text-xs text-fg-tertiary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary"
+            >
+              — Not set —
+            </button>
+            {matches.map((c) => (
+              <button
+                key={c.code}
+                type="button"
+                role="option"
+                aria-selected={value === c.code}
+                onClick={() => pick(c.code)}
+                className={cn(
+                  'flex w-full items-center gap-2 px-3 py-2 text-left text-xs transition-colors hover:bg-bg-surface-2 hover:text-fg-primary',
+                  value === c.code ? 'text-amber-500' : 'text-fg-secondary',
+                )}
+              >
+                <span aria-hidden>{countryFlag(c.code)}</span>
+                <span className="truncate">{c.label}</span>
+                <span className="ml-auto text-[10px] text-fg-tertiary">{c.code}</span>
+              </button>
+            ))}
+            {matches.length === 0 && (
+              <div className="px-3 py-3 text-center text-xs text-fg-tertiary">No matches.</div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -193,24 +302,29 @@ export function StepRow({
   }
 
   return (
-    <div className="grid grid-cols-[28px_1fr_32px] items-start gap-3 rounded-xl border border-white/[0.08] bg-bg-base p-4 transition-colors duration-fast hover:border-neutral-700 focus-within:border-amber-500">
+    <div className="group grid grid-cols-[28px_1fr_32px] items-start gap-3 rounded-xl border border-white/[0.08] bg-bg-base p-4 transition-colors duration-fast hover:border-neutral-700 focus-within:border-amber-500">
       <div className="col-start-1 row-start-1 mt-1 flex size-7 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-3 font-mono text-xs font-semibold text-fg-secondary">
         {index + 1}
       </div>
       <div className="col-start-2 row-start-1 flex min-w-0 flex-col gap-2.5">
-        <input
-          type="text"
-          value={step.title}
-          onChange={(e) => onChange({ title: e.target.value })}
-          placeholder="Step title — e.g. Find a viable plot"
-          className="w-full border-none bg-transparent py-1 font-sans text-base font-medium text-fg-primary outline-none placeholder:text-fg-tertiary"
-        />
+        {/* The pencil signals that prefilled (blueprint) step text is
+            editable — placeholders only cover the empty case. */}
+        <div className="relative">
+          <input
+            type="text"
+            value={step.title}
+            onChange={(e) => onChange({ title: e.target.value })}
+            placeholder="Step title — click to modify"
+            className="w-full border-none bg-transparent py-1 pr-7 font-sans text-base font-medium text-fg-primary outline-none placeholder:text-fg-tertiary"
+          />
+          <Pencil className="pointer-events-none absolute right-1.5 top-1/2 size-3.5 -translate-y-1/2 text-fg-tertiary opacity-0 transition-opacity duration-fast group-hover:opacity-100 group-focus-within:opacity-0" />
+        </div>
         <textarea
           ref={descRef}
           value={step.description}
           onChange={(e) => onChange({ description: e.target.value })}
           rows={1}
-          placeholder='Optional detail — what does "done" look like?'
+          placeholder="Optional details — click to add"
           className="min-h-[22px] w-full resize-none border-none bg-transparent p-0 font-sans text-sm leading-relaxed text-fg-secondary outline-none placeholder:text-fg-tertiary"
         />
 

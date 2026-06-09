@@ -79,8 +79,6 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       status: true,
       location: true,
       address: true,
-      latitude: true,
-      longitude: true,
       remoteOk: true,
       timeCommitmentHrs: true,
       coverImageUrl: true,
@@ -142,12 +140,11 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
 
   if (!project) notFound()
 
-  // Build the public Google Maps URL once. Prefers coords; falls back to the
-  // free-form address; null if neither is set.
+  // Build the public Google Maps URL once — address plus the coarse
+  // location so Google can disambiguate; null if neither is set.
   const mapsUrl = googleMapsUrl({
     address: project.address,
-    latitude: project.latitude,
-    longitude: project.longitude,
+    location: project.location,
   })
 
   // Aggregate time logs across all steps in one round-trip, so each card can
@@ -542,12 +539,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-xs font-semibold text-fg-secondary backdrop-blur-sm transition-colors hover:border-amber-500/55 hover:text-amber-500"
-                  title={
-                    project.address ??
-                    (project.latitude != null
-                      ? `${project.latitude}, ${project.longitude}`
-                      : 'Open in Google Maps')
-                  }
+                  title={project.address ?? project.location ?? 'Open in Google Maps'}
                 >
                   <ExternalLink className="size-3" strokeWidth={2.5} />
                   Open in Google Maps
