@@ -49,21 +49,29 @@ export default function RootLayout({
     <ClerkProvider
       appearance={{
         baseTheme: dark,
-        // Every contrast-bearing colour is set explicitly so the auth card
-        // is legible even if the (older) @clerk/themes baseTheme defaults
-        // don't fully apply under @clerk/nextjs v7. Previously colorInputText
-        // and colorNeutral were left to the baseTheme, which produced dark
-        // input text and near-invisible input outlines on the dark card.
+        // The CDN-loaded clerk-js runtime ignores the legacy appearance
+        // variable names (colorText / colorInputBackground / colorInputText /
+        // colorTextSecondary), which is why the card previously showed dark
+        // text and default-white inputs. Use the current names so the dark
+        // auth card is legible regardless of whether baseTheme applies.
         variables: {
+          // Accent
           colorPrimary: '#F4A535',
-          colorTextOnPrimaryBackground: '#0E1A2B',
+          colorPrimaryForeground: '#0E1A2B',
+          // Surfaces
           colorBackground: '#152236',
-          colorInputBackground: '#1E3148',
-          colorInputText: '#EBF1F7',
-          colorText: '#EBF1F7',
-          colorTextSecondary: '#A8BCCE',
-          // Light neutral → visible field outlines, dividers, and icons.
+          colorInput: '#1E3148',
+          colorMuted: '#1E3148',
+          // Text
+          colorForeground: '#EBF1F7',
+          colorInputForeground: '#EBF1F7',
+          colorMutedForeground: '#A8BCCE',
+          // Borders / focus — light neutral so field outlines, dividers and
+          // hovered surfaces are visible on the dark card (default is black).
           colorNeutral: '#EBF1F7',
+          colorBorder: 'rgba(235, 241, 247, 0.22)',
+          colorRing: '#F4A535',
+          // Status
           colorDanger: '#F4736B',
           colorSuccess: '#3DAF7C',
           colorWarning: '#F4A535',
