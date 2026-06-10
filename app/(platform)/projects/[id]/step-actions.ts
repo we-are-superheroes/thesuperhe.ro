@@ -12,12 +12,13 @@ import {
 import type { ServerActionResult } from '@/types'
 
 /* ================================================================
-   setStepStatusAction — free state machine.
-   Any active member of the project can change any step's status to
-   any of the five values. The contribution status on a step-level
-   row is kept in sync (active vs completed) so dashboard counts and
-   "my steps" lists stay coherent. step_completed and step_needs_help
-   notifications fan out on the transitions that matter.
+   setStepStatusAction — free state machine, gated by involvement.
+   The project lead can change any step's status; everyone else must
+   have joined the specific step first. The contribution status on a
+   step-level row is kept in sync (active vs completed) so dashboard
+   counts and "my steps" lists stay coherent. step_completed and
+   step_needs_help notifications fan out on the transitions that
+   matter.
    ================================================================ */
 
 const VALID_STATUSES = new Set<StepStatus>([
@@ -54,19 +55,23 @@ export async function setStepStatusAction(
     return { success: false, error: 'Step not found.' }
   }
 
-  // Authz: must be an active (or pending) member of the project, on any
-  // contribution row. This matches the design's "anyone in the project can
-  // change a step's state" footer.
-  const myMembership = await db.contribution.findFirst({
+  // Authz: the project lead can change any step; everyone else must have
+  // joined this specific step first.
+  const myRows = await db.contribution.findMany({
     where: {
       userId,
       projectId,
       status: { in: ['active', 'pending'] },
     },
-    select: { id: true },
+    select: { projectStepId: true, role: true, status: true },
   })
-  if (!myMembership) {
-    return { success: false, error: 'Join the project to change step statuses.' }
+  const isLead = myRows.some((r) => r.projectStepId === null && r.role === 'lead')
+  const onStep = myRows.some((r) => r.projectStepId === stepId && r.status === 'active')
+  if (!isLead && !onStep) {
+    if (myRows.length === 0) {
+      return { success: false, error: 'Join the project to change step statuses.' }
+    }
+    return { success: false, error: 'Join this step before changing its status.' }
   }
 
   const prev = step.status as StepStatus

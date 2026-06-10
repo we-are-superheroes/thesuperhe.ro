@@ -318,9 +318,9 @@ function StepCard({
       className={cn(
         'flex flex-col gap-3 rounded-2xl border bg-bg-surface px-4 py-4 transition-all duration-standard sm:px-6 sm:py-5',
         isNeedsHelp &&
-          'border-amber-500/40 bg-[radial-gradient(ellipse_at_left,rgba(244,165,53,0.08),transparent_60%),var(--color-bg-surface)]',
-        isDone && 'border-white/[0.06] opacity-80 hover:opacity-100',
-        !isNeedsHelp && !isDone && 'border-white/[0.08]',
+          'border-amber-500/40 bg-[radial-gradient(ellipse_at_left,rgba(244,165,53,0.08),transparent_60%),var(--color-bg-surface)] hover:border-amber-500/70',
+        isDone && 'border-white/[0.06] opacity-80 hover:border-white/[0.14] hover:opacity-100',
+        !isNeedsHelp && !isDone && 'border-white/[0.08] hover:border-neutral-600',
       )}
     >
       {/* Head */}
@@ -345,6 +345,8 @@ function StepCard({
           status={status}
           isSignedIn={isSignedIn}
           isMember={isMember}
+          isLead={isLead}
+          meOnStep={step.meOnStep}
           onChange={onStatusChange}
         />
       </div>
@@ -621,6 +623,8 @@ function StatusPillButton({
   status,
   isSignedIn,
   isMember,
+  isLead,
+  meOnStep,
   onChange,
 }: {
   projectId: string
@@ -628,6 +632,8 @@ function StatusPillButton({
   status: StepStatusKey
   isSignedIn: boolean
   isMember: boolean
+  isLead: boolean
+  meOnStep: boolean
   onChange: (next: StepStatusKey) => void
 }) {
   const [open, setOpen] = useState(false)
@@ -649,7 +655,9 @@ function StatusPillButton({
     }
   }, [open])
 
-  const canEdit = isSignedIn && isMember
+  // The lead can change any step; everyone else must join the step first
+  // (enforced server-side in setStepStatusAction too).
+  const canEdit = isSignedIn && isMember && (isLead || meOnStep)
 
   const pick = (next: StepStatusKey) => {
     setOpen(false)
@@ -673,6 +681,11 @@ function StatusPillButton({
         aria-haspopup="menu"
         aria-expanded={open}
         disabled={!canEdit}
+        title={
+          !canEdit && isSignedIn && isMember
+            ? 'Join this step to change its status'
+            : undefined
+        }
         className={cn(
           'inline-flex items-center gap-2 whitespace-nowrap rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider transition-all',
           STATUS_PILL_CLASSES[status],
