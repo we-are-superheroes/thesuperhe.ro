@@ -274,12 +274,11 @@ model Project {
   status                ProjectStatus @default(defining)
   // Coarse "City, Country" for browse-page filters.
   location              String?
-  // Precise location (optional): a human-readable address or place name and/or
-  // a lat/lng pair. Either or both — used to build the "Open in Google Maps"
-  // link on the project page.
+  // Precise location (optional): a human-readable address or place name,
+  // used (with `location`) to build the "Open in Google Maps" link on the
+  // project page. NB: legacy latitude/longitude columns still exist in the
+  // DB until the follow-up drop migration lands (contract phase).
   address               String?
-  latitude              Float?
-  longitude             Float?
   // ISO codes for browse-page filters. Pre-filled from the source blueprint
   // when a project is forked, editable from the project form.
   language              String?

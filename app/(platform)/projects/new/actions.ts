@@ -4,7 +4,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { notify } from '@/lib/notifications'
-import { parseCoords } from '@/lib/location'
+import { buildLocation } from '@/lib/location'
 import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
 import type { ServerActionResult } from '@/types'
 
@@ -19,13 +19,10 @@ export interface CreateProjectInput {
   title: string
   description: string
   city: string
-  /** Free-form country label used in the location string. */
-  country: string
   /** Optional precise street address or place name. */
   address: string
-  /** Optional "lat, lng" string. Parsed + validated server-side. */
-  coordinates: string
-  /** ISO 3166-1 alpha-2 code; nullable + filterable on the browse page. */
+  /** ISO 3166-1 alpha-2 code; nullable + filterable on the browse page.
+   *  Also supplies the country part of the "City, Country" location string. */
   countryCode: string | null
   /** ISO 639-1 code; nullable + filterable on the browse page. */
   languageCode: string | null
@@ -62,15 +59,6 @@ async function ensureUserExists(userId: string): Promise<ServerActionResult<void
   }
 }
 
-function buildLocation(city: string, country: string): string | null {
-  const c = city.trim()
-  const co = country.trim()
-  if (c && co && co.toLowerCase() !== 'other / multi-country') return `${c}, ${co}`
-  if (c) return c
-  if (co && co.toLowerCase() !== 'other / multi-country') return co
-  return null
-}
-
 function validateProject(data: CreateProjectInput): string | null {
   const title = data.title.trim()
   if (!title) return 'Give your project a title first.'
@@ -98,21 +86,6 @@ export async function launchProjectAction(
 
   const validationError = validateProject(data)
   if (validationError) return { success: false, error: validationError }
-
-  // Parse the optional "lat, lng" string into a coords pair (or null).
-  let coords: { latitude: number | null; longitude: number | null } = {
-    latitude: null,
-    longitude: null,
-  }
-  try {
-    const parsed = parseCoords(data.coordinates)
-    if (parsed) coords = parsed
-  } catch (e) {
-    return {
-      success: false,
-      error: e instanceof Error ? e.message : 'Coordinates couldn’t be parsed.',
-    }
-  }
 
   // Validate the locale codes (or fall back to the blueprint's later).
   let countryCode: string | null = null
@@ -185,10 +158,10 @@ export async function launchProjectAction(
           title: data.title.trim(),
           description: data.description.trim(),
           status: 'defining',
-          location: buildLocation(data.city, data.country),
+          // countryCode is final here — blueprint inheritance above already
+          // ran, so an inherited country lands in the display string too.
+          location: buildLocation(data.city, countryCode),
           address: data.address.trim() || null,
-          latitude: coords.latitude,
-          longitude: coords.longitude,
           language: languageCode,
           country: countryCode,
           // 'yes' or 'some' → remote contributors welcome.

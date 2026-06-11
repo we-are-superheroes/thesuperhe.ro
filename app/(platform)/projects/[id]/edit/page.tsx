@@ -1,7 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
-import { formatCoords } from '@/lib/location'
+import { COUNTRIES } from '@/lib/locales'
 import {
   EditProjectForm,
   type EditProjectInitial,
@@ -11,20 +11,35 @@ interface EditProjectParams {
   params: Promise<{ id: string }>
 }
 
+// Reverse lookup so legacy locations whose trailing segment is a country
+// label (written by the old free-text country field) can recover a code.
+const CODE_BY_LABEL = new Map(COUNTRIES.map((c) => [c.label.toLowerCase(), c.code]))
+
 /**
- * Best-effort split of "City, Country" back into the form's two fields.
- * Falls back to putting the whole thing in `city` if it doesn't look like a
- * clean comma split.
+ * Country-aware split of the stored "City, Country" display string back into
+ * the form's city input + ISO country code. Only a trailing segment that
+ * matches a known country label is stripped — anything else stays in `city`
+ * untouched (self-healing on the next save, which regenerates the string).
  */
-function splitLocation(loc: string | null): { city: string; country: string } {
-  if (!loc) return { city: '', country: '' }
+function splitLocation(
+  loc: string | null,
+  storedCode: string | null,
+): { city: string; countryCode: string | null } {
+  if (!loc) return { city: '', countryCode: storedCode }
   const parts = loc.split(',').map((s) => s.trim()).filter(Boolean)
   if (parts.length >= 2) {
-    const country = parts[parts.length - 1]
-    const city = parts.slice(0, -1).join(', ')
-    return { city, country }
+    const trailing = parts[parts.length - 1]
+    const matchedCode = CODE_BY_LABEL.get(trailing.toLowerCase()) ?? null
+    if (matchedCode) {
+      return {
+        city: parts.slice(0, -1).join(', '),
+        // The stored ISO code is authoritative; the label match only fills
+        // in for legacy rows that never had a code.
+        countryCode: storedCode ?? matchedCode,
+      }
+    }
   }
-  return { city: loc, country: '' }
+  return { city: loc, countryCode: storedCode }
 }
 
 export default async function EditProjectPage({ params }: EditProjectParams) {
@@ -40,8 +55,6 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       description: true,
       location: true,
       address: true,
-      latitude: true,
-      longitude: true,
       country: true,
       language: true,
       remoteOk: true,
@@ -84,23 +97,18 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
     select: { id: true, name: true, category: true },
   })
 
-  const { city, country } = splitLocation(project.location)
+  const { city, countryCode } = splitLocation(project.location, project.country)
 
   const initial: EditProjectInitial = {
     id: project.id,
     title: project.title,
     description: project.description,
     city,
-    country,
     // remoteOk → yes; off → no. We can't distinguish "some" once saved, so
     // default the toggle to "yes" when remote is allowed and "no" otherwise.
     remote: project.remoteOk ? 'yes' : 'no',
     address: project.address ?? '',
-    coordinates:
-      project.latitude != null && project.longitude != null
-        ? formatCoords(project.latitude, project.longitude)
-        : '',
-    countryCode: project.country,
+    countryCode,
     languageCode: project.language,
     coverImageUrl: project.coverImageUrl,
     joinPolicy: project.joinPolicy,

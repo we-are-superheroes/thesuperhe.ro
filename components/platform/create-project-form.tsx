@@ -22,10 +22,11 @@ import {
 import {
   StepRow,
   AddStepButton,
+  CountrySelect,
   type FormStep,
   type SkillOption as SharedSkillOption,
 } from '@/components/platform/project-form-bits'
-import { COUNTRIES as ISO_COUNTRIES, LANGUAGES as ISO_LANGUAGES } from '@/lib/locales'
+import { LANGUAGES as ISO_LANGUAGES } from '@/lib/locales'
 
 /* ================================================================
    Types
@@ -47,20 +48,6 @@ export interface BlueprintOption {
 }
 
 export type SkillOption = SharedSkillOption
-
-const COUNTRIES = [
-  'United Kingdom',
-  'Switzerland',
-  'Portugal',
-  'Spain',
-  'France',
-  'Germany',
-  'Netherlands',
-  'Ireland',
-  'United States',
-  'Canada',
-  'Other / multi-country',
-]
 
 const REMOTE_OPTIONS: Array<{ value: 'yes' | 'some' | 'no'; label: string; icon: typeof Globe }> = [
   { value: 'yes', label: 'Yes, remote-friendly', icon: Globe },
@@ -139,9 +126,7 @@ export function CreateProjectForm({
   )
   const [description, setDescription] = useState(sourceBlueprint?.description ?? '')
   const [city, setCity] = useState('')
-  const [country, setCountry] = useState(COUNTRIES[0])
   const [address, setAddress] = useState('')
-  const [coordinates, setCoordinates] = useState('')
   // Inherit the blueprint's locale so a forked project / variant lands in the
   // same filter buckets by default; the user can override before saving.
   const [countryCode, setCountryCode] = useState<string | null>(
@@ -171,9 +156,7 @@ export function CreateProjectForm({
     setTitle('')
     setDescription('')
     setCity('')
-    setCountry(COUNTRIES[0])
     setAddress('')
-    setCoordinates('')
     setCountryCode(null)
     setLanguageCode(null)
     setRemote('yes')
@@ -217,9 +200,7 @@ export function CreateProjectForm({
     title,
     description,
     city,
-    country,
     address,
-    coordinates,
     countryCode,
     languageCode,
     remote,
@@ -317,9 +298,7 @@ export function CreateProjectForm({
             title={title}
             description={description}
             city={city}
-            country={country}
             address={address}
-            coordinates={coordinates}
             countryCode={countryCode}
             languageCode={languageCode}
             remote={remote}
@@ -334,9 +313,7 @@ export function CreateProjectForm({
             setTitle={setTitle}
             setDescription={setDescription}
             setCity={setCity}
-            setCountry={setCountry}
             setAddress={setAddress}
-            setCoordinates={setCoordinates}
             setCountryCode={setCountryCode}
             setLanguageCode={setLanguageCode}
             setRemote={setRemote}
@@ -558,9 +535,7 @@ function EditorPhase({
   title,
   description,
   city,
-  country,
   address,
-  coordinates,
   countryCode,
   languageCode,
   remote,
@@ -575,9 +550,7 @@ function EditorPhase({
   setTitle,
   setDescription,
   setCity,
-  setCountry,
   setAddress,
-  setCoordinates,
   setCountryCode,
   setLanguageCode,
   setRemote,
@@ -596,9 +569,7 @@ function EditorPhase({
   title: string
   description: string
   city: string
-  country: string
   address: string
-  coordinates: string
   countryCode: string | null
   languageCode: string | null
   remote: 'yes' | 'some' | 'no'
@@ -613,9 +584,7 @@ function EditorPhase({
   setTitle: (v: string) => void
   setDescription: (v: string) => void
   setCity: (v: string) => void
-  setCountry: (v: string) => void
   setAddress: (v: string) => void
-  setCoordinates: (v: string) => void
   setCountryCode: (v: string | null) => void
   setLanguageCode: (v: string | null) => void
   setRemote: (v: 'yes' | 'some' | 'no') => void
@@ -710,19 +679,12 @@ function EditorPhase({
                 className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
               />
             </Field>
-            <Field label="Country" htmlFor="fld-country">
-              <select
-                id="fld-country"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                className="w-full appearance-none rounded-lg border border-neutral-700 bg-bg-surface-2 py-2.5 pl-3.5 pr-9 font-sans text-sm text-fg-primary outline-none transition-all duration-fast focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)] [background-image:url('data:image/svg+xml;utf8,<svg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_24_24%22_fill=%22none%22_stroke=%22%238097B5%22_stroke-width=%222.5%22_stroke-linecap=%22round%22_stroke-linejoin=%22round%22><polyline_points=%226_9_12_15_18_9%22/></svg>')] [background-position:right_14px_center] [background-repeat:no-repeat]"
-              >
-                {COUNTRIES.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
+            <Field
+              label="Country (optional)"
+              htmlFor="fld-country"
+              help="Shown on the project card and used by the browse-page country filter."
+            >
+              <CountrySelect id="fld-country" value={countryCode} onChange={setCountryCode} />
             </Field>
           </div>
 
@@ -742,43 +704,7 @@ function EditorPhase({
             />
           </Field>
 
-          <Field
-            label="Coordinates (optional)"
-            htmlFor="fld-coords"
-            help="Paste a “lat, lng” pair (e.g. from a Google Maps share). Pins the project on the map when people open it in Google Maps."
-          >
-            <input
-              id="fld-coords"
-              type="text"
-              inputMode="decimal"
-              value={coordinates}
-              onChange={(e) => setCoordinates(e.target.value)}
-              placeholder="e.g. 51.5424, -0.0244"
-              className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-mono text-sm tabular-nums text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
-            />
-          </Field>
-
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-            <Field
-              label="Country tag (optional)"
-              htmlFor="fld-country-code"
-              help="Used by the browse-page country filter."
-            >
-              <select
-                id="fld-country-code"
-                value={countryCode ?? ''}
-                onChange={(e) => setCountryCode(e.target.value || null)}
-                className="w-full appearance-none rounded-lg border border-neutral-700 bg-bg-surface-2 py-2.5 pl-3.5 pr-9 font-sans text-sm text-fg-primary outline-none transition-all duration-fast focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)] [background-image:url('data:image/svg+xml;utf8,<svg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_24_24%22_fill=%22none%22_stroke=%22%238097B5%22_stroke-width=%222.5%22_stroke-linecap=%22round%22_stroke-linejoin=%22round%22><polyline_points=%226_9_12_15_18_9%22/></svg>')] [background-position:right_14px_center] [background-repeat:no-repeat]"
-              >
-                <option value="">— none —</option>
-                {ISO_COUNTRIES.map((c) => (
-                  <option key={c.code} value={c.code}>
-                    {c.flag ? `${c.flag} ` : ''}
-                    {c.label}
-                  </option>
-                ))}
-              </select>
-            </Field>
             <Field
               label="Working language (optional)"
               htmlFor="fld-lang"

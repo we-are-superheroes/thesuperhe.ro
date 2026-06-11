@@ -11,13 +11,11 @@ import {
   Field,
   StepRow,
   AddStepButton,
+  CountrySelect,
   type FormStep,
   type SkillOption,
 } from '@/components/platform/project-form-bits'
-import {
-  COUNTRIES as ISO_COUNTRIES,
-  LANGUAGES as ISO_LANGUAGES,
-} from '@/lib/locales'
+import { LANGUAGES as ISO_LANGUAGES } from '@/lib/locales'
 
 /* ================================================================
    Modify Blueprint form.
@@ -261,20 +259,11 @@ export function EditBlueprintForm({
             <div className="flex flex-col gap-5">
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <Field label="Country (optional unless this is a variant)" htmlFor="fld-bp-country">
-                  <select
+                  <CountrySelect
                     id="fld-bp-country"
-                    value={countryCode ?? ''}
-                    onChange={(e) => setCountryCode(e.target.value || null)}
-                    className="w-full appearance-none rounded-lg border border-neutral-700 bg-bg-surface-2 py-2.5 pl-3.5 pr-9 font-sans text-sm text-fg-primary outline-none transition-all duration-fast focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)] [background-image:url('data:image/svg+xml;utf8,<svg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_24_24%22_fill=%22none%22_stroke=%22%238097B5%22_stroke-width=%222.5%22_stroke-linecap=%22round%22_stroke-linejoin=%22round%22><polyline_points=%226_9_12_15_18_9%22/></svg>')] [background-position:right_14px_center] [background-repeat:no-repeat]"
-                  >
-                    <option value="">— none —</option>
-                    {ISO_COUNTRIES.map((c) => (
-                      <option key={c.code} value={c.code}>
-                        {c.flag ? `${c.flag} ` : ''}
-                        {c.label}
-                      </option>
-                    ))}
-                  </select>
+                    value={countryCode}
+                    onChange={setCountryCode}
+                  />
                 </Field>
                 <Field label="Working language (optional unless this is a variant)" htmlFor="fld-bp-lang">
                   <select

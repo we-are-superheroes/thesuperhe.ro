@@ -6,7 +6,7 @@ import type { ProjectStatus } from '@prisma/client'
 import { db } from '@/lib/db'
 import { uploadImage, deleteImageByUrl } from '@/lib/storage'
 import { notify, getActiveProjectMemberIds } from '@/lib/notifications'
-import { parseCoords } from '@/lib/location'
+import { buildLocation } from '@/lib/location'
 import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
 import type { ServerActionResult } from '@/types'
 
@@ -45,12 +45,10 @@ export interface UpdateProjectInput {
   title: string
   description: string
   city: string
-  country: string
   /** Optional precise street address or place name. */
   address: string
-  /** Optional "lat, lng" string. Parsed + validated server-side. */
-  coordinates: string
-  /** ISO 3166-1 alpha-2 country code (or null to clear). Browse-page filter. */
+  /** ISO 3166-1 alpha-2 country code (or null to clear). Browse-page filter
+   *  + the country part of the "City, Country" location string. */
   countryCode: string | null
   /** ISO 639-1 language code (or null to clear). Browse-page filter. */
   languageCode: string | null
@@ -66,15 +64,6 @@ const VALID_PROJECT_STATUSES = new Set<ProjectStatus>([
   'in_progress',
   'completed',
 ])
-
-function buildLocation(city: string, country: string): string | null {
-  const c = city.trim()
-  const co = country.trim()
-  if (c && co && co.toLowerCase() !== 'other / multi-country') return `${c}, ${co}`
-  if (c) return c
-  if (co && co.toLowerCase() !== 'other / multi-country') return co
-  return null
-}
 
 function validate(data: UpdateProjectInput): string | null {
   const title = data.title.trim()
@@ -115,21 +104,6 @@ export async function updateProjectAction(
 
   const validationError = validate(data)
   if (validationError) return { success: false, error: validationError }
-
-  // Parse the optional "lat, lng" string into a coords pair (or null).
-  let coords: { latitude: number | null; longitude: number | null } = {
-    latitude: null,
-    longitude: null,
-  }
-  try {
-    const parsed = parseCoords(data.coordinates)
-    if (parsed) coords = parsed
-  } catch (e) {
-    return {
-      success: false,
-      error: e instanceof Error ? e.message : 'Coordinates couldn’t be parsed.',
-    }
-  }
 
   // Validate locale codes (used by browse filters).
   let countryCode: string | null = null
@@ -224,10 +198,8 @@ export async function updateProjectAction(
         data: {
           title: data.title.trim(),
           description: data.description.trim(),
-          location: buildLocation(data.city, data.country),
+          location: buildLocation(data.city, countryCode),
           address: data.address.trim() || null,
-          latitude: coords.latitude,
-          longitude: coords.longitude,
           country: countryCode,
           language: languageCode,
           remoteOk: data.remote === 'yes' || data.remote === 'some',
