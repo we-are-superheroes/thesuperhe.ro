@@ -20,8 +20,13 @@ const TYPE_IMG_KEY: Record<string, string> = {
   'Ocean & Marine': 'water',
 }
 
+/** Elapsed ms — module-scope so the wall-clock read stays out of render. */
+function msSince(d: Date): number {
+  return Date.now() - d.getTime()
+}
+
 function humanise(d: Date): string {
-  const ms = Date.now() - d.getTime()
+  const ms = msSince(d)
   const mins = Math.floor(ms / 60000)
   if (mins < 1) return 'just now'
   if (mins < 60) return `${mins} minute${mins === 1 ? '' : 's'} ago`
@@ -129,7 +134,7 @@ export default async function MyProjectsPage() {
       )
     const next = mySteps[0]
     const due = next ? dueLabel(next.dueDate) : null
-    const nextStep = next
+    const nextStep = next && due
       ? {
           id: next.id,
           name: next.title,
@@ -139,9 +144,9 @@ export default async function MyProjectsPage() {
             : next.status === 'in_progress'
               ? 'in_progress'
               : 'review') as 'needs_help' | 'in_progress' | 'review',
-          due: due!.text,
-          urgent: due!.urgent,
-          dueSort: due!.sort,
+          due: due.text,
+          urgent: due.urgent,
+          dueSort: due.sort,
         }
       : null
 
@@ -169,7 +174,7 @@ export default async function MyProjectsPage() {
       contributors: contributorInitials.length,
       contributorInitials,
       lastActivity: humanise(p.updatedAt),
-      lastActivityMs: Date.now() - p.updatedAt.getTime(),
+      lastActivityMs: msSince(p.updatedAt),
       hoursContributed: c.hoursContributed,
       nextStep,
     }

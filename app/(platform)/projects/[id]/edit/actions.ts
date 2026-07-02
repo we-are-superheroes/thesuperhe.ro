@@ -277,10 +277,11 @@ export async function updateProjectAction(
       // Notify all active members about the edit.
       const recipients = await getActiveProjectMemberIds(tx, projectId)
       const newTitle = data.title.trim()
-      const titleChanged = projectBefore?.title && projectBefore.title !== newTitle
-      const titleCopy = titleChanged
-        ? `${actorName} renamed “${projectBefore!.title}” to “${newTitle}”.`
-        : `${actorName} updated ${newTitle}.`
+      const oldTitle = projectBefore?.title
+      const titleCopy =
+        oldTitle && oldTitle !== newTitle
+          ? `${actorName} renamed “${oldTitle}” to “${newTitle}”.`
+          : `${actorName} updated ${newTitle}.`
       await notify(tx, {
         type: 'project_updated',
         recipients,

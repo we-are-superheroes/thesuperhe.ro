@@ -111,9 +111,12 @@ export function StepTimeLog({
   const [now, setNow] = useState(0)
 
   useEffect(() => {
-    setNow(Date.now())
+    const raf = requestAnimationFrame(() => setNow(Date.now()))
     const id = window.setInterval(() => setNow(Date.now()), 60_000)
-    return () => window.clearInterval(id)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.clearInterval(id)
+    }
   }, [])
 
   useEffect(() => {

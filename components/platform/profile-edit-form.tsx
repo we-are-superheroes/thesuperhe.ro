@@ -85,20 +85,21 @@ export function ProfileEditForm({
   const [error, setError] = useState<string | null>(null)
   const [savedAt, setSavedAt] = useState<Date | null>(null)
 
-  // Track baseline so we can show "Unsaved changes"
-  const baselineRef = useRef({
+  // Track baseline so we can show "Unsaved changes". State (not a ref)
+  // because it's read during render and updated after a successful save.
+  const [baseline, setBaseline] = useState(() => ({
     name: initial.name,
     bio: initial.bio,
     location: initial.location,
     timezone: initial.timezone || timezones[3] || '',
     skills: JSON.stringify(initial.skills),
-  })
+  }))
   const isDirty =
-    name !== baselineRef.current.name ||
-    bio !== baselineRef.current.bio ||
-    location !== baselineRef.current.location ||
-    timezone !== baselineRef.current.timezone ||
-    JSON.stringify(skills) !== baselineRef.current.skills
+    name !== baseline.name ||
+    bio !== baseline.bio ||
+    location !== baseline.location ||
+    timezone !== baseline.timezone ||
+    JSON.stringify(skills) !== baseline.skills
 
   const addedSkillIds = useMemo(() => new Set(skills.map((s) => s.skillId)), [skills])
 
@@ -211,13 +212,13 @@ export function ProfileEditForm({
       if (!result.success) {
         setError(result.error)
       } else {
-        baselineRef.current = {
+        setBaseline({
           name,
           bio,
           location,
           timezone,
           skills: JSON.stringify(skills),
-        }
+        })
         setSavedAt(new Date())
       }
     })

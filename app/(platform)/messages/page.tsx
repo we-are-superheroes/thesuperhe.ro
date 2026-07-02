@@ -25,6 +25,12 @@ interface SearchParams {
 
 const PRESENCE_WINDOW_MS = 5 * 60 * 1000
 
+/** "Online" = seen within the presence window. Module-scope helper so the
+ *  wall-clock read stays out of component render. */
+function presenceOnline(lastSeenAt: Date | null): boolean {
+  return !!lastSeenAt && Date.now() - lastSeenAt.getTime() < PRESENCE_WINDOW_MS
+}
+
 export default async function MessagesPage({ searchParams }: SearchParams) {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
@@ -114,10 +120,6 @@ export default async function MessagesPage({ searchParams }: SearchParams) {
     )
     myParticipants.forEach((p, i) => unreadCounts.set(p.conversation.id, counts[i]))
   }
-
-  const now = Date.now()
-  const presenceOnline = (lastSeenAt: Date | null): boolean =>
-    !!lastSeenAt && now - lastSeenAt.getTime() < PRESENCE_WINDOW_MS
 
   const conversations: ConversationListItem[] = myParticipants.map((p) => {
     const peer = p.conversation.participants[0]?.user

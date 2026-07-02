@@ -95,7 +95,9 @@ export function EditBlueprintForm({
         }))
       : [
           {
-            id: `tmp-${Date.now()}`,
+            // Stable placeholder id — only one blank row can exist at mount,
+            // and rows added later get unique ids in the event handler.
+            id: 'tmp-initial',
             title: '',
             description: '',
             skillIds: [],
