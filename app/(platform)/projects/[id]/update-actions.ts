@@ -6,18 +6,8 @@ import { db } from '@/lib/db'
 import { isCurrentUserAdmin } from '@/lib/auth'
 import { notify } from '@/lib/notifications'
 import { rateLimit, rateLimitError } from '@/lib/rate-limit'
+import { validateUpdateBody } from '@/lib/validation'
 import type { ServerActionResult } from '@/types'
-
-const MAX_UPDATE_LENGTH = 5000
-
-function validateBody(raw: string): { ok: true; body: string } | { ok: false; error: string } {
-  const body = raw.trim()
-  if (!body) return { ok: false, error: 'An update needs some text.' }
-  if (body.length > MAX_UPDATE_LENGTH) {
-    return { ok: false, error: `Updates are capped at ${MAX_UPDATE_LENGTH} characters.` }
-  }
-  return { ok: true, body }
-}
 
 export async function postUpdateAction(
   projectId: string,
@@ -31,7 +21,7 @@ export async function postUpdateAction(
   const rl = rateLimit(`${userId}:post-update`, 5, 60_000)
   if (!rl.ok) return { success: false, error: rateLimitError(rl) }
 
-  const validated = validateBody(rawBody)
+  const validated = validateUpdateBody(rawBody)
   if (!validated.ok) return { success: false, error: validated.error }
 
   // Only the project lead can post updates.
@@ -97,7 +87,7 @@ export async function editUpdateAction(
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
 
-  const validated = validateBody(rawBody)
+  const validated = validateUpdateBody(rawBody)
   if (!validated.ok) return { success: false, error: validated.error }
 
   const update = await db.projectUpdate.findUnique({

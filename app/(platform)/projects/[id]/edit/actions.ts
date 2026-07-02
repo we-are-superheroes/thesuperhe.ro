@@ -8,6 +8,7 @@ import { uploadImage, deleteImageByUrl } from '@/lib/storage'
 import { notify, getActiveProjectMemberIds } from '@/lib/notifications'
 import { buildLocation } from '@/lib/location'
 import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
+import { validateProjectFields, validateProjectStatus } from '@/lib/validation'
 import type { ServerActionResult } from '@/types'
 
 /**
@@ -58,30 +59,8 @@ export interface UpdateProjectInput {
   steps: UpdateProjectStepInput[]
 }
 
-const VALID_PROJECT_STATUSES = new Set<ProjectStatus>([
-  'defining',
-  'needs_help',
-  'in_progress',
-  'completed',
-])
-
 function validate(data: UpdateProjectInput): string | null {
-  const title = data.title.trim()
-  if (!title) return 'Title can’t be empty.'
-  if (title.length > 200) return 'Title is too long.'
-  const desc = data.description.trim()
-  if (!desc) return 'Description can’t be empty.'
-  if (!['yes', 'some', 'no'].includes(data.remote)) return 'Pick a remote option.'
-  if (!['open', 'approval_required'].includes(data.joinPolicy)) {
-    return 'Pick a join policy.'
-  }
-  if (!VALID_PROJECT_STATUSES.has(data.status)) {
-    return 'Pick a project status.'
-  }
-  if (data.address.trim().length > 500) {
-    return 'Address is too long.'
-  }
-  return null
+  return validateProjectFields(data, 'update') ?? validateProjectStatus(data.status)
 }
 
 /**
