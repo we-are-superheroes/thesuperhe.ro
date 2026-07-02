@@ -1,3 +1,6 @@
+// Lausanne example projects + tags existing project descriptions with an
+// "Example:" prefix. Skips titles that already exist. Run manually:
+//   DATABASE_URL=… npx tsx prisma/seed-examples.ts
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
@@ -30,7 +33,7 @@ async function main() {
     foodAg, education,
     envScience, biology, communityOrganising, projectMgmt, dataAnalysis,
     grantWriting, eventCoord, webDev, copywriting, socialMedia,
-    facilitation, engineering, gis, architecture,
+    facilitation, , gis,
   ] = await Promise.all([
     db.projectType.findUnique({ where: { name: 'Water & Conservation' } }),
     db.projectType.findUnique({ where: { name: 'Repair & Reuse' } }),

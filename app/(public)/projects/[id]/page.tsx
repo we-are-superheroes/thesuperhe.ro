@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import Image from 'next/image'
-import { ChevronRight, Share2, Bookmark, MapPin, Globe, Calendar, FolderOpen, Clock, User, Pencil, ExternalLink } from 'lucide-react'
+import { ChevronRight, MapPin, Globe, Calendar, FolderOpen, Clock, User, Pencil, ExternalLink } from 'lucide-react'
+import { ShareButton } from '@/components/platform/share-button'
 import { googleMapsUrl } from '@/lib/location'
 import { ProjectStepsList, type StepCardData } from '@/components/platform/project-steps-list'
 import { JoinProjectTopButton, JoinProjectCard } from '@/components/platform/join-project-controls'
@@ -438,20 +439,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           <span className="truncate text-fg-primary">{project.title}</span>
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
-            title="Share"
-          >
-            <Share2 className="size-4" />
-          </button>
-          <button
-            type="button"
-            className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
-            title="Pin"
-          >
-            <Bookmark className="size-4" />
-          </button>
+          <ShareButton title={project.title} />
           {isLead && (
             <Link
               href={`/projects/${id}/edit`}

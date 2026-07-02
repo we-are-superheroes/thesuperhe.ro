@@ -1,3 +1,5 @@
+// Base reference data (33 skills + 14 project types). Idempotent (upserts).
+// Run by the "Seed database" GitHub workflow, or locally: npx tsx prisma/seed.ts
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'

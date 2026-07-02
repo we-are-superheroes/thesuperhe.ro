@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
-import { Logo } from '@/components/ui/logo'
 import {
   ArrowRight,
   Search,

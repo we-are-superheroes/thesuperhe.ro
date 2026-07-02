@@ -7,14 +7,13 @@ import {
   MapPin,
   Clock,
   Calendar,
-  Share2,
-  MoreHorizontal,
   Pencil,
   Star,
   Users as UsersIcon,
   MessageSquare,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ShareButton } from '@/components/platform/share-button'
 import {
   UserProfileProjects,
   type ProfileProject,
@@ -214,20 +213,7 @@ export default async function UserProfilePage({ params }: Params) {
           <span className="truncate font-medium text-fg-primary">{user.name}</span>
         </div>
         <div className="flex items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
-            title="Share"
-          >
-            <Share2 className="size-4" />
-          </button>
-          <button
-            type="button"
-            className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
-            title="More"
-          >
-            <MoreHorizontal className="size-4" />
-          </button>
+          <ShareButton title={user.name} />
         </div>
       </div>
 

@@ -3,7 +3,7 @@
 import { auth, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
-import { notify, getProjectLeadIds, getActiveProjectMemberIds } from '@/lib/notifications'
+import { notify, getProjectLeadIds } from '@/lib/notifications'
 import type { ServerActionResult } from '@/types'
 
 /**
@@ -421,7 +421,3 @@ export async function leaveProjectAction(
   revalidatePath('/notifications')
   return { success: true, data: { left: true } }
 }
-
-// Quiet the unused import warning for getActiveProjectMemberIds — used in
-// other actions (toggle done, project update) that import this helper too.
-void getActiveProjectMemberIds

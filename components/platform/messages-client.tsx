@@ -14,7 +14,6 @@ import {
   BellOff,
   Bell,
   Archive,
-  Trash2,
   X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -916,7 +915,3 @@ function ThreadMenu({
     </div>
   )
 }
-
-// Quiet the unused-import warning — Trash2 is reserved for the future
-// "delete message" affordance on a per-message hover menu.
-export const _unused = Trash2
