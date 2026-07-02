@@ -1,0 +1,333 @@
+step_slug,blueprint_slug,step_order,title,description,estimated_hours,remote_friendly
+litter-pick-s01,litter-pick,1,Choose location and date,"Scout a site with visible litter, safe access and parking; pick a weekend date 3-4 weeks out.",2,false
+litter-pick-s02,litter-pick,2,Get landowner or municipal permission,Contact the municipality or landowner to confirm the cleanup is allowed and ask about waste collection support.,2,true
+litter-pick-s03,litter-pick,3,Arrange waste disposal,Agree with the local waste service where filled bags will be collected and how recyclables are separated.,2,true
+litter-pick-s04,litter-pick,4,Gather equipment,"Source gloves, litter pickers, bags and hi-vis vests; many municipalities lend these for free.",3,false
+litter-pick-s05,litter-pick,5,Promote the event,"Create a simple flyer and post in local social media groups, noticeboards and schools.",3,true
+litter-pick-s06,litter-pick,6,Prepare a safety briefing,"Write a short briefing covering sharps, traffic, weather and hygiene; identify a first-aider.",2,true
+litter-pick-s07,litter-pick,7,Run the cleanup,"Register attendees, brief them, assign zones, and coordinate collection points during the event.",5,false
+litter-pick-s08,litter-pick,8,Document and share results,"Weigh or count bags, photograph the haul and thank volunteers publicly to build momentum for the next one.",2,true
+repair-cafe-s01,repair-cafe,1,Define scope and format,"Decide which repair categories to offer first (e.g. electronics, textiles, bikes) and target visitor numbers.",2,true
+repair-cafe-s02,repair-cafe,2,Recruit volunteer fixers,"Find 4-8 skilled repairers via community groups, makerspaces and retirement networks; confirm their categories.",5,true
+repair-cafe-s03,repair-cafe,3,Secure a venue,"Book a community hall or café with tables, power sockets and good lighting for a half-day slot.",3,false
+repair-cafe-s04,repair-cafe,4,Sort insurance and liability,Check the venue's public liability cover and prepare a simple repair disclaimer form for visitors.,3,true
+repair-cafe-s05,repair-cafe,5,Assemble tools and spares,"Collect basic toolkits, multimeters, sewing machines and common spare parts; ask fixers what they need.",4,false
+repair-cafe-s06,repair-cafe,6,Promote locally,"Design a poster, list the event on local calendars and invite people to register items in advance.",4,true
+repair-cafe-s07,repair-cafe,7,Run the event,"Manage the welcome desk, queue visitors to the right fixer, and log each item and outcome.",6,false
+repair-cafe-s08,repair-cafe,8,Log repairs and follow up,"Record repair statistics (items fixed, waste diverted), thank fixers and announce the next date.",2,true
+clothing-swap-s01,clothing-swap,1,Set format and rules,"Decide the swap mechanics (token per item vs. free-for-all), quality standards and item limits.",2,true
+clothing-swap-s02,clothing-swap,2,Book a venue,"Find a free or cheap space with tables, mirrors and a changing corner.",2,false
+clothing-swap-s03,clothing-swap,3,Promote and manage sign-ups,Publicise via social media and posters; use a simple sign-up form to estimate attendance.,3,true
+clothing-swap-s04,clothing-swap,4,Organise intake and sorting,"Plan how items are checked in, quality-screened and displayed by size and type.",3,false
+clothing-swap-s05,clothing-swap,5,Run the swap,"Staff the intake desk, keep rails tidy, and handle the token system during the event.",5,false
+clothing-swap-s06,clothing-swap,6,Handle leftovers responsibly,Arrange donation of unclaimed items to a charity shop or textile recycler.,2,false
+seed-plant-swap-s01,seed-plant-swap,1,Pick season and venue,"Schedule for early spring or autumn and book a hall, market corner or community garden.",2,false
+seed-plant-swap-s02,seed-plant-swap,2,Set swap guidelines,"Write simple rules on labelling, invasive species to exclude, and seed packaging.",2,true
+seed-plant-swap-s03,seed-plant-swap,3,Recruit experienced gardeners,Invite 2-3 knowledgeable gardeners to answer questions and identify plants on the day.,2,true
+seed-plant-swap-s04,seed-plant-swap,4,Promote to gardening networks,"Share in allotment associations, balcony-gardening groups and local media.",3,true
+seed-plant-swap-s05,seed-plant-swap,5,Run the swap,"Set up labelled tables by plant type, manage intake and keep the exchange flowing.",4,false
+seed-plant-swap-s06,seed-plant-swap,6,Capture the community,Collect contacts of attendees who want a recurring swap or a future community garden.,1,false
+beach-lake-cleanup-s01,beach-lake-cleanup,1,Select shoreline site and tide/weather window,Choose an accessible stretch of shore and a date with a fallback option for bad weather.,2,false
+beach-lake-cleanup-s02,beach-lake-cleanup,2,Coordinate with authorities,"Inform the municipality or lake authority, confirm access rules and waste pickup.",2,true
+beach-lake-cleanup-s03,beach-lake-cleanup,3,Plan litter data collection,Adopt a simple litter survey protocol so the cleanup contributes data to marine litter research.,3,true
+beach-lake-cleanup-s04,beach-lake-cleanup,4,Gather equipment and safety gear,"Source gloves, bags, buckets for sorting, and sun/water safety equipment.",3,false
+beach-lake-cleanup-s05,beach-lake-cleanup,5,Promote the event,Publicise with strong before-photos of the site; partner with local water-sports clubs.,3,true
+beach-lake-cleanup-s06,beach-lake-cleanup,6,Run cleanup and sort waste,"Brief volunteers, assign zones, and sort collected waste into recyclables and residual.",5,false
+beach-lake-cleanup-s07,beach-lake-cleanup,7,Report results,"Submit litter data, publish totals and photos, and thank partners and volunteers.",2,true
+fruit-rescue-s01,fruit-rescue,1,Map fruit trees and recruit tree owners,"Invite owners to register trees they cannot harvest; log location, species and ripening window.",4,true
+fruit-rescue-s02,fruit-rescue,2,Set the sharing agreement,"Define the split (e.g. thirds to owner, pickers, charity) and a simple liability waiver for climbing/ladders.",2,true
+fruit-rescue-s03,fruit-rescue,3,Gather harvesting equipment,"Source ladders, picking bags, crates and fruit pickers; arrange storage between harvests.",3,false
+fruit-rescue-s04,fruit-rescue,4,Recruit and schedule pickers,Build a picker list and match small teams to trees as they ripen.,3,true
+fruit-rescue-s05,fruit-rescue,5,Run harvest sessions,"Lead safe picking sessions, weigh the harvest and split according to the agreement.",4,false
+fruit-rescue-s06,fruit-rescue,6,Distribute surplus,Deliver the charity share to a food bank or community fridge and log totals.,2,false
+disco-soup-s01,disco-soup,1,Secure surplus food sources,"Agree with supermarkets, bakeries or markets to donate unsellable but safe produce.",4,true
+disco-soup-s02,disco-soup,2,Book venue with kitchen access,"Find a public square or hall with cooking facilities, water and power.",3,false
+disco-soup-s03,disco-soup,3,Plan the menu and hygiene protocol,Design flexible recipes for unpredictable ingredients and set food-safety rules for volunteers.,3,true
+disco-soup-s04,disco-soup,4,Recruit cooking volunteers and a lead cook,"Find an experienced cook to lead plus 6-10 helpers for chopping, cooking and serving.",3,true
+disco-soup-s05,disco-soup,5,Promote as a festive public event,"Market it as a party with purpose: music, free food, and a message about food waste.",3,true
+disco-soup-s06,disco-soup,6,Run the event,"Coordinate food collection, communal preparation, serving and the atmosphere on the day.",8,false
+disco-soup-s07,disco-soup,7,Share impact,Publish kilograms of food rescued and portions served; credit food donors visibly.,2,true
+book-toy-swap-s01,book-toy-swap,1,Choose venue and format,"Book a library, school hall or café and decide swap rules and item quality standards.",2,false
+book-toy-swap-s02,book-toy-swap,2,Promote to families,"Reach parents via schools, kindergartens and neighbourhood groups.",3,true
+book-toy-swap-s03,book-toy-swap,3,Organise intake and display,Plan quality checks and arrange items by age group and category.,2,false
+book-toy-swap-s04,book-toy-swap,4,Run the swap,"Manage intake, keep displays tidy and host a small reading or play corner.",4,false
+book-toy-swap-s05,book-toy-swap,5,Donate leftovers,"Pass unclaimed items to a charity, hospital or refugee support organisation.",2,false
+ewaste-drive-s01,ewaste-drive,1,Partner with a certified recycler,Agree with a licensed e-waste recycler or municipal service to take the collected items.,3,true
+ewaste-drive-s02,ewaste-drive,2,Choose a visible drop-off site,"Book a car park, school yard or market corner with easy drive-up access for a Saturday morning.",2,false
+ewaste-drive-s03,ewaste-drive,3,Plan data-security messaging,Prepare guidance on wiping personal data from devices before donation.,2,true
+ewaste-drive-s04,ewaste-drive,4,Promote with a clear accepted-items list,Publish exactly what is and is not accepted to avoid being dumped with hazardous items.,3,true
+ewaste-drive-s05,ewaste-drive,5,Run the collection,"Staff intake, sort items into recycler categories and handle batteries safely.",5,false
+ewaste-drive-s06,ewaste-drive,6,Report the haul,"Publish total weight collected and, where possible, devices routed to reuse rather than recycling.",2,true
+bioblitz-s01,bioblitz,1,Recruit a naturalist guide,"Find a local ecologist, birder or botanist willing to lead identification.",3,true
+bioblitz-s02,bioblitz,2,Choose site and get access permission,"Pick a park, reserve or riverbank and confirm group access with the manager.",2,true
+bioblitz-s03,bioblitz,3,Set up the recording tool,Create an event project in a citizen-science app (e.g. iNaturalist) and prepare a how-to guide.,2,true
+bioblitz-s04,bioblitz,4,Promote to families and schools,Frame it as a nature treasure hunt; invite school classes and family groups.,3,true
+bioblitz-s05,bioblitz,5,Run the BioBlitz,"Lead the walk, help participants photograph and log species, and keep groups safe.",4,false
+bioblitz-s06,bioblitz,6,Publish the species count,Share the final species tally and highlight notable finds with the community and the site manager.,2,true
+birdhouse-workshop-s01,birdhouse-workshop,1,Design build kits,Choose species-appropriate designs and prepare cutting lists sized for beginners.,3,true
+birdhouse-workshop-s02,birdhouse-workshop,2,Source materials and tools,"Get untreated timber (ideally offcuts/donations), screws, drills and saws for group use.",4,false
+birdhouse-workshop-s03,birdhouse-workshop,3,Book a workshop space,"Find a makerspace, school workshop or garage with workbenches and power.",2,false
+birdhouse-workshop-s04,birdhouse-workshop,4,Promote and take registrations,Cap participant numbers to match tools; promote to families and garden owners.,2,true
+birdhouse-workshop-s05,birdhouse-workshop,5,Run the build session,"Teach safe tool use, guide assembly and explain correct placement for each design.",5,false
+birdhouse-workshop-s06,birdhouse-workshop,6,Coordinate installation,Help participants site boxes correctly and arrange installing a few in public green spaces.,2,false
+give-box-s01,give-box,1,Choose location and get permission,"Find a sheltered, visible, accessible spot and get written approval from the municipality or landowner.",4,true
+give-box-s02,give-box,2,Design a weatherproof cabinet,"Design or adapt a robust, rainproof design with clear signage space.",3,true
+give-box-s03,give-box,3,Source materials or an old cabinet,Get donated materials or upcycle an old wardrobe/phone box; budget for weatherproofing.,3,false
+give-box-s04,give-box,4,Build the box,Construct and weatherproof the cabinet over one or two build days.,8,false
+give-box-s05,give-box,5,Install and launch,"Mount it securely, stock it with starter items and hold a small opening moment for the neighbourhood.",4,false
+give-box-s06,give-box,6,Set up light-touch stewardship,Recruit 2-3 nearby residents to tidy it weekly and post house rules inside.,2,true
+pollinator-planting-s01,pollinator-planting,1,Identify a site and get approval,"Find an underused green strip and get permission from the municipality or landowner, including a no-mow agreement.",4,true
+pollinator-planting-s02,pollinator-planting,2,Choose native seed mix,"Select a regionally native, pollinator-friendly seed mix suited to the soil and light conditions.",2,true
+pollinator-planting-s03,pollinator-planting,3,Plan site preparation,"Determine how the ground will be cleared and prepared, and what tools are needed.",2,true
+pollinator-planting-s04,pollinator-planting,4,Recruit volunteers and promote,Invite neighbours and families; frame it as creating a butterfly meadow on their street.,3,true
+pollinator-planting-s05,pollinator-planting,5,Run the planting day,"Prepare soil, sow seeds or plant plugs, water in, and install a small explanatory sign.",5,false
+pollinator-planting-s06,pollinator-planting,6,Arrange aftercare,Set a light watering/weeding rota for the establishment period and agree the mowing regime.,2,true
+documentary-night-s01,documentary-night,1,Choose film and secure screening rights,Pick an engaging film and obtain a public screening licence or use a free-to-screen title.,3,true
+documentary-night-s02,documentary-night,2,Book venue with projection,"Find a café, library or hall with projector, sound and seating.",2,false
+documentary-night-s03,documentary-night,3,Design the discussion format,Prepare 3-4 discussion questions that connect the film to concrete local action options.,2,true
+documentary-night-s04,documentary-night,4,Promote the evening,"Publicise via local calendars, posters and partner organisations.",3,true
+documentary-night-s05,documentary-night,5,Host the screening and discussion,"Welcome guests, run the screening, and facilitate the conversation toward next steps.",4,false
+documentary-night-s06,documentary-night,6,Capture interest for follow-up projects,"Collect contacts of attendees who want to act, and connect them to concrete projects.",1,true
+mending-circle-s01,mending-circle,1,Recruit 1-2 sewing mentors,"Find experienced menders willing to teach basics like darning, patching and button repair.",3,true
+mending-circle-s02,mending-circle,2,Find a regular cosy venue,"Book a recurring slot in a café, library or community room with good light and tables.",2,false
+mending-circle-s03,mending-circle,3,Assemble a shared mending kit,"Collect needles, threads, yarns, patches and a couple of sewing machines.",3,false
+mending-circle-s04,mending-circle,4,Promote the first sessions,"Emphasise the social, creative angle; ask people to bring one damaged garment.",3,true
+mending-circle-s05,mending-circle,5,Host the first circle,"Run intros, demonstrate a basic technique, and support everyone to finish one repair.",3,false
+mending-circle-s06,mending-circle,6,Establish the recurring rhythm,"Fix a monthly schedule, rotate hosting duties and build a message group for regulars.",2,true
+community-garden-s01,community-garden,1,Gauge interest and form a core group,"Confirm 5-10 committed neighbours and agree the garden's purpose (food, community, education).",4,true
+community-garden-s02,community-garden,2,Find and assess land,"Identify candidate plots; check sunlight, water access, soil contamination history and ownership.",8,false
+community-garden-s03,community-garden,3,Negotiate land use agreement,Agree a written multi-year use agreement with the municipality or landowner.,6,true
+community-garden-s04,community-garden,4,Design the garden layout,"Plan beds, paths, compost area, water points and a communal space; decide plot vs. communal model.",5,true
+community-garden-s05,community-garden,5,Budget and fundraise for setup,"Cost soil, timber, tools and water connection; raise funds via small grants or crowdfunding.",6,true
+community-garden-s06,community-garden,6,Organise build days,"Run 2-3 volunteer days to build beds, paths and compost bins.",12,false
+community-garden-s07,community-garden,7,Set governance and rules,"Agree membership, fees, plot allocation, shared duties and conflict resolution.",4,true
+community-garden-s08,community-garden,8,Plant the first season,Coordinate a planting plan and first sowing with all members.,6,false
+community-garden-s09,community-garden,9,Establish ongoing rhythm,"Set up watering rotas, monthly workdays and a communication channel.",3,true
+community-compost-s01,community-compost,1,Assess demand and site options,Survey neighbours on interest and find a site with drainage and reasonable distance from homes.,5,true
+community-compost-s02,community-compost,2,Get municipal approval,"Clarify local rules on composting sites, odour and vermin control, and get written permission.",5,true
+community-compost-s03,community-compost,3,Design the composting system,"Choose the system (3-bay, tumblers, bokashi) sized for expected volume, and plan the material flow.",4,true
+community-compost-s04,community-compost,4,Build the composting site,"Construct bins, signage and a covered browns storage area over 1-2 build days.",10,false
+community-compost-s05,community-compost,5,Train compost stewards,"Train 3-5 volunteers in layering, turning, temperature checks and troubleshooting.",4,false
+community-compost-s06,community-compost,6,Onboard households,"Register participating households, distribute caddies and a clear what-goes-in guide.",4,true
+community-compost-s07,community-compost,7,Run and monitor the first cycles,"Operate a steward rota, monitor quality and fix issues quickly to keep neighbours onside.",6,false
+community-compost-s08,community-compost,8,Distribute finished compost,Hold a compost giveaway day for members and the local community garden.,3,false
+tool-library-s01,tool-library,1,Validate demand and model,Survey the neighbourhood on desired items and willingness to pay a small membership fee.,5,true
+tool-library-s02,tool-library,2,Find a home for the collection,"Secure a small storage space with public access hours — a shop corner, cellar or container.",6,false
+tool-library-s03,tool-library,3,Sort legal structure and insurance,"Set up a simple association, liability terms for borrowers and insurance for the inventory.",8,true
+tool-library-s04,tool-library,4,Collect and catalogue inventory,"Run a donation drive for quality tools; test, tag and catalogue each item.",10,false
+tool-library-s05,tool-library,5,Set up a booking system,Deploy lightweight lending software (several open-source options exist) with member accounts and due dates.,6,true
+tool-library-s06,tool-library,6,Recruit and train volunteer librarians,Build a rota of volunteers to staff opening hours and check items in/out.,5,true
+tool-library-s07,tool-library,7,Launch with an open day,"Hold a launch event with demos, sign-ups and a tool amnesty for more donations.",5,false
+tool-library-s08,tool-library,8,Establish maintenance routines,Set up repair days for damaged items and periodic inventory checks.,3,false
+community-fridge-s01,community-fridge,1,Find a host location,"Secure a sheltered, accessible spot with power — outside a shop, community centre or church.",6,true
+community-fridge-s02,community-fridge,2,Clarify food-safety rules,"Define what may be shared (no raw meat/fish, date rules) following established community-fridge guidelines.",4,true
+community-fridge-s03,community-fridge,3,Source a fridge and shelter,Get a donated or cheap reliable fridge and build a simple weatherproof housing if outdoors.,5,false
+community-fridge-s04,community-fridge,4,Recruit fridge stewards,"Build a rota of volunteers for daily checks, cleaning and temperature logging.",4,true
+community-fridge-s05,community-fridge,5,Onboard food donors,"Sign up nearby bakeries, shops and households as regular contributors.",5,true
+community-fridge-s06,community-fridge,6,Launch and publicise,"Open with clear signage on rules, and publicise so both givers and takers feel welcome.",4,false
+community-fridge-s07,community-fridge,7,Monitor and adapt,"Track usage and hygiene, fix problems fast and share impact numbers monthly.",3,true
+food-rescue-s01,food-rescue,1,Map donors and recipients,"List potential food donors (bakeries, supermarkets, caterers) and recipients (shelters, fridges, food banks).",5,true
+food-rescue-s02,food-rescue,2,Agree donation terms,"Sign simple agreements covering pickup times, food types and liability with each donor.",6,true
+food-rescue-s03,food-rescue,3,Design safe transport routine,"Plan routes, cool boxes and hygiene rules so food stays safe in transit.",4,true
+food-rescue-s04,food-rescue,4,Recruit rescue riders/drivers,Build a pool of volunteers with bikes or cars who each take one short weekly slot.,5,true
+food-rescue-s05,food-rescue,5,Set up shift scheduling,Use a simple scheduling tool so every pickup slot is reliably covered or escalated.,3,true
+food-rescue-s06,food-rescue,6,Run a pilot month,"Operate 2-3 routes for a month, log weights and iron out timing problems.",8,false
+food-rescue-s07,food-rescue,7,Scale and report,"Add donors and routes, and publish monthly kilograms rescued to keep partners engaged.",4,true
+repair-skills-course-s01,repair-skills-course,1,Design the curriculum,Define 4-6 sessions with clear skills outcomes per session and required materials.,6,true
+repair-skills-course-s02,repair-skills-course,2,Recruit instructors,Find skilled repairers able to teach each module; agree dates and any stipends.,5,true
+repair-skills-course-s03,repair-skills-course,3,Book workshop venue,"Secure a space with workbenches, power and tool storage for the series.",3,false
+repair-skills-course-s04,repair-skills-course,4,Source practice materials,Collect broken donor devices/garments for participants to practise on.,4,false
+repair-skills-course-s05,repair-skills-course,5,Recruit participants,Open registration with a small commitment fee to reduce no-shows.,4,true
+repair-skills-course-s06,repair-skills-course,6,Deliver the sessions,"Run each session with demos, guided practice and safety supervision.",15,false
+repair-skills-course-s07,repair-skills-course,7,Graduate fixers into repair cafés,Connect graduates to local repair cafés as volunteer fixers.,2,true
+school-garden-s01,school-garden,1,Win school buy-in,Pitch the programme to the head and 1-2 champion teachers; agree goals and responsibilities.,6,true
+school-garden-s02,school-garden,2,Design an age-appropriate garden,"Plan raised beds, safe tools and crops that fruit within school terms.",5,true
+school-garden-s03,school-garden,3,Fund the build,"Raise a small budget through the parents' association, local sponsors or a mini-grant.",6,true
+school-garden-s04,school-garden,4,Build with the school community,Run a family build day to construct beds and fill soil.,8,false
+school-garden-s05,school-garden,5,Create simple lesson links,Prepare seasonal activity sheets linking garden tasks to the curriculum.,6,true
+school-garden-s06,school-garden,6,Support the first growing year,"Mentor teachers through sowing, care and harvest across the school year.",12,false
+school-garden-s07,school-garden,7,Plan holiday care and handover,Set up a holiday watering rota and progressively hand ownership to the school.,3,true
+tree-planting-s01,tree-planting,1,Identify planting sites,"Survey the neighbourhood for viable spots considering utilities, sightlines and space for mature trees.",6,false
+tree-planting-s02,tree-planting,2,Get municipal approval and species advice,Work with the city's green department on permissions and climate-adapted native species.,8,true
+tree-planting-s03,tree-planting,3,Fund the trees,"Cost saplings, stakes and soil; raise funds via sponsorship (e.g. adopt-a-tree) or grants.",6,true
+tree-planting-s04,tree-planting,4,Recruit resident tree stewards,Sign up nearby residents to water and watch over specific trees for the first two summers.,4,true
+tree-planting-s05,tree-planting,5,Organise the planting day,"Coordinate delivery, tools, pit preparation and a correct-planting demo.",6,false
+tree-planting-s06,tree-planting,6,Plant and celebrate,"Plant with residents, mulch and stake properly, and mark the day with the neighbourhood.",6,false
+tree-planting-s07,tree-planting,7,Run the aftercare programme,Coordinate watering reminders and check-ups through the critical establishment period.,4,true
+bulk-buying-group-s01,bulk-buying-group,1,Form the founding group,Gather 8-15 households and agree product priorities and order frequency.,4,true
+bulk-buying-group-s02,bulk-buying-group,2,Select suppliers,"Research wholesalers and producers offering bulk, low-packaging staples at good prices.",6,true
+bulk-buying-group-s03,bulk-buying-group,3,Set up ordering and payments,Create a shared order sheet and a transparent payment/settlement process.,4,true
+bulk-buying-group-s04,bulk-buying-group,4,Organise distribution point,"Arrange a garage or community room for delivery, splitting and pickup.",3,false
+bulk-buying-group-s05,bulk-buying-group,5,Run the first order cycle,"Collect orders, place the bulk order, split goods into member portions and settle payments.",6,false
+bulk-buying-group-s06,bulk-buying-group,6,Refine and formalise,Review pricing and effort after 2-3 cycles; agree roles and a small margin for shared costs.,3,true
+lift-sharing-s01,lift-sharing,1,Define the community and routes,"Pick a bounded community with repeated journeys (commutes, training sessions, school runs).",3,true
+lift-sharing-s02,lift-sharing,2,Choose a matching mechanism,"Select a simple tool — an existing carpool app, a group chat with pinned routes, or a shared sheet.",4,true
+lift-sharing-s03,lift-sharing,3,Set ground rules,"Agree cost-sharing norms, reliability expectations and insurance basics for drivers.",3,true
+lift-sharing-s04,lift-sharing,4,Recruit a critical mass,Sign up enough drivers and riders on the core routes for matches to actually occur.,6,true
+lift-sharing-s05,lift-sharing,5,Launch and seed the first matches,Manually broker the first pairings so early users experience success.,4,true
+lift-sharing-s06,lift-sharing,6,Monitor and celebrate savings,Track shared rides and publicise kilometres and CO2 saved to sustain participation.,3,true
+walking-school-bus-s01,walking-school-bus,1,Partner with the school,Get school endorsement and help contacting interested families.,4,true
+walking-school-bus-s02,walking-school-bus,2,Design safe routes and stops,"Map 1-3 walking routes with timed pickup stops, avoiding dangerous crossings.",5,false
+walking-school-bus-s03,walking-school-bus,3,Recruit parent walkers,Sign up enough adult volunteers for a reliable rota with backups.,5,true
+walking-school-bus-s04,walking-school-bus,4,Set safety protocol,"Agree adult-child ratios, registration procedure, absence handling and bad-weather rules.",3,true
+walking-school-bus-s05,walking-school-bus,5,Pilot for two weeks,"Run the routes daily, adjust timings and fix pain points.",8,false
+walking-school-bus-s06,walking-school-bus,6,Formalise the rota,Move to a stable schedule with a coordinator per route and a substitution system.,3,true
+textile-upcycling-s01,textile-upcycling,1,Recruit sewing instructors,Find 2-3 skilled sewists/designers to lead project-based sessions.,4,true
+textile-upcycling-s02,textile-upcycling,2,Secure machines and space,Book a venue and source 6-10 working sewing machines (borrowed or donated).,6,false
+textile-upcycling-s03,textile-upcycling,3,Collect donor textiles,Run a textile donation drive and sort usable fabric by type.,4,false
+textile-upcycling-s04,textile-upcycling,4,Design beginner-friendly projects,"Prepare 3-4 projects (tote from jeans, patchwork cushion) with patterns and steps.",5,true
+textile-upcycling-s05,textile-upcycling,5,Promote and register participants,Market the series and manage sign-ups sized to machine availability.,3,true
+textile-upcycling-s06,textile-upcycling,6,Deliver the workshops,Teach the sessions with per-machine support and safety guidance.,12,false
+textile-upcycling-s07,textile-upcycling,7,Showcase results,Hold a small exhibition or online gallery of finished pieces to recruit the next cohort.,2,true
+plant-based-cooking-club-s01,plant-based-cooking-club,1,Find a kitchen venue,Book a community kitchen or rotate between members' homes for monthly sessions.,3,false
+plant-based-cooking-club-s02,plant-based-cooking-club,2,Set the format,"Agree the model: shared cost, rotating menu themes, and one host-cook per session.",2,true
+plant-based-cooking-club-s03,plant-based-cooking-club,3,Plan seasonal menus,Draft simple seasonal menus with shopping lists sized per group.,3,true
+plant-based-cooking-club-s04,plant-based-cooking-club,4,Recruit members,"Invite a mixed group and emphasise the food-first, non-preachy framing.",3,true
+plant-based-cooking-club-s05,plant-based-cooking-club,5,Host the first sessions,"Cook and eat together, sharing techniques and recipe cards.",8,false
+plant-based-cooking-club-s06,plant-based-cooking-club,6,Publish the recipe collection,Compile tested recipes into a shared booklet or webpage for wider reach.,3,true
+green-map-s01,green-map,1,Define categories and coverage area,"Agree the directory scope: repair, reuse, refill, sharing, food rescue.",2,true
+green-map-s02,green-map,2,Crowdsource and research entries,Split the area among volunteers to research and verify entries by phone or visit.,10,true
+green-map-s03,green-map,3,Build the map,Publish entries on an open map platform with categories and descriptions.,6,true
+green-map-s04,green-map,4,Verify with listed businesses,Contact each business to confirm details and permission to be listed.,4,true
+green-map-s05,green-map,5,Design a printable version,Create a printable one-page map/flyer for libraries and cafés.,4,true
+green-map-s06,green-map,6,Launch and maintain,Promote the map and set a twice-yearly verification routine.,3,true
+play-street-s01,play-street,1,Build resident support,Door-knock the street to gather signatures supporting a temporary closure.,5,false
+play-street-s02,play-street,2,Apply for the street closure permit,Navigate the municipal permit process including traffic plan and notification requirements.,8,true
+play-street-s03,play-street,3,Plan activities and safety,"Organise games, chalk zones, a shared table, and barriers/marshals for the closure points.",4,true
+play-street-s04,play-street,4,Borrow equipment,"Source barriers, signage, games and furniture from the municipality and neighbours.",3,false
+play-street-s05,play-street,5,Promote to the whole street,Letterbox every household with the date and how to get involved.,3,false
+play-street-s06,play-street,6,Run the day,"Manage setup, marshals, activities and teardown.",8,false
+play-street-s07,play-street,7,Gather momentum,Survey attendees on making it regular and share results with the municipality.,2,true
+draft-proofing-brigade-s01,draft-proofing-brigade,1,Define the measure kit,"Choose safe, high-impact measures: draft strips, radiator foil, LED swaps, thermostat guidance.",4,true
+draft-proofing-brigade-s02,draft-proofing-brigade,2,Train the brigade,"Run a hands-on training day covering measures, measurement and respectful home visits.",6,false
+draft-proofing-brigade-s03,draft-proofing-brigade,3,Fund the materials,"Buy kits in bulk via a small grant, sponsorship or cost-price contributions.",4,true
+draft-proofing-brigade-s04,draft-proofing-brigade,4,Recruit households,Prioritise energy-poor households via community organisations and simple sign-up.,5,true
+draft-proofing-brigade-s05,draft-proofing-brigade,5,Set visit protocol,"Agree two-person visits, consent forms, and what the brigade will and won't touch (no gas/mains).",3,true
+draft-proofing-brigade-s06,draft-proofing-brigade,6,Run visit rounds,"Schedule and complete home visits, logging measures installed per home.",12,false
+draft-proofing-brigade-s07,draft-proofing-brigade,7,Measure and report savings,Estimate energy/cost savings per home and report results to funders and community.,3,true
+hard-to-recycle-points-s01,hard-to-recycle-points,1,Identify recyclable streams and takers,Research which hard-to-recycle streams have genuine local recycling routes and confirm the receivers.,5,true
+hard-to-recycle-points-s02,hard-to-recycle-points,2,Recruit host locations,"Sign up cafés, shops and offices willing to host labelled collection boxes.",5,true
+hard-to-recycle-points-s03,hard-to-recycle-points,3,Design and place boxes,"Create clearly labelled, tidy collection boxes with accepted-items graphics.",4,false
+hard-to-recycle-points-s04,hard-to-recycle-points,4,Organise the emptying rota,Set volunteer routes to empty boxes and deliver materials to recyclers monthly.,3,true
+hard-to-recycle-points-s05,hard-to-recycle-points,5,Publicise the network,Publish a map of points and what each accepts.,3,true
+hard-to-recycle-points-s06,hard-to-recycle-points,6,Track volumes and expand,"Log collected volumes, drop dead streams, add popular ones and new locations.",3,true
+battery-awareness-campaign-s01,battery-awareness-campaign,1,Map official drop-off points,Compile every local battery/bulb return point into a simple map.,3,true
+battery-awareness-campaign-s02,battery-awareness-campaign,2,Create campaign materials,"Design posters and a one-pager explaining why and where, in plain language.",4,true
+battery-awareness-campaign-s03,battery-awareness-campaign,3,Distribute through local channels,"Place materials in shops, schools and building lobbies; post in neighbourhood groups.",4,false
+battery-awareness-campaign-s04,battery-awareness-campaign,4,Run a collection booster week,Pair the campaign with a one-week household amnesty drive at a visible point.,5,false
+battery-awareness-campaign-s05,battery-awareness-campaign,5,Report results,Share collected volumes and keep the map alive as a lasting resource.,2,true
+guerrilla-gardening-s01,guerrilla-gardening,1,Scout neglected spots,"Identify tree pits, verges and abandoned planters where planting would be welcomed.",3,false
+guerrilla-gardening-s02,guerrilla-gardening,2,Check the legal position,Understand local rules; where possible seek informal blessing from the municipality to avoid removal.,2,true
+guerrilla-gardening-s03,guerrilla-gardening,3,Choose hardy native plants,"Select drought-tolerant, non-invasive natives that survive neglect.",2,true
+guerrilla-gardening-s04,guerrilla-gardening,4,Make seed bombs together,Host a fun seed-bomb-making session as a recruitment activity.,3,false
+guerrilla-gardening-s05,guerrilla-gardening,5,Plant and adopt spots,Plant the sites and have each participant adopt one spot for occasional watering.,4,false
+second-hand-market-s01,second-hand-market,1,Secure venue and permit,"Book a square, hall or street section and obtain the market permit.",6,true
+second-hand-market-s02,second-hand-market,2,Recruit sellers,Open stall registration with a small fee covering costs.,4,true
+second-hand-market-s03,second-hand-market,3,Plan site layout and logistics,"Map stall pitches, access, waste stations and wet-weather plan.",4,true
+second-hand-market-s04,second-hand-market,4,Promote to buyers,"Publicise through posters, socials and local press for footfall.",4,true
+second-hand-market-s05,second-hand-market,5,Run the market day,"Manage setup, stall allocation, visitors and teardown.",8,false
+second-hand-market-s06,second-hand-market,6,Handle unsold goods,Offer a donation point so unsold items go to charity rather than home or bin.,2,false
+climate-quiz-night-s01,climate-quiz-night,1,Partner with a venue,Agree a quiet-night slot with a pub or café that benefits from the crowd.,2,true
+climate-quiz-night-s02,climate-quiz-night,2,Write the quiz,"Create fun, surprising rounds that inform without lecturing.",4,true
+climate-quiz-night-s03,climate-quiz-night,3,Arrange small prizes,Get sustainable prizes donated by local businesses.,2,true
+climate-quiz-night-s04,climate-quiz-night,4,Promote the night,Publicise to reach beyond the usual green audience.,2,true
+climate-quiz-night-s05,climate-quiz-night,5,Host the quiz,"MC the evening, score rounds and plug local projects between rounds.",4,false
+sustainability-newsletter-s01,sustainability-newsletter,1,Define editorial focus,"Set the beat: local projects, events calendar, practical guides, interviews.",2,true
+sustainability-newsletter-s02,sustainability-newsletter,2,Set up the publishing platform,Choose a newsletter/blog platform and design a simple template.,3,true
+sustainability-newsletter-s03,sustainability-newsletter,3,Build a contributor pool,Recruit 3-5 writers/photographers who each cover one piece per issue.,4,true
+sustainability-newsletter-s04,sustainability-newsletter,4,Publish the first issues,"Write, edit and publish the first 2-3 issues on a fixed schedule.",8,true
+sustainability-newsletter-s05,sustainability-newsletter,5,Grow the audience,Cross-promote with local groups and gather reader feedback.,3,true
+swap-board-s01,swap-board,1,Choose physical vs digital format,"Decide between a weatherproof physical board, a chat group, or both.",2,true
+swap-board-s02,swap-board,2,Get placement permission,"For a physical board, agree a spot with a shop, building manager or municipality.",3,true
+swap-board-s03,swap-board,3,Build/set up the board,Construct and mount the board or configure the digital group with clear categories and rules.,4,false
+swap-board-s04,swap-board,4,Seed initial content,Ask 10-15 neighbours to post first offers so it never looks empty.,2,true
+swap-board-s05,swap-board,5,Moderate and maintain,Keep content fresh and appropriate with a light monthly tidy-up.,2,true
+solar-cooperative-s01,solar-cooperative,1,Form the founding team,"Assemble a core team covering technical, legal, financial and communications skills.",8,true
+solar-cooperative-s02,solar-cooperative,2,Choose the model,Decide between a group-purchase scheme (bulk discount for homeowners) and a cooperative owning shared installations.,10,true
+solar-cooperative-s03,solar-cooperative,3,Understand the regulatory framework,"Research local rules on grid connection, feed-in remuneration and self-consumption communities.",15,true
+solar-cooperative-s04,solar-cooperative,4,Survey interest and roof potential,Register interested households/roof owners and pre-assess roof suitability.,12,true
+solar-cooperative-s05,solar-cooperative,5,Set up the legal entity,"Found the cooperative or association with statutes, board and bank account.",15,true
+solar-cooperative-s06,solar-cooperative,6,Tender to installers,Run a competitive tender for a qualified installer with member pricing.,12,true
+solar-cooperative-s07,solar-cooperative,7,Arrange financing,"Structure member shares, bank finance or subsidy applications to fund installations.",15,true
+solar-cooperative-s08,solar-cooperative,8,Run the member campaign,Hold info evenings and enrol members with clear contracts and expected returns.,12,false
+solar-cooperative-s09,solar-cooperative,9,Oversee installations,"Coordinate site assessments, contracts and installation quality across member roofs.",20,false
+solar-cooperative-s10,solar-cooperative,10,Set up operations and reporting,"Establish monitoring, maintenance contracts and annual member reporting.",8,true
+community-renewable-s01,community-renewable,1,Build the municipal relationship,Win support from the municipality for hosting citizen-financed solar on a public roof.,12,true
+community-renewable-s02,community-renewable,2,Shortlist and assess roofs,"Technically assess candidate roofs for structure, orientation and grid connection.",12,false
+community-renewable-s03,community-renewable,3,Develop the business case,"Model costs, generation, tariffs and citizen-investor returns over 20-25 years.",15,true
+community-renewable-s04,community-renewable,4,Establish the legal vehicle,Create the cooperative/company and the roof-lease and power-purchase agreements with the municipality.,20,true
+community-renewable-s05,community-renewable,5,Raise citizen investment,Run a community share offer with clear prospectus and subscription process.,20,true
+community-renewable-s06,community-renewable,6,Procure and build,"Tender, contract and supervise the installation through to commissioning.",25,false
+community-renewable-s07,community-renewable,7,Launch publicly,Celebrate the switch-on publicly to build appetite for the next roof.,6,false
+community-renewable-s08,community-renewable,8,Operate and report,"Run monitoring, maintenance, insurance and annual investor reporting.",10,true
+energy-audit-service-s01,energy-audit-service,1,Develop the audit methodology,Create a standardised walk-through checklist and reporting template with an energy professional.,10,true
+energy-audit-service-s02,energy-audit-service,2,Address liability,"Set clear advisory-only terms, disclaimers and insurance for volunteers entering homes.",8,true
+energy-audit-service-s03,energy-audit-service,3,Train volunteer auditors,Deliver training with supervised practice audits before solo visits.,15,false
+energy-audit-service-s04,energy-audit-service,4,Build the referral pipeline,"Partner with the municipality and social organisations to reach households, prioritising energy poverty.",8,true
+energy-audit-service-s05,energy-audit-service,5,Schedule and run audits,"Book two-person visits, complete audits and deliver written recommendations.",20,false
+energy-audit-service-s06,energy-audit-service,6,Connect to follow-up support,"Link households to subsidy programmes, installers and the draft-proofing brigade.",6,true
+energy-audit-service-s07,energy-audit-service,7,Evaluate impact,Follow up on implemented measures and estimate aggregate savings.,5,true
+rain-garden-s01,rain-garden,1,Identify a suitable paved site,"Find over-paved space (school yard corner, parking edge) where infiltration would help.",5,false
+rain-garden-s02,rain-garden,2,Get technical and permit approval,"Confirm no utilities below, drainage suitability and municipal permission to depave.",12,true
+rain-garden-s03,rain-garden,3,Design the rain garden,"Design basin depth, overflow, soil profile and water-tolerant native planting.",8,true
+rain-garden-s04,rain-garden,4,Fund materials and machinery,"Budget for machinery hire, soil, gravel and plants; seek a green-infrastructure grant.",6,true
+rain-garden-s05,rain-garden,5,Organise the depave day,"Break and remove paving with proper tools, safety gear and disposal of rubble.",12,false
+rain-garden-s06,rain-garden,6,Build and plant the garden,"Shape the basin, amend soil and plant over one or two community days.",12,false
+rain-garden-s07,rain-garden,7,Monitor performance,Check infiltration after storms and maintain planting through year one.,4,false
+green-roof-pilot-s01,green-roof-pilot,1,Secure the host building,Agree with a community building owner to host a demonstration installation.,8,true
+green-roof-pilot-s02,green-roof-pilot,2,Commission structural assessment,Have an engineer verify load capacity and waterproofing condition.,8,false
+green-roof-pilot-s03,green-roof-pilot,3,Design the system,"Choose extensive green roof or facade system, plant palette and irrigation approach.",8,true
+green-roof-pilot-s04,green-roof-pilot,4,Fund the pilot,"Combine municipal green-building subsidies, sponsorship and crowdfunding.",10,true
+green-roof-pilot-s05,green-roof-pilot,5,Obtain permits,Secure building permission and any heritage/facade approvals.,8,true
+green-roof-pilot-s06,green-roof-pilot,6,Install with professionals and volunteers,Contract specialist work; involve volunteers in planting and finishing.,15,false
+green-roof-pilot-s07,green-roof-pilot,7,Use it as a demonstrator,Install monitoring and signage; host open visits to inspire replication.,5,false
+air-quality-network-s01,air-quality-network,1,Choose sensor platform,Select an established open-hardware sensor design with a public data platform.,5,true
+air-quality-network-s02,air-quality-network,2,Fund the sensor fleet,Budget 15-30 sensors and raise funds via micro-grants or host contributions.,5,true
+air-quality-network-s03,air-quality-network,3,Recruit sensor hosts,Sign up households/businesses across a representative grid with power and WiFi at mounting points.,6,true
+air-quality-network-s04,air-quality-network,4,Run sensor build workshops,Assemble and flash sensors together in soldering workshops.,10,false
+air-quality-network-s05,air-quality-network,5,Install and calibrate,"Mount sensors correctly, connect to the data platform and cross-check readings.",10,false
+air-quality-network-s06,air-quality-network,6,Analyse and publish findings,Produce accessible analyses of hotspots and trends for residents and the municipality.,8,true
+air-quality-network-s07,air-quality-network,7,Maintain the network,Set a maintenance rota for offline or drifting sensors.,4,false
+stream-restoration-s01,stream-restoration,1,Assess the stream section,"Document current condition, pollution sources and restoration potential with expert input.",10,false
+stream-restoration-s02,stream-restoration,2,Engage the water authority,Build a working relationship with the responsible authority; align on scope and permissions.,12,true
+stream-restoration-s03,stream-restoration,3,Develop the restoration plan,"Plan invasive removal, native replanting, bank stabilisation and habitat features within permitted scope.",10,true
+stream-restoration-s04,stream-restoration,4,Fund the works,Apply for environmental grants and secure in-kind support from the authority.,8,true
+stream-restoration-s05,stream-restoration,5,Run volunteer work days,Deliver the manual works in supervised volunteer days across seasons.,25,false
+stream-restoration-s06,stream-restoration,6,Monitor recovery,Track indicator species and water quality before/after with citizen-science methods.,8,false
+stream-restoration-s07,stream-restoration,7,Report and celebrate,Publish results with the authority and mark completion with the community.,4,true
+wildlife-corridor-s01,wildlife-corridor,1,Map the corridor route,Identify a habitat connection route across private and public land.,8,true
+wildlife-corridor-s02,wildlife-corridor,2,Negotiate with landowners,Secure planting agreements with each landowner along the route.,15,true
+wildlife-corridor-s03,wildlife-corridor,3,Design species mix,"Choose native hedgerow species for food, shelter and connectivity value.",5,true
+wildlife-corridor-s04,wildlife-corridor,4,Source plants and funding,Order bare-root whips in season and cover costs via biodiversity grants.,6,true
+wildlife-corridor-s05,wildlife-corridor,5,Run planting days,"Plant sections with volunteers over the dormant season, with protection against browsing.",18,false
+wildlife-corridor-s06,wildlife-corridor,6,Establish maintenance agreements,Agree who maintains each section for the establishment years.,5,true
+wildlife-corridor-s07,wildlife-corridor,7,Monitor wildlife use,"Set up simple wildlife monitoring (tracks, cameras, surveys) along the corridor.",5,false
+community-orchard-s01,community-orchard,1,Secure long-term land access,"Negotiate a 10+ year agreement, since trees need years to bear fruit.",12,true
+community-orchard-s02,community-orchard,2,Design the orchard,"Plan spacing, pollination partners and heritage local varieties with expert advice.",8,true
+community-orchard-s03,community-orchard,3,Fund trees and infrastructure,"Budget trees, stakes, guards and water access; run adopt-a-tree sponsorships.",6,true
+community-orchard-s04,community-orchard,4,Prepare the site,"Clear, mark out and prepare planting pits before the dormant season.",10,false
+community-orchard-s05,community-orchard,5,Hold the planting festival,Plant the orchard in a community celebration with correct technique demos.,8,false
+community-orchard-s06,community-orchard,6,Set up the care group,"Train a stewardship group in formative pruning, watering and pest care.",8,false
+community-orchard-s07,community-orchard,7,Plan annual traditions,Establish blossom day and harvest festival to keep the community attached year-round.,4,true
+sme-sustainability-audit-s01,sme-sustainability-audit,1,Build the audit framework,"Adapt a lightweight SME framework covering energy, waste, procurement and transport.",10,true
+sme-sustainability-audit-s02,sme-sustainability-audit,2,Recruit professional volunteers,"Enlist volunteers with sustainability, engineering or finance backgrounds.",6,true
+sme-sustainability-audit-s03,sme-sustainability-audit,3,Pilot with friendly businesses,Test the audit with 2-3 supportive businesses and refine for time-poor owners.,12,false
+sme-sustainability-audit-s04,sme-sustainability-audit,4,Formalise the offer,"Define scope, confidentiality terms and a professional report template.",5,true
+sme-sustainability-audit-s05,sme-sustainability-audit,5,Recruit client businesses,Promote via the business association and chamber of commerce.,6,true
+sme-sustainability-audit-s06,sme-sustainability-audit,6,Deliver audit cycles,Match volunteer pairs to businesses and deliver audits with prioritised action plans.,20,false
+sme-sustainability-audit-s07,sme-sustainability-audit,7,Showcase wins,Publish anonymised case studies of savings achieved to attract the next cohort.,4,true
+cargo-bike-share-s01,cargo-bike-share,1,Choose the operating model,Decide between joining an existing sharing platform/network and building a standalone scheme.,6,true
+cargo-bike-share-s02,cargo-bike-share,2,Fund the fleet,"Finance 2-5 cargo bikes via grants, sponsorship from local businesses or municipal mobility funds.",8,true
+cargo-bike-share-s03,cargo-bike-share,3,Set up booking and access,Deploy a booking system and key handover solution (host locations or smart locks).,8,true
+cargo-bike-share-s04,cargo-bike-share,4,Recruit host stations,Sign up cafés/shops as bike homes handling handovers during opening hours.,6,true
+cargo-bike-share-s05,cargo-bike-share,5,Sort insurance and user terms,Arrange bike insurance and clear user agreements covering damage and liability.,6,true
+cargo-bike-share-s06,cargo-bike-share,6,Launch and onboard riders,Run try-out days teaching cargo bike handling and sign up members.,8,false
+cargo-bike-share-s07,cargo-bike-share,7,Maintain the fleet,Establish regular maintenance with a local bike shop or volunteer mechanics.,5,false
+cargo-bike-share-s08,cargo-bike-share,8,Track usage and expand,Monitor bookings and user feedback; add bikes/stations where demand is proven.,4,true
+climate-advocacy-group-s01,climate-advocacy-group,1,Found the group,"Gather a committed core, agree scope (advocacy vs. assembly push) and working principles.",6,true
+climate-advocacy-group-s02,climate-advocacy-group,2,Research the policy landscape,"Analyse the municipality's climate plans, budgets and decision calendar to find leverage points.",12,true
+climate-advocacy-group-s03,climate-advocacy-group,3,Define concrete asks,"Formulate 2-3 specific, costed, achievable policy proposals rather than general demands.",8,true
+climate-advocacy-group-s04,climate-advocacy-group,4,Build a broad coalition,"Ally with local organisations, businesses and scientists to widen legitimacy.",10,true
+climate-advocacy-group-s05,climate-advocacy-group,5,Engage decision-makers,Meet councillors and officials; present proposals constructively and persistently.,12,false
+climate-advocacy-group-s06,climate-advocacy-group,6,Mobilise public support,"Run petitions, public meetings and local media work around the asks.",12,true
+climate-advocacy-group-s07,climate-advocacy-group,7,Track and sustain,"Monitor decisions, celebrate wins publicly and maintain momentum between milestones.",8,true

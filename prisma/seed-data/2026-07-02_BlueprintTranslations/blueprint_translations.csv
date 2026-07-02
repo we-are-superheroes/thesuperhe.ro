@@ -1,0 +1,101 @@
+blueprint_slug,language,title,summary
+litter-pick,fr-CH,Ramassage de déchets / Nettoyage de rivière,"Organiser une journée de nettoyage communautaire d'un parc, d'une rue, d'une berge ou d'un sentier."
+litter-pick,de-CH,Abfallsammelaktion / Flussuferreinigung,"Eine eintägige gemeinschaftliche Reinigung eines Parks, einer Strasse, eines Flussufers oder eines Wegs organisieren."
+repair-cafe,fr-CH,Repair Café,"Organiser un événement éphémère où des réparateur·trice·s bénévoles aident les voisin·e·s à réparer électronique, vêtements, vélos et meubles."
+repair-cafe,de-CH,Repair Café,"Einen Anlass durchführen, an dem freiwillige Reparaturprofis Nachbarinnen und Nachbarn beim Reparieren von Elektronik, Kleidern, Velos und Möbeln helfen."
+clothing-swap,fr-CH,Troc de vêtements,Organiser un événement où l'on échange des vêtements de qualité au lieu d'en acheter des neufs.
+clothing-swap,de-CH,Kleidertauschbörse,"Einen Anlass organisieren, an dem gut erhaltene Kleider getauscht statt neu gekauft werden."
+seed-plant-swap,fr-CH,Bourse aux graines et aux plantes,"Organiser un échange saisonnier de graines, plantons et boutures pour les jardinier·ère·s de la région."
+seed-plant-swap,de-CH,Samen- und Pflanzentauschbörse,"Einen saisonalen Tausch von Samen, Setzlingen und Ablegern für Gärtnerinnen und Gärtner der Region durchführen."
+beach-lake-cleanup,fr-CH,Nettoyage de plage / rive de lac,Organiser un nettoyage de rivage avec tri des déchets et collecte facultative de données de science citoyenne.
+beach-lake-cleanup,de-CH,Strand- / Seeuferreinigung,Eine Uferreinigung mit Abfalltrennung und optionaler Citizen-Science-Datenerhebung durchführen.
+fruit-rescue,fr-CH,Récolte communautaire de fruits (sauvetage de fruits),"Cueillir les fruits non récoltés d'arbres privés et publics et les distribuer aux cueilleur·euse·s, aux propriétaires et aux œuvres d'entraide."
+fruit-rescue,de-CH,Gemeinschaftliche Obsternte (Obst retten),"Nicht geerntetes Obst von privaten und öffentlichen Bäumen pflücken und an Pflückende, Eigentümer und Hilfswerke verteilen."
+disco-soup,fr-CH,Cuisine anti-gaspi (Disco Soupe),"Cuisiner et partager un repas public préparé avec des invendus alimentaires, en musique et en parlant du gaspillage alimentaire."
+disco-soup,de-CH,Foodwaste-Kochanlass (Disco Soup),Aus geretteten Lebensmitteln gemeinsam ein öffentliches Essen kochen – mit Musik und Gesprächen über Food Waste.
+book-toy-swap,fr-CH,Troc de livres et de jouets,"Un événement d'échange familial pour livres, jeux et jouets."
+book-toy-swap,de-CH,Bücher- / Spielsachen-Tauschbörse,"Ein familienfreundlicher Tauschanlass für Bücher, Spiele und Spielsachen."
+ewaste-drive,fr-CH,Collecte de déchets électroniques,"Une collecte de quartier d'une journée pour vieux appareils électroniques, câbles et piles, en vue d'un recyclage certifié."
+ewaste-drive,de-CH,Elektroschrott-Sammelaktion,"Eine eintägige Quartiersammlung von Altgeräten, Kabeln und Batterien für zertifiziertes Recycling."
+bioblitz,fr-CH,Balade nature / Journée BioBlitz de science citoyenne,Un événement guidé de recensement des espèces où les participant·e·s documentent la biodiversité locale pour de vraies bases de données scientifiques.
+bioblitz,de-CH,Naturspaziergang / BioBlitz-Citizen-Science-Tag,"Ein geführter Artenerfassungs-Anlass, bei dem Teilnehmende die lokale Biodiversität für echte wissenschaftliche Datenbanken dokumentieren."
+birdhouse-workshop,fr-CH,Atelier nichoirs et hôtels à insectes,Une session pratique où les participant·e·s construisent des nichoirs et des hôtels à insectes pour les jardins et parcs locaux.
+birdhouse-workshop,de-CH,Nistkasten- und Insektenhotel-Bauworkshop,"Ein praktischer Workshop, in dem Teilnehmende Nistkästen und Insektenhotels für Gärten und Parks bauen."
+give-box,fr-CH,Boîte à dons / bibliothèque publique de rue,Construire et installer une armoire d'échange publique et résistante aux intempéries pour livres ou objets du quotidien.
+give-box,de-CH,Give-Box / öffentlicher Bücherschrank,Einen wetterfesten öffentlichen Tauschschrank für Bücher oder Haushaltsgegenstände bauen und aufstellen.
+pollinator-planting,fr-CH,Journée de plantation de fleurs sauvages pour pollinisateurs,"Transformer une bande herbeuse, un talus ou un coin de parc en prairie fleurie pour les pollinisateurs."
+pollinator-planting,de-CH,Wildblumen- / Bestäuber-Pflanztag,"Einen Randstreifen, Rasenstreifen oder eine Parkecke in eine Wildblumenfläche für Bestäuber verwandeln."
+documentary-night,fr-CH,Projection de documentaire + soirée débat,"Projeter un documentaire sur le climat ou la durabilité, suivi d'une discussion animée sur l'action locale."
+documentary-night,de-CH,Dokfilm-Abend mit Diskussion,"Einen Klima- oder Nachhaltigkeitsdokfilm zeigen, gefolgt von einer moderierten Diskussion über lokales Handeln."
+mending-circle,fr-CH,Cercle de raccommodage / réparation visible de vêtements,Une rencontre sociale récurrente où l'on apprend à réparer et raccommoder visiblement ses propres vêtements.
+mending-circle,de-CH,Flickstube / Visible-Mending-Treff,"Ein regelmässiger geselliger Treff, bei dem man lernt, die eigenen Kleider zu reparieren und sichtbar zu flicken."
+community-garden,fr-CH,Jardin communautaire,Créer un jardin partagé où les voisin·e·s cultivent ensemble sur un terrain inutilisé.
+community-garden,de-CH,Gemeinschaftsgarten,"Einen gemeinsamen Garten aufbauen, in dem Nachbarinnen und Nachbarn auf ungenutztem Land zusammen Gemüse anbauen."
+community-compost,fr-CH,Compost de quartier,Créer un site de compostage partagé où les ménages déposent leurs déchets organiques et reçoivent du compost mûr.
+community-compost,de-CH,Quartierkompost,"Eine gemeinsame Kompostieranlage aufbauen, bei der Haushalte Grüngut abgeben und fertigen Kompost erhalten."
+tool-library,fr-CH,Bibliothèque d'outils / objethèque,Créer une bibliothèque de prêt d'outils et d'équipements pour emprunter au lieu d'acheter.
+tool-library,de-CH,Werkzeugbibliothek / Leihlager,"Eine Ausleihe für Werkzeuge und Haushaltsgeräte aufbauen, damit die Nachbarschaft leiht statt kauft."
+community-fridge,fr-CH,Frigo partagé / point de partage alimentaire,Installer un frigo public où les surplus alimentaires sont partagés librement entre voisin·e·s et commerces.
+community-fridge,de-CH,Offener Kühlschrank / Foodsharing-Punkt,"Einen öffentlichen Kühlschrank aufstellen, über den überschüssige Lebensmittel frei zwischen Nachbarschaft und Geschäften geteilt werden."
+food-rescue,fr-CH,Sauvetage et redistribution d'invendus alimentaires,Mettre en place une tournée récurrente qui achemine les surplus alimentaires des commerces vers les œuvres d'entraide et frigos partagés.
+food-rescue,de-CH,Lebensmittelrettung und -verteilung,"Eine wiederkehrende Abholtour aufbauen, die überschüssige Lebensmittel von Betrieben zu Hilfswerken und offenen Kühlschränken bringt."
+repair-skills-course,fr-CH,Cycle de formation aux compétences de réparation,"Un cours sur plusieurs semaines enseignant des compétences pratiques de réparation (électronique, textile, vélos) pour renforcer les capacités locales."
+repair-skills-course,de-CH,Kursreihe Reparaturkompetenzen,"Ein mehrwöchiger Kurs, der praktische Reparaturfähigkeiten (Elektronik, Textilien, Velos) vermittelt und lokale Reparaturkapazität aufbaut."
+school-garden,fr-CH,Programme de jardin scolaire,S'associer à une école pour créer et animer un jardin pédagogique intégré aux cours.
+school-garden,de-CH,Schulgarten-Programm,"Mit einer Schule einen Lehr- und Lerngarten aufbauen und betreiben, der in den Unterricht integriert ist."
+tree-planting,fr-CH,Plantation d'arbres de quartier,Organiser la plantation d'arbres de rue ou de parc avec la commune et les riverain·e·s.
+tree-planting,de-CH,Baumpflanzung im Quartier,Die Pflanzung von Strassen- oder Parkbäumen mit Gemeinde und Anwohnenden organisieren.
+bulk-buying-group,fr-CH,Groupement d'achat en vrac zéro déchet,Un groupe de quartier qui commande des denrées de base en gros pour réduire emballages et coûts.
+bulk-buying-group,de-CH,Zero-Waste-Einkaufsgemeinschaft,"Eine Nachbarschaftsgruppe, die Grundnahrungsmittel im Grossgebinde bestellt und so Verpackung und Kosten spart."
+lift-sharing,fr-CH,Réseau de covoiturage communautaire,"Mettre en place un covoiturage organisé pour un village, un pôle d'entreprises ou un club."
+lift-sharing,de-CH,Fahrgemeinschafts-Netzwerk,"Ein organisiertes Mitfahrsystem für ein Dorf, einen Arbeitsplatz-Cluster oder einen Verein aufbauen."
+walking-school-bus,fr-CH,Pédibus,Organiser des lignes de marche accompagnée où les enfants vont à l'école ensemble à pied plutôt qu'en voiture.
+walking-school-bus,de-CH,Pedibus (laufender Schulbus),"Begleitete Schulwege organisieren, auf denen Kinder gemeinsam zu Fuss zur Schule gehen statt gefahren zu werden."
+textile-upcycling,fr-CH,Cycle d'ateliers de surcyclage textile,Des ateliers transformant textiles abîmés ou délaissés en nouveaux vêtements et objets utiles.
+textile-upcycling,de-CH,Workshopreihe Textil-Upcycling,"Workshops, die beschädigte oder aussortierte Textilien in neue Kleidungsstücke und nützliche Gegenstände verwandeln."
+plant-based-cooking-club,fr-CH,Club de cuisine végétale,"Un groupe de cuisine convivial et récurrent explorant des repas bas carbone, abordables et savoureux."
+plant-based-cooking-club,de-CH,Pflanzlicher Kochclub,"Eine wiederkehrende gesellige Kochgruppe, die günstige, feine und klimafreundliche Gerichte erkundet."
+green-map,fr-CH,Carte verte locale / répertoire réparation & seconde main,"Recenser et publier une carte des ateliers de réparation, magasins de seconde main, stations de recharge en vrac et services de partage."
+green-map,de-CH,Lokale grüne Karte / Reparatur- und Secondhand-Verzeichnis,"Eine Karte mit lokalen Reparaturwerkstätten, Secondhand-Läden, Unverpackt-Stationen und Sharing-Angeboten erstellen und veröffentlichen."
+play-street,fr-CH,Rue de jeu / journée sans voitures,"Fermer temporairement une rue résidentielle au trafic pour une journée de jeu, de nourriture et de lien entre voisin·e·s."
+play-street,de-CH,Spielstrasse / autofreier Tag,"Eine Wohnstrasse für einen Tag für den Verkehr sperren — für Spiel, Essen und nachbarschaftliche Begegnung."
+draft-proofing-brigade,fr-CH,Brigade anti-courants d'air et économies d'énergie,"Des bénévoles formé·e·s aident les voisin·e·s à installer des mesures simples: joints d'étanchéité, films réflecteurs de radiateurs."
+draft-proofing-brigade,de-CH,Energiespar-Brigade (Abdichten & Co.),"Geschulte Freiwillige helfen der Nachbarschaft, einfache Energiesparmassnahmen wie Dichtungen und Radiatorfolien zu installieren."
+hard-to-recycle-points,fr-CH,Réseau de points de collecte pour déchets difficiles à recycler,"Un réseau de boîtes de dépôt dans magasins et cafés pour ce que la collecte ordinaire ne prend pas (bouchons de liège, stylos, blisters)."
+hard-to-recycle-points,de-CH,Sammelstellen-Netz für schwer rezyklierbare Abfälle,"Ein Netz von Abgabeboxen in Läden und Cafés für Dinge, die die normale Sammlung nicht nimmt (Zapfen, Stifte, Blister)."
+battery-awareness-campaign,fr-CH,Campagne de sensibilisation au recyclage des piles et ampoules,Une campagne locale pour que chaque ménage sache où et comment recycler piles et ampoules.
+battery-awareness-campaign,de-CH,Sensibilisierungskampagne Batterie- und Leuchtmittel-Recycling,"Eine lokale Kampagne, damit alle Haushalte wissen, wo und wie Batterien und Leuchtmittel rezykliert werden."
+guerrilla-gardening,fr-CH,Guérilla jardinière / bombes à graines,Embellir des espaces urbains délaissés avec des plantations indigènes peu exigeantes.
+guerrilla-gardening,de-CH,Guerilla-Gärtnern / Samenbomben,Vernachlässigte Stadtflächen mit pflegeleichter einheimischer Bepflanzung verschönern.
+second-hand-market,fr-CH,Marché de seconde main,Organiser un marché aux puces de quartier axé sur le réemploi.
+second-hand-market,de-CH,Secondhand-Markt,Einen Quartier-Flohmarkt mit Fokus auf Wiederverwendung organisieren.
+climate-quiz-night,fr-CH,Quiz climat au bistrot / soirée jeux,Une soirée quiz conviviale qui crée du lien communautaire autour des thèmes climatiques.
+climate-quiz-night,de-CH,Klima-Pubquiz / Spieleabend,"Ein unterhaltsamer Quizabend, der Gemeinschaft rund um Klimathemen aufbaut."
+sustainability-newsletter,fr-CH,Newsletter / blog local sur la durabilité,"Une publication régulière couvrant initiatives vertes locales, agenda et guides pratiques."
+sustainability-newsletter,de-CH,Lokaler Nachhaltigkeits-Newsletter / -Blog,"Eine regelmässige Publikation über lokale grüne Initiativen, Termine und praktische Anleitungen."
+swap-board,fr-CH,Tableau d'échange de quartier,Un tableau physique ou numérique où les voisin·e·s proposent et demandent objets et services.
+swap-board,de-CH,Quartier-Tauschbrett,"Ein physisches oder digitales Brett, auf dem die Nachbarschaft Gegenstände und Gefälligkeiten anbietet und sucht."
+solar-cooperative,fr-CH,Coopérative solaire / achat groupé de solaire,Organiser l'achat groupé ou la propriété coopérative d'installations solaires pour les toits de la région.
+solar-cooperative,de-CH,Solargenossenschaft / gemeinschaftlicher Solar-Einkauf,Gemeinsamen Einkauf oder genossenschaftliches Eigentum von Solaranlagen für Dächer der Region organisieren.
+community-renewable,fr-CH,Installation renouvelable citoyenne sur bâtiment public,"Développer une installation solaire financée par les citoyen·ne·s sur une école, une salle de sport ou un toit public, avec la commune comme hôte."
+community-renewable,de-CH,Bürgerbeteiligungs-Solaranlage auf öffentlichem Gebäude,"Eine bürgerfinanzierte Solaranlage auf Schule, Turnhalle oder öffentlichem Dach entwickeln, mit der Gemeinde als Gastgeberin."
+energy-audit-service,fr-CH,Service bénévole de diagnostic énergétique à domicile,Des bénévoles formé·e·s réalisent des évaluations énergétiques avec recommandations priorisées pour les ménages.
+energy-audit-service,de-CH,Freiwilligendienst Heim-Energiechecks,Geschulte Freiwillige führen kostenlose Energie-Rundgänge mit priorisierten Empfehlungen für Haushalte durch.
+rain-garden,fr-CH,Jardin de pluie / projet de débitumisation,Retirer un revêtement superflu et créer un jardin de pluie qui absorbe les eaux pluviales et soutient la biodiversité.
+rain-garden,de-CH,Regengarten / Entsiegelungsprojekt,"Unnötige Versiegelung entfernen und einen Regengarten anlegen, der Regenwasser versickern lässt und Biodiversität fördert."
+green-roof-pilot,fr-CH,Toiture ou façade végétalisée pilote sur un bâtiment communautaire,Installer une toiture végétalisée ou une façade grimpante de démonstration sur un bâtiment communautaire.
+green-roof-pilot,de-CH,Pilotprojekt Gründach / Fassadenbegrünung an Gemeinschaftsgebäude,Ein Demonstrations-Gründach oder eine Kletterfassade an einem gemeinschaftlich genutzten Gebäude installieren.
+air-quality-network,fr-CH,Réseau citoyen de mesure de la qualité de l'air,Déployer des capteurs bon marché dans le quartier et publier des données ouvertes sur la qualité de l'air.
+air-quality-network,de-CH,Bürger-Messnetz für Luftqualität,Kostengünstige Sensoren im Quartier verteilen und offene Luftqualitätsdaten publizieren.
+stream-restoration,fr-CH,Projet de revitalisation de ruisseau / rivière,"Restaurer avec les autorités un tronçon de cours d'eau dégradé: berges, végétation et habitats."
+stream-restoration,de-CH,Bach- / Flussrevitalisierungsprojekt,"Mit den Behörden einen degradierten Gewässerabschnitt aufwerten: Ufer, Vegetation und Lebensräume."
+wildlife-corridor,fr-CH,Plantation de haies / corridor biologique,Relier des habitats fragmentés en plantant des haies indigènes à travers des propriétés coopérantes.
+wildlife-corridor,de-CH,Hecken- / Wildtierkorridor-Pflanzung,"Fragmentierte Lebensräume verbinden, indem über kooperierende Grundstücke einheimische Hecken gepflanzt werden."
+community-orchard,fr-CH,Verger communautaire,Planter et entretenir un verger partagé de variétés fruitières locales sur un terrain public ou loué.
+community-orchard,de-CH,Gemeinschaftsobstgarten,Einen gemeinsamen Obstgarten mit lokalen Sorten auf öffentlichem oder gepachtetem Land pflanzen und pflegen.
+sme-sustainability-audit,fr-CH,Service d'audit de durabilité pour PME,Des bénévoles qualifié·e·s aident les petites entreprises locales à évaluer et réduire leur empreinte environnementale.
+sme-sustainability-audit,de-CH,Nachhaltigkeits-Check für KMU,"Qualifizierte Freiwillige helfen kleinen lokalen Betrieben, ihren ökologischen Fussabdruck zu erfassen und zu senken."
+cargo-bike-share,fr-CH,Système de vélos-cargos partagés,Mettre à disposition des vélos-cargos partagés pour transporter enfants et marchandises sans voiture.
+cargo-bike-share,de-CH,Cargo-Velo-Sharing,"Geteilte Cargo-Velos bereitstellen, damit Haushalte Kinder und Waren ohne Auto transportieren können."
+climate-advocacy-group,fr-CH,Groupe local de plaidoyer climatique / démarche d'assemblée citoyenne,Organiser les habitant·e·s pour défendre des politiques climatiques communales concrètes ou une assemblée citoyenne locale.
+climate-advocacy-group,de-CH,Lokale Klima-Interessengruppe / Anstoss für Bürgerrat,"Die Bevölkerung organisieren, um konkrete kommunale Klimapolitik oder einen lokalen Bürgerrat einzufordern."

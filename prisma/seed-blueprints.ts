@@ -10,7 +10,7 @@
 // Idempotent: canonical blueprints are skipped when their title already
 // exists; variants when the parent already has a variant in that language.
 //
-//   DATABASE_URL=… npx tsx prisma/seed-blueprints.ts "../Seeding blueprints"
+//   DATABASE_URL=… npx tsx prisma/seed-blueprints.ts   (CSVs: prisma/seed-data)
 import 'dotenv/config'
 import { readFileSync } from 'fs'
 import { join } from 'path'
@@ -78,8 +78,8 @@ const TYPE_BY_CATEGORY: Record<string, string> = {
 const langOf = (bcp47: string) => bcp47.split('-')[0].toLowerCase()
 
 async function main() {
-  const root = process.argv[2]
-  if (!root) throw new Error('Usage: npx tsx prisma/seed-blueprints.ts <folder>')
+  // Defaults to the in-repo copy; pass a folder to seed from elsewhere.
+  const root = process.argv[2] ?? join(process.cwd(), 'prisma', 'seed-data')
   const canonDir = join(root, '2026-07-02_Blueprints')
   const transDir = join(root, '2026-07-02_BlueprintTranslations')
   const load = (dir: string, f: string) => parseCsv(readFileSync(join(dir, f), 'utf8'))

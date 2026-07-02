@@ -23,6 +23,10 @@ on:
         description: Also create the sample projects? (off on re-runs)
         type: boolean
         default: true
+      blueprints:
+        description: Seed the blueprint catalogue (canonical + fr/de variants)? Idempotent.
+        type: boolean
+        default: false
 
 concurrency:
   group: db-seed-${{ inputs.target }}
@@ -60,3 +64,7 @@ jobs:
       - name: Seed sample projects
         if: ${{ inputs.sample_projects }}
         run: npx tsx prisma/seed-projects.ts
+
+      - name: Seed blueprint catalogue
+        if: ${{ inputs.blueprints }}
+        run: npx tsx prisma/seed-blueprints.ts
