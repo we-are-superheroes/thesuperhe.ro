@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { isCurrentUserAdmin } from '@/lib/auth'
 import { notify } from '@/lib/notifications'
+import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import type { ServerActionResult } from '@/types'
 
 const MAX_UPDATE_LENGTH = 5000
@@ -25,6 +26,10 @@ export async function postUpdateAction(
 ): Promise<ServerActionResult<{ id: string }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  // Every post notifies all members — throttle the fanout.
+  const rl = rateLimit(`${userId}:post-update`, 5, 60_000)
+  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
 
   const validated = validateBody(rawBody)
   if (!validated.ok) return { success: false, error: validated.error }
@@ -59,6 +64,7 @@ export async function postUpdateAction(
       const members = await tx.contribution.findMany({
         where: { projectId, projectStepId: null, status: 'active' },
         select: { userId: true },
+        take: 500, // fanout ceiling — revisit with digests if teams get bigger
       })
       const excerpt =
         validated.body.length > 140 ? `${validated.body.slice(0, 139)}…` : validated.body

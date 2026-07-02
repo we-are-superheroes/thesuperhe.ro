@@ -47,32 +47,31 @@ export async function POST(req: Request) {
 
   const { type, data } = event
 
-  const primaryEmail = data.email_addresses.find(
+  const primaryEmail = data.email_addresses?.find(
     (e) => e.id === data.primary_email_address_id
   )
   const email = primaryEmail?.email_address ?? ''
   const name = [data.first_name, data.last_name].filter(Boolean).join(' ') || email
 
-  if (type === 'user.created') {
-    await db.user.create({
-      data: {
-        id: data.id,
-        email,
-        name,
-        avatarUrl: data.image_url,
-      },
-    })
-  }
-
-  if (type === 'user.updated') {
-    await db.user.update({
-      where: { id: data.id },
-      data: { email, name, avatarUrl: data.image_url },
-    })
-  }
-
-  if (type === 'user.deleted') {
-    await db.user.delete({ where: { id: data.id } }).catch(() => null)
+  try {
+    if (type === 'user.created' || type === 'user.updated') {
+      // Upsert both ways: created can race the in-app ensureUserExists
+      // fallback, and updated can arrive before created was processed.
+      await db.user.upsert({
+        where: { id: data.id },
+        update: { email, name, avatarUrl: data.image_url },
+        create: { id: data.id, email, name, avatarUrl: data.image_url },
+      })
+    } else if (type === 'user.deleted') {
+      await db.user.delete({ where: { id: data.id } }).catch(() => null)
+    } else {
+      // Unknown event type (future Clerk versions) — log, ack, move on.
+      console.warn('[clerk-webhook] unhandled event type', { type, svixId })
+    }
+  } catch (e) {
+    // Log with the svix id and return 500 so svix retries the delivery.
+    console.error('[clerk-webhook] sync failed', { type, svixId, userId: data.id }, e)
+    return new Response('Sync failed', { status: 500 })
   }
 
   return new Response('OK', { status: 200 })

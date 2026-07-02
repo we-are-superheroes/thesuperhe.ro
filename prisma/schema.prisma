@@ -396,9 +396,14 @@ model Contribution {
 
   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectStep ProjectStep? @relation(fields: [projectStepId], references: [id])
+  projectStep ProjectStep? @relation(fields: [projectStepId], references: [id], onDelete: Cascade)
 
+  // NB: Postgres treats NULLs as distinct here, so this composite unique
+  // never guards project-level rows (projectStepId NULL). Those are covered
+  // by a partial unique index (contributions_project_level_unique) created
+  // in raw SQL — Prisma can't express partial indexes in the schema.
   @@unique([userId, projectId, projectStepId])
+  @@index([userId, projectId])
   @@map("contributions")
 }
 

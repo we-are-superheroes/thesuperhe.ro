@@ -4,6 +4,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { notify } from '@/lib/notifications'
+import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import { buildLocation } from '@/lib/location'
 import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
 import type { ServerActionResult } from '@/types'
@@ -80,6 +81,10 @@ export async function launchProjectAction(
 ): Promise<ServerActionResult<{ projectId: string }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  // Each launch can fan out skill-match notifications — keep it human-paced.
+  const rl = rateLimit(`${userId}:launch-project`, 5, 60 * 60_000)
+  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
 
   const userCheck = await ensureUserExists(userId)
   if (!userCheck.success) return { success: false, error: userCheck.error }

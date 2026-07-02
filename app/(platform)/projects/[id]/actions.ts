@@ -4,6 +4,7 @@ import { auth, currentUser } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { notify, getProjectLeadIds } from '@/lib/notifications'
+import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import type { ServerActionResult } from '@/types'
 
 /**
@@ -49,6 +50,10 @@ export async function joinProjectAction(
 ): Promise<ServerActionResult<{ joined: true; pending: boolean }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  // Join/leave loops spam the leads with notifications — throttle.
+  const rl = rateLimit(`${userId}:join-project`, 5, 60_000)
+  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
 
   const userCheck = await ensureUserExists(userId)
   if (!userCheck.success) return { success: false, error: userCheck.error }
@@ -141,6 +146,9 @@ export async function joinStepAction(
 ): Promise<ServerActionResult<{ joined: true }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const rl = rateLimit(`${userId}:step-membership`, 10, 60_000)
+  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
 
   const userCheck = await ensureUserExists(userId)
   if (!userCheck.success) return { success: false, error: userCheck.error }
@@ -244,6 +252,9 @@ export async function leaveStepAction(
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
 
+  const rl = rateLimit(`${userId}:step-membership`, 10, 60_000)
+  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+
   const step = await db.projectStep.findUnique({
     where: { id: projectStepId },
     select: {
@@ -329,6 +340,9 @@ export async function leaveProjectAction(
 ): Promise<ServerActionResult<{ left: true }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const rl = rateLimit(`${userId}:join-project`, 5, 60_000)
+  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
 
   const existing = await db.contribution.findFirst({
     where: { userId, projectId, projectStepId: null },

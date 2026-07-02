@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { findOrCreateConversation } from '@/lib/messages'
 import { notifyMessageReceived } from '@/lib/notifications'
+import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import type { ServerActionResult } from '@/types'
 
 const BODY_MAX = 4000
@@ -49,6 +50,10 @@ export async function sendMessageAction(
 ): Promise<ServerActionResult<{ conversationId: string; messageId: string }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const rl = rateLimit(`${userId}:send-message`, 30, 60_000)
+  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+
   if (recipientUserId === userId) {
     return { success: false, error: 'You can’t message yourself.' }
   }
