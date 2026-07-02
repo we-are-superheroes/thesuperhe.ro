@@ -35,6 +35,23 @@ export const REMOTE_OPTIONS: Array<{
   { value: 'no', label: 'No, in-person only', icon: MapPin },
 ]
 
+export const JOIN_POLICY_OPTIONS: Array<{
+  value: 'open' | 'approval_required'
+  label: string
+  description: string
+}> = [
+  {
+    value: 'open',
+    label: 'Open to the world',
+    description: 'Anyone can join instantly and start contributing.',
+  },
+  {
+    value: 'approval_required',
+    label: 'Approval needed',
+    description: 'Joins land in your inbox as a request to accept or decline.',
+  },
+]
+
 /* ================================================================
    Card / CardHead / Field helpers
    ================================================================ */
@@ -95,6 +112,26 @@ export function Field({
       {children}
       {help && <span className="mt-0.5 text-xs text-fg-tertiary">{help}</span>}
     </div>
+  )
+}
+
+/* ================================================================
+   SelectBox — native <select> with the shared chevron styling used
+   across the platform forms and filter bars.
+   ================================================================ */
+
+export function SelectBox(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
+  const { className, children, ...rest } = props
+  return (
+    <select
+      {...rest}
+      className={cn(
+        "w-full appearance-none rounded-lg border border-neutral-700 bg-bg-surface-2 py-2.5 pl-3.5 pr-9 font-sans text-sm text-fg-primary outline-none transition-all duration-fast focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)] [background-image:url('data:image/svg+xml;utf8,<svg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_24_24%22_fill=%22none%22_stroke=%22%238097B5%22_stroke-width=%222.5%22_stroke-linecap=%22round%22_stroke-linejoin=%22round%22><polyline_points=%226_9_12_15_18_9%22/></svg>')] [background-position:right_14px_center] [background-repeat:no-repeat]",
+        className,
+      )}
+    >
+      {children}
+    </select>
   )
 }
 

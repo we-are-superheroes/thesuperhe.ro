@@ -17,6 +17,7 @@ import {
   X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { initialsOf } from '@/lib/avatar'
 import {
   sendMessageAction,
   markConversationReadAction,
@@ -88,13 +89,6 @@ function gradientFor(id: string): string {
   let h = 0
   for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) | 0
   return GRADIENTS[Math.abs(h) % GRADIENTS.length]
-}
-
-function initialsFor(name: string | null | undefined): string {
-  if (!name) return '?'
-  const parts = name.trim().split(/\s+/).filter(Boolean)
-  if (parts.length === 0) return '?'
-  return ((parts[0][0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() || '?'
 }
 
 /* ================================================================
@@ -687,7 +681,7 @@ function Avatar({
       {user?.avatarUrl ? (
         <Image src={user.avatarUrl} alt={user.name} fill sizes="44px" className="object-cover" />
       ) : user ? (
-        initialsFor(user.name)
+        initialsOf(user.name)
       ) : (
         '?'
       )}

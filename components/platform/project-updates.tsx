@@ -13,6 +13,8 @@ import {
   Megaphone,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { gradientFor, initialOf } from '@/lib/avatar'
+import { fmtAgo } from '@/lib/format'
 import {
   postUpdateAction,
   editUpdateAction,
@@ -40,38 +42,6 @@ export type UpdatesFeedItem =
     }
   | { kind: 'step_completed'; id: string; stepTitle: string; atMs: number }
   | { kind: 'members_joined'; id: string; names: string[]; atMs: number }
-
-const AVATAR_GRADIENTS = [
-  'linear-gradient(135deg, #4a8b6e, #3DAF7C)',
-  'linear-gradient(135deg, #F4A535, #F7BD64)',
-  'linear-gradient(135deg, #4A7FD4, #7AAEE8)',
-  'linear-gradient(135deg, #B86E00, #F4A535)',
-  'linear-gradient(135deg, #2E5FAA, #4A7FD4)',
-  'linear-gradient(135deg, #1A5C40, #3DAF7C)',
-]
-
-function gradientFor(id: string): string {
-  let hash = 0
-  for (let i = 0; i < id.length; i++) hash = (hash * 31 + id.charCodeAt(i)) | 0
-  return AVATAR_GRADIENTS[Math.abs(hash) % AVATAR_GRADIENTS.length]
-}
-
-function initial(name: string): string {
-  return name.trim().charAt(0).toUpperCase() || '?'
-}
-
-function fmtAgo(ms: number, now = Date.now()): string {
-  const diff = now - ms
-  const sec = diff / 1000
-  if (sec < 60) return 'just now'
-  if (sec < 3600) return `${Math.round(sec / 60)} min ago`
-  if (sec < 86400) return `${Math.round(sec / 3600)} h ago`
-  const d = Math.round(sec / 86400)
-  if (d === 1) return 'yesterday'
-  if (d < 30) return `${d} days ago`
-  const mo = Math.round(d / 30)
-  return mo === 1 ? '1 month ago' : `${mo} months ago`
-}
 
 function joinNames(names: string[]): string {
   if (names.length <= 2) return names.join(' and ')
@@ -374,7 +344,7 @@ function UpdateCard({
           className="flex size-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-blue-900"
           style={{ background: gradientFor(item.author?.id ?? 'anon') }}
         >
-          {initial(authorName)}
+          {initialOf(authorName)}
         </div>
         <div className="flex min-w-0 flex-col leading-tight">
           <span className="flex items-center gap-2 text-sm font-semibold text-fg-primary">

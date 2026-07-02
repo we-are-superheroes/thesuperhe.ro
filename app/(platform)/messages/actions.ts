@@ -1,8 +1,9 @@
 'use server'
 
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
+import { ensureUserExists } from '@/lib/users'
 import { findOrCreateConversation } from '@/lib/messages'
 import { notifyMessageReceived } from '@/lib/notifications'
 import { rateLimit, rateLimitError } from '@/lib/rate-limit'
@@ -10,33 +11,6 @@ import type { ServerActionResult } from '@/types'
 
 const BODY_MAX = 4000
 
-/**
- * Ensure a User row exists for the Clerk userId. Used by send + new-message
- * paths in case the Clerk webhook hasn't synced yet.
- */
-async function ensureUserExists(userId: string): Promise<ServerActionResult<void>> {
-  const existing = await db.user.findUnique({ where: { id: userId }, select: { id: true } })
-  if (existing) return { success: true, data: undefined }
-
-  const cu = await currentUser()
-  if (!cu) return { success: false, error: 'Could not load Clerk profile' }
-  const email = cu.emailAddresses?.[0]?.emailAddress
-  if (!email) return { success: false, error: 'No email on profile' }
-  const name =
-    [cu.firstName, cu.lastName].filter(Boolean).join(' ') ||
-    cu.username ||
-    email.split('@')[0]
-  try {
-    await db.user.create({
-      data: { id: userId, email, name, avatarUrl: cu.imageUrl ?? null },
-    })
-    return { success: true, data: undefined }
-  } catch {
-    const retry = await db.user.findUnique({ where: { id: userId }, select: { id: true } })
-    if (retry) return { success: true, data: undefined }
-    return { success: false, error: 'Could not create user record' }
-  }
-}
 
 /**
  * Send a message to another user. Find-or-creates the 1-to-1 conversation

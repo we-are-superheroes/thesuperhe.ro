@@ -20,6 +20,7 @@ import {
   type UpdatesFeedItem,
 } from '@/components/platform/project-updates'
 import { isCurrentUserAdmin } from '@/lib/auth'
+import { AVATAR_GRADIENTS, initialOf, initialsOf } from '@/lib/avatar'
 
 /* ================================================================
    PROJECT VIEW — server component
@@ -39,20 +40,6 @@ const TYPE_COVER_GRADIENT: Record<string, string> = {
   'Education & Awareness': 'radial-gradient(circle at 60% 50%, #F7BD64 0%, transparent 60%), linear-gradient(135deg, #2A3A52, #5A7090)',
   'Biodiversity': 'radial-gradient(circle at 40% 50%, #7DD3B0 0%, transparent 60%), linear-gradient(135deg, #0E2A1E, #1A5C40)',
   'Waste Reduction': 'radial-gradient(circle at 30% 50%, #f4a535 0%, transparent 70%), linear-gradient(160deg, #5C3600, #B86E00)',
-}
-
-const AVATAR_GRADIENTS = [
-  'linear-gradient(135deg, #4a8b6e, #3DAF7C)',
-  'linear-gradient(135deg, #F4A535, #F7BD64)',
-  'linear-gradient(135deg, #4A7FD4, #7AAEE8)',
-  'linear-gradient(135deg, #B86E00, #F4A535)',
-  'linear-gradient(135deg, #2E5FAA, #4A7FD4)',
-  'linear-gradient(135deg, #1A5C40, #3DAF7C)',
-]
-
-function initial(name: string | null | undefined) {
-  if (!name) return '?'
-  return name.trim().charAt(0).toUpperCase()
 }
 
 function formatDate(d: Date): string {
@@ -335,14 +322,6 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
     TYPE_COVER_GRADIENT['Urban Rewilding']
 
   // Shape steps for the client component
-  const initials = (name: string) =>
-    name
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((p) => p[0]?.toUpperCase() ?? '')
-      .join('') || '?'
-
   const stepCards: StepCardData[] = project.steps.map((s) => {
     // Joiners are the active step-level contributions. For anonymous viewers
     // we keep the count + coordinator flag but anonymise the names.
@@ -351,7 +330,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       return {
         id: c.user?.id ?? 'anon',
         name: userId ? name : 'Someone',
-        initials: userId ? initials(name) : '?',
+        initials: userId ? initialsOf(name) : '?',
         isCoordinator: !!s.coordinatorId && s.coordinatorId === c.user?.id,
         isMe: !!userId && c.user?.id === userId,
       }
@@ -371,7 +350,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           ? {
               id: tl.user.id,
               name: userId ? name : 'Someone',
-              initials: userId ? initials(name) : '?',
+              initials: userId ? initialsOf(name) : '?',
               isMe: !!userId && tl.user.id === userId,
             }
           : null,
@@ -703,7 +682,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                       style={{ background: AVATAR_GRADIENTS[i % AVATAR_GRADIENTS.length] }}
                       title={c.name}
                     >
-                      {initial(c.name)}
+                      {initialOf(c.name)}
                     </Link>
                   ))}
                   {moreContributors > 0 && (

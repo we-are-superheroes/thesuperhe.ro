@@ -1,49 +1,13 @@
 'use server'
 
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
+import { ensureUserExists } from '@/lib/users'
 import { notify, getProjectLeadIds } from '@/lib/notifications'
 import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import type { ServerActionResult } from '@/types'
 
-/**
- * Ensure a User record exists for the given Clerk userId. The Clerk webhook
- * normally creates this on sign-up, but this fallback prevents a poor UX
- * when the webhook is slow or the user signed up before it was wired up.
- */
-async function ensureUserExists(userId: string): Promise<ServerActionResult<void>> {
-  const existing = await db.user.findUnique({ where: { id: userId }, select: { id: true } })
-  if (existing) return { success: true, data: undefined }
-
-  const cu = await currentUser()
-  if (!cu) return { success: false, error: 'Could not load Clerk profile' }
-
-  const email = cu.emailAddresses?.[0]?.emailAddress
-  if (!email) return { success: false, error: 'No email on profile' }
-
-  const name =
-    [cu.firstName, cu.lastName].filter(Boolean).join(' ') ||
-    cu.username ||
-    email.split('@')[0]
-
-  try {
-    await db.user.create({
-      data: {
-        id: userId,
-        email,
-        name,
-        avatarUrl: cu.imageUrl ?? null,
-      },
-    })
-    return { success: true, data: undefined }
-  } catch {
-    // Race condition — another request just created the user. Treat as success.
-    const retry = await db.user.findUnique({ where: { id: userId }, select: { id: true } })
-    if (retry) return { success: true, data: undefined }
-    return { success: false, error: 'Could not create user record' }
-  }
-}
 
 export async function joinProjectAction(
   projectId: string,

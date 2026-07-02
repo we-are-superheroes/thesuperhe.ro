@@ -1,8 +1,9 @@
 'use server'
 
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
+import { ensureUserExists } from '@/lib/users'
 import { uploadImage, deleteImageByUrl } from '@/lib/storage'
 import type { ServerActionResult, Proficiency } from '@/types'
 
@@ -22,30 +23,6 @@ export interface ProfileFormData {
 
 const VALID_PROFICIENCIES: Proficiency[] = ['beginner', 'intermediate', 'expert']
 
-async function ensureUserExists(userId: string): Promise<ServerActionResult<void>> {
-  const existing = await db.user.findUnique({ where: { id: userId }, select: { id: true } })
-  if (existing) return { success: true, data: undefined }
-
-  const cu = await currentUser()
-  if (!cu) return { success: false, error: 'Could not load Clerk profile' }
-  const email = cu.emailAddresses?.[0]?.emailAddress
-  if (!email) return { success: false, error: 'No email on profile' }
-  const name =
-    [cu.firstName, cu.lastName].filter(Boolean).join(' ') ||
-    cu.username ||
-    email.split('@')[0]
-
-  try {
-    await db.user.create({
-      data: { id: userId, email, name, avatarUrl: cu.imageUrl ?? null },
-    })
-    return { success: true, data: undefined }
-  } catch {
-    const retry = await db.user.findUnique({ where: { id: userId }, select: { id: true } })
-    if (retry) return { success: true, data: undefined }
-    return { success: false, error: 'Could not create user record' }
-  }
-}
 
 export async function saveProfileAction(
   data: ProfileFormData,
