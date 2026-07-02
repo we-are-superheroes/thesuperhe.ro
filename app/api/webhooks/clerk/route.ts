@@ -1,6 +1,7 @@
 import { headers } from 'next/headers'
 import { Webhook } from 'svix'
 import { db } from '@/lib/db'
+import { log } from '@/lib/log'
 
 type ClerkUserEvent = {
   type: 'user.created' | 'user.updated' | 'user.deleted'
@@ -66,11 +67,16 @@ export async function POST(req: Request) {
       await db.user.delete({ where: { id: data.id } }).catch(() => null)
     } else {
       // Unknown event type (future Clerk versions) — log, ack, move on.
-      console.warn('[clerk-webhook] unhandled event type', { type, svixId })
+      log.warn('clerk_webhook.unhandled_type', { type, svixId })
     }
   } catch (e) {
     // Log with the svix id and return 500 so svix retries the delivery.
-    console.error('[clerk-webhook] sync failed', { type, svixId, userId: data.id }, e)
+    log.error('clerk_webhook.sync_failed', {
+      type,
+      svixId,
+      userId: data.id,
+      message: e instanceof Error ? e.message : String(e),
+    })
     return new Response('Sync failed', { status: 500 })
   }
 

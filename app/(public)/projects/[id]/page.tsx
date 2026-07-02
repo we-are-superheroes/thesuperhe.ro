@@ -54,6 +54,25 @@ interface ProjectViewParams {
   params: Promise<{ id: string }>
 }
 
+export async function generateMetadata({ params }: ProjectViewParams) {
+  const { id } = await params
+  const project = await db.project.findUnique({
+    where: { id },
+    select: { title: true, description: true, coverImageUrl: true, location: true },
+  })
+  if (!project) return { title: 'Project not found — The Superhero' }
+  const description = project.description.split(/\n+/)[0].slice(0, 160)
+  return {
+    title: `${project.title} — The Superhero`,
+    description,
+    openGraph: {
+      title: project.title,
+      description,
+      ...(project.coverImageUrl ? { images: [project.coverImageUrl] } : {}),
+    },
+  }
+}
+
 export default async function ProjectViewPage({ params }: ProjectViewParams) {
   const { id } = await params
   const { userId } = await auth()

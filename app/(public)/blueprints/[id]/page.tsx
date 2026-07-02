@@ -37,6 +37,21 @@ interface PageParams {
   params: Promise<{ id: string }>
 }
 
+export async function generateMetadata({ params }: PageParams) {
+  const { id } = await params
+  const blueprint = await db.blueprint.findUnique({
+    where: { id },
+    select: { title: true, description: true },
+  })
+  if (!blueprint) return { title: 'Blueprint not found — The Superhero' }
+  const description = blueprint.description.split(/\n+/)[0].slice(0, 160)
+  return {
+    title: `${blueprint.title} — blueprint — The Superhero`,
+    description,
+    openGraph: { title: blueprint.title, description },
+  }
+}
+
 export default async function BlueprintViewPage({ params }: PageParams) {
   const { id } = await params
   const { userId } = await auth()

@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { requireAdmin } from '@/lib/auth'
+import { log } from '@/lib/log'
 import type { ServerActionResult } from '@/types'
 
 /* ================================================================
@@ -49,9 +50,7 @@ export async function deleteProjectAction(
     return { success: false, error: 'Could not delete the project.' }
   }
 
-  console.warn(
-    `[admin-audit] user ${adminId} deleted project ${projectId} ("${project.title}")`,
-  )
+  log.warn('admin.project_deleted', { adminId, projectId, title: project.title })
 
   revalidatePath('/projects')
   revalidatePath('/my-projects')
@@ -87,9 +86,7 @@ export async function deleteBlueprintAction(
     return { success: false, error: 'Could not delete the blueprint.' }
   }
 
-  console.warn(
-    `[admin-audit] user ${adminId} deleted blueprint ${blueprintId} ("${blueprint.title}")`,
-  )
+  log.warn('admin.blueprint_deleted', { adminId, blueprintId, title: blueprint.title })
 
   revalidatePath('/blueprints')
   return { success: true, data: { deleted: true } }

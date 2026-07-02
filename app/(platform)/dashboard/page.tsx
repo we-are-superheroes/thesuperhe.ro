@@ -683,23 +683,39 @@ function EmptyState({
 }
 
 function StepStatusIndicator({ status }: { status: string }) {
+  // The colour is decorative; the status is announced via a label so it
+  // isn't colour-only (also shows as a tooltip on hover).
   if (status === 'needs_help') {
     return (
-      <div className="flex size-[22px] items-center justify-center rounded-full border-[1.5px] border-amber-500 bg-amber-500/20 shadow-[0_0_8px_rgba(244,165,53,0.4)]">
-        <span className="font-display text-[13px] font-bold text-amber-500">!</span>
+      <div
+        role="img"
+        aria-label="Status: needs help"
+        title="Needs help"
+        className="flex size-[22px] items-center justify-center rounded-full border-[1.5px] border-amber-500 bg-amber-500/20 shadow-[0_0_8px_rgba(244,165,53,0.4)]"
+      >
+        <span aria-hidden className="font-display text-[13px] font-bold text-amber-500">!</span>
       </div>
     )
   }
   if (status === 'in_progress') {
     return (
-      <div className="flex size-[22px] items-center justify-center rounded-full border-[1.5px] border-blue-500 bg-blue-500/15">
-        <span className="size-2 rounded-full bg-blue-300" />
+      <div
+        role="img"
+        aria-label="Status: in progress"
+        title="In progress"
+        className="flex size-[22px] items-center justify-center rounded-full border-[1.5px] border-blue-500 bg-blue-500/15"
+      >
+        <span aria-hidden className="size-2 rounded-full bg-blue-300" />
       </div>
     )
   }
-  // not_started
   return (
-    <div className="size-[22px] rounded-full border-[1.5px] border-neutral-600" />
+    <div
+      role="img"
+      aria-label="Status: not started"
+      title="Not started"
+      className="size-[22px] rounded-full border-[1.5px] border-neutral-600"
+    />
   )
 }
 
