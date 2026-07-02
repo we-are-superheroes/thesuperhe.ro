@@ -1,6 +1,7 @@
 import 'server-only'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { randomUUID } from 'crypto'
+import { log } from '@/lib/log'
 
 /* ================================================================
    Supabase Storage helper — used by avatar + project cover uploads.
@@ -63,13 +64,27 @@ function getClient(): SupabaseClient {
 async function ensureBucket(): Promise<void> {
   if (bucketReady) return
   const client = getClient()
-  const { data } = await client.storage.getBucket(BUCKET)
+  const { data, error: getError } = await client.storage.getBucket(BUCKET)
+  if (getError && /signature|jwt|invalid.*key|unauthorized/i.test(getError.message)) {
+    // Don't fall through to createBucket — the credentials are the problem.
+    // Classic cause: SUPABASE_SERVICE_ROLE_KEY belongs to a different
+    // Supabase project than NEXT_PUBLIC_SUPABASE_URL (or was rotated).
+    log.error('storage.credentials_rejected', {
+      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      message: getError.message,
+    })
+    throw new Error(
+      'Storage credentials were rejected by Supabase. Check that SUPABASE_SERVICE_ROLE_KEY ' +
+        'belongs to the same Supabase project as NEXT_PUBLIC_SUPABASE_URL in this environment.',
+    )
+  }
   if (!data) {
     const { error } = await client.storage.createBucket(BUCKET, {
       public: true,
       fileSizeLimit: 8 * 1024 * 1024, // outer cap; per-prefix limits enforced in the action
     })
     if (error && !/already exists/i.test(error.message)) {
+      log.error('storage.bucket_create_failed', { message: error.message })
       throw new Error(`Could not create storage bucket: ${error.message}`)
     }
   }
