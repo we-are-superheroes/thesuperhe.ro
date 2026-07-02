@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo, useTransition, useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { ArrowRight, ChevronDown, Check, LogIn, Pencil } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { joinStepAction, leaveStepAction } from '@/app/(platform)/projects/[id]/actions'
@@ -439,9 +440,14 @@ function JoinersStack({
   isLead: boolean
 }) {
   // Local copy so the lead's coordinator change can be reflected
-  // optimistically. The server round-trips on the next router.refresh().
+  // optimistically. The server round-trips on the next router.refresh();
+  // re-sync is adjusted during render when the prop identity changes.
   const [localJoiners, setLocalJoiners] = useState(joiners)
-  useEffect(() => setLocalJoiners(joiners), [joiners])
+  const [prevJoiners, setPrevJoiners] = useState(joiners)
+  if (joiners !== prevJoiners) {
+    setPrevJoiners(joiners)
+    setLocalJoiners(joiners)
+  }
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -901,13 +907,13 @@ function StepAction({
   if (isJoinable) {
     if (!isSignedIn) {
       return (
-        <a
+        <Link
           href="/sign-in"
           className="inline-flex items-center gap-1 text-sm font-medium text-fg-tertiary hover:text-fg-primary"
         >
           <LogIn className="size-3.5" />
           Sign in to join
-        </a>
+        </Link>
       )
     }
     if (!isMember) {

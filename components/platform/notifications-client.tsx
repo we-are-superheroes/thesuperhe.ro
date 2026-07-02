@@ -101,13 +101,18 @@ export function NotificationsClient({ initialItems }: { initialItems: Notificati
   const [now, setNow] = useState(0)
   const [, startTransition] = useTransition()
 
-  // Keep local state synced when the server re-renders the page (e.g. after a mark-read action revalidates).
-  useEffect(() => {
+  // Keep local state synced when the server re-renders the page (e.g. after
+  // a mark-read action revalidates) — adjusted during render, not an effect.
+  const [prevInitialItems, setPrevInitialItems] = useState(initialItems)
+  if (initialItems !== prevInitialItems) {
+    setPrevInitialItems(initialItems)
     setItems(initialItems)
-  }, [initialItems])
+  }
 
+  // Hydration-safe "now": 0 on the server, bumped in a frame callback.
   useEffect(() => {
-    setNow(Date.now())
+    const raf = requestAnimationFrame(() => setNow(Date.now()))
+    return () => cancelAnimationFrame(raf)
   }, [])
 
   const counts = useMemo(

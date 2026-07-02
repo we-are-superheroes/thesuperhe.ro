@@ -3,7 +3,8 @@ import Link from 'next/link'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import Image from 'next/image'
-import { ChevronRight, Share2, Bookmark, MapPin, Globe, Calendar, FolderOpen, Clock, User, Pencil, ExternalLink } from 'lucide-react'
+import { ChevronRight, MapPin, Globe, Calendar, FolderOpen, Clock, User, Pencil, ExternalLink } from 'lucide-react'
+import { ShareButton } from '@/components/platform/share-button'
 import { googleMapsUrl } from '@/lib/location'
 import { ProjectStepsList, type StepCardData } from '@/components/platform/project-steps-list'
 import { JoinProjectTopButton, JoinProjectCard } from '@/components/platform/join-project-controls'
@@ -19,6 +20,7 @@ import {
   type UpdatesFeedItem,
 } from '@/components/platform/project-updates'
 import { isCurrentUserAdmin } from '@/lib/auth'
+import { AVATAR_GRADIENTS, initialOf, initialsOf } from '@/lib/avatar'
 
 /* ================================================================
    PROJECT VIEW — server component
@@ -40,20 +42,6 @@ const TYPE_COVER_GRADIENT: Record<string, string> = {
   'Waste Reduction': 'radial-gradient(circle at 30% 50%, #f4a535 0%, transparent 70%), linear-gradient(160deg, #5C3600, #B86E00)',
 }
 
-const AVATAR_GRADIENTS = [
-  'linear-gradient(135deg, #4a8b6e, #3DAF7C)',
-  'linear-gradient(135deg, #F4A535, #F7BD64)',
-  'linear-gradient(135deg, #4A7FD4, #7AAEE8)',
-  'linear-gradient(135deg, #B86E00, #F4A535)',
-  'linear-gradient(135deg, #2E5FAA, #4A7FD4)',
-  'linear-gradient(135deg, #1A5C40, #3DAF7C)',
-]
-
-function initial(name: string | null | undefined) {
-  if (!name) return '?'
-  return name.trim().charAt(0).toUpperCase()
-}
-
 function formatDate(d: Date): string {
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 }
@@ -64,6 +52,25 @@ function daysSince(d: Date): number {
 
 interface ProjectViewParams {
   params: Promise<{ id: string }>
+}
+
+export async function generateMetadata({ params }: ProjectViewParams) {
+  const { id } = await params
+  const project = await db.project.findUnique({
+    where: { id },
+    select: { title: true, description: true, coverImageUrl: true, location: true },
+  })
+  if (!project) return { title: 'Project not found — The Superhero' }
+  const description = project.description.split(/\n+/)[0].slice(0, 160)
+  return {
+    title: `${project.title} — The Superhero`,
+    description,
+    openGraph: {
+      title: project.title,
+      description,
+      ...(project.coverImageUrl ? { images: [project.coverImageUrl] } : {}),
+    },
+  }
 }
 
 export default async function ProjectViewPage({ params }: ProjectViewParams) {
@@ -334,14 +341,6 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
     TYPE_COVER_GRADIENT['Urban Rewilding']
 
   // Shape steps for the client component
-  const initials = (name: string) =>
-    name
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((p) => p[0]?.toUpperCase() ?? '')
-      .join('') || '?'
-
   const stepCards: StepCardData[] = project.steps.map((s) => {
     // Joiners are the active step-level contributions. For anonymous viewers
     // we keep the count + coordinator flag but anonymise the names.
@@ -350,7 +349,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       return {
         id: c.user?.id ?? 'anon',
         name: userId ? name : 'Someone',
-        initials: userId ? initials(name) : '?',
+        initials: userId ? initialsOf(name) : '?',
         isCoordinator: !!s.coordinatorId && s.coordinatorId === c.user?.id,
         isMe: !!userId && c.user?.id === userId,
       }
@@ -370,7 +369,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           ? {
               id: tl.user.id,
               name: userId ? name : 'Someone',
-              initials: userId ? initials(name) : '?',
+              initials: userId ? initialsOf(name) : '?',
               isMe: !!userId && tl.user.id === userId,
             }
           : null,
@@ -438,20 +437,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           <span className="truncate text-fg-primary">{project.title}</span>
         </div>
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
-            title="Share"
-          >
-            <Share2 className="size-4" />
-          </button>
-          <button
-            type="button"
-            className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
-            title="Pin"
-          >
-            <Bookmark className="size-4" />
-          </button>
+          <ShareButton title={project.title} />
           {isLead && (
             <Link
               href={`/projects/${id}/edit`}
@@ -715,7 +701,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                       style={{ background: AVATAR_GRADIENTS[i % AVATAR_GRADIENTS.length] }}
                       title={c.name}
                     >
-                      {initial(c.name)}
+                      {initialOf(c.name)}
                     </Link>
                   ))}
                   {moreContributors > 0 && (

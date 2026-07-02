@@ -18,6 +18,7 @@ import {
   FolderOpen,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { SelectBox } from '@/components/platform/project-form-bits'
 
 /* ================================================================
    Types
@@ -273,16 +274,16 @@ export function MyProjectsClient({
             />
           </div>
           <div className="flex items-center gap-3">
-            <select
+            <SelectBox
               value={sort}
               onChange={(e) => setSort(e.target.value as SortKey)}
-              className="cursor-pointer appearance-none rounded-lg border border-neutral-700 bg-bg-surface py-2 pl-3 pr-8 text-sm text-fg-primary outline-none [background-image:url('data:image/svg+xml;utf8,<svg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_24_24%22_fill=%22none%22_stroke=%22%23A8BCCE%22_stroke-width=%222.5%22><polyline_points=%226_9_12_15_18_9%22/></svg>')] [background-position:right_10px_center] [background-repeat:no-repeat]"
+              className="w-auto cursor-pointer bg-bg-surface py-2 pl-3 pr-8 [background-position:right_10px_center]"
             >
               <option value="recent">Last activity</option>
               <option value="due">Soonest deadline</option>
               <option value="progress">Closest to finished</option>
               <option value="title">Title (A–Z)</option>
-            </select>
+            </SelectBox>
             <div className="flex rounded-lg border border-neutral-700 bg-bg-surface p-[3px]">
               <button
                 type="button"

@@ -33,10 +33,19 @@ type RawBlueprint = {
   _count: { steps: number; projects: number }
 }
 
+export const metadata = {
+  title: 'Blueprints — The Superhero',
+  description:
+    'Proven, reusable project plans — repair cafés, pocket forests, solar co-ops and more. Fork one and adapt it to your community.',
+}
+
 export default async function BlueprintsCatalogPage() {
   const [blueprints, projectTypes] = await Promise.all([
     db.blueprint.findMany({
       orderBy: [{ reuseCount: 'desc' }, { createdAt: 'desc' }],
+      // Ceiling for the fetch-all + client-side-filter approach. Move to
+      // real pagination when the catalogue approaches this.
+      take: 500,
       select: {
         id: true,
         title: true,

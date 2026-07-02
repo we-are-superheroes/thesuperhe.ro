@@ -20,28 +20,13 @@ import {
   StepRow,
   AddStepButton,
   CountrySelect,
+  SelectBox,
   REMOTE_OPTIONS,
+  JOIN_POLICY_OPTIONS,
   type FormStep,
   type SkillOption,
 } from '@/components/platform/project-form-bits'
 import { LANGUAGES as ISO_LANGUAGES } from '@/lib/locales'
-
-const JOIN_POLICY_OPTIONS: Array<{
-  value: 'open' | 'approval_required'
-  label: string
-  description: string
-}> = [
-  {
-    value: 'open',
-    label: 'Open to the world',
-    description: 'Anyone can join instantly and start contributing.',
-  },
-  {
-    value: 'approval_required',
-    label: 'Approval needed',
-    description: 'Joins land in your inbox as a request to accept or decline.',
-  },
-]
 
 /* ================================================================
    Types
@@ -147,7 +132,9 @@ export function EditProjectForm({
         }))
       : [
           {
-            id: `tmp-${Date.now()}`,
+            // Stable placeholder id — only one blank row can exist at mount,
+            // and rows added later get unique ids in the event handler.
+            id: 'tmp-initial',
             title: '',
             description: '',
             skillIds: [],
@@ -539,11 +526,10 @@ export function EditProjectForm({
                 htmlFor="fld-lang"
                 help="Used by the browse-page language filter."
               >
-                <select
+                <SelectBox
                   id="fld-lang"
                   value={languageCode ?? ''}
                   onChange={(e) => setLanguageCode(e.target.value || null)}
-                  className="w-full appearance-none rounded-lg border border-neutral-700 bg-bg-surface-2 py-2.5 pl-3.5 pr-9 font-sans text-sm text-fg-primary outline-none transition-all duration-fast focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)] [background-image:url('data:image/svg+xml;utf8,<svg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_24_24%22_fill=%22none%22_stroke=%22%238097B5%22_stroke-width=%222.5%22_stroke-linecap=%22round%22_stroke-linejoin=%22round%22><polyline_points=%226_9_12_15_18_9%22/></svg>')] [background-position:right_14px_center] [background-repeat:no-repeat]"
                 >
                   <option value="">— none —</option>
                   {ISO_LANGUAGES.map((l) => (
@@ -551,7 +537,7 @@ export function EditProjectForm({
                       {l.label}
                     </option>
                   ))}
-                </select>
+                </SelectBox>
               </Field>
             </div>
 

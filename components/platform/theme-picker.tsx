@@ -106,14 +106,18 @@ export function ThemePicker() {
   const [selected, setSelected] = useState<ThemeKey>('dark')
 
   useEffect(() => {
-    let stored: ThemeKey = 'dark'
-    try {
-      const raw = localStorage.getItem(THEME_KEY)
-      if (raw === 'daylight' || raw === 'paper' || raw === 'contrast') stored = raw
-    } catch {
-      /* ignore */
-    }
-    setSelected(stored)
+    // Reconcile in a frame callback (SSR always paints the default first).
+    const raf = requestAnimationFrame(() => {
+      let stored: ThemeKey = 'dark'
+      try {
+        const raw = localStorage.getItem(THEME_KEY)
+        if (raw === 'daylight' || raw === 'paper' || raw === 'contrast') stored = raw
+      } catch {
+        /* ignore */
+      }
+      setSelected(stored)
+    })
+    return () => cancelAnimationFrame(raf)
   }, [])
 
   const choose = (name: ThemeKey) => {

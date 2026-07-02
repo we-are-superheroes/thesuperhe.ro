@@ -8,9 +8,6 @@ import {
   ArrowRight,
   FileText,
   ChevronLeft,
-  Globe,
-  MapPin,
-  Settings as SettingsIcon,
   ChevronDown,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -20,9 +17,15 @@ import {
   type CreateProjectInput,
 } from '@/app/(platform)/projects/new/actions'
 import {
+  Card,
+  CardHead,
+  Field,
   StepRow,
   AddStepButton,
   CountrySelect,
+  SelectBox,
+  REMOTE_OPTIONS,
+  JOIN_POLICY_OPTIONS,
   type FormStep,
   type SkillOption as SharedSkillOption,
 } from '@/components/platform/project-form-bits'
@@ -48,29 +51,6 @@ export interface BlueprintOption {
 }
 
 export type SkillOption = SharedSkillOption
-
-const REMOTE_OPTIONS: Array<{ value: 'yes' | 'some' | 'no'; label: string; icon: typeof Globe }> = [
-  { value: 'yes', label: 'Yes, remote-friendly', icon: Globe },
-  { value: 'some', label: 'Some steps only', icon: SettingsIcon },
-  { value: 'no', label: 'No, in-person only', icon: MapPin },
-]
-
-const JOIN_POLICY_OPTIONS: Array<{
-  value: 'open' | 'approval_required'
-  label: string
-  description: string
-}> = [
-  {
-    value: 'open',
-    label: 'Open to the world',
-    description: 'Anyone can join instantly and start contributing.',
-  },
-  {
-    value: 'approval_required',
-    label: 'Approval needed',
-    description: 'Joins land in your inbox as a request to accept or decline.',
-  },
-]
 
 function blankSteps(): FormStep[] {
   return [
@@ -710,11 +690,10 @@ function EditorPhase({
               htmlFor="fld-lang"
               help="Used by the browse-page language filter."
             >
-              <select
+              <SelectBox
                 id="fld-lang"
                 value={languageCode ?? ''}
                 onChange={(e) => setLanguageCode(e.target.value || null)}
-                className="w-full appearance-none rounded-lg border border-neutral-700 bg-bg-surface-2 py-2.5 pl-3.5 pr-9 font-sans text-sm text-fg-primary outline-none transition-all duration-fast focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)] [background-image:url('data:image/svg+xml;utf8,<svg_xmlns=%22http://www.w3.org/2000/svg%22_width=%2212%22_height=%2212%22_viewBox=%220_0_24_24%22_fill=%22none%22_stroke=%22%238097B5%22_stroke-width=%222.5%22_stroke-linecap=%22round%22_stroke-linejoin=%22round%22><polyline_points=%226_9_12_15_18_9%22/></svg>')] [background-position:right_14px_center] [background-repeat:no-repeat]"
               >
                 <option value="">— none —</option>
                 {ISO_LANGUAGES.map((l) => (
@@ -722,7 +701,7 @@ function EditorPhase({
                     {l.label}
                   </option>
                 ))}
-              </select>
+              </SelectBox>
             </Field>
           </div>
 
@@ -865,54 +844,3 @@ function EditorPhase({
   )
 }
 
-/* ================================================================
-   Shared field helpers
-   ================================================================ */
-
-function Card({ children }: { children: React.ReactNode }) {
-  return (
-    <section className="rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6 lg:p-8">{children}</section>
-  )
-}
-
-function CardHead({
-  eyebrow,
-  title,
-  desc,
-}: {
-  eyebrow: string
-  title: string
-  desc?: string
-}) {
-  return (
-    <div className="mb-6">
-      <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">
-        {eyebrow}
-      </div>
-      <h2 className="font-display text-2xl font-normal leading-tight tracking-tight">{title}</h2>
-      {desc && <p className="mt-2 text-sm leading-relaxed text-fg-secondary">{desc}</p>}
-    </div>
-  )
-}
-
-function Field({
-  label,
-  htmlFor,
-  help,
-  children,
-}: {
-  label: string
-  htmlFor?: string
-  help?: string
-  children: React.ReactNode
-}) {
-  return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={htmlFor} className="text-sm font-medium text-fg-primary">
-        {label}
-      </label>
-      {children}
-      {help && <span className="mt-0.5 text-xs text-fg-tertiary">{help}</span>}
-    </div>
-  )
-}

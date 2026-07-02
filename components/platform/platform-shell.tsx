@@ -34,10 +34,13 @@ export function PlatformShell({
   const [drawerOpen, setDrawerOpen] = useState(false)
   const pathname = usePathname()
 
-  // Auto-close the drawer when the user navigates.
-  useEffect(() => {
+  // Auto-close the drawer when the user navigates — adjusted during render
+  // (React's recommended pattern for reacting to a changed value).
+  const [lastPath, setLastPath] = useState(pathname)
+  if (pathname !== lastPath) {
+    setLastPath(pathname)
     setDrawerOpen(false)
-  }, [pathname])
+  }
 
   // Lock body scroll while the drawer is open on mobile.
   useEffect(() => {

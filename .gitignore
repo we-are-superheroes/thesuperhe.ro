@@ -49,9 +49,9 @@ next-env.d.ts
 /.claude
 .commit-msg.tmp
 
-# Working directories used during this session — design source bundles
-# and one-off Prisma snapshots that shouldn't be checked in.
+# Scratch directories — design source bundles, one-off Prisma snapshots,
+# and editor auto-backups (nppBackup can contain .env copies) — never commit.
 /design-extract
 /existing_prisma
-
 .tmp-designs/
+nppBackup/

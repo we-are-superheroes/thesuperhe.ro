@@ -14,10 +14,10 @@ import {
   BellOff,
   Bell,
   Archive,
-  Trash2,
   X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { initialsOf } from '@/lib/avatar'
 import {
   sendMessageAction,
   markConversationReadAction,
@@ -91,13 +91,6 @@ function gradientFor(id: string): string {
   return GRADIENTS[Math.abs(h) % GRADIENTS.length]
 }
 
-function initialsFor(name: string | null | undefined): string {
-  if (!name) return '?'
-  const parts = name.trim().split(/\s+/).filter(Boolean)
-  if (parts.length === 0) return '?'
-  return ((parts[0][0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() || '?'
-}
-
 /* ================================================================
    Date formatting helpers
    ================================================================ */
@@ -164,22 +157,32 @@ export function MessagesClient({
   const [showThreadMenu, setShowThreadMenu] = useState(false)
   const [showMobileThread, setShowMobileThread] = useState(false)
 
-  // Hydration-safe "now" — start at 0 server-side; bump on mount + every minute.
+  // Hydration-safe "now" — start at 0 server-side; bump in a frame callback
+  // after mount, then every minute.
   useEffect(() => {
-    setNow(Date.now())
+    const raf = requestAnimationFrame(() => setNow(Date.now()))
     const id = window.setInterval(() => setNow(Date.now()), 60_000)
-    return () => window.clearInterval(id)
+    return () => {
+      cancelAnimationFrame(raf)
+      window.clearInterval(id)
+    }
   }, [])
 
-  // Sync local thread state when the server payload changes (e.g. after revalidate).
-  useEffect(() => {
+  // Sync local thread state when the server payload changes (e.g. after a
+  // revalidate). Adjust-during-render instead of an effect so the sync
+  // happens in the same render pass.
+  const [prevInitialThread, setPrevInitialThread] = useState(initialThread)
+  if (initialThread !== prevInitialThread) {
+    setPrevInitialThread(initialThread)
     setThread(initialThread)
-  }, [initialThread])
+  }
 
   // Auto-show the thread view on mobile when a conversation is opened.
-  useEffect(() => {
+  const [prevOpenId, setPrevOpenId] = useState(openConversationId)
+  if (openConversationId !== prevOpenId) {
+    setPrevOpenId(openConversationId)
     if (openConversationId) setShowMobileThread(true)
-  }, [openConversationId])
+  }
 
   // Mark this conversation as read on open + when the tab regains focus.
   useEffect(() => {
@@ -195,7 +198,6 @@ export function MessagesClient({
     }
     document.addEventListener('visibilitychange', onVisible)
     return () => document.removeEventListener('visibilitychange', onVisible)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openConversationId])
 
   // Lightweight polling while a conversation is open and the tab is foregrounded.
@@ -271,7 +273,6 @@ export function MessagesClient({
             : prev,
         )
         setComposer(body)
-        // eslint-disable-next-line no-alert
         alert(result.error)
         return
       }
@@ -680,7 +681,7 @@ function Avatar({
       {user?.avatarUrl ? (
         <Image src={user.avatarUrl} alt={user.name} fill sizes="44px" className="object-cover" />
       ) : user ? (
-        initialsFor(user.name)
+        initialsOf(user.name)
       ) : (
         '?'
       )}
@@ -784,18 +785,23 @@ function NewMessagePopover({
   const [searching, startSearch] = useTransition()
   const ref = useRef<HTMLDivElement>(null)
 
-  // Debounce + run search
+  // Debounce + run search. The empty-query clear also goes through the
+  // timeout callback so no state is set synchronously inside the effect.
   useEffect(() => {
-    if (!query.trim()) {
-      setResults([])
-      return
-    }
-    const handle = window.setTimeout(() => {
-      startSearch(async () => {
-        const result = await searchUsersAction(query)
-        if (result.success) setResults(result.data)
-      })
-    }, 200)
+    const trimmed = query.trim()
+    const handle = window.setTimeout(
+      () => {
+        if (!trimmed) {
+          setResults([])
+          return
+        }
+        startSearch(async () => {
+          const result = await searchUsersAction(query)
+          if (result.success) setResults(result.data)
+        })
+      },
+      trimmed ? 200 : 0,
+    )
     return () => window.clearTimeout(handle)
   }, [query])
 
@@ -916,7 +922,3 @@ function ThreadMenu({
     </div>
   )
 }
-
-// Quiet the unused-import warning — Trash2 is reserved for the future
-// "delete message" affordance on a per-message hover menu.
-export const _unused = Trash2

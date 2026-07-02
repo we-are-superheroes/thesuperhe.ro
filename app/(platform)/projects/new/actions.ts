@@ -1,11 +1,14 @@
 'use server'
 
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
+import { ensureUserExists } from '@/lib/users'
 import { notify } from '@/lib/notifications'
+import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import { buildLocation } from '@/lib/location'
 import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
+import { validateProjectFields } from '@/lib/validation'
 import type { ServerActionResult } from '@/types'
 
 export interface CreateProjectStepInput {
@@ -35,45 +38,7 @@ export interface CreateProjectInput {
   steps: CreateProjectStepInput[]
 }
 
-async function ensureUserExists(userId: string): Promise<ServerActionResult<void>> {
-  const existing = await db.user.findUnique({ where: { id: userId }, select: { id: true } })
-  if (existing) return { success: true, data: undefined }
 
-  const cu = await currentUser()
-  if (!cu) return { success: false, error: 'Could not load Clerk profile' }
-  const email = cu.emailAddresses?.[0]?.emailAddress
-  if (!email) return { success: false, error: 'No email on profile' }
-  const name =
-    [cu.firstName, cu.lastName].filter(Boolean).join(' ') ||
-    cu.username ||
-    email.split('@')[0]
-  try {
-    await db.user.create({
-      data: { id: userId, email, name, avatarUrl: cu.imageUrl ?? null },
-    })
-    return { success: true, data: undefined }
-  } catch {
-    const retry = await db.user.findUnique({ where: { id: userId }, select: { id: true } })
-    if (retry) return { success: true, data: undefined }
-    return { success: false, error: 'Could not create user record' }
-  }
-}
-
-function validateProject(data: CreateProjectInput): string | null {
-  const title = data.title.trim()
-  if (!title) return 'Give your project a title first.'
-  if (title.length > 200) return 'Title is too long.'
-  const desc = data.description.trim()
-  if (!desc) return 'Add a short description so people know what they’re joining.'
-  if (!['yes', 'some', 'no'].includes(data.remote)) return 'Pick a remote option.'
-  if (!['open', 'approval_required'].includes(data.joinPolicy)) {
-    return 'Pick a join policy.'
-  }
-  if (data.address.trim().length > 500) {
-    return 'Address is too long.'
-  }
-  return null
-}
 
 export async function launchProjectAction(
   data: CreateProjectInput,
@@ -81,10 +46,14 @@ export async function launchProjectAction(
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
 
+  // Each launch can fan out skill-match notifications — keep it human-paced.
+  const rl = rateLimit(`${userId}:launch-project`, 5, 60 * 60_000)
+  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+
   const userCheck = await ensureUserExists(userId)
   if (!userCheck.success) return { success: false, error: userCheck.error }
 
-  const validationError = validateProject(data)
+  const validationError = validateProjectFields(data, 'create')
   if (validationError) return { success: false, error: validationError }
 
   // Validate the locale codes (or fall back to the blueprint's later).
@@ -283,7 +252,7 @@ export async function saveBlueprintAction(
   const userCheck = await ensureUserExists(userId)
   if (!userCheck.success) return { success: false, error: userCheck.error }
 
-  const validationError = validateProject(data)
+  const validationError = validateProjectFields(data, 'create')
   if (validationError) return { success: false, error: validationError }
 
   // Validate the locale codes.

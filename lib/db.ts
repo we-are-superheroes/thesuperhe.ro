@@ -1,12 +1,13 @@
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
+import { env } from '@/lib/env'
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient }
 
 function createClient() {
   // Use the pooled DATABASE_URL (Supabase port 6543) at runtime.
   // Migrations use DIRECT_URL (port 5432) via prisma.config.ts.
-  const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! })
+  const adapter = new PrismaPg({ connectionString: env.DATABASE_URL })
   return new PrismaClient({ adapter })
 }
 

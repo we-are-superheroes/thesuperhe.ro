@@ -1,3 +1,5 @@
+// Expanded skill catalogue (~296 skills). Idempotent (upserts). Run by the
+// "Seed database" GitHub workflow after seed.ts, or locally via npx tsx.
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'

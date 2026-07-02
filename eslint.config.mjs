@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local scratch areas (design bundles, editor backups) — never lint.
+    ".tmp-designs/**",
+    "design-extract/**",
+    "nppBackup/**",
+    "existing_prisma/**",
   ]),
 ]);
 

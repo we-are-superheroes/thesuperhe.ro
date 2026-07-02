@@ -1,6 +1,7 @@
 import { headers } from 'next/headers'
 import { Webhook } from 'svix'
 import { db } from '@/lib/db'
+import { log } from '@/lib/log'
 
 type ClerkUserEvent = {
   type: 'user.created' | 'user.updated' | 'user.deleted'
@@ -47,32 +48,36 @@ export async function POST(req: Request) {
 
   const { type, data } = event
 
-  const primaryEmail = data.email_addresses.find(
+  const primaryEmail = data.email_addresses?.find(
     (e) => e.id === data.primary_email_address_id
   )
   const email = primaryEmail?.email_address ?? ''
   const name = [data.first_name, data.last_name].filter(Boolean).join(' ') || email
 
-  if (type === 'user.created') {
-    await db.user.create({
-      data: {
-        id: data.id,
-        email,
-        name,
-        avatarUrl: data.image_url,
-      },
+  try {
+    if (type === 'user.created' || type === 'user.updated') {
+      // Upsert both ways: created can race the in-app ensureUserExists
+      // fallback, and updated can arrive before created was processed.
+      await db.user.upsert({
+        where: { id: data.id },
+        update: { email, name, avatarUrl: data.image_url },
+        create: { id: data.id, email, name, avatarUrl: data.image_url },
+      })
+    } else if (type === 'user.deleted') {
+      await db.user.delete({ where: { id: data.id } }).catch(() => null)
+    } else {
+      // Unknown event type (future Clerk versions) — log, ack, move on.
+      log.warn('clerk_webhook.unhandled_type', { type, svixId })
+    }
+  } catch (e) {
+    // Log with the svix id and return 500 so svix retries the delivery.
+    log.error('clerk_webhook.sync_failed', {
+      type,
+      svixId,
+      userId: data.id,
+      message: e instanceof Error ? e.message : String(e),
     })
-  }
-
-  if (type === 'user.updated') {
-    await db.user.update({
-      where: { id: data.id },
-      data: { email, name, avatarUrl: data.image_url },
-    })
-  }
-
-  if (type === 'user.deleted') {
-    await db.user.delete({ where: { id: data.id } }).catch(() => null)
+    return new Response('Sync failed', { status: 500 })
   }
 
   return new Response('OK', { status: 200 })

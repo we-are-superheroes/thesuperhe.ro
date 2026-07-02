@@ -96,7 +96,8 @@ export async function getProjectLeadIds(
   return rows.map((r) => r.userId)
 }
 
-/** Active project-level members (any role). */
+/** Active project-level members (any role). Capped so a huge team can't
+ *  turn one event into an unbounded notification fanout. */
 export async function getActiveProjectMemberIds(
   tx: TxClient,
   projectId: string,
@@ -108,6 +109,7 @@ export async function getActiveProjectMemberIds(
       status: { in: ['active', 'pending'] },
     },
     select: { userId: true },
+    take: 500,
   })
   return rows.map((r) => r.userId)
 }

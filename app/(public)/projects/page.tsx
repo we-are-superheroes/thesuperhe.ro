@@ -40,6 +40,9 @@ async function getBrowseData(): Promise<{
     db.project.findMany({
       where: { status: { in: ['defining', 'needs_help', 'in_progress'] } },
       orderBy: { createdAt: 'desc' },
+      // Ceiling for the fetch-all + client-side-filter approach. Move to
+      // real pagination when the catalogue approaches this.
+      take: 500,
       select: {
         id: true,
         title: true,
@@ -172,6 +175,12 @@ async function getBrowseData(): Promise<{
     countries: countriesWithCounts,
     languages: languagesWithCounts,
   }
+}
+
+export const metadata = {
+  title: 'Browse projects — The Superhero',
+  description:
+    'Find climate and sustainability projects that need your skills — filter by type, country, language and time commitment.',
 }
 
 export default async function BrowseProjectsPage() {

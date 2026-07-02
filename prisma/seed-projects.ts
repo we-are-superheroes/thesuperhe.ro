@@ -1,3 +1,5 @@
+// Three authorless sample projects (UK examples). CREATE-ONLY — running it
+// twice duplicates them. Optional step of the "Seed database" workflow.
 import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
