@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { LeavesMark } from '@/components/ui/logo'
 
 /**
  * Public top nav shown to anonymous viewers on routes that don't require
@@ -13,9 +14,7 @@ export function PublicNavbar() {
           can use an exact top offset (the project page's tab bar). */}
       <div className="mx-auto flex h-14 max-w-[1280px] items-center justify-between gap-4 px-4 sm:h-16 sm:gap-8 sm:px-8">
         <Link href="/" className="flex items-center gap-2 sm:gap-3">
-          <div className="flex size-7 items-center justify-center rounded-md bg-gradient-to-br from-amber-500 to-amber-400 font-display text-base font-bold text-blue-900 shadow-glow-amber sm:size-8 sm:text-lg">
-            S
-          </div>
+          <LeavesMark className="size-7 sm:size-8" />
           <span className="font-display text-base tracking-tight sm:text-xl">
             The Superhero
           </span>

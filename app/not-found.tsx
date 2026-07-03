@@ -1,13 +1,12 @@
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
+import { LeavesMark } from '@/components/ui/logo'
 
 export default function NotFound() {
   return (
     <div className="flex min-h-screen items-center justify-center px-6 py-12">
       <div className="flex max-w-[520px] flex-col items-center gap-5 text-center">
-        <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-to-br from-amber-500 to-amber-400 font-display text-3xl font-bold text-blue-900 shadow-glow-amber">
-          ?
-        </div>
+        <LeavesMark className="size-14" />
         <p className="text-xs font-semibold uppercase tracking-widest text-amber-500">
           404 · Not found
         </p>
