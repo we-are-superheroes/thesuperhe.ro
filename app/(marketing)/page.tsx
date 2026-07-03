@@ -234,7 +234,7 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
           <h1 className="mb-6 font-display text-[clamp(48px,6.2vw,80px)] leading-[0.98] tracking-[-0.025em] animate-[rise_800ms_ease-out_200ms_backwards]">
             Don&apos;t act alone.
             <br />
-            Let's be{' '}
+            Let&apos;s be{' '}
             <span className="relative italic text-amber-500">
               superheroes
               <span className="absolute inset-x-0 bottom-2 -z-10 h-2 rounded-sm bg-amber-500/[0.18]" />
@@ -716,24 +716,37 @@ function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
 
 /* ── Footer ──────────────────────────────────────────────────── */
 
+/** Tiny inline Swiss flag — an SVG rather than the 🇨🇭 emoji, which
+ *  Windows browsers render as the letters "CH" instead of a flag. */
+function SwissFlag({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" className={className} aria-label="Swiss flag" role="img">
+      <rect width="32" height="32" rx="4" fill="#DA291C" />
+      <rect x="13" y="6.5" width="6" height="19" fill="#fff" />
+      <rect x="6.5" y="13" width="19" height="6" fill="#fff" />
+    </svg>
+  )
+}
+
 function Footer() {
   return (
     <footer className="border-t border-white/[0.07] py-10 pb-8 text-sm text-neutral-400">
-      <div className="mx-auto flex max-w-[1420px] items-center justify-between gap-6 px-4 sm:px-8">
+      <div className="mx-auto flex max-w-[1420px] flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:gap-6 sm:px-8">
         <div>&copy; 2026 The Superhero · climate &amp; sustainability collaboration</div>
-        <div className="flex gap-6">
-          <Link href="#" className="hover:text-fg-primary">
-            About
+        <div className="flex items-center gap-6">
+          <Link href="/projects" className="hover:text-fg-primary">
+            Projects
           </Link>
           <Link href="/blueprints" className="hover:text-fg-primary">
             Blueprints
           </Link>
-          <Link href="#" className="hover:text-fg-primary">
+          <Link href="/privacy" className="hover:text-fg-primary">
             Privacy
           </Link>
-          <Link href="#" className="hover:text-fg-primary">
-            Contact
-          </Link>
+        </div>
+        <div className="flex items-center gap-2">
+          Created in Switzerland
+          <SwissFlag className="size-4" />
         </div>
       </div>
     </footer>
