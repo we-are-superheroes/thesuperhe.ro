@@ -333,6 +333,21 @@ const skills: Array<{ name: string; category: string }> = [
   { name: 'Library science', category: 'Education' },
   { name: 'Special educational needs (SEND)', category: 'Education' },
   { name: 'Storytime / reading aloud', category: 'Education' },
+
+  // ── Languages ──────────────────────────────────────────────
+  { name: 'English', category: 'Languages' },
+  { name: 'French', category: 'Languages' },
+  { name: 'German', category: 'Languages' },
+  { name: 'Spanish', category: 'Languages' },
+  { name: 'Italian', category: 'Languages' },
+  { name: 'Mandarin', category: 'Languages' },
+  { name: 'Russian', category: 'Languages' },
+  { name: 'Ukrainian', category: 'Languages' },
+  { name: 'Arabic', category: 'Languages' },
+  { name: 'Polish', category: 'Languages' },
+  { name: 'Hindi', category: 'Languages' },
+  { name: 'Turkish', category: 'Languages' },
+  { name: 'Portuguese', category: 'Languages' },
 ]
 
 async function main() {

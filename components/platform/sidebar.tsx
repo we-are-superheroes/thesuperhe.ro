@@ -19,6 +19,7 @@ import {
   X,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { LeavesMark } from '@/components/ui/logo'
 
 interface NavItem {
   label: string
@@ -151,9 +152,7 @@ export function Sidebar({
 
       {/* Logo */}
       <Link href="/" className="flex items-center gap-3 px-2 font-display text-xl tracking-tight">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-amber-400 font-display text-lg font-bold text-blue-900 shadow-glow-amber">
-          S
-        </div>
+        <LeavesMark className="size-8" />
         <span>The Superhero</span>
       </Link>
 

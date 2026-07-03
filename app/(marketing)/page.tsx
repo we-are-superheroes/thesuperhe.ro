@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+import { LeavesMark } from '@/components/ui/logo'
 import {
   ArrowRight,
   Search,
@@ -126,9 +127,7 @@ function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
     <nav className="sticky top-0 z-50 border-b border-white/[0.07] bg-blue-900/[0.78] backdrop-blur-2xl backdrop-saturate-[1.4]">
       <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-4 px-4 py-3 sm:gap-8 sm:px-8 sm:py-4">
         <Link href="/" className="flex items-center gap-2 sm:gap-3">
-          <div className="flex size-7 items-center justify-center rounded-md bg-gradient-to-br from-amber-500 to-amber-400 font-display text-base font-bold text-blue-900 shadow-glow-amber sm:size-8 sm:text-lg">
-            S
-          </div>
+          <LeavesMark className="size-7 sm:size-8" />
           <span className="font-display text-base tracking-tight sm:text-xl">
             The Superhero
           </span>

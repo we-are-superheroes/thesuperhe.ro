@@ -1,0 +1,51 @@
+blueprint_slug,title,summary,category,tier,appeal,effort,estimated_duration_weeks,step_count,total_estimated_hours
+litter-pick,Litter Pick / River Cleanup,"Organise a one-day community cleanup of a park, street, riverbank or trail.",waste-circular-economy,1,high,low,4,8,21
+repair-cafe,Repair Café,"Host a pop-up event where volunteer fixers help neighbours repair electronics, clothing, bikes and furniture.",waste-circular-economy,1,high,low,8,8,29
+clothing-swap,Clothing Swap,Organise an event where people exchange good-quality clothes instead of buying new.,waste-circular-economy,1,high,low,5,6,17
+seed-plant-swap,Seed & Plant Swap,"Host a seasonal exchange of seeds, seedlings and cuttings for local gardeners.",food-agriculture,1,high,low,4,6,14
+beach-lake-cleanup,Beach / Lakeside Cleanup,Run a shoreline cleanup with waste sorting and optional citizen-science litter data collection.,waste-circular-economy,1,high,low,4,7,20
+fruit-rescue,Community Fruit Harvesting (Fruit Rescue),"Pick unharvested fruit from private and public trees and distribute it to pickers, owners and food charities.",food-agriculture,1,high,low,6,6,18
+disco-soup,Food Waste Cooking Event (Disco Soup),"Cook and share a public meal made from rescued surplus food, with music and conversation about food waste.",food-agriculture,1,high,low,6,7,26
+book-toy-swap,Book / Toy Swap,"A family-friendly exchange event for books, games and toys.",waste-circular-economy,1,high,low,4,5,13
+ewaste-drive,E-Waste Collection Drive,"A one-day neighbourhood collection of old electronics, cables and batteries for certified recycling.",waste-circular-economy,1,high,low,5,6,17
+bioblitz,Nature Walk / BioBlitz Citizen Science Day,A guided species-recording event where participants document local biodiversity for real scientific datasets.,biodiversity-nature,1,high,low,5,6,16
+birdhouse-workshop,Birdhouse & Insect Hotel Building Workshop,A hands-on session where participants build nesting boxes and insect hotels for local gardens and parks.,biodiversity-nature,1,high,low,5,6,18
+give-box,Give-Box / Public Bookcase Installation,Build and install a weatherproof public exchange cabinet for books or household items.,waste-circular-economy,1,medium,low,8,6,24
+pollinator-planting,Wildflower / Pollinator Planting Day,"Convert a verge, lawn strip or park corner into a wildflower patch for pollinators.",biodiversity-nature,1,high,low,6,6,18
+documentary-night,Documentary Screening + Discussion Night,Screen a climate or sustainability documentary followed by a facilitated local-action discussion.,education-community,1,medium,low,4,6,15
+mending-circle,Visible Mending / Clothing Repair Circle,A recurring social meetup where people learn to repair and visibly mend their own clothes.,waste-circular-economy,1,medium,low,6,6,16
+community-garden,Community Garden,Establish a shared garden where neighbours grow food together on unused land.,food-agriculture,2,high,medium,26,9,54
+community-compost,Community Compost Scheme,Set up a shared composting site where households drop off organic waste and receive finished compost.,waste-circular-economy,2,medium,medium,16,8,41
+tool-library,Tool Library / Library of Things,Create a lending library for tools and household equipment so neighbours borrow instead of buy.,waste-circular-economy,2,high,medium,20,8,48
+community-fridge,Community Fridge / Food-Sharing Point,Install a public fridge where surplus food is shared freely between neighbours and businesses.,food-agriculture,2,high,medium,14,7,31
+food-rescue,Surplus Food Rescue & Redistribution,Build a recurring collection route that moves surplus food from businesses to charities and community fridges.,food-agriculture,2,medium,medium,16,7,35
+repair-skills-course,Repair Skills Training Series,"A multi-week course teaching practical repair skills (electronics, textiles, bikes) to build local fixer capacity.",education-community,2,medium,medium,12,7,39
+school-garden,School Garden Program,Partner with a school to build and run a teaching garden integrated into lessons.,education-community,2,high,medium,30,7,46
+tree-planting,Neighbourhood Tree Planting,Organise the planting of street or park trees with the municipality and residents.,biodiversity-nature,2,high,medium,20,7,40
+bulk-buying-group,Zero-Waste Bulk-Buying Group,A neighbourhood group that orders staple foods in bulk to cut packaging and cost.,food-agriculture,2,medium,medium,12,6,26
+lift-sharing,Community Carpool / Lift-Sharing Network,"Set up an organised lift-sharing scheme for a village, workplace cluster or club.",mobility,2,medium,medium,12,6,23
+walking-school-bus,Walking School Bus,Organise supervised walking routes where children walk to school together instead of being driven.,mobility,2,high,medium,10,6,28
+textile-upcycling,Textile Upcycling Workshop Series,Workshops transforming damaged or unwanted textiles into new garments and useful items.,waste-circular-economy,2,medium,medium,12,7,36
+plant-based-cooking-club,Plant-Based Cooking Club,"A recurring social cooking group exploring affordable, delicious low-carbon meals.",food-agriculture,2,medium,low,10,6,22
+green-map,Local Green Map / Repair & Reuse Directory,"Research and publish a map of local repair shops, second-hand stores, refill stations and sharing services.",education-community,2,medium,low,10,6,29
+play-street,Play Street / Car-Free Day,"Temporarily close a residential street to traffic for a day of play, food and neighbourly connection.",mobility,2,high,medium,12,7,33
+draft-proofing-brigade,Draft-Proofing & Energy-Saving Brigade,Trained volunteers help neighbours install simple energy-saving measures like draft excluders and radiator foils.,energy,2,medium,medium,14,7,37
+hard-to-recycle-points,Hard-to-Recycle Collection Point Network,"A network of drop-off boxes in shops and cafés for items kerbside recycling doesn't take (corks, pens, blister packs).",waste-circular-economy,2,medium,low,12,6,23
+battery-awareness-campaign,Battery & Lightbulb Recycling Awareness Campaign,A local campaign making sure households know where and how to recycle batteries and bulbs.,waste-circular-economy,3,low,low,8,5,18
+guerrilla-gardening,Guerrilla Gardening / Seed Bombing,Beautify neglected urban spots with low-maintenance native planting.,biodiversity-nature,3,medium,low,6,5,14
+second-hand-market,Second-Hand Market,Organise a neighbourhood flea market focused on reuse.,waste-circular-economy,3,medium,medium,10,6,28
+climate-quiz-night,Climate-Themed Pub Quiz / Games Night,A fun social quiz night that builds community around climate topics.,education-community,3,medium,low,4,5,14
+sustainability-newsletter,Local Sustainability Newsletter / Blog,"A regular publication covering local green initiatives, events and how-tos.",education-community,3,low,low,12,5,20
+swap-board,Neighbourhood Swap Board,A physical or digital board where neighbours offer and request items and favours.,education-community,3,low,low,6,5,13
+solar-cooperative,Solar Cooperative / Community Solar Purchase Group,Organise collective purchasing or cooperative ownership of solar installations for local roofs.,energy,4,high,high,52,10,127
+community-renewable,Community-Owned Renewable on Public Buildings,"Develop a citizen-financed solar installation on a school, gym or civic roof, with the municipality as host.",energy,4,high,high,78,8,120
+energy-audit-service,Home Energy Audit Volunteer Service,Trained volunteers provide free walk-through energy assessments with prioritised recommendations for households.,energy,4,medium,high,26,7,72
+rain-garden,Rain Garden / Depaving Project,Remove unnecessary paving and create a rain garden that absorbs stormwater and supports biodiversity.,built-environment,4,medium,high,26,7,59
+green-roof-pilot,Green Roof / Facade Pilot on a Community Building,Install a demonstration green roof or climbing facade on a community-owned building.,built-environment,4,medium,high,39,7,62
+air-quality-network,Citizen Air Quality Monitoring Network,Deploy low-cost sensors across the neighbourhood and publish open air-quality data.,built-environment,4,medium,high,26,7,48
+stream-restoration,Stream / River Restoration Project,"Work with authorities to restore a degraded stream section: banks, vegetation and habitat.",biodiversity-nature,4,medium,high,52,7,77
+wildlife-corridor,Hedgerow / Wildlife Corridor Planting,Connect fragmented habitats by planting native hedgerows across cooperating properties.,biodiversity-nature,4,medium,high,39,7,62
+community-orchard,Community Orchard,Plant and steward a shared orchard of local fruit varieties on public or leased land.,food-agriculture,4,high,high,52,7,56
+sme-sustainability-audit,SME Sustainability Audit Service,Skilled volunteers help small local businesses assess and cut their environmental footprint.,education-community,4,medium,high,26,7,63
+cargo-bike-share,Cargo Bike Sharing Scheme,Provide shared cargo bikes so households can move kids and goods without a car.,mobility,4,medium,high,26,8,51
+climate-advocacy-group,Local Climate Advocacy Group / Citizens' Assembly Push,Organise residents to advocate for concrete municipal climate policies or a local citizens' assembly.,education-community,4,medium,high,52,7,68

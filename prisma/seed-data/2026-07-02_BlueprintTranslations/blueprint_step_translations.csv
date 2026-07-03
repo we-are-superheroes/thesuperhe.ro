@@ -1,0 +1,665 @@
+step_slug,language,title,description
+litter-pick-s01,fr-CH,Choisir le lieu et la date,"Repérer un site avec des déchets visibles, un accès sûr et des places de parc; fixer une date de week-end dans 3 à 4 semaines."
+litter-pick-s01,de-CH,Ort und Datum festlegen,"Einen Standort mit sichtbarem Abfall, sicherem Zugang und Parkplätzen auskundschaften; einen Wochenendtermin in 3–4 Wochen festlegen."
+litter-pick-s02,fr-CH,Obtenir l'autorisation du propriétaire ou de la commune,Contacter la commune ou le propriétaire pour confirmer que le nettoyage est autorisé et demander un soutien pour la collecte des déchets.
+litter-pick-s02,de-CH,Bewilligung von Eigentümer oder Gemeinde einholen,"Gemeinde oder Grundeigentümer kontaktieren, um die Aktion zu bestätigen und Unterstützung bei der Abfallabfuhr anzufragen."
+litter-pick-s03,fr-CH,Organiser l'élimination des déchets,Convenir avec le service de voirie du lieu de collecte des sacs remplis et du tri des recyclables.
+litter-pick-s03,de-CH,Abfallentsorgung organisieren,"Mit dem lokalen Entsorgungsdienst vereinbaren, wo volle Säcke abgeholt werden und wie Wertstoffe getrennt werden."
+litter-pick-s04,fr-CH,Rassembler le matériel,"Se procurer gants, pinces, sacs et gilets de sécurité; de nombreuses communes les prêtent gratuitement."
+litter-pick-s04,de-CH,Ausrüstung beschaffen,"Handschuhe, Greifzangen, Säcke und Leuchtwesten organisieren; viele Gemeinden verleihen diese gratis."
+litter-pick-s05,fr-CH,Promouvoir l'événement,"Créer un flyer simple et le diffuser dans les groupes locaux sur les réseaux sociaux, les panneaux d'affichage et les écoles."
+litter-pick-s05,de-CH,Anlass bewerben,"Einen einfachen Flyer gestalten und in lokalen Social-Media-Gruppen, an Anschlagbrettern und in Schulen verbreiten."
+litter-pick-s06,fr-CH,Préparer un briefing de sécurité,"Rédiger un court briefing couvrant objets coupants, circulation, météo et hygiène; désigner un·e secouriste."
+litter-pick-s06,de-CH,Sicherheitsbriefing vorbereiten,"Ein kurzes Briefing zu scharfen Gegenständen, Verkehr, Wetter und Hygiene verfassen; eine Person mit Erste-Hilfe-Kenntnissen bestimmen."
+litter-pick-s07,fr-CH,Réaliser le nettoyage,"Enregistrer les participant·e·s, les briefer, attribuer les zones et coordonner les points de collecte pendant l'événement."
+litter-pick-s07,de-CH,Sammelaktion durchführen,"Teilnehmende registrieren und briefen, Zonen zuteilen und Sammelpunkte während des Anlasses koordinieren."
+litter-pick-s08,fr-CH,Documenter et partager les résultats,"Peser ou compter les sacs, photographier la récolte et remercier publiquement les bénévoles pour préparer la prochaine édition."
+litter-pick-s08,de-CH,Ergebnisse dokumentieren und teilen,"Säcke wägen oder zählen, die Ausbeute fotografieren und den Freiwilligen öffentlich danken, um Schwung für die nächste Aktion aufzubauen."
+repair-cafe-s01,fr-CH,Définir le périmètre et le format,"Décider des catégories de réparation proposées au départ (p. ex. électronique, textile, vélos) et du nombre de visiteurs visé."
+repair-cafe-s01,de-CH,Umfang und Format definieren,"Entscheiden, welche Reparaturkategorien zuerst angeboten werden (z. B. Elektronik, Textilien, Velos) und wie viele Besuchende erwartet werden."
+repair-cafe-s02,fr-CH,Recruter des réparateur·trice·s bénévoles,"Trouver 4 à 8 personnes qualifiées via les associations locales, fablabs et réseaux de retraité·e·s; confirmer leurs spécialités."
+repair-cafe-s02,de-CH,Freiwillige Reparierende gewinnen,"4–8 versierte Reparierende über Quartiervereine, Makerspaces und Seniorennetzwerke finden; ihre Fachgebiete bestätigen."
+repair-cafe-s03,fr-CH,Trouver un lieu,"Réserver une salle communale ou un café avec tables, prises électriques et bon éclairage pour une demi-journée."
+repair-cafe-s03,de-CH,Lokal sichern,"Einen Gemeindesaal oder ein Café mit Tischen, Steckdosen und guter Beleuchtung für einen halben Tag buchen."
+repair-cafe-s04,fr-CH,Régler assurance et responsabilité,Vérifier la couverture responsabilité civile du lieu et préparer un formulaire de décharge simple pour les visiteurs.
+repair-cafe-s04,de-CH,Versicherung und Haftung klären,Die Haftpflichtdeckung des Lokals prüfen und ein einfaches Haftungsausschluss-Formular für Besuchende vorbereiten.
+repair-cafe-s05,fr-CH,Rassembler outils et pièces détachées,"Réunir boîtes à outils, multimètres, machines à coudre et pièces courantes; demander aux réparateur·trice·s ce dont ils ont besoin."
+repair-cafe-s05,de-CH,Werkzeug und Ersatzteile zusammenstellen,"Werkzeugkoffer, Multimeter, Nähmaschinen und gängige Ersatzteile sammeln; die Reparierenden nach ihrem Bedarf fragen."
+repair-cafe-s06,fr-CH,Faire la promotion locale,"Concevoir une affiche, inscrire l'événement dans les agendas locaux et inviter à annoncer les objets à réparer à l'avance."
+repair-cafe-s06,de-CH,Lokal bewerben,"Ein Plakat gestalten, den Anlass in lokalen Veranstaltungskalendern eintragen und zur Voranmeldung von Gegenständen einladen."
+repair-cafe-s07,fr-CH,Animer l'événement,"Gérer l'accueil, orienter les visiteurs vers la bonne personne et consigner chaque objet et son issue."
+repair-cafe-s07,de-CH,Anlass durchführen,"Den Empfang betreuen, Besuchende der richtigen Fachperson zuweisen und jeden Gegenstand samt Ergebnis erfassen."
+repair-cafe-s08,fr-CH,Consigner les réparations et assurer le suivi,"Enregistrer les statistiques (objets réparés, déchets évités), remercier les bénévoles et annoncer la prochaine date."
+repair-cafe-s08,de-CH,Reparaturen erfassen und nachfassen,"Reparaturstatistik festhalten (reparierte Gegenstände, vermiedener Abfall), den Reparierenden danken und den nächsten Termin ankündigen."
+clothing-swap-s01,fr-CH,Définir le format et les règles,"Décider du mécanisme d'échange (jeton par article ou libre-service), des critères de qualité et des limites par personne."
+clothing-swap-s01,de-CH,Format und Regeln festlegen,"Den Tauschmechanismus (Jeton pro Stück oder freie Mitnahme), Qualitätsstandards und Mengenlimiten festlegen."
+clothing-swap-s02,fr-CH,Réserver un lieu,"Trouver un espace gratuit ou bon marché avec tables, miroirs et coin d'essayage."
+clothing-swap-s02,de-CH,Lokal buchen,"Einen kostenlosen oder günstigen Raum mit Tischen, Spiegeln und Umkleideecke finden."
+clothing-swap-s03,fr-CH,Promouvoir et gérer les inscriptions,Communiquer via réseaux sociaux et affiches; utiliser un formulaire simple pour estimer la fréquentation.
+clothing-swap-s03,de-CH,Bewerben und Anmeldungen verwalten,Über Social Media und Plakate bekannt machen; mit einem einfachen Anmeldeformular die Besucherzahl abschätzen.
+clothing-swap-s04,fr-CH,Organiser la réception et le tri,"Planifier l'enregistrement des articles, le contrôle qualité et la présentation par taille et par type."
+clothing-swap-s04,de-CH,Annahme und Sortierung organisieren,"Planen, wie Stücke angenommen, auf Qualität geprüft und nach Grösse und Art präsentiert werden."
+clothing-swap-s05,fr-CH,Animer le troc,"Tenir le comptoir de réception, garder les portants en ordre et gérer le système de jetons pendant l'événement."
+clothing-swap-s05,de-CH,Tauschbörse durchführen,"Den Annahmetisch betreuen, die Kleiderständer ordentlich halten und das Jetonsystem während des Anlasses handhaben."
+clothing-swap-s06,fr-CH,Gérer les invendus de manière responsable,Organiser le don des articles restants à une boutique caritative ou à un recycleur textile.
+clothing-swap-s06,de-CH,Übrig Gebliebenes verantwortungsvoll weitergeben,Nicht abgeholte Stücke an einen Secondhand-Laden oder ein Textilrecycling spenden.
+seed-plant-swap-s01,fr-CH,Choisir la saison et le lieu,"Planifier au début du printemps ou en automne et réserver une salle, un coin de marché ou un jardin communautaire."
+seed-plant-swap-s01,de-CH,Saison und Ort wählen,"Für Frühjahr oder Herbst planen und einen Saal, eine Marktecke oder einen Gemeinschaftsgarten buchen."
+seed-plant-swap-s02,fr-CH,Fixer les règles d'échange,"Rédiger des règles simples sur l'étiquetage, les espèces envahissantes à exclure et le conditionnement des graines."
+seed-plant-swap-s02,de-CH,Tauschregeln festlegen,"Einfache Regeln zu Beschriftung, auszuschliessenden invasiven Arten und Samenverpackung verfassen."
+seed-plant-swap-s03,fr-CH,Recruter des jardinier·ère·s expérimenté·e·s,Inviter 2 à 3 personnes compétentes pour répondre aux questions et identifier les plantes le jour J.
+seed-plant-swap-s03,de-CH,Erfahrene Gartenprofis gewinnen,"2–3 kundige Personen einladen, die am Anlass Fragen beantworten und Pflanzen bestimmen."
+seed-plant-swap-s04,fr-CH,Promouvoir auprès des réseaux de jardinage,"Diffuser dans les associations de jardins familiaux, les groupes de jardinage de balcon et les médias locaux."
+seed-plant-swap-s04,de-CH,In Gartennetzwerken bewerben,"In Familiengartenvereinen, Balkongarten-Gruppen und lokalen Medien teilen."
+seed-plant-swap-s05,fr-CH,Animer la bourse,"Installer des tables étiquetées par type de plante, gérer la réception et faire vivre l'échange."
+seed-plant-swap-s05,de-CH,Tauschbörse durchführen,"Beschriftete Tische nach Pflanzenart aufstellen, die Annahme organisieren und den Tausch am Laufen halten."
+seed-plant-swap-s06,fr-CH,Fidéliser la communauté,Recueillir les contacts des personnes intéressées par une bourse récurrente ou un futur jardin communautaire.
+seed-plant-swap-s06,de-CH,Community binden,"Kontakte von Teilnehmenden sammeln, die eine regelmässige Börse oder einen künftigen Gemeinschaftsgarten möchten."
+beach-lake-cleanup-s01,fr-CH,Choisir le site et la fenêtre météo,Sélectionner un tronçon de rive accessible et une date avec solution de repli en cas de mauvais temps.
+beach-lake-cleanup-s01,de-CH,Uferabschnitt und Wetterfenster wählen,Einen gut zugänglichen Uferabschnitt und ein Datum mit Ausweichtermin bei schlechtem Wetter festlegen.
+beach-lake-cleanup-s02,fr-CH,Se coordonner avec les autorités,"Informer la commune ou l'autorité du lac, confirmer les règles d'accès et l'enlèvement des déchets."
+beach-lake-cleanup-s02,de-CH,Mit Behörden koordinieren,"Gemeinde oder Seeverwaltung informieren, Zugangsregeln und Abfallabholung bestätigen."
+beach-lake-cleanup-s03,fr-CH,Planifier la collecte de données,Adopter un protocole simple de recensement des déchets pour que le nettoyage alimente la recherche sur les déchets aquatiques.
+beach-lake-cleanup-s03,de-CH,Abfalldatenerhebung planen,"Ein einfaches Abfall-Erhebungsprotokoll übernehmen, damit die Reinigung Daten für die Gewässerabfall-Forschung liefert."
+beach-lake-cleanup-s04,fr-CH,Rassembler matériel et équipement de sécurité,"Se procurer gants, sacs, seaux de tri et équipement de protection solaire et aquatique."
+beach-lake-cleanup-s04,de-CH,Ausrüstung und Sicherheitsmaterial beschaffen,"Handschuhe, Säcke, Sortierkübel sowie Sonnen- und Wassersicherheitsausrüstung organisieren."
+beach-lake-cleanup-s05,fr-CH,Promouvoir l'événement,Communiquer avec des photos avant du site; s'associer aux clubs nautiques locaux.
+beach-lake-cleanup-s05,de-CH,Anlass bewerben,Mit aussagekräftigen Vorher-Fotos werben; mit lokalen Wassersportvereinen zusammenspannen.
+beach-lake-cleanup-s06,fr-CH,Nettoyer et trier les déchets,"Briefer les bénévoles, attribuer les zones et trier les déchets collectés entre recyclables et incinérables."
+beach-lake-cleanup-s06,de-CH,Reinigen und Abfall sortieren,"Freiwillige briefen, Zonen zuteilen und den gesammelten Abfall in Wertstoffe und Restmüll trennen."
+beach-lake-cleanup-s07,fr-CH,Publier les résultats,"Transmettre les données, publier totaux et photos, et remercier partenaires et bénévoles."
+beach-lake-cleanup-s07,de-CH,Resultate melden,"Abfalldaten einreichen, Totale und Fotos veröffentlichen sowie Partnern und Freiwilligen danken."
+fruit-rescue-s01,fr-CH,Recenser les arbres et recruter les propriétaires,"Inviter les propriétaires à annoncer les arbres qu'ils ne peuvent pas récolter; noter emplacement, espèce et période de maturité."
+fruit-rescue-s01,de-CH,Obstbäume erfassen und Baumbesitzer gewinnen,"Eigentümer einladen, Bäume zu melden, die sie nicht ernten können; Standort, Sorte und Reifezeit erfassen."
+fruit-rescue-s02,fr-CH,Fixer l'accord de partage,"Définir la répartition (p. ex. un tiers propriétaire, cueilleurs, entraide) et une décharge simple pour l'usage d'échelles."
+fruit-rescue-s02,de-CH,Teilungsvereinbarung festlegen,"Die Aufteilung definieren (z. B. je ein Drittel für Eigentümer, Pflückende, Hilfswerk) und einen einfachen Haftungsausschluss für Leiterarbeit erstellen."
+fruit-rescue-s03,fr-CH,Rassembler le matériel de récolte,"Se procurer échelles, sacs de cueillette, caisses et cueille-fruits; organiser le stockage entre les récoltes."
+fruit-rescue-s03,de-CH,Erntematerial beschaffen,"Leitern, Pflücksäcke, Harassen und Obstpflücker organisieren; Lagerung zwischen den Ernten regeln."
+fruit-rescue-s04,fr-CH,Recruter et planifier les cueilleur·euse·s,Constituer une liste de bénévoles et affecter de petites équipes aux arbres au fil de la maturité.
+fruit-rescue-s04,de-CH,Pflückende gewinnen und einteilen,Eine Liste Freiwilliger aufbauen und kleine Teams den Bäumen nach Reifezeitpunkt zuteilen.
+fruit-rescue-s05,fr-CH,Mener les sessions de récolte,"Encadrer des cueillettes sûres, peser la récolte et la répartir selon l'accord."
+fruit-rescue-s05,de-CH,Ernteeinsätze durchführen,"Sichere Pflückeinsätze leiten, die Ernte wägen und gemäss Vereinbarung aufteilen."
+fruit-rescue-s06,fr-CH,Distribuer le surplus,Livrer la part solidaire à une banque alimentaire ou un frigo partagé et consigner les totaux.
+fruit-rescue-s06,de-CH,Überschuss verteilen,Den Hilfswerk-Anteil an eine Abgabestelle oder einen offenen Kühlschrank liefern und die Mengen erfassen.
+disco-soup-s01,fr-CH,Sécuriser les sources d'invendus,"Convenir avec supermarchés, boulangeries ou marchés du don de produits invendables mais consommables."
+disco-soup-s01,de-CH,Quellen für überschüssige Lebensmittel sichern,"Mit Supermärkten, Bäckereien oder Märkten vereinbaren, unverkäufliche, aber einwandfreie Ware zu spenden."
+disco-soup-s02,fr-CH,Réserver un lieu avec cuisine,"Trouver une place publique ou une salle avec équipement de cuisine, eau et électricité."
+disco-soup-s02,de-CH,Lokal mit Küchenzugang buchen,"Einen öffentlichen Platz oder Saal mit Kochgelegenheit, Wasser und Strom finden."
+disco-soup-s03,fr-CH,Planifier le menu et le protocole d'hygiène,Concevoir des recettes flexibles pour des ingrédients imprévisibles et fixer les règles d'hygiène pour les bénévoles.
+disco-soup-s03,de-CH,Menü und Hygienekonzept planen,Flexible Rezepte für unvorhersehbare Zutaten entwerfen und Lebensmittelhygiene-Regeln für Freiwillige festlegen.
+disco-soup-s04,fr-CH,Recruter les bénévoles et un·e chef·fe,"Trouver un·e cuisinier·ère expérimenté·e pour diriger, plus 6 à 10 personnes pour couper, cuisiner et servir."
+disco-soup-s04,de-CH,Kochfreiwillige und Küchenleitung gewinnen,"Eine erfahrene Kochperson für die Leitung sowie 6–10 Helfende fürs Rüsten, Kochen und Servieren finden."
+disco-soup-s05,fr-CH,Promouvoir comme fête publique,"Communiquer comme une fête engagée: musique, repas gratuit et message contre le gaspillage alimentaire."
+disco-soup-s05,de-CH,Als festlichen öffentlichen Anlass bewerben,"Als Fest mit Sinn vermarkten: Musik, Gratisessen und eine Botschaft gegen Food Waste."
+disco-soup-s06,fr-CH,Animer l'événement,"Coordonner la collecte des aliments, la préparation collective, le service et l'ambiance le jour J."
+disco-soup-s06,de-CH,Anlass durchführen,"Lebensmittelabholung, gemeinsames Zubereiten, Ausgabe und Stimmung am Tag koordinieren."
+disco-soup-s07,fr-CH,Partager l'impact,Publier les kilos d'aliments sauvés et les portions servies; remercier visiblement les donateurs.
+disco-soup-s07,de-CH,Wirkung teilen,Gerettete Kilogramm und servierte Portionen veröffentlichen; die Lebensmittelspender sichtbar würdigen.
+book-toy-swap-s01,fr-CH,Choisir le lieu et le format,"Réserver une bibliothèque, une salle d'école ou un café et fixer les règles d'échange et les critères de qualité."
+book-toy-swap-s01,de-CH,Ort und Format wählen,"Eine Bibliothek, Schulaula oder ein Café buchen und Tauschregeln sowie Qualitätsstandards festlegen."
+book-toy-swap-s02,fr-CH,Promouvoir auprès des familles,"Toucher les parents via écoles, crèches et groupes de quartier."
+book-toy-swap-s02,de-CH,Bei Familien bewerben,"Eltern über Schulen, Kitas und Quartiergruppen erreichen."
+book-toy-swap-s03,fr-CH,Organiser la réception et la présentation,Prévoir le contrôle qualité et le classement des articles par âge et par catégorie.
+book-toy-swap-s03,de-CH,Annahme und Präsentation organisieren,Qualitätskontrolle planen und die Artikel nach Altersgruppe und Kategorie ordnen.
+book-toy-swap-s04,fr-CH,Animer le troc,"Gérer la réception, garder les présentoirs en ordre et animer un petit coin lecture ou jeu."
+book-toy-swap-s04,de-CH,Tauschbörse durchführen,"Annahme betreuen, Auslagen ordentlich halten und eine kleine Lese- oder Spielecke anbieten."
+book-toy-swap-s05,fr-CH,Donner les restes,"Transmettre les articles non repris à une œuvre caritative, un hôpital ou une organisation d'aide aux réfugié·e·s."
+book-toy-swap-s05,de-CH,Übriges spenden,"Nicht abgeholte Artikel an ein Hilfswerk, Spital oder eine Flüchtlingshilfe-Organisation weitergeben."
+ewaste-drive-s01,fr-CH,S'associer à un recycleur certifié,Convenir avec un recycleur agréé ou le service communal de la reprise des objets collectés.
+ewaste-drive-s01,de-CH,Mit zertifiziertem Recycler zusammenarbeiten,Mit einem lizenzierten Elektroschrott-Recycler oder der Gemeinde die Übernahme des Sammelguts vereinbaren.
+ewaste-drive-s02,fr-CH,Choisir un point de dépôt visible,"Réserver un parking, une cour d'école ou un coin de marché avec accès facile en voiture pour un samedi matin."
+ewaste-drive-s02,de-CH,Gut sichtbare Abgabestelle wählen,"Einen Parkplatz, Schulhof oder eine Marktecke mit einfacher Zufahrt für einen Samstagmorgen reservieren."
+ewaste-drive-s03,fr-CH,Préparer la communication sur la sécurité des données,Rédiger des conseils pour effacer les données personnelles des appareils avant le don.
+ewaste-drive-s03,de-CH,Kommunikation zur Datensicherheit vorbereiten,"Anleitungen erstellen, wie persönliche Daten vor der Abgabe von den Geräten gelöscht werden."
+ewaste-drive-s04,fr-CH,Promouvoir avec une liste claire des objets acceptés,Publier précisément ce qui est accepté ou non pour éviter les dépôts sauvages de produits dangereux.
+ewaste-drive-s04,de-CH,Mit klarer Liste akzeptierter Artikel werben,"Genau publizieren, was angenommen wird und was nicht, um wilde Ablagerung gefährlicher Gegenstände zu vermeiden."
+ewaste-drive-s05,fr-CH,Tenir la collecte,"Assurer la réception, trier selon les catégories du recycleur et manipuler les piles en toute sécurité."
+ewaste-drive-s05,de-CH,Sammlung durchführen,"Annahme betreuen, nach Recycler-Kategorien sortieren und Batterien sicher handhaben."
+ewaste-drive-s06,fr-CH,Publier le bilan,"Communiquer le poids total collecté et, si possible, les appareils orientés vers le réemploi plutôt que le recyclage."
+ewaste-drive-s06,de-CH,Bilanz veröffentlichen,"Das gesammelte Gesamtgewicht publizieren und wenn möglich ausweisen, welche Geräte in die Wiederverwendung statt ins Recycling gehen."
+bioblitz-s01,fr-CH,Recruter un·e guide naturaliste,"Trouver un·e écologue, ornithologue ou botaniste local·e prêt·e à guider l'identification."
+bioblitz-s01,de-CH,Naturkundige Leitung gewinnen,"Eine lokale Fachperson für Ökologie, Vögel oder Botanik finden, die die Bestimmung anleitet."
+bioblitz-s02,fr-CH,Choisir le site et obtenir l'autorisation d'accès,"Sélectionner un parc, une réserve ou une berge et confirmer l'accès en groupe avec le gestionnaire."
+bioblitz-s02,de-CH,Ort wählen und Zugangserlaubnis einholen,"Einen Park, ein Schutzgebiet oder ein Ufer wählen und den Gruppenzugang mit der Verwaltung klären."
+bioblitz-s03,fr-CH,Configurer l'outil de recensement,Créer un projet d'événement dans une appli de science citoyenne (p. ex. iNaturalist) et préparer un petit guide d'utilisation.
+bioblitz-s03,de-CH,Erfassungstool einrichten,Ein Anlassprojekt in einer Citizen-Science-App (z. B. iNaturalist) anlegen und eine Kurzanleitung vorbereiten.
+bioblitz-s04,fr-CH,Promouvoir auprès des familles et des écoles,Présenter l'événement comme une chasse au trésor nature; inviter classes et familles.
+bioblitz-s04,de-CH,Bei Familien und Schulen bewerben,Als Natur-Schatzsuche vermarkten; Schulklassen und Familien einladen.
+bioblitz-s05,fr-CH,Animer le BioBlitz,"Guider la balade, aider à photographier et enregistrer les espèces, et veiller à la sécurité des groupes."
+bioblitz-s05,de-CH,BioBlitz durchführen,"Den Rundgang leiten, beim Fotografieren und Erfassen der Arten helfen und die Gruppen sicher führen."
+bioblitz-s06,fr-CH,Publier le décompte des espèces,Partager le total final et les découvertes remarquables avec la communauté et le gestionnaire du site.
+bioblitz-s06,de-CH,Artenzahl veröffentlichen,Die Endbilanz und bemerkenswerte Funde mit der Community und der Standortverwaltung teilen.
+birdhouse-workshop-s01,fr-CH,Concevoir les kits de construction,Choisir des modèles adaptés aux espèces et préparer des listes de découpe pour débutant·e·s.
+birdhouse-workshop-s01,de-CH,Bausätze entwerfen,Artgerechte Bauweisen wählen und anfängertaugliche Zuschnittlisten vorbereiten.
+birdhouse-workshop-s02,fr-CH,Se procurer matériaux et outils,"Obtenir du bois non traité (idéalement chutes ou dons), vis, perceuses et scies pour le groupe."
+birdhouse-workshop-s02,de-CH,Material und Werkzeug beschaffen,"Unbehandeltes Holz (idealerweise Reste oder Spenden), Schrauben, Bohrmaschinen und Sägen für die Gruppe organisieren."
+birdhouse-workshop-s03,fr-CH,Réserver un atelier,"Trouver un fablab, un atelier d'école ou un garage avec établis et électricité."
+birdhouse-workshop-s03,de-CH,Werkstattraum buchen,"Einen Makerspace, eine Schulwerkstatt oder Garage mit Werkbänken und Strom finden."
+birdhouse-workshop-s04,fr-CH,Promouvoir et gérer les inscriptions,Limiter le nombre de participant·e·s selon les outils; cibler familles et propriétaires de jardins.
+birdhouse-workshop-s04,de-CH,Bewerben und Anmeldungen entgegennehmen,Die Teilnehmerzahl auf das Werkzeug abstimmen; Familien und Gartenbesitzende ansprechen.
+birdhouse-workshop-s05,fr-CH,Animer la session de construction,"Enseigner l'usage sûr des outils, guider l'assemblage et expliquer le bon emplacement de chaque modèle."
+birdhouse-workshop-s05,de-CH,Bau-Session durchführen,"Sicheren Werkzeuggebrauch vermitteln, beim Zusammenbau anleiten und die richtige Platzierung jedes Modells erklären."
+birdhouse-workshop-s06,fr-CH,Coordonner l'installation,Aider à bien positionner les nichoirs et organiser l'installation de quelques-uns dans les espaces verts publics.
+birdhouse-workshop-s06,de-CH,Montage koordinieren,Beim korrekten Aufhängen helfen und die Montage einiger Kästen im öffentlichen Grün organisieren.
+give-box-s01,fr-CH,Choisir l'emplacement et obtenir l'autorisation,"Trouver un endroit abrité, visible et accessible, et obtenir l'accord écrit de la commune ou du propriétaire."
+give-box-s01,de-CH,Standort wählen und Bewilligung einholen,"Einen geschützten, sichtbaren, gut zugänglichen Ort finden und die schriftliche Zustimmung von Gemeinde oder Eigentümer einholen."
+give-box-s02,fr-CH,Concevoir une armoire résistante aux intempéries,Concevoir ou adapter un modèle robuste et étanche avec un espace de signalétique clair.
+give-box-s02,de-CH,Wetterfesten Schrank entwerfen,"Ein robustes, regendichtes Design mit klarer Beschriftungsfläche entwerfen oder anpassen."
+give-box-s03,fr-CH,Se procurer les matériaux ou une vieille armoire,Obtenir des matériaux donnés ou surcycler une vieille armoire/cabine téléphonique; budgéter l'étanchéification.
+give-box-s03,de-CH,Material oder alten Schrank beschaffen,Gespendetes Material besorgen oder einen alten Schrank/eine Telefonkabine umnutzen; Wetterschutz einkalkulieren.
+give-box-s04,fr-CH,Construire la boîte,Construire et imperméabiliser l'armoire sur une ou deux journées de bricolage.
+give-box-s04,de-CH,Box bauen,Den Schrank an ein bis zwei Bautagen bauen und wetterfest machen.
+give-box-s05,fr-CH,Installer et inaugurer,"La fixer solidement, la garnir de premiers objets et marquer l'ouverture avec le voisinage."
+give-box-s05,de-CH,Aufstellen und einweihen,"Sicher montieren, mit Startobjekten bestücken und die Eröffnung mit der Nachbarschaft feiern."
+give-box-s06,fr-CH,Mettre en place un parrainage léger,Recruter 2 à 3 riverain·e·s pour un rangement hebdomadaire et afficher les règles à l'intérieur.
+give-box-s06,de-CH,Leichte Betreuung aufsetzen,"2–3 Anwohnende gewinnen, die wöchentlich aufräumen, und Hausregeln innen anbringen."
+pollinator-planting-s01,fr-CH,Identifier un site et obtenir l'accord,"Trouver une bande verte sous-utilisée et obtenir l'autorisation de la commune ou du propriétaire, y compris un accord de fauche réduite."
+pollinator-planting-s01,de-CH,Fläche finden und Zustimmung einholen,"Einen wenig genutzten Grünstreifen finden und die Erlaubnis von Gemeinde oder Eigentümer einholen, inklusive Vereinbarung zu reduziertem Mähen."
+pollinator-planting-s02,fr-CH,Choisir un mélange de graines indigènes,"Sélectionner un mélange régional favorable aux pollinisateurs, adapté au sol et à l'exposition."
+pollinator-planting-s02,de-CH,Einheimische Saatmischung wählen,"Eine regional heimische, bestäuberfreundliche Mischung passend zu Boden und Licht auswählen."
+pollinator-planting-s03,fr-CH,Planifier la préparation du terrain,"Déterminer comment le sol sera dégagé et préparé, et quels outils sont nécessaires."
+pollinator-planting-s03,de-CH,Bodenvorbereitung planen,"Festlegen, wie die Fläche geräumt und vorbereitet wird und welche Werkzeuge nötig sind."
+pollinator-planting-s04,fr-CH,Recruter des bénévoles et promouvoir,Inviter voisin·e·s et familles; présenter le projet comme la création d'une prairie à papillons dans leur rue.
+pollinator-planting-s04,de-CH,Freiwillige gewinnen und bewerben,Nachbarschaft und Familien einladen; als Schmetterlingswiese in ihrer Strasse vermarkten.
+pollinator-planting-s05,fr-CH,Réaliser la journée de plantation,"Préparer le sol, semer ou planter, arroser et installer un petit panneau explicatif."
+pollinator-planting-s05,de-CH,Pflanztag durchführen,"Boden vorbereiten, säen oder Setzlinge pflanzen, angiessen und eine kleine Infotafel aufstellen."
+pollinator-planting-s06,fr-CH,Organiser l'entretien,Mettre en place un tournus léger d'arrosage/désherbage pour la phase d'installation et convenir du régime de fauche.
+pollinator-planting-s06,de-CH,Nachpflege organisieren,Für die Anwuchszeit einen leichten Giess-/Jätplan aufstellen und das Mähregime vereinbaren.
+documentary-night-s01,fr-CH,Choisir le film et obtenir les droits de projection,Sélectionner un film captivant et obtenir une licence de projection publique ou choisir un titre librement diffusable.
+documentary-night-s01,de-CH,Film wählen und Vorführrechte sichern,Einen packenden Film auswählen und eine öffentliche Vorführlizenz einholen oder einen frei vorführbaren Titel nutzen.
+documentary-night-s02,fr-CH,Réserver un lieu avec projection,"Trouver un café, une bibliothèque ou une salle avec projecteur, son et sièges."
+documentary-night-s02,de-CH,Lokal mit Projektion buchen,"Ein Café, eine Bibliothek oder einen Saal mit Beamer, Ton und Bestuhlung finden."
+documentary-night-s03,fr-CH,Concevoir le format de discussion,Préparer 3 à 4 questions reliant le film à des options d'action locale concrètes.
+documentary-night-s03,de-CH,Diskussionsformat gestalten,"3–4 Diskussionsfragen vorbereiten, die den Film mit konkreten lokalen Handlungsmöglichkeiten verbinden."
+documentary-night-s04,fr-CH,Promouvoir la soirée,"Communiquer via les agendas locaux, des affiches et les organisations partenaires."
+documentary-night-s04,de-CH,Abend bewerben,"Über lokale Veranstaltungskalender, Plakate und Partnerorganisationen bekannt machen."
+documentary-night-s05,fr-CH,Animer la projection et la discussion,"Accueillir le public, lancer la projection et guider la conversation vers des suites concrètes."
+documentary-night-s05,de-CH,Vorführung und Diskussion moderieren,"Gäste begrüssen, die Vorführung durchführen und das Gespräch auf nächste Schritte lenken."
+documentary-night-s06,fr-CH,Recueillir l'intérêt pour la suite,Collecter les contacts des personnes prêtes à agir et les orienter vers des projets concrets.
+documentary-night-s06,de-CH,Interesse für Folgeprojekte sammeln,"Kontakte von Teilnehmenden erfassen, die aktiv werden möchten, und sie mit konkreten Projekten verbinden."
+mending-circle-s01,fr-CH,Recruter 1 à 2 mentors couture,"Trouver des raccommodeur·euse·s expérimenté·e·s prêt·e·s à enseigner les bases: reprisage, pièces, boutons."
+mending-circle-s01,de-CH,1–2 Näh-Mentorinnen oder -Mentoren gewinnen,"Erfahrene Flickprofis finden, die Grundtechniken wie Stopfen, Flicken und Knopfannähen vermitteln."
+mending-circle-s02,fr-CH,Trouver un lieu régulier et convivial,"Réserver un créneau récurrent dans un café, une bibliothèque ou une salle avec bonne lumière et tables."
+mending-circle-s02,de-CH,Gemütlichen Stammort finden,"Einen wiederkehrenden Termin in einem Café, einer Bibliothek oder einem Gemeinschaftsraum mit gutem Licht und Tischen buchen."
+mending-circle-s03,fr-CH,Constituer un kit de raccommodage commun,"Réunir aiguilles, fils, laines, pièces et une ou deux machines à coudre."
+mending-circle-s03,de-CH,Gemeinsames Flickset zusammenstellen,"Nadeln, Garne, Wolle, Flicken und ein bis zwei Nähmaschinen sammeln."
+mending-circle-s04,fr-CH,Promouvoir les premières sessions,Mettre en avant l'aspect social et créatif; demander d'apporter un vêtement abîmé.
+mending-circle-s04,de-CH,Erste Treffen bewerben,"Den sozialen, kreativen Aspekt betonen; alle bitten, ein beschädigtes Kleidungsstück mitzubringen."
+mending-circle-s05,fr-CH,Animer le premier cercle,"Faire les présentations, démontrer une technique de base et aider chacun·e à terminer une réparation."
+mending-circle-s05,de-CH,Ersten Treff durchführen,"Vorstellungsrunde machen, eine Grundtechnik zeigen und alle bei einer fertigen Reparatur begleiten."
+mending-circle-s06,fr-CH,Installer le rythme récurrent,"Fixer un rendez-vous mensuel, faire tourner l'accueil et créer un groupe de discussion pour les habitué·e·s."
+mending-circle-s06,de-CH,Regelmässigen Rhythmus etablieren,"Einen monatlichen Termin fixieren, das Gastgeben rotieren lassen und eine Chatgruppe für Stammgäste einrichten."
+community-garden-s01,fr-CH,Sonder l'intérêt et former un noyau,"Réunir 5 à 10 voisin·e·s engagé·e·s et s'accorder sur la vocation du jardin (alimentation, communauté, éducation)."
+community-garden-s01,de-CH,Interesse abklären und Kerngruppe bilden,"5–10 engagierte Nachbarinnen und Nachbarn gewinnen und den Zweck des Gartens klären (Ernährung, Gemeinschaft, Bildung)."
+community-garden-s02,fr-CH,Trouver et évaluer un terrain,"Identifier des parcelles candidates; vérifier ensoleillement, accès à l'eau, historique de pollution du sol et propriété."
+community-garden-s02,de-CH,Land finden und prüfen,"Mögliche Parzellen identifizieren; Besonnung, Wasserzugang, Altlasten und Eigentumsverhältnisse abklären."
+community-garden-s03,fr-CH,Négocier une convention d'utilisation,Conclure un accord écrit pluriannuel avec la commune ou le propriétaire.
+community-garden-s03,de-CH,Nutzungsvereinbarung aushandeln,"Eine schriftliche, mehrjährige Nutzungsvereinbarung mit Gemeinde oder Eigentümer abschliessen."
+community-garden-s04,fr-CH,Concevoir l'aménagement,"Planifier bacs, chemins, zone de compost, points d'eau et espace commun; choisir entre parcelles individuelles et culture collective."
+community-garden-s04,de-CH,Gartenlayout gestalten,"Beete, Wege, Kompostplatz, Wasserstellen und Gemeinschaftsbereich planen; zwischen Parzellen- und Gemeinschaftsmodell entscheiden."
+community-garden-s05,fr-CH,Budgéter et financer l'installation,"Chiffrer terre, bois, outils et raccordement à l'eau; financer via petites subventions ou financement participatif."
+community-garden-s05,de-CH,Budgetieren und Aufbau finanzieren,"Erde, Holz, Werkzeug und Wasseranschluss kalkulieren; über Kleinförderungen oder Crowdfunding finanzieren."
+community-garden-s06,fr-CH,Organiser les journées de construction,"Mener 2 à 3 journées bénévoles pour construire bacs, chemins et composteurs."
+community-garden-s06,de-CH,Bautage organisieren,"An 2–3 Freiwilligentagen Beete, Wege und Kompostbehälter bauen."
+community-garden-s07,fr-CH,Fixer la gouvernance et les règles,"Convenir de l'adhésion, des cotisations, de l'attribution des parcelles, des tâches communes et de la gestion des conflits."
+community-garden-s07,de-CH,Organisation und Regeln festlegen,"Mitgliedschaft, Beiträge, Beetvergabe, Gemeinschaftsaufgaben und Konfliktlösung vereinbaren."
+community-garden-s08,fr-CH,Planter la première saison,Coordonner un plan de culture et les premiers semis avec tous les membres.
+community-garden-s08,de-CH,Erste Saison bepflanzen,Einen Anbauplan und die erste Aussaat mit allen Mitgliedern koordinieren.
+community-garden-s09,fr-CH,Installer le rythme de fonctionnement,"Mettre en place tournus d'arrosage, journées de travail mensuelles et canal de communication."
+community-garden-s09,de-CH,Laufenden Betrieb etablieren,"Giessplan, monatliche Arbeitstage und einen Kommunikationskanal einrichten."
+community-compost-s01,fr-CH,Évaluer la demande et les sites possibles,"Sonder les voisin·e·s et trouver un site drainé, à distance raisonnable des habitations."
+community-compost-s01,de-CH,Bedarf und Standorte prüfen,Nachbarschaft zum Interesse befragen und einen Standort mit Entwässerung und vernünftigem Abstand zu Wohnungen finden.
+community-compost-s02,fr-CH,Obtenir l'accord communal,"Clarifier les règles locales sur les sites de compostage, les odeurs et les nuisibles, et obtenir une autorisation écrite."
+community-compost-s02,de-CH,Gemeindebewilligung einholen,"Lokale Vorschriften zu Kompostplätzen, Geruchs- und Schädlingskontrolle klären und eine schriftliche Erlaubnis einholen."
+community-compost-s03,fr-CH,Concevoir le système de compostage,"Choisir le système (3 bacs, composteurs rotatifs, bokashi) dimensionné au volume attendu et planifier le flux des matières."
+community-compost-s03,de-CH,Kompostsystem konzipieren,"Das System (3-Kammer, Trommeln, Bokashi) auf das erwartete Volumen auslegen und den Materialfluss planen."
+community-compost-s04,fr-CH,Construire le site,"Construire bacs, signalétique et abri pour matières sèches sur une à deux journées."
+community-compost-s04,de-CH,Kompostplatz bauen,"Behälter, Beschriftung und einen gedeckten Lagerplatz für Strukturmaterial an 1–2 Bautagen erstellen."
+community-compost-s05,fr-CH,Former les référent·e·s compost,"Former 3 à 5 bénévoles au brassage, aux couches, au contrôle de température et au dépannage."
+community-compost-s05,de-CH,Kompost-Verantwortliche schulen,"3–5 Freiwillige in Schichtung, Umsetzen, Temperaturkontrolle und Problembehebung ausbilden."
+community-compost-s06,fr-CH,Intégrer les ménages,"Enregistrer les ménages participants, distribuer les seaux et un guide clair de ce qui est accepté."
+community-compost-s06,de-CH,Haushalte anschliessen,"Teilnehmende Haushalte registrieren, Behälter verteilen und eine klare Anleitung, was hinein darf, abgeben."
+community-compost-s07,fr-CH,Faire tourner et surveiller les premiers cycles,"Assurer un tournus de référent·e·s, surveiller la qualité et corriger vite les problèmes pour garder la confiance du voisinage."
+community-compost-s07,de-CH,Erste Zyklen betreiben und überwachen,"Einen Betreuungsplan führen, die Qualität überwachen und Probleme rasch beheben, um das Vertrauen der Nachbarschaft zu erhalten."
+community-compost-s08,fr-CH,Distribuer le compost mûr,Organiser une journée de distribution pour les membres et le jardin communautaire local.
+community-compost-s08,de-CH,Fertigen Kompost verteilen,Einen Kompost-Abgabetag für Mitglieder und den lokalen Gemeinschaftsgarten durchführen.
+tool-library-s01,fr-CH,Valider la demande et le modèle,Sonder le quartier sur les objets souhaités et la disposition à payer une petite cotisation.
+tool-library-s01,de-CH,Bedarf und Modell prüfen,Das Quartier zu gewünschten Gegenständen und zur Zahlungsbereitschaft für einen kleinen Mitgliederbeitrag befragen.
+tool-library-s02,fr-CH,Trouver un local pour la collection,"Obtenir un petit espace de stockage avec heures d'ouverture publiques — coin de magasin, cave ou conteneur."
+tool-library-s02,de-CH,Standort für die Sammlung finden,"Einen kleinen Lagerraum mit öffentlichen Öffnungszeiten sichern — Ladenecke, Keller oder Container."
+tool-library-s03,fr-CH,Régler structure juridique et assurance,"Créer une association simple, des conditions de responsabilité pour les emprunteurs et une assurance pour l'inventaire."
+tool-library-s03,de-CH,Rechtsform und Versicherung klären,"Einen einfachen Verein gründen, Haftungsbedingungen für Ausleihende festlegen und das Inventar versichern."
+tool-library-s04,fr-CH,Collecter et cataloguer l'inventaire,"Organiser une collecte d'outils de qualité; tester, étiqueter et cataloguer chaque objet."
+tool-library-s04,de-CH,Inventar sammeln und katalogisieren,"Eine Spendenaktion für gutes Werkzeug durchführen; jedes Teil testen, etikettieren und erfassen."
+tool-library-s05,fr-CH,Mettre en place un système de réservation,Déployer un logiciel de prêt léger (plusieurs options open source existent) avec comptes membres et échéances.
+tool-library-s05,de-CH,Buchungssystem einrichten,Eine schlanke Ausleihsoftware (mehrere Open-Source-Optionen) mit Mitgliederkonten und Rückgabefristen aufsetzen.
+tool-library-s06,fr-CH,Recruter et former les bibliothécaires bénévoles,Constituer un tournus de bénévoles pour tenir les heures d'ouverture et gérer les prêts et retours.
+tool-library-s06,de-CH,Freiwillige Bibliotheksleute gewinnen und schulen,Einen Einsatzplan von Freiwilligen für Öffnungszeiten sowie Aus- und Rückgabe aufbauen.
+tool-library-s07,fr-CH,Lancer avec une journée portes ouvertes,"Organiser un événement de lancement avec démonstrations, inscriptions et collecte d'outils supplémentaires."
+tool-library-s07,de-CH,Mit Tag der offenen Tür starten,"Einen Eröffnungsanlass mit Vorführungen, Anmeldungen und einer Werkzeug-Sammelaktion durchführen."
+tool-library-s08,fr-CH,Établir les routines d'entretien,Prévoir des journées de réparation pour les objets abîmés et des inventaires périodiques.
+tool-library-s08,de-CH,Unterhaltsroutinen etablieren,Reparaturtage für beschädigte Gegenstände und periodische Inventuren einführen.
+community-fridge-s01,fr-CH,Trouver un lieu d'accueil,"Obtenir un emplacement abrité et accessible avec électricité — devant un magasin, un centre de quartier ou une église."
+community-fridge-s01,de-CH,Gastgeber-Standort finden,"Einen geschützten, zugänglichen Platz mit Strom sichern — vor einem Laden, Quartierzentrum oder einer Kirche."
+community-fridge-s02,fr-CH,Clarifier les règles d'hygiène alimentaire,"Définir ce qui peut être partagé (pas de viande/poisson crus, règles de dates) selon les lignes directrices établies des frigos partagés."
+community-fridge-s02,de-CH,Lebensmittelhygiene-Regeln klären,"Festlegen, was geteilt werden darf (kein rohes Fleisch/Fisch, Datumsregeln) gemäss etablierten Richtlinien für offene Kühlschränke."
+community-fridge-s03,fr-CH,Se procurer frigo et abri,Obtenir un frigo fiable donné ou bon marché et construire un abri simple s'il est en extérieur.
+community-fridge-s03,de-CH,Kühlschrank und Schutz beschaffen,Einen gespendeten oder günstigen zuverlässigen Kühlschrank besorgen und bei Aussenstandort ein einfaches wetterfestes Gehäuse bauen.
+community-fridge-s04,fr-CH,Recruter des parrains/marraines du frigo,"Constituer un tournus de bénévoles pour contrôles quotidiens, nettoyage et relevés de température."
+community-fridge-s04,de-CH,Kühlschrank-Verantwortliche gewinnen,"Einen Einsatzplan Freiwilliger für tägliche Kontrollen, Reinigung und Temperaturprotokoll aufbauen."
+community-fridge-s05,fr-CH,Intégrer les donateurs alimentaires,"Enrôler boulangeries, magasins et ménages voisins comme contributeurs réguliers."
+community-fridge-s05,de-CH,Lebensmittelspender anschliessen,"Bäckereien, Läden und Haushalte in der Nähe als regelmässige Beitragende gewinnen."
+community-fridge-s06,fr-CH,Lancer et faire connaître,"Ouvrir avec une signalétique claire sur les règles, et communiquer pour que donneurs et preneurs se sentent bienvenus."
+community-fridge-s06,de-CH,Eröffnen und bekannt machen,"Mit klarer Beschilderung zu den Regeln starten und so kommunizieren, dass sich Gebende wie Nehmende willkommen fühlen."
+community-fridge-s07,fr-CH,Surveiller et adapter,"Suivre l'utilisation et l'hygiène, corriger vite les problèmes et publier des chiffres d'impact mensuels."
+community-fridge-s07,de-CH,Beobachten und anpassen,"Nutzung und Hygiene verfolgen, Probleme rasch beheben und monatlich Wirkungszahlen teilen."
+food-rescue-s01,fr-CH,Cartographier donateurs et bénéficiaires,"Lister donateurs potentiels (boulangeries, supermarchés, traiteurs) et bénéficiaires (foyers, frigos, banques alimentaires)."
+food-rescue-s01,de-CH,Spender und Empfänger erfassen,"Mögliche Lebensmittelspender (Bäckereien, Supermärkte, Caterer) und Empfänger (Notunterkünfte, Kühlschränke, Abgabestellen) auflisten."
+food-rescue-s02,fr-CH,Convenir des conditions de don,"Signer avec chaque donateur des accords simples couvrant horaires de collecte, types d'aliments et responsabilité."
+food-rescue-s02,de-CH,Spendenkonditionen vereinbaren,"Mit jedem Spender einfache Vereinbarungen zu Abholzeiten, Lebensmittelarten und Haftung abschliessen."
+food-rescue-s03,fr-CH,Concevoir une routine de transport sûre,"Planifier itinéraires, glacières et règles d'hygiène pour que les aliments restent sûrs en transit."
+food-rescue-s03,de-CH,Sichere Transportroutine gestalten,"Routen, Kühlboxen und Hygieneregeln planen, damit die Lebensmittel unterwegs sicher bleiben."
+food-rescue-s04,fr-CH,Recruter cyclistes et chauffeur·euse·s,Constituer un pool de bénévoles à vélo ou en voiture prenant chacun·e un court créneau hebdomadaire.
+food-rescue-s04,de-CH,Rettungsfahrende gewinnen,"Einen Pool Freiwilliger mit Velo oder Auto aufbauen, die je einen kurzen Wochenslot übernehmen."
+food-rescue-s05,fr-CH,Mettre en place la planification des tournées,Utiliser un outil de planification simple pour que chaque créneau soit couvert de manière fiable.
+food-rescue-s05,de-CH,Schichtplanung einrichten,"Ein einfaches Planungstool nutzen, damit jeder Abholtermin zuverlässig abgedeckt oder eskaliert wird."
+food-rescue-s06,fr-CH,Mener un mois pilote,"Faire tourner 2 à 3 itinéraires pendant un mois, consigner les poids et régler les problèmes d'horaires."
+food-rescue-s06,de-CH,Pilotmonat durchführen,"2–3 Routen einen Monat lang betreiben, Gewichte erfassen und Zeitprobleme ausbügeln."
+food-rescue-s07,fr-CH,Étendre et rendre compte,"Ajouter donateurs et itinéraires, et publier les kilos sauvés chaque mois pour garder les partenaires mobilisés."
+food-rescue-s07,de-CH,Skalieren und berichten,"Spender und Routen ergänzen und monatlich die geretteten Kilogramm publizieren, um die Partner zu binden."
+repair-skills-course-s01,fr-CH,Concevoir le programme,Définir 4 à 6 sessions avec des objectifs de compétences clairs et le matériel nécessaire par session.
+repair-skills-course-s01,de-CH,Lehrplan gestalten,4–6 Sessionen mit klaren Lernzielen und benötigtem Material pro Session definieren.
+repair-skills-course-s02,fr-CH,Recruter les formateur·trice·s,Trouver des réparateur·trice·s capables d'enseigner chaque module; convenir des dates et d'éventuelles indemnités.
+repair-skills-course-s02,de-CH,Kursleitende gewinnen,"Versierte Reparaturprofis finden, die je ein Modul unterrichten; Termine und allfällige Spesen vereinbaren."
+repair-skills-course-s03,fr-CH,Réserver l'atelier,"Obtenir un espace avec établis, électricité et rangement d'outils pour toute la série."
+repair-skills-course-s03,de-CH,Werkstatt buchen,"Einen Raum mit Werkbänken, Strom und Werkzeuglager für die ganze Reihe sichern."
+repair-skills-course-s04,fr-CH,Se procurer du matériel d'exercice,Collecter appareils et vêtements cassés donnés pour que les participant·e·s s'exercent.
+repair-skills-course-s04,de-CH,Übungsmaterial beschaffen,"Defekte Spendegeräte und -kleider sammeln, an denen die Teilnehmenden üben können."
+repair-skills-course-s05,fr-CH,Recruter les participant·e·s,Ouvrir les inscriptions avec une petite finance d'engagement pour limiter les absences.
+repair-skills-course-s05,de-CH,Teilnehmende gewinnen,"Die Anmeldung mit einem kleinen Unkostenbeitrag öffnen, um Absenzen zu reduzieren."
+repair-skills-course-s06,fr-CH,Donner les sessions,"Animer chaque session avec démonstrations, pratique guidée et supervision de sécurité."
+repair-skills-course-s06,de-CH,Sessionen durchführen,"Jede Session mit Vorführungen, angeleiteter Praxis und Sicherheitsaufsicht durchführen."
+repair-skills-course-s07,fr-CH,Intégrer les diplômé·e·s aux Repair Cafés,Mettre les personnes formées en lien avec les Repair Cafés locaux comme bénévoles.
+repair-skills-course-s07,de-CH,Absolvierende in Repair Cafés vermitteln,Die Ausgebildeten als Freiwillige mit lokalen Repair Cafés verbinden.
+school-garden-s01,fr-CH,Obtenir l'adhésion de l'école,Présenter le programme à la direction et à 1 ou 2 enseignant·e·s moteurs; convenir des objectifs et responsabilités.
+school-garden-s01,de-CH,Schule gewinnen,Das Programm der Schulleitung und 1–2 engagierten Lehrpersonen vorstellen; Ziele und Verantwortlichkeiten vereinbaren.
+school-garden-s02,fr-CH,Concevoir un jardin adapté aux âges,"Planifier bacs surélevés, outils sûrs et cultures qui produisent pendant les périodes scolaires."
+school-garden-s02,de-CH,Altersgerechten Garten gestalten,"Hochbeete, sichere Werkzeuge und Kulturen planen, die innerhalb der Schulzeit Ertrag bringen."
+school-garden-s03,fr-CH,Financer la construction,"Réunir un petit budget via l'association de parents, des sponsors locaux ou une mini-subvention."
+school-garden-s03,de-CH,Bau finanzieren,"Ein kleines Budget über den Elternverein, lokale Sponsoren oder eine Kleinförderung beschaffen."
+school-garden-s04,fr-CH,Construire avec la communauté scolaire,Organiser une journée de construction en famille pour monter les bacs et les remplir de terre.
+school-garden-s04,de-CH,Mit der Schulgemeinschaft bauen,"Einen Familien-Bautag durchführen, um Beete zu bauen und mit Erde zu füllen."
+school-garden-s05,fr-CH,Créer des liens simples avec les cours,Préparer des fiches d'activités saisonnières reliant les tâches du jardin au plan d'études.
+school-garden-s05,de-CH,Einfache Unterrichtsbezüge schaffen,"Saisonale Aktivitätenblätter vorbereiten, die Gartenarbeiten mit dem Lehrplan verknüpfen."
+school-garden-s06,fr-CH,Accompagner la première année de culture,"Accompagner les enseignant·e·s dans les semis, l'entretien et la récolte sur l'année scolaire."
+school-garden-s06,de-CH,Erstes Gartenjahr begleiten,"Lehrpersonen durch Aussaat, Pflege und Ernte über das Schuljahr begleiten."
+school-garden-s07,fr-CH,Planifier les vacances et la transmission,Mettre en place un tournus d'arrosage pendant les vacances et transférer progressivement la responsabilité à l'école.
+school-garden-s07,de-CH,Ferienbetreuung und Übergabe planen,Einen Ferien-Giessplan aufstellen und die Verantwortung schrittweise an die Schule übergeben.
+tree-planting-s01,fr-CH,Identifier les sites de plantation,"Parcourir le quartier pour repérer des emplacements viables en tenant compte des conduites, de la visibilité et de l'espace pour les arbres adultes."
+tree-planting-s01,de-CH,Pflanzstandorte identifizieren,"Das Quartier nach geeigneten Standorten absuchen und dabei Leitungen, Sichtachsen und Platz für ausgewachsene Bäume berücksichtigen."
+tree-planting-s02,fr-CH,Obtenir l'accord communal et des conseils d'espèces,Travailler avec le service des espaces verts sur les autorisations et des espèces indigènes adaptées au climat.
+tree-planting-s02,de-CH,Gemeindebewilligung und Artenberatung einholen,Mit der Grünabteilung Bewilligungen und klimaangepasste einheimische Arten klären.
+tree-planting-s03,fr-CH,Financer les arbres,"Chiffrer plants, tuteurs et terre; financer par parrainage (p. ex. adopter un arbre) ou subventions."
+tree-planting-s03,de-CH,Bäume finanzieren,"Jungbäume, Pfähle und Substrat kalkulieren; über Patenschaften (z. B. Baum adoptieren) oder Beiträge finanzieren."
+tree-planting-s04,fr-CH,Recruter des parrains/marraines d'arbres,Engager des riverain·e·s à arroser et surveiller des arbres précis pendant les deux premiers étés.
+tree-planting-s04,de-CH,Baumpatenschaften in der Nachbarschaft gewinnen,"Anwohnende verpflichten, bestimmte Bäume in den ersten zwei Sommern zu giessen und zu beobachten."
+tree-planting-s05,fr-CH,Organiser la journée de plantation,"Coordonner livraison, outils, préparation des fosses et démonstration de plantation correcte."
+tree-planting-s05,de-CH,Pflanztag organisieren,"Lieferung, Werkzeug, Pflanzgruben-Vorbereitung und eine Demonstration korrekten Pflanzens koordinieren."
+tree-planting-s06,fr-CH,Planter et célébrer,"Planter avec les riverain·e·s, pailler et tuteurer correctement, et marquer la journée avec le quartier."
+tree-planting-s06,de-CH,Pflanzen und feiern,"Mit den Anwohnenden pflanzen, fachgerecht mulchen und anbinden und den Tag mit dem Quartier feiern."
+tree-planting-s07,fr-CH,Assurer le suivi,Coordonner rappels d'arrosage et contrôles pendant la période critique d'enracinement.
+tree-planting-s07,de-CH,Nachsorgeprogramm betreiben,Giess-Erinnerungen und Kontrollen durch die kritische Anwuchsphase koordinieren.
+bulk-buying-group-s01,fr-CH,Constituer le groupe fondateur,Réunir 8 à 15 ménages et convenir des produits prioritaires et de la fréquence des commandes.
+bulk-buying-group-s01,de-CH,Gründungsgruppe bilden,8–15 Haushalte zusammenbringen und Produktprioritäten sowie Bestellrhythmus vereinbaren.
+bulk-buying-group-s02,fr-CH,Sélectionner les fournisseurs,"Rechercher grossistes et producteurs proposant des denrées en vrac, peu emballées, à bon prix."
+bulk-buying-group-s02,de-CH,Lieferanten auswählen,"Grosshändler und Produzenten recherchieren, die verpackungsarme Grossgebinde zu guten Preisen anbieten."
+bulk-buying-group-s03,fr-CH,Organiser commandes et paiements,Créer une feuille de commande partagée et un processus de règlement transparent.
+bulk-buying-group-s03,de-CH,Bestellung und Zahlung organisieren,Eine gemeinsame Bestellliste und einen transparenten Zahlungs- und Abrechnungsprozess einrichten.
+bulk-buying-group-s04,fr-CH,Organiser le point de distribution,"Prévoir un garage ou une salle pour la livraison, la répartition et le retrait."
+bulk-buying-group-s04,de-CH,Verteilpunkt organisieren,"Eine Garage oder einen Gemeinschaftsraum für Lieferung, Aufteilung und Abholung bereitstellen."
+bulk-buying-group-s05,fr-CH,Mener le premier cycle de commande,"Collecter les commandes, passer la commande groupée, répartir les marchandises et régler les paiements."
+bulk-buying-group-s05,de-CH,Ersten Bestellzyklus durchführen,"Bestellungen sammeln, die Sammelbestellung aufgeben, Ware in Mitgliederportionen teilen und Zahlungen abrechnen."
+bulk-buying-group-s06,fr-CH,Affiner et formaliser,Évaluer prix et charge de travail après 2 à 3 cycles; définir les rôles et une petite marge pour les frais communs.
+bulk-buying-group-s06,de-CH,Verfeinern und formalisieren,Nach 2–3 Zyklen Preise und Aufwand überprüfen; Rollen und eine kleine Marge für Gemeinkosten festlegen.
+lift-sharing-s01,fr-CH,Définir la communauté et les trajets,"Choisir une communauté délimitée avec des trajets répétés (pendulaires, entraînements, trajets scolaires)."
+lift-sharing-s01,de-CH,Gemeinschaft und Strecken definieren,"Eine abgegrenzte Gemeinschaft mit wiederkehrenden Fahrten wählen (Pendeln, Trainings, Schulwege)."
+lift-sharing-s02,fr-CH,Choisir un mécanisme de mise en relation,"Sélectionner un outil simple — appli de covoiturage existante, groupe de discussion avec trajets épinglés ou tableur partagé."
+lift-sharing-s02,de-CH,Vermittlungsmechanismus wählen,"Ein einfaches Tool wählen — bestehende Mitfahr-App, Chatgruppe mit fixierten Strecken oder geteilte Tabelle."
+lift-sharing-s03,fr-CH,Fixer les règles de base,"Convenir du partage des frais, des attentes de fiabilité et des bases d'assurance pour les conducteur·trice·s."
+lift-sharing-s03,de-CH,Grundregeln festlegen,"Kostenteilung, Verlässlichkeitserwartungen und Versicherungsgrundlagen für Fahrende vereinbaren."
+lift-sharing-s04,fr-CH,Recruter une masse critique,Inscrire assez de conducteur·trice·s et passagers sur les trajets clés pour que des correspondances se produisent réellement.
+lift-sharing-s04,de-CH,Kritische Masse gewinnen,"Genug Fahrende und Mitfahrende auf den Kernstrecken anmelden, damit tatsächlich Matches entstehen."
+lift-sharing-s05,fr-CH,Lancer et amorcer les premières mises en relation,Organiser manuellement les premiers duos pour que les premiers usagers vivent une réussite.
+lift-sharing-s05,de-CH,Starten und erste Matches stiften,"Die ersten Paarungen von Hand vermitteln, damit frühe Nutzende ein Erfolgserlebnis haben."
+lift-sharing-s06,fr-CH,Suivre et valoriser les économies,Comptabiliser les trajets partagés et publier kilomètres et CO2 économisés pour entretenir la participation.
+lift-sharing-s06,de-CH,Einsparungen verfolgen und feiern,"Geteilte Fahrten erfassen und gesparte Kilometer und CO2 publizieren, um die Beteiligung zu erhalten."
+walking-school-bus-s01,fr-CH,S'associer à l'école,Obtenir le soutien de l'école et son aide pour contacter les familles intéressées.
+walking-school-bus-s01,de-CH,Mit der Schule zusammenarbeiten,Die Unterstützung der Schule und Hilfe beim Kontaktieren interessierter Familien gewinnen.
+walking-school-bus-s02,fr-CH,Concevoir des lignes et arrêts sûrs,"Tracer 1 à 3 itinéraires avec arrêts horaires, en évitant les traversées dangereuses."
+walking-school-bus-s02,de-CH,Sichere Routen und Haltestellen planen,1–3 Fusswege mit getakteten Sammelpunkten kartieren und gefährliche Übergänge meiden.
+walking-school-bus-s03,fr-CH,Recruter des parents accompagnants,Inscrire assez d'adultes bénévoles pour un tournus fiable avec remplaçant·e·s.
+walking-school-bus-s03,de-CH,Begleitende Eltern gewinnen,Genug erwachsene Freiwillige für einen zuverlässigen Einsatzplan mit Ersatzpersonen anmelden.
+walking-school-bus-s04,fr-CH,Fixer le protocole de sécurité,"Convenir des ratios adultes-enfants, de la procédure d'appel, de la gestion des absences et des règles en cas d'intempéries."
+walking-school-bus-s04,de-CH,Sicherheitsprotokoll festlegen,"Betreuungsschlüssel, Anwesenheitskontrolle, Umgang mit Absenzen und Schlechtwetterregeln vereinbaren."
+walking-school-bus-s05,fr-CH,Tester pendant deux semaines,"Faire tourner les lignes chaque jour, ajuster les horaires et corriger les points de friction."
+walking-school-bus-s05,de-CH,Zwei Wochen Pilotbetrieb,"Die Routen täglich laufen lassen, Zeiten anpassen und Schwachstellen beheben."
+walking-school-bus-s06,fr-CH,Formaliser le tournus,Passer à un horaire stable avec un·e coordinateur·trice par ligne et un système de remplacement.
+walking-school-bus-s06,de-CH,Einsatzplan formalisieren,Zu einem stabilen Fahrplan mit einer Koordinationsperson pro Route und einem Stellvertretungssystem übergehen.
+textile-upcycling-s01,fr-CH,Recruter des formateur·trice·s couture,Trouver 2 à 3 couturier·ère·s ou designers pour animer des sessions par projet.
+textile-upcycling-s01,de-CH,Näh-Kursleitende gewinnen,"2–3 versierte Näh- oder Designprofis finden, die projektbasierte Sessionen leiten."
+textile-upcycling-s02,fr-CH,Obtenir machines et local,Réserver un lieu et réunir 6 à 10 machines à coudre en état (prêtées ou données).
+textile-upcycling-s02,de-CH,Maschinen und Raum sichern,Ein Lokal buchen und 6–10 funktionierende Nähmaschinen (geliehen oder gespendet) beschaffen.
+textile-upcycling-s03,fr-CH,Collecter des textiles,Organiser une collecte de textiles et trier les tissus utilisables par type.
+textile-upcycling-s03,de-CH,Spenden-Textilien sammeln,Eine Textil-Sammelaktion durchführen und brauchbare Stoffe nach Art sortieren.
+textile-upcycling-s04,fr-CH,Concevoir des projets pour débutant·e·s,"Préparer 3 à 4 projets (sac en jeans, coussin patchwork) avec patrons et étapes."
+textile-upcycling-s04,de-CH,Anfängerfreundliche Projekte entwerfen,"3–4 Projekte (Tasche aus Jeans, Patchwork-Kissen) mit Schnittmustern und Arbeitsschritten vorbereiten."
+textile-upcycling-s05,fr-CH,Promouvoir et gérer les inscriptions,Faire connaître la série et gérer les inscriptions selon les machines disponibles.
+textile-upcycling-s05,de-CH,Bewerben und Teilnehmende registrieren,Die Reihe vermarkten und die Anmeldungen auf die verfügbaren Maschinen abstimmen.
+textile-upcycling-s06,fr-CH,Donner les ateliers,Enseigner les sessions avec un accompagnement par machine et des consignes de sécurité.
+textile-upcycling-s06,de-CH,Workshops durchführen,Die Sessionen mit Betreuung pro Maschine und Sicherheitsanleitung unterrichten.
+textile-upcycling-s07,fr-CH,Exposer les résultats,Organiser une petite exposition ou galerie en ligne des pièces réalisées pour recruter la prochaine volée.
+textile-upcycling-s07,de-CH,Ergebnisse zeigen,"Eine kleine Ausstellung oder Online-Galerie der fertigen Stücke organisieren, um die nächste Gruppe zu gewinnen."
+plant-based-cooking-club-s01,fr-CH,Trouver une cuisine,Réserver une cuisine communautaire ou tourner entre les domiciles des membres pour des sessions mensuelles.
+plant-based-cooking-club-s01,de-CH,Küche finden,Eine Gemeinschaftsküche buchen oder für monatliche Treffen zwischen den Haushalten der Mitglieder rotieren.
+plant-based-cooking-club-s02,fr-CH,Fixer le format,"Convenir du modèle: frais partagés, thèmes de menu tournants et un·e hôte-cuisinier·ère par session."
+plant-based-cooking-club-s02,de-CH,Format festlegen,"Das Modell vereinbaren: geteilte Kosten, wechselnde Menüthemen und eine gastgebende Kochperson pro Treffen."
+plant-based-cooking-club-s03,fr-CH,Planifier des menus de saison,Rédiger des menus saisonniers simples avec listes de courses dimensionnées au groupe.
+plant-based-cooking-club-s03,de-CH,Saisonale Menüs planen,Einfache saisonale Menüs mit auf die Gruppe abgestimmten Einkaufslisten entwerfen.
+plant-based-cooking-club-s04,fr-CH,Recruter les membres,Inviter un groupe varié en misant sur le plaisir de la table plutôt que sur le discours moralisateur.
+plant-based-cooking-club-s04,de-CH,Mitglieder gewinnen,Eine gemischte Gruppe einladen und den Genuss statt den Zeigefinger in den Vordergrund stellen.
+plant-based-cooking-club-s05,fr-CH,Animer les premières sessions,Cuisiner et manger ensemble en partageant techniques et fiches recettes.
+plant-based-cooking-club-s05,de-CH,Erste Treffen durchführen,"Gemeinsam kochen und essen, Techniken austauschen und Rezeptkarten teilen."
+plant-based-cooking-club-s06,fr-CH,Publier le recueil de recettes,Compiler les recettes testées dans un livret ou une page web pour élargir la portée.
+plant-based-cooking-club-s06,de-CH,Rezeptsammlung veröffentlichen,"Erprobte Rezepte in einem Heft oder auf einer Webseite zusammenstellen, um mehr Menschen zu erreichen."
+green-map-s01,fr-CH,Définir catégories et périmètre,"Convenir du champ du répertoire: réparation, réemploi, vrac, partage, sauvetage alimentaire."
+green-map-s01,de-CH,Kategorien und Gebiet definieren,"Den Umfang des Verzeichnisses festlegen: Reparatur, Wiederverwendung, Unverpackt, Teilen, Lebensmittelrettung."
+green-map-s02,fr-CH,Rechercher les entrées de manière participative,Répartir le territoire entre bénévoles pour rechercher et vérifier les entrées par téléphone ou visite.
+green-map-s02,de-CH,Einträge gemeinschaftlich recherchieren,"Das Gebiet unter Freiwilligen aufteilen, um Einträge telefonisch oder vor Ort zu recherchieren und zu prüfen."
+green-map-s03,fr-CH,Construire la carte,Publier les entrées sur une plateforme cartographique ouverte avec catégories et descriptions.
+green-map-s03,de-CH,Karte erstellen,Die Einträge mit Kategorien und Beschreibungen auf einer offenen Kartenplattform publizieren.
+green-map-s04,fr-CH,Vérifier avec les commerces listés,Contacter chaque commerce pour confirmer les informations et l'accord d'être listé.
+green-map-s04,de-CH,Mit den gelisteten Betrieben verifizieren,"Jeden Betrieb kontaktieren, um Angaben und das Einverständnis zur Listung zu bestätigen."
+green-map-s05,fr-CH,Concevoir une version imprimable,Créer une carte/flyer d'une page pour bibliothèques et cafés.
+green-map-s05,de-CH,Druckversion gestalten,Eine druckbare Ein-Seiten-Karte für Bibliotheken und Cafés erstellen.
+green-map-s06,fr-CH,Lancer et maintenir,Promouvoir la carte et instaurer une routine de vérification semestrielle.
+green-map-s06,de-CH,Lancieren und pflegen,Die Karte bewerben und eine halbjährliche Prüfroutine einrichten.
+play-street-s01,fr-CH,Mobiliser le soutien des riverain·e·s,Faire du porte-à-porte pour récolter des signatures en faveur d'une fermeture temporaire.
+play-street-s01,de-CH,Unterstützung der Anwohnenden gewinnen,Von Tür zu Tür gehen und Unterschriften für eine vorübergehende Sperrung sammeln.
+play-street-s02,fr-CH,Demander l'autorisation de fermeture,"Suivre la procédure communale d'autorisation, plan de circulation et obligations d'information comprises."
+play-street-s02,de-CH,Bewilligung für die Strassensperrung beantragen,Das kommunale Bewilligungsverfahren inklusive Verkehrskonzept und Informationspflichten durchlaufen.
+play-street-s03,fr-CH,Planifier activités et sécurité,"Organiser jeux, zones de craie, table commune, ainsi que barrières et personnes de garde aux points de fermeture."
+play-street-s03,de-CH,Aktivitäten und Sicherheit planen,"Spiele, Kreidezonen, einen langen Tisch sowie Absperrungen und Ordnungspersonen an den Sperrpunkten organisieren."
+play-street-s04,fr-CH,Emprunter le matériel,"Obtenir barrières, signalisation, jeux et mobilier auprès de la commune et des voisin·e·s."
+play-street-s04,de-CH,Material ausleihen,"Absperrungen, Signalisation, Spiele und Mobiliar bei Gemeinde und Nachbarschaft ausleihen."
+play-street-s05,fr-CH,Informer toute la rue,Distribuer à chaque ménage la date et les possibilités de participer.
+play-street-s05,de-CH,Ganze Strasse informieren,Jedem Haushalt Datum und Mitwirkungsmöglichkeiten in den Briefkasten legen.
+play-street-s06,fr-CH,Animer la journée,"Gérer installation, personnes de garde, activités et démontage."
+play-street-s06,de-CH,Tag durchführen,"Aufbau, Ordnungsdienst, Aktivitäten und Abbau managen."
+play-street-s07,fr-CH,Capitaliser sur l'élan,Sonder les participant·e·s sur une édition régulière et partager les résultats avec la commune.
+play-street-s07,de-CH,Schwung nutzen,Teilnehmende zu einer regelmässigen Durchführung befragen und die Ergebnisse mit der Gemeinde teilen.
+draft-proofing-brigade-s01,fr-CH,Définir le kit de mesures,"Choisir des mesures sûres à fort impact: joints, films réflecteurs, ampoules LED, réglage du thermostat."
+draft-proofing-brigade-s01,de-CH,Massnahmen-Set definieren,"Sichere, wirkungsvolle Massnahmen wählen: Dichtungsbänder, Radiatorfolie, LED-Tausch, Thermostat-Beratung."
+draft-proofing-brigade-s02,fr-CH,Former la brigade,"Organiser une journée pratique couvrant les mesures, les relevés et les visites respectueuses à domicile."
+draft-proofing-brigade-s02,de-CH,Brigade schulen,"Einen praktischen Schulungstag zu Massnahmen, Messungen und respektvollen Hausbesuchen durchführen."
+draft-proofing-brigade-s03,fr-CH,Financer le matériel,"Acheter les kits en gros via une petite subvention, un sponsoring ou des contributions à prix coûtant."
+draft-proofing-brigade-s03,de-CH,Material finanzieren,"Sets im Grosseinkauf über eine Kleinförderung, Sponsoring oder Selbstkostenbeiträge beschaffen."
+draft-proofing-brigade-s04,fr-CH,Recruter les ménages,Prioriser les ménages en précarité énergétique via les organisations sociales et une inscription simple.
+draft-proofing-brigade-s04,de-CH,Haushalte gewinnen,Über soziale Organisationen und eine einfache Anmeldung gezielt energiearme Haushalte priorisieren.
+draft-proofing-brigade-s05,fr-CH,Fixer le protocole de visite,"Convenir de visites à deux, de formulaires de consentement et de ce que la brigade touche ou non (ni gaz ni électricité)."
+draft-proofing-brigade-s05,de-CH,Besuchsprotokoll festlegen,"Zweierbesuche, Einverständnisformulare und die Abgrenzung vereinbaren, was die Brigade anfasst und was nicht (kein Gas, keine Elektroinstallation)."
+draft-proofing-brigade-s06,fr-CH,Mener les tournées de visites,Planifier et réaliser les visites à domicile en consignant les mesures installées par logement.
+draft-proofing-brigade-s06,de-CH,Besuchsrunden durchführen,Hausbesuche planen und durchführen und die installierten Massnahmen pro Haushalt erfassen.
+draft-proofing-brigade-s07,fr-CH,Mesurer et communiquer les économies,Estimer les économies d'énergie et d'argent par ménage et en rendre compte aux financeurs et à la communauté.
+draft-proofing-brigade-s07,de-CH,Einsparungen messen und berichten,Energie- und Kosteneinsparungen pro Haushalt schätzen und den Geldgebern und der Community rapportieren.
+hard-to-recycle-points-s01,fr-CH,Identifier les filières et les repreneurs,Rechercher quelles filières difficiles disposent réellement d'une voie de recyclage locale et confirmer les repreneurs.
+hard-to-recycle-points-s01,de-CH,Materialströme und Abnehmer identifizieren,"Recherchieren, welche schwierigen Ströme tatsächlich lokale Recyclingwege haben, und die Abnehmer bestätigen."
+hard-to-recycle-points-s02,fr-CH,Recruter des lieux d'accueil,"Enrôler cafés, magasins et bureaux prêts à héberger des boîtes de collecte étiquetées."
+hard-to-recycle-points-s02,de-CH,Gastgeber-Standorte gewinnen,"Cafés, Läden und Büros gewinnen, die beschriftete Sammelboxen aufstellen."
+hard-to-recycle-points-s03,fr-CH,Concevoir et placer les boîtes,Créer des boîtes propres et clairement étiquetées avec visuels des objets acceptés.
+hard-to-recycle-points-s03,de-CH,Boxen gestalten und platzieren,"Saubere, klar beschriftete Sammelboxen mit Grafiken der akzeptierten Artikel erstellen."
+hard-to-recycle-points-s04,fr-CH,Organiser le tournus de vidage,Définir des tournées bénévoles pour vider les boîtes et livrer les matières aux recycleurs chaque mois.
+hard-to-recycle-points-s04,de-CH,Leerungsplan organisieren,"Freiwilligen-Touren festlegen, um die Boxen zu leeren und das Material monatlich den Recyclern zu bringen."
+hard-to-recycle-points-s05,fr-CH,Faire connaître le réseau,Publier une carte des points et de ce que chacun accepte.
+hard-to-recycle-points-s05,de-CH,Netz bekannt machen,"Eine Karte der Standorte publizieren mit Angabe, was wo angenommen wird."
+hard-to-recycle-points-s06,fr-CH,Suivre les volumes et étendre,"Consigner les volumes, abandonner les filières mortes, développer les populaires et ajouter des lieux."
+hard-to-recycle-points-s06,de-CH,Mengen verfolgen und ausbauen,"Gesammelte Mengen erfassen, tote Ströme streichen, beliebte ausbauen und neue Standorte ergänzen."
+battery-awareness-campaign-s01,fr-CH,Recenser les points de collecte officiels,Compiler chaque point de reprise local de piles et d'ampoules sur une carte simple.
+battery-awareness-campaign-s01,de-CH,Offizielle Rückgabestellen erfassen,Jede lokale Rückgabestelle für Batterien und Leuchtmittel auf einer einfachen Karte zusammentragen.
+battery-awareness-campaign-s02,fr-CH,Créer les supports de campagne,Concevoir affiches et fiche explicative en langage clair: pourquoi et où.
+battery-awareness-campaign-s02,de-CH,Kampagnenmaterial erstellen,Plakate und ein Merkblatt in einfacher Sprache gestalten: warum und wohin.
+battery-awareness-campaign-s03,fr-CH,Diffuser via les canaux locaux,"Placer les supports dans magasins, écoles et halls d'immeubles; publier dans les groupes de quartier."
+battery-awareness-campaign-s03,de-CH,Über lokale Kanäle verbreiten,"Material in Läden, Schulen und Hauseingängen platzieren; in Quartiergruppen posten."
+battery-awareness-campaign-s04,fr-CH,Organiser une semaine de collecte,Associer la campagne à une semaine d'amnistie des tiroirs avec un point de collecte visible.
+battery-awareness-campaign-s04,de-CH,Sammel-Aktionswoche durchführen,Die Kampagne mit einer einwöchigen Schubladen-Amnestie an einem sichtbaren Sammelpunkt verbinden.
+battery-awareness-campaign-s05,fr-CH,Publier les résultats,Communiquer les volumes collectés et faire vivre la carte comme ressource durable.
+battery-awareness-campaign-s05,de-CH,Resultate publizieren,Die gesammelten Mengen kommunizieren und die Karte als bleibende Ressource pflegen.
+guerrilla-gardening-s01,fr-CH,Repérer les espaces délaissés,"Identifier pieds d'arbres, bandes herbeuses et bacs abandonnés où une plantation serait bienvenue."
+guerrilla-gardening-s01,de-CH,Vernachlässigte Flächen auskundschaften,"Baumscheiben, Randstreifen und verlassene Pflanztröge identifizieren, wo Bepflanzung willkommen wäre."
+guerrilla-gardening-s02,fr-CH,Vérifier la situation juridique,"Comprendre les règles locales; si possible, obtenir la bénédiction informelle de la commune pour éviter l'arrachage."
+guerrilla-gardening-s02,de-CH,Rechtslage prüfen,"Die lokalen Regeln verstehen; wenn möglich das informelle Einverständnis der Gemeinde einholen, damit nichts entfernt wird."
+guerrilla-gardening-s03,fr-CH,Choisir des plantes indigènes robustes,"Sélectionner des espèces indigènes non envahissantes et tolérantes à la sécheresse, qui survivent sans entretien."
+guerrilla-gardening-s03,de-CH,Robuste einheimische Pflanzen wählen,"Trockenheitstolerante, nicht invasive einheimische Arten wählen, die Vernachlässigung überstehen."
+guerrilla-gardening-s04,fr-CH,Fabriquer des bombes à graines ensemble,Organiser un atelier ludique de fabrication comme activité de recrutement.
+guerrilla-gardening-s04,de-CH,Gemeinsam Samenbomben herstellen,Einen unterhaltsamen Samenbomben-Workshop als Rekrutierungsaktivität durchführen.
+guerrilla-gardening-s05,fr-CH,Planter et adopter les spots,Planter les sites et faire adopter à chaque participant·e un spot pour un arrosage occasionnel.
+guerrilla-gardening-s05,de-CH,Bepflanzen und Flächen adoptieren,Die Standorte bepflanzen und jede teilnehmende Person eine Fläche für gelegentliches Giessen übernehmen lassen.
+second-hand-market-s01,fr-CH,Obtenir lieu et autorisation,"Réserver une place, une salle ou un tronçon de rue et obtenir l'autorisation de marché."
+second-hand-market-s01,de-CH,Ort und Bewilligung sichern,"Einen Platz, Saal oder Strassenabschnitt buchen und die Marktbewilligung einholen."
+second-hand-market-s02,fr-CH,Recruter les vendeur·euse·s,Ouvrir les inscriptions de stands avec une petite finance couvrant les frais.
+second-hand-market-s02,de-CH,Verkaufende gewinnen,Die Standanmeldung mit einer kleinen kostendeckenden Gebühr öffnen.
+second-hand-market-s03,fr-CH,Planifier l'implantation et la logistique,"Cartographier les emplacements, les accès, les stations de tri des déchets et le plan en cas de pluie."
+second-hand-market-s03,de-CH,Platzlayout und Logistik planen,"Standplätze, Zugänge, Abfallstationen und einen Schlechtwetterplan kartieren."
+second-hand-market-s04,fr-CH,Attirer les acheteur·euse·s,"Communiquer via affiches, réseaux sociaux et presse locale pour assurer la fréquentation."
+second-hand-market-s04,de-CH,Käuferschaft anlocken,"Über Plakate, Social Media und Lokalpresse für Publikum sorgen."
+second-hand-market-s05,fr-CH,Tenir le jour de marché,"Gérer installation, attribution des stands, visiteurs et démontage."
+second-hand-market-s05,de-CH,Markttag durchführen,"Aufbau, Standzuteilung, Besuchende und Abbau managen."
+second-hand-market-s06,fr-CH,Gérer les invendus,Proposer un point de don pour que les invendus aillent à une œuvre caritative plutôt qu'à la poubelle.
+second-hand-market-s06,de-CH,Unverkauftes weitergeben,"Eine Spendestelle anbieten, damit Unverkauftes an ein Hilfswerk statt zurück nach Hause oder in den Abfall geht."
+climate-quiz-night-s01,fr-CH,S'associer à un établissement,Convenir d'un créneau calme avec un bistrot ou un café qui profite de la clientèle.
+climate-quiz-night-s01,de-CH,Mit einem Lokal zusammenarbeiten,"Mit einer Beiz oder einem Café einen ruhigen Abend vereinbaren, der vom Publikum profitiert."
+climate-quiz-night-s02,fr-CH,Rédiger le quiz,Créer des manches amusantes et surprenantes qui informent sans faire la leçon.
+climate-quiz-night-s02,de-CH,Quiz schreiben,"Unterhaltsame, überraschende Runden erstellen, die informieren, ohne zu belehren."
+climate-quiz-night-s03,fr-CH,Organiser de petits prix,Obtenir des prix durables offerts par des commerces locaux.
+climate-quiz-night-s03,de-CH,Kleine Preise organisieren,Nachhaltige Preise von lokalen Geschäften spenden lassen.
+climate-quiz-night-s04,fr-CH,Promouvoir la soirée,Communiquer pour toucher au-delà du public déjà convaincu.
+climate-quiz-night-s04,de-CH,Abend bewerben,"So kommunizieren, dass auch Leute ausserhalb der üblichen grünen Szene kommen."
+climate-quiz-night-s05,fr-CH,Animer le quiz,"Présenter la soirée, compter les points et présenter des projets locaux entre les manches."
+climate-quiz-night-s05,de-CH,Quiz moderieren,"Den Abend moderieren, Runden auswerten und zwischen den Runden lokale Projekte vorstellen."
+sustainability-newsletter-s01,fr-CH,Définir la ligne éditoriale,"Fixer le champ: projets locaux, agenda, guides pratiques, interviews."
+sustainability-newsletter-s01,de-CH,Redaktionellen Fokus definieren,"Das Themenfeld festlegen: lokale Projekte, Veranstaltungskalender, praktische Anleitungen, Interviews."
+sustainability-newsletter-s02,fr-CH,Mettre en place la plateforme de publication,Choisir une plateforme de newsletter/blog et concevoir un gabarit simple.
+sustainability-newsletter-s02,de-CH,Publikationsplattform einrichten,Eine Newsletter-/Blog-Plattform wählen und eine einfache Vorlage gestalten.
+sustainability-newsletter-s03,fr-CH,Constituer un pool de contributeur·trice·s,Recruter 3 à 5 rédacteur·trice·s/photographes couvrant chacun·e un sujet par numéro.
+sustainability-newsletter-s03,de-CH,Pool von Mitwirkenden aufbauen,"3–5 Schreibende/Fotografierende gewinnen, die je einen Beitrag pro Ausgabe übernehmen."
+sustainability-newsletter-s04,fr-CH,Publier les premiers numéros,"Écrire, relire et publier les 2 à 3 premiers numéros selon un calendrier fixe."
+sustainability-newsletter-s04,de-CH,Erste Ausgaben publizieren,"Die ersten 2–3 Ausgaben nach fixem Zeitplan schreiben, redigieren und veröffentlichen."
+sustainability-newsletter-s05,fr-CH,Développer l'audience,Faire des promotions croisées avec les groupes locaux et recueillir les retours des lecteur·trice·s.
+sustainability-newsletter-s05,de-CH,Leserschaft ausbauen,Mit lokalen Gruppen gegenseitig werben und Feedback der Lesenden einholen.
+swap-board-s01,fr-CH,Choisir le format physique ou numérique,"Décider entre un tableau physique résistant aux intempéries, un groupe de discussion, ou les deux."
+swap-board-s01,de-CH,Physisch oder digital entscheiden,"Zwischen wetterfestem physischem Brett, Chatgruppe oder beidem wählen."
+swap-board-s02,fr-CH,Obtenir l'autorisation d'emplacement,"Pour un tableau physique, convenir d'un emplacement avec un magasin, une gérance ou la commune."
+swap-board-s02,de-CH,Platzierungserlaubnis einholen,"Für ein physisches Brett einen Standort mit Laden, Hausverwaltung oder Gemeinde vereinbaren."
+swap-board-s03,fr-CH,Installer le tableau,Construire et fixer le tableau ou configurer le groupe numérique avec catégories et règles claires.
+swap-board-s03,de-CH,Brett bauen/einrichten,Das Brett bauen und montieren oder die digitale Gruppe mit klaren Kategorien und Regeln konfigurieren.
+swap-board-s04,fr-CH,Amorcer le contenu,Demander à 10 à 15 voisin·e·s de publier de premières offres pour qu'il ne paraisse jamais vide.
+swap-board-s04,de-CH,Erste Inhalte einspeisen,"10–15 Nachbarinnen und Nachbarn bitten, erste Angebote zu posten, damit es nie leer wirkt."
+swap-board-s05,fr-CH,Modérer et entretenir,Garder le contenu frais et approprié avec un petit rangement mensuel.
+swap-board-s05,de-CH,Moderieren und pflegen,Inhalte mit einem kleinen monatlichen Aufräumen aktuell und angemessen halten.
+solar-cooperative-s01,fr-CH,Constituer l'équipe fondatrice,"Réunir un noyau couvrant les compétences techniques, juridiques, financières et de communication."
+solar-cooperative-s01,de-CH,Gründungsteam bilden,"Ein Kernteam mit technischen, rechtlichen, finanziellen und kommunikativen Kompetenzen zusammenstellen."
+solar-cooperative-s02,fr-CH,Choisir le modèle,Trancher entre un achat groupé (rabais de volume pour propriétaires) et une coopérative possédant des installations communes.
+solar-cooperative-s02,de-CH,Modell wählen,Zwischen Einkaufsgemeinschaft (Mengenrabatt für Eigenheime) und Genossenschaft mit gemeinsamen Anlagen entscheiden.
+solar-cooperative-s03,fr-CH,Comprendre le cadre réglementaire,"Étudier les règles locales sur le raccordement, la rétribution de l'injection et les regroupements pour la consommation propre."
+solar-cooperative-s03,de-CH,Regulatorischen Rahmen verstehen,"Lokale Regeln zu Netzanschluss, Einspeisevergütung und Zusammenschluss zum Eigenverbrauch (ZEV) recherchieren."
+solar-cooperative-s04,fr-CH,Sonder l'intérêt et le potentiel des toits,Recenser ménages et propriétaires de toits intéressés et pré-évaluer l'aptitude des toitures.
+solar-cooperative-s04,de-CH,Interesse und Dachpotenzial erheben,Interessierte Haushalte und Dacheigentümer registrieren und die Dächer vorprüfen.
+solar-cooperative-s05,fr-CH,Créer l'entité juridique,"Fonder la coopérative ou l'association avec statuts, comité et compte bancaire."
+solar-cooperative-s05,de-CH,Rechtsträger gründen,"Die Genossenschaft oder den Verein mit Statuten, Vorstand und Bankkonto gründen."
+solar-cooperative-s06,fr-CH,Lancer l'appel d'offres aux installateurs,Mener un appel d'offres concurrentiel pour un installateur qualifié avec tarif membres.
+solar-cooperative-s06,de-CH,Installateure ausschreiben,Eine kompetitive Ausschreibung für einen qualifizierten Installateur mit Mitgliederpreisen durchführen.
+solar-cooperative-s07,fr-CH,Organiser le financement,"Structurer parts sociales, financement bancaire ou demandes de subventions pour financer les installations."
+solar-cooperative-s07,de-CH,Finanzierung organisieren,"Anteilscheine, Bankfinanzierung oder Fördergesuche strukturieren, um die Anlagen zu finanzieren."
+solar-cooperative-s08,fr-CH,Mener la campagne d'adhésion,Tenir des soirées d'information et enrôler les membres avec contrats clairs et rendements attendus.
+solar-cooperative-s08,de-CH,Mitgliederkampagne durchführen,Infoabende halten und Mitglieder mit klaren Verträgen und erwarteten Renditen gewinnen.
+solar-cooperative-s09,fr-CH,Superviser les installations,"Coordonner évaluations, contrats et qualité d'exécution sur les toits des membres."
+solar-cooperative-s09,de-CH,Installationen begleiten,"Standortprüfungen, Verträge und Ausführungsqualität über die Mitgliederdächer hinweg koordinieren."
+solar-cooperative-s10,fr-CH,Mettre en place exploitation et reporting,"Établir suivi de production, contrats d'entretien et rapport annuel aux membres."
+solar-cooperative-s10,de-CH,Betrieb und Berichterstattung aufsetzen,"Monitoring, Wartungsverträge und die jährliche Mitgliederberichterstattung etablieren."
+community-renewable-s01,fr-CH,Construire la relation avec la commune,Gagner le soutien de la commune pour accueillir du solaire citoyen sur un toit public.
+community-renewable-s01,de-CH,Beziehung zur Gemeinde aufbauen,"Die Unterstützung der Gemeinde gewinnen, bürgerfinanzierte Solaranlagen auf einem öffentlichen Dach zuzulassen."
+community-renewable-s02,fr-CH,Présélectionner et évaluer les toits,"Évaluer techniquement les toits candidats: structure, orientation, raccordement."
+community-renewable-s02,de-CH,Dächer vorauswählen und prüfen,"Kandidaten-Dächer technisch auf Statik, Ausrichtung und Netzanschluss prüfen."
+community-renewable-s03,fr-CH,Élaborer le plan d'affaires,"Modéliser coûts, production, tarifs et rendements pour les investisseur·euse·s citoyens sur 20 à 25 ans."
+community-renewable-s03,de-CH,Businessplan entwickeln,"Kosten, Ertrag, Tarife und Renditen für Bürger-Investierende über 20–25 Jahre modellieren."
+community-renewable-s04,fr-CH,Créer le véhicule juridique,Constituer la coopérative/société et les contrats de superficie et d'achat d'électricité avec la commune.
+community-renewable-s04,de-CH,Rechtsträger aufsetzen,Genossenschaft/Gesellschaft sowie Dachnutzungs- und Stromabnahmeverträge mit der Gemeinde erstellen.
+community-renewable-s05,fr-CH,Lever l'investissement citoyen,Mener une souscription publique avec prospectus clair et processus de souscription.
+community-renewable-s05,de-CH,Bürgerkapital einwerben,Eine öffentliche Zeichnungskampagne mit klarem Prospekt und Zeichnungsprozess durchführen.
+community-renewable-s06,fr-CH,Acheter et construire,"Adjuger, contractualiser et superviser l'installation jusqu'à la mise en service."
+community-renewable-s06,de-CH,Beschaffen und bauen,"Ausschreiben, Verträge abschliessen und die Installation bis zur Inbetriebnahme überwachen."
+community-renewable-s07,fr-CH,Inaugurer publiquement,Célébrer publiquement la mise en service pour susciter l'envie du prochain toit.
+community-renewable-s07,de-CH,Öffentlich einweihen,"Die Inbetriebnahme öffentlich feiern, um Lust auf das nächste Dach zu machen."
+community-renewable-s08,fr-CH,Exploiter et rendre compte,"Assurer suivi, entretien, assurance et rapport annuel aux investisseur·euse·s."
+community-renewable-s08,de-CH,Betreiben und berichten,"Monitoring, Wartung, Versicherung und die jährliche Berichterstattung an die Investierenden sicherstellen."
+energy-audit-service-s01,fr-CH,Développer la méthodologie,Créer une check-list de visite standardisée et un modèle de rapport avec un·e professionnel·le de l'énergie.
+energy-audit-service-s01,de-CH,Check-Methodik entwickeln,Mit einer Energiefachperson eine standardisierte Rundgang-Checkliste und Berichtsvorlage erstellen.
+energy-audit-service-s02,fr-CH,Traiter la responsabilité,"Fixer des conditions purement consultatives, des décharges et une assurance pour les bénévoles entrant dans les logements."
+energy-audit-service-s02,de-CH,Haftung regeln,"Rein beratende Bedingungen, Haftungsausschlüsse und Versicherung für Freiwillige in fremden Wohnungen festlegen."
+energy-audit-service-s03,fr-CH,Former les auditeur·trice·s bénévoles,Dispenser la formation avec des diagnostics d'entraînement supervisés avant les visites autonomes.
+energy-audit-service-s03,de-CH,Freiwillige Energieberatende ausbilden,Die Schulung mit begleiteten Übungs-Checks vor den ersten selbständigen Besuchen durchführen.
+energy-audit-service-s04,fr-CH,Construire le circuit d'orientation,"S'associer à la commune et aux organisations sociales pour atteindre les ménages, en priorisant la précarité énergétique."
+energy-audit-service-s04,de-CH,Vermittlungskanäle aufbauen,Mit Gemeinde und sozialen Organisationen Haushalte erreichen und Energiearmut priorisieren.
+energy-audit-service-s05,fr-CH,Planifier et réaliser les diagnostics,"Fixer des visites à deux, réaliser les diagnostics et remettre des recommandations écrites."
+energy-audit-service-s05,de-CH,Checks planen und durchführen,"Zweierbesuche terminieren, Checks durchführen und schriftliche Empfehlungen abgeben."
+energy-audit-service-s06,fr-CH,Relier au soutien de suite,"Orienter les ménages vers subventions, installateurs et la brigade anti-courants d'air."
+energy-audit-service-s06,de-CH,An weiterführende Unterstützung anbinden,"Haushalte mit Förderprogrammen, Installateuren und der Energiespar-Brigade verbinden."
+energy-audit-service-s07,fr-CH,Évaluer l'impact,Suivre les mesures mises en œuvre et estimer les économies agrégées.
+energy-audit-service-s07,de-CH,Wirkung auswerten,Umgesetzte Massnahmen nachverfolgen und die Gesamteinsparungen schätzen.
+rain-garden-s01,fr-CH,Identifier un site imperméabilisé adapté,"Trouver une surface sur-imperméabilisée (coin de cour d'école, bord de parking) où l'infiltration serait utile."
+rain-garden-s01,de-CH,Geeignete versiegelte Fläche finden,"Übermässig versiegelte Flächen (Pausenplatz-Ecke, Parkplatzrand) finden, wo Versickerung helfen würde."
+rain-garden-s02,fr-CH,Obtenir validation technique et autorisation,"Vérifier l'absence de conduites, l'aptitude à l'infiltration et l'accord communal pour retirer le revêtement."
+rain-garden-s02,de-CH,Technische Prüfung und Bewilligung einholen,"Sicherstellen, dass keine Leitungen darunter liegen, die Versickerung geeignet ist und die Gemeinde der Entsiegelung zustimmt."
+rain-garden-s03,fr-CH,Concevoir le jardin de pluie,"Dimensionner profondeur de bassin, trop-plein, profil de sol et plantation indigène tolérante à l'eau."
+rain-garden-s03,de-CH,Regengarten planen,"Muldentiefe, Überlauf, Bodenaufbau und wassertolerante einheimische Bepflanzung entwerfen."
+rain-garden-s04,fr-CH,Financer matériaux et machines,"Budgéter location de machines, terre, gravier et plantes; solliciter une subvention d'infrastructure verte."
+rain-garden-s04,de-CH,Material und Maschinen finanzieren,"Maschinenmiete, Erde, Kies und Pflanzen budgetieren; eine Förderung für grüne Infrastruktur beantragen."
+rain-garden-s05,fr-CH,Organiser la journée de débitumisation,"Casser et évacuer le revêtement avec les bons outils, l'équipement de sécurité et l'élimination des gravats."
+rain-garden-s05,de-CH,Entsiegelungstag organisieren,"Den Belag mit geeignetem Werkzeug, Schutzausrüstung und Bauschutt-Entsorgung aufbrechen und abführen."
+rain-garden-s06,fr-CH,Construire et planter le jardin,"Modeler le bassin, amender le sol et planter sur une ou deux journées communautaires."
+rain-garden-s06,de-CH,Garten bauen und bepflanzen,"Die Mulde formen, den Boden verbessern und an ein bis zwei Gemeinschaftstagen bepflanzen."
+rain-garden-s07,fr-CH,Suivre la performance,Contrôler l'infiltration après les orages et entretenir la plantation la première année.
+rain-garden-s07,de-CH,Funktion überwachen,Die Versickerung nach Gewittern prüfen und die Bepflanzung im ersten Jahr pflegen.
+green-roof-pilot-s01,fr-CH,Trouver le bâtiment hôte,Convenir avec le propriétaire d'un bâtiment communautaire d'accueillir une installation de démonstration.
+green-roof-pilot-s01,de-CH,Gastgeber-Gebäude sichern,Mit dem Eigentümer eines Gemeinschaftsgebäudes eine Demonstrationsanlage vereinbaren.
+green-roof-pilot-s02,fr-CH,Commander l'évaluation structurelle,Faire vérifier par un·e ingénieur·e la capacité portante et l'état de l'étanchéité.
+green-roof-pilot-s02,de-CH,Statische Prüfung in Auftrag geben,Tragfähigkeit und Zustand der Abdichtung durch eine Ingenieurperson prüfen lassen.
+green-roof-pilot-s03,fr-CH,Concevoir le système,"Choisir toiture extensive ou système de façade, palette végétale et approche d'arrosage."
+green-roof-pilot-s03,de-CH,System planen,"Extensives Gründach oder Fassadensystem, Pflanzenauswahl und Bewässerungsansatz wählen."
+green-roof-pilot-s04,fr-CH,Financer le pilote,"Combiner subventions communales, sponsoring et financement participatif."
+green-roof-pilot-s04,de-CH,Pilot finanzieren,"Kommunale Förderungen für grünes Bauen, Sponsoring und Crowdfunding kombinieren."
+green-roof-pilot-s05,fr-CH,Obtenir les autorisations,Décrocher le permis de construire et les éventuelles approbations patrimoniales.
+green-roof-pilot-s05,de-CH,Bewilligungen einholen,Baubewilligung und allfällige Denkmalpflege-/Fassadengenehmigungen einholen.
+green-roof-pilot-s06,fr-CH,Installer avec professionnels et bénévoles,Confier les travaux spécialisés à des pros; impliquer les bénévoles dans la plantation et les finitions.
+green-roof-pilot-s06,de-CH,Mit Profis und Freiwilligen installieren,Spezialarbeiten an Fachfirmen vergeben; Freiwillige bei Bepflanzung und Abschlussarbeiten einbinden.
+green-roof-pilot-s07,fr-CH,En faire un démonstrateur,Installer suivi et signalétique; organiser des visites pour inspirer la réplication.
+green-roof-pilot-s07,de-CH,Als Anschauungsobjekt nutzen,"Monitoring und Beschilderung installieren; Besichtigungen anbieten, um Nachahmung anzuregen."
+air-quality-network-s01,fr-CH,Choisir la plateforme de capteurs,Sélectionner un modèle de capteur open hardware éprouvé avec plateforme de données publique.
+air-quality-network-s01,de-CH,Sensorplattform wählen,Ein etabliertes Open-Hardware-Sensordesign mit öffentlicher Datenplattform auswählen.
+air-quality-network-s02,fr-CH,Financer la flotte de capteurs,Budgéter 15 à 30 capteurs et lever les fonds via micro-subventions ou contributions des hôtes.
+air-quality-network-s02,de-CH,Sensorflotte finanzieren,15–30 Sensoren budgetieren und über Kleinstförderungen oder Beiträge der Gastgeber finanzieren.
+air-quality-network-s03,fr-CH,Recruter les hôtes de capteurs,"Enrôler ménages/commerces sur une grille représentative, avec électricité et WiFi aux points de pose."
+air-quality-network-s03,de-CH,Sensor-Gastgeber gewinnen,"Haushalte/Betriebe über ein repräsentatives Raster gewinnen, mit Strom und WLAN an den Montagepunkten."
+air-quality-network-s04,fr-CH,Organiser des ateliers d'assemblage,Assembler et programmer les capteurs ensemble lors d'ateliers de soudure.
+air-quality-network-s04,de-CH,Sensor-Bauworkshops durchführen,Die Sensoren in Lötworkshops gemeinsam zusammenbauen und aufsetzen.
+air-quality-network-s05,fr-CH,Installer et calibrer,"Monter correctement les capteurs, les connecter à la plateforme et croiser les mesures."
+air-quality-network-s05,de-CH,Installieren und kalibrieren,"Sensoren korrekt montieren, mit der Datenplattform verbinden und Messwerte gegenprüfen."
+air-quality-network-s06,fr-CH,Analyser et publier les résultats,Produire des analyses accessibles des points chauds et tendances pour les habitant·e·s et la commune.
+air-quality-network-s06,de-CH,Ergebnisse analysieren und publizieren,Verständliche Auswertungen zu Hotspots und Trends für Bevölkerung und Gemeinde erstellen.
+air-quality-network-s07,fr-CH,Entretenir le réseau,Mettre en place un tournus de maintenance pour les capteurs hors ligne ou dérivants.
+air-quality-network-s07,de-CH,Netz unterhalten,Einen Wartungsplan für ausgefallene oder driftende Sensoren einführen.
+stream-restoration-s01,fr-CH,Évaluer le tronçon,"Documenter état actuel, sources de pollution et potentiel de revitalisation avec appui d'expert·e·s."
+stream-restoration-s01,de-CH,Gewässerabschnitt beurteilen,"Zustand, Verschmutzungsquellen und Aufwertungspotenzial mit Fachunterstützung dokumentieren."
+stream-restoration-s02,fr-CH,Impliquer l'autorité des eaux,Construire une relation de travail avec l'autorité compétente; s'aligner sur le périmètre et les autorisations.
+stream-restoration-s02,de-CH,Gewässerbehörde einbinden,Eine Arbeitsbeziehung mit der zuständigen Behörde aufbauen; Umfang und Bewilligungen abstimmen.
+stream-restoration-s03,fr-CH,Élaborer le plan de revitalisation,"Planifier élimination des invasives, replantation indigène, stabilisation des berges et structures d'habitat dans le cadre autorisé."
+stream-restoration-s03,de-CH,Revitalisierungsplan entwickeln,"Neophyten-Entfernung, einheimische Bepflanzung, Uferstabilisierung und Strukturelemente im bewilligten Rahmen planen."
+stream-restoration-s04,fr-CH,Financer les travaux,Demander des subventions environnementales et obtenir un soutien en nature de l'autorité.
+stream-restoration-s04,de-CH,Arbeiten finanzieren,Umweltförderungen beantragen und Sachleistungen der Behörde sichern.
+stream-restoration-s05,fr-CH,Mener les journées de travail bénévoles,Réaliser les travaux manuels lors de journées encadrées au fil des saisons.
+stream-restoration-s05,de-CH,Freiwilligen-Arbeitstage durchführen,Die Handarbeiten in begleiteten Einsatztagen über die Jahreszeiten umsetzen.
+stream-restoration-s06,fr-CH,Suivre la régénération,Suivre espèces indicatrices et qualité de l'eau avant/après avec des méthodes de science citoyenne.
+stream-restoration-s06,de-CH,Erholung überwachen,Zeigerarten und Wasserqualität vorher/nachher mit Citizen-Science-Methoden verfolgen.
+stream-restoration-s07,fr-CH,Rendre compte et célébrer,Publier les résultats avec l'autorité et marquer l'achèvement avec la population.
+stream-restoration-s07,de-CH,Berichten und feiern,Die Resultate gemeinsam mit der Behörde publizieren und den Abschluss mit der Bevölkerung feiern.
+wildlife-corridor-s01,fr-CH,Cartographier le tracé du corridor,Identifier un tracé de connexion des habitats à travers terrains privés et publics.
+wildlife-corridor-s01,de-CH,Korridorverlauf kartieren,Eine Habitatverbindung über private und öffentliche Flächen hinweg identifizieren.
+wildlife-corridor-s02,fr-CH,Négocier avec les propriétaires,Obtenir des accords de plantation avec chaque propriétaire le long du tracé.
+wildlife-corridor-s02,de-CH,Mit Grundeigentümern verhandeln,Mit jedem Eigentümer entlang der Route Pflanzvereinbarungen abschliessen.
+wildlife-corridor-s03,fr-CH,Concevoir le mélange d'espèces,"Choisir des espèces de haies indigènes pour leur valeur nourricière, d'abri et de connectivité."
+wildlife-corridor-s03,de-CH,Artenmischung planen,"Einheimische Heckenarten nach Nahrungs-, Schutz- und Vernetzungswert auswählen."
+wildlife-corridor-s04,fr-CH,Se procurer plants et financement,Commander des plants à racines nues en saison et couvrir les coûts par des subventions biodiversité.
+wildlife-corridor-s04,de-CH,Pflanzen und Finanzierung beschaffen,Wurzelnackte Jungpflanzen saisongerecht bestellen und die Kosten über Biodiversitätsförderungen decken.
+wildlife-corridor-s05,fr-CH,Mener les journées de plantation,"Planter les tronçons avec des bénévoles durant le repos végétatif, avec protection contre l'abroutissement."
+wildlife-corridor-s05,de-CH,Pflanztage durchführen,"Die Abschnitte mit Freiwilligen in der Vegetationsruhe pflanzen, mit Verbissschutz."
+wildlife-corridor-s06,fr-CH,Établir les accords d'entretien,Convenir de qui entretient chaque tronçon pendant les années d'installation.
+wildlife-corridor-s06,de-CH,Unterhaltsvereinbarungen treffen,"Festlegen, wer welchen Abschnitt in den Anwuchsjahren pflegt."
+wildlife-corridor-s07,fr-CH,Suivre l'utilisation par la faune,"Mettre en place un suivi simple (traces, pièges photo, relevés) le long du corridor."
+wildlife-corridor-s07,de-CH,Wildtiernutzung überwachen,"Einfaches Wildtier-Monitoring (Spuren, Fotofallen, Zählungen) entlang des Korridors aufsetzen."
+community-orchard-s01,fr-CH,Obtenir un accès au terrain à long terme,"Négocier un accord de 10 ans ou plus, car les arbres mettent des années à produire."
+community-orchard-s01,de-CH,Langfristigen Landzugang sichern,"Eine Vereinbarung über 10+ Jahre aushandeln, da Bäume Jahre bis zum Ertrag brauchen."
+community-orchard-s02,fr-CH,Concevoir le verger,"Planifier espacements, partenaires de pollinisation et variétés locales anciennes avec conseil d'expert·e."
+community-orchard-s02,de-CH,Obstgarten planen,"Abstände, Befruchtersorten und alte Lokalsorten mit Fachberatung planen."
+community-orchard-s03,fr-CH,Financer arbres et infrastructure,"Budgéter arbres, tuteurs, protections et accès à l'eau; lancer des parrainages d'arbres."
+community-orchard-s03,de-CH,Bäume und Infrastruktur finanzieren,"Bäume, Pfähle, Schutz und Wasserzugang budgetieren; Baumpatenschaften lancieren."
+community-orchard-s04,fr-CH,Préparer le site,"Débroussailler, piqueter et préparer les fosses de plantation avant le repos végétatif."
+community-orchard-s04,de-CH,Gelände vorbereiten,"Vor der Vegetationsruhe roden, ausstecken und Pflanzgruben vorbereiten."
+community-orchard-s05,fr-CH,Tenir la fête de plantation,Planter le verger lors d'une célébration communautaire avec démonstrations de bonne technique.
+community-orchard-s05,de-CH,Pflanzfest durchführen,"Den Obstgarten als Gemeinschaftsfest pflanzen, mit Vorführungen der richtigen Technik."
+community-orchard-s06,fr-CH,Constituer le groupe d'entretien,"Former un groupe de parrainage à la taille de formation, l'arrosage et les soins."
+community-orchard-s06,de-CH,Pflegegruppe aufbauen,"Eine Betreuungsgruppe in Erziehungsschnitt, Bewässerung und Pflege ausbilden."
+community-orchard-s07,fr-CH,Instaurer des traditions annuelles,Créer la journée des fleurs et la fête de la récolte pour garder la communauté attachée toute l'année.
+community-orchard-s07,de-CH,Jährliche Traditionen etablieren,"Blütentag und Erntefest einführen, damit die Gemeinschaft das ganze Jahr verbunden bleibt."
+sme-sustainability-audit-s01,fr-CH,Construire le cadre d'audit,"Adapter un cadre léger pour PME couvrant énergie, déchets, achats et transports."
+sme-sustainability-audit-s01,de-CH,Prüfrahmen aufbauen,"Einen schlanken KMU-Rahmen zu Energie, Abfall, Beschaffung und Verkehr adaptieren."
+sme-sustainability-audit-s02,fr-CH,Recruter des bénévoles professionnels,"Enrôler des bénévoles aux profils durabilité, ingénierie ou finance."
+sme-sustainability-audit-s02,de-CH,Fachfreiwillige gewinnen,"Freiwillige mit Hintergrund in Nachhaltigkeit, Ingenieurwesen oder Finanzen gewinnen."
+sme-sustainability-audit-s03,fr-CH,Piloter avec des entreprises amies,Tester l'audit avec 2 à 3 entreprises bienveillantes et l'adapter aux patron·ne·s pressé·e·s.
+sme-sustainability-audit-s03,de-CH,Mit wohlgesinnten Betrieben pilotieren,Den Check mit 2–3 unterstützenden Betrieben testen und für zeitknappe Inhaber verschlanken.
+sme-sustainability-audit-s04,fr-CH,Formaliser l'offre,"Définir périmètre, clauses de confidentialité et un modèle de rapport professionnel."
+sme-sustainability-audit-s04,de-CH,Angebot formalisieren,"Umfang, Vertraulichkeitsregeln und eine professionelle Berichtsvorlage definieren."
+sme-sustainability-audit-s05,fr-CH,Recruter des entreprises clientes,Promouvoir via l'association des commerçants et la chambre de commerce.
+sme-sustainability-audit-s05,de-CH,Kundenbetriebe gewinnen,Über Gewerbeverein und Handelskammer bewerben.
+sme-sustainability-audit-s06,fr-CH,Livrer les cycles d'audit,Affecter des binômes bénévoles aux entreprises et livrer des audits avec plans d'action priorisés.
+sme-sustainability-audit-s06,de-CH,Prüfzyklen durchführen,Freiwilligen-Zweierteams den Betrieben zuteilen und Checks mit priorisierten Massnahmenplänen liefern.
+sme-sustainability-audit-s07,fr-CH,Valoriser les réussites,Publier des études de cas anonymisées des économies réalisées pour attirer la prochaine volée.
+sme-sustainability-audit-s07,de-CH,Erfolge sichtbar machen,"Anonymisierte Fallstudien erzielter Einsparungen publizieren, um die nächste Runde zu gewinnen."
+cargo-bike-share-s01,fr-CH,Choisir le modèle d'exploitation,Trancher entre rejoindre une plateforme de partage existante et créer un système indépendant.
+cargo-bike-share-s01,de-CH,Betriebsmodell wählen,Zwischen dem Beitritt zu einer bestehenden Sharing-Plattform und einem eigenständigen System entscheiden.
+cargo-bike-share-s02,fr-CH,Financer la flotte,"Financer 2 à 5 vélos-cargos via subventions, sponsoring de commerces ou fonds communaux de mobilité."
+cargo-bike-share-s02,de-CH,Flotte finanzieren,"2–5 Cargo-Velos über Förderungen, Sponsoring lokaler Geschäfte oder kommunale Mobilitätsfonds finanzieren."
+cargo-bike-share-s03,fr-CH,Mettre en place réservation et accès,Déployer un système de réservation et une solution de remise des clés (lieux hôtes ou serrures connectées).
+cargo-bike-share-s03,de-CH,Buchung und Zugang einrichten,Ein Buchungssystem und eine Schlüsselübergabe-Lösung (Gastgeber-Standorte oder smarte Schlösser) aufsetzen.
+cargo-bike-share-s04,fr-CH,Recruter des stations hôtes,Enrôler cafés/magasins comme ports d'attache gérant les remises pendant leurs horaires.
+cargo-bike-share-s04,de-CH,Gastgeber-Stationen gewinnen,"Cafés/Läden als Velo-Heimathäfen gewinnen, die Übergaben während der Öffnungszeiten abwickeln."
+cargo-bike-share-s05,fr-CH,Régler assurance et conditions d'utilisation,Souscrire une assurance vélos et rédiger des conditions claires sur dommages et responsabilité.
+cargo-bike-share-s05,de-CH,Versicherung und Nutzungsbedingungen regeln,Velo-Versicherung abschliessen und klare Nutzungsbedingungen zu Schäden und Haftung erstellen.
+cargo-bike-share-s06,fr-CH,Lancer et former les utilisateur·trice·s,Organiser des journées d'essai enseignant la conduite du vélo-cargo et inscrire les membres.
+cargo-bike-share-s06,de-CH,Starten und Fahrende einführen,Schnuppertage zum Cargo-Velo-Fahren durchführen und Mitglieder registrieren.
+cargo-bike-share-s07,fr-CH,Entretenir la flotte,Instaurer un entretien régulier avec un magasin de vélos local ou des mécanicien·ne·s bénévoles.
+cargo-bike-share-s07,de-CH,Flotte unterhalten,Regelmässigen Unterhalt mit einem lokalen Veloladen oder freiwilligen Mechanikern etablieren.
+cargo-bike-share-s08,fr-CH,Suivre l'utilisation et étendre,Analyser réservations et retours; ajouter vélos et stations là où la demande est avérée.
+cargo-bike-share-s08,de-CH,Nutzung verfolgen und ausbauen,"Buchungen und Feedback auswerten; Velos und Stationen dort ergänzen, wo Nachfrage belegt ist."
+climate-advocacy-group-s01,fr-CH,Fonder le groupe,"Réunir un noyau engagé, définir le champ (plaidoyer ou assemblée) et les principes de travail."
+climate-advocacy-group-s01,de-CH,Gruppe gründen,"Einen engagierten Kern versammeln, den Fokus klären (Interessenvertretung oder Bürgerrat) und Arbeitsprinzipien vereinbaren."
+climate-advocacy-group-s02,fr-CH,Étudier le paysage politique,"Analyser plans climatiques, budgets et calendrier décisionnel de la commune pour trouver les leviers."
+climate-advocacy-group-s02,de-CH,Politische Landschaft analysieren,"Klimapläne, Budgets und Entscheidungskalender der Gemeinde analysieren, um Hebelpunkte zu finden."
+climate-advocacy-group-s03,fr-CH,Définir des demandes concrètes,"Formuler 2 à 3 propositions précises, chiffrées et réalisables plutôt que des revendications générales."
+climate-advocacy-group-s03,de-CH,Konkrete Forderungen definieren,"2–3 spezifische, bezifferte, erreichbare Vorschläge statt allgemeiner Forderungen formulieren."
+climate-advocacy-group-s04,fr-CH,Construire une large coalition,"S'allier avec organisations locales, entreprises et scientifiques pour élargir la légitimité."
+climate-advocacy-group-s04,de-CH,Breite Koalition aufbauen,"Sich mit lokalen Organisationen, Betrieben und Wissenschaft verbünden, um die Legitimität zu stärken."
+climate-advocacy-group-s05,fr-CH,Dialoguer avec les décideur·euse·s,Rencontrer élu·e·s et administration; présenter les propositions de manière constructive et persévérante.
+climate-advocacy-group-s05,de-CH,Entscheidungstragende einbinden,Gemeinderäte und Verwaltung treffen; Vorschläge konstruktiv und beharrlich präsentieren.
+climate-advocacy-group-s06,fr-CH,Mobiliser le soutien public,"Mener pétitions, réunions publiques et travail médiatique local autour des demandes."
+climate-advocacy-group-s06,de-CH,Öffentliche Unterstützung mobilisieren,"Petitionen, öffentliche Anlässe und lokale Medienarbeit rund um die Forderungen durchführen."
+climate-advocacy-group-s07,fr-CH,Suivre et durer,"Suivre les décisions, célébrer publiquement les victoires et entretenir l'élan entre les étapes."
+climate-advocacy-group-s07,de-CH,Dranbleiben,"Entscheidungen verfolgen, Erfolge öffentlich feiern und den Schwung zwischen den Meilensteinen erhalten."

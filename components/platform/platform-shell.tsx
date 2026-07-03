@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu } from 'lucide-react'
 import { Sidebar } from './sidebar'
+import { LeavesMark } from '@/components/ui/logo'
 
 /**
  * The whole authenticated app layout, wrapping the sidebar + main column.
@@ -75,9 +76,7 @@ export function PlatformShell({
           <Menu className="size-5" />
         </button>
         <Link href="/dashboard" className="flex items-center gap-2 font-display text-base tracking-tight">
-          <div className="flex size-7 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-amber-400 font-display text-sm font-bold text-blue-900 shadow-glow-amber">
-            S
-          </div>
+          <LeavesMark className="size-7" />
           <span>The Superhero</span>
         </Link>
         {/* Right-side spacer keeps the logo visually centred. */}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { LeavesMark } from '@/components/ui/logo'
 
 /**
  * Route-level error boundary — catches render/data errors anywhere below
@@ -20,9 +21,7 @@ export default function ErrorBoundary({
 
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 px-6 text-center">
-      <div className="flex size-12 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-amber-400 font-display text-2xl font-bold text-blue-900 shadow-glow-amber">
-        S
-      </div>
+      <LeavesMark className="size-12" />
       <h1 className="font-display text-3xl tracking-tight">Something broke.</h1>
       <p className="max-w-[420px] text-sm leading-relaxed text-fg-secondary">
         That&rsquo;s on us, not you. It&rsquo;s been logged
