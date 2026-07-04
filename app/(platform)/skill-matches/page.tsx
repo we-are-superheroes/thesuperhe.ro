@@ -259,8 +259,8 @@ export default async function SkillMatchesPage() {
             </div>
             <h3 className="font-display text-2xl">Tell us what you&rsquo;re good at.</h3>
             <p className="max-w-[460px] leading-relaxed text-fg-secondary">
-              Matches are built from the skills on your profile. Add a few — anything
-              counts, not just the technical stuff — and this page fills itself.
+              Matches are built from the skills on your profile. Add a few — any
+              skill counts, not just technical ones — and matches will appear here.
             </p>
             <Link
               href="/profile"

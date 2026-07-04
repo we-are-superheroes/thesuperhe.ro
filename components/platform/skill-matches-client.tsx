@@ -131,7 +131,7 @@ export function SkillMatchesClient({ cards }: { cards: MatchCardData[] }) {
           <h3 className="font-display text-2xl">No matches with those filters.</h3>
           <p className="max-w-[460px] leading-relaxed text-fg-secondary">
             Try turning off &ldquo;Remote only&rdquo;, clearing the search — or add more
-            skills to your profile to widen the net.
+            skills to your profile to see more matches.
           </p>
         </div>
       ) : (
@@ -151,7 +151,7 @@ export function SkillMatchesClient({ cards }: { cards: MatchCardData[] }) {
             <section className="flex flex-col gap-3">
               <GroupHead
                 title="Adjacent to your skills"
-                sub={`${adjacent.length} — in the same skill areas, a chance to stretch`}
+                sub={`${adjacent.length} — in the same skill areas, a chance to learn something new`}
               />
               {adjacent.map((c, i) => (
                 <MatchCard key={`${c.kind}-${c.id}`} card={c} index={i} />
@@ -328,7 +328,7 @@ function WhyLine({ card }: { card: MatchCardData }) {
     bits.push(
       <span key="related" className="inline-flex items-center gap-1.5">
         <Waves className="size-3 shrink-0" />
-        {card.related.join(', ')} sits in your wheelhouse
+        {card.related.join(', ')} is close to your skills
       </span>,
     )
   }

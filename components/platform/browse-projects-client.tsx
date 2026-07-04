@@ -250,7 +250,7 @@ export function BrowseProjectsClient({
             that <em className="italic text-amber-500">needs</em> you.
           </h1>
           <p className="max-w-[560px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-            Every project here is real, in motion, and looking for help. Filter by where you are, what you&apos;re good at, or what kind of work moves you.
+            Every project here is real, active, and looking for help. Filter by where you are, what you&apos;re good at, or what kind of work interests you.
           </p>
         </section>
 

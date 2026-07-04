@@ -199,7 +199,7 @@ export function MyProjectsClient({
               Your <em className="italic text-amber-500">projects</em>.
             </h1>
             <p className="max-w-[560px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-              Everything you’re contributing to, in one place. See what’s blocked, and pick up where you left off.
+              Everything you’re contributing to, in one place. See what’s blocked, and continue where you stopped.
             </p>
           </div>
           <div className="flex w-full flex-wrap gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface px-5 py-4 sm:gap-8 sm:px-6 sm:py-5 lg:w-auto">

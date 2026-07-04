@@ -126,7 +126,7 @@ function JoinedDropdown({
     setError(null)
     if (myAssignedStepCount > 0) {
       const ok = window.confirm(
-        `You have ${myAssignedStepCount} step${myAssignedStepCount === 1 ? '' : 's'} assigned to you on this project. Leaving will hand ${myAssignedStepCount === 1 ? 'it' : 'them'} back to the team.\n\nAre you sure you want to leave?`,
+        `You have ${myAssignedStepCount} step${myAssignedStepCount === 1 ? '' : 's'} assigned to you on this project. If you leave, ${myAssignedStepCount === 1 ? 'it goes' : 'they go'} back to the team.\n\nAre you sure you want to leave?`,
       )
       if (!ok) return
     }
@@ -223,11 +223,11 @@ export function JoinProjectCard({
         <>
           <h3 className="mb-2 flex items-center gap-2 font-display text-2xl leading-tight">
             <Check className="size-5 text-green-300" strokeWidth={2.5} />
-            You’re in.
+            You’re a member.
           </h3>
           <p className="mb-4 text-sm leading-relaxed text-fg-secondary">
-            This project is in your dashboard. Claim a step to start contributing, and keep an
-            eye on the Updates tab.
+            This project is in your dashboard. Claim a step to start contributing, and check
+            the Updates tab for news.
           </p>
           <button
             type="button"
@@ -244,12 +244,12 @@ export function JoinProjectCard({
             Request sent.
           </h3>
           <p className="text-sm leading-relaxed text-fg-secondary">
-            The project lead will get a notification. You’ll be welcomed once they accept.
+            The project lead will get a notification. You’ll become a member once they accept.
           </p>
         </>
       ) : (
         <>
-          <h3 className="mb-2 font-display text-2xl leading-tight">Want in?</h3>
+          <h3 className="mb-2 font-display text-2xl leading-tight">Want to join?</h3>
           <p className="mb-4 text-sm leading-relaxed text-fg-secondary">
             Join the project to claim steps, see updates in your dashboard, and chat with the team.
           </p>

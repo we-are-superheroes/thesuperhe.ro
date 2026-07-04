@@ -614,7 +614,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                           {stepsByStatus.needs_help} need{stepsByStatus.needs_help === 1 ? 's' : ''} help
                         </em>
                       ) : (
-                        <em className="italic text-amber-500">in motion</em>
+                        <em className="italic text-amber-500">making progress</em>
                       )}{' '}
                       right now.
                     </h2>
@@ -671,7 +671,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
 
             {/* Stats */}
             <div className="rounded-2xl border border-white/[0.08] bg-bg-surface p-6">
-              <div className="mb-4 font-display text-lg">By the numbers</div>
+              <div className="mb-4 font-display text-lg">Project numbers</div>
               <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.08]">
                 <Stat value={contributors.length} label="Contributors" />
                 <Stat value={totalHours} unit="h" label="Hours given" />
@@ -684,7 +684,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                   }
                   label="Steps done"
                 />
-                <Stat value={days} unit="d" label="In motion" />
+                <Stat value={days} unit="d" label="Days active" />
               </div>
 
               {contributors.length === 0 ? (
@@ -760,7 +760,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 )}
               </DetailRow>
               <DetailRow icon={<Globe className="size-3.5" />} label="Remote contributions">
-                {project.remoteOk ? 'Welcome' : 'Not at this project'}
+                {project.remoteOk ? 'Welcome' : 'Not for this project'}
               </DetailRow>
               <DetailRow icon={<Clock className="size-3.5" />} label="Time commitment">
                 {project.timeCommitmentHrs != null ? (

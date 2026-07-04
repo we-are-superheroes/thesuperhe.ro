@@ -57,5 +57,5 @@ export function rateLimit(key: string, max: number, windowMs: number): RateLimit
 
 /** Standard friendly refusal for rate-limited server actions. */
 export function rateLimitError(result: RateLimitResult): string {
-  return `Slow down a little — try again in ${Math.max(result.retryAfterSec, 1)}s.`
+  return `You're doing that too often — try again in ${Math.max(result.retryAfterSec, 1)}s.`
 }

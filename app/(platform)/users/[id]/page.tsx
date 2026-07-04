@@ -491,7 +491,7 @@ function SkillCard({
             Open to projects needing this
           </span>
         ) : (
-          <span className="text-xs italic text-fg-tertiary">Has it, but not chasing more of it</span>
+          <span className="text-xs italic text-fg-tertiary">Has this skill, but not looking for projects that need it</span>
         )}
       </div>
       <span

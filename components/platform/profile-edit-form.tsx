@@ -295,7 +295,7 @@ export function ProfileEditForm({
               Your <em className="italic text-amber-500">profile</em>.
             </h1>
             <p className="max-w-[540px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-              This is what project leads see when you raise your hand. Make it real — the more honest, the better the matches.
+              This is what project leads see when you offer to help. Be honest — the more accurate your profile, the better the matches.
             </p>
           </div>
         </header>

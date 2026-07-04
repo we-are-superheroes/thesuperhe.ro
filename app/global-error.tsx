@@ -29,7 +29,7 @@ export default function GlobalError({
           padding: '24px',
         }}
       >
-        <h1 style={{ fontSize: '28px', margin: 0 }}>Something broke badly.</h1>
+        <h1 style={{ fontSize: '28px', margin: 0 }}>Something went badly wrong.</h1>
         <p style={{ maxWidth: 420, color: '#A8BCCE', fontSize: 14, lineHeight: 1.6 }}>
           The whole page failed to render{error.digest ? ` (ref ${error.digest})` : ''}.
           Reloading usually fixes it.

@@ -187,7 +187,7 @@ export function ProjectUpdatesPanel({
           <h3 className="font-display text-2xl">Nothing here yet.</h3>
           <p className="max-w-[420px] text-sm text-fg-secondary">
             {isLead
-              ? 'Post the first update above — members get notified, and public updates show anyone browsing that this project is alive.'
+              ? 'Post the first update above — members get notified, and public updates show visitors that this project is active.'
               : 'When the project lead posts updates or steps get completed, they’ll show up here.'}
           </p>
         </div>

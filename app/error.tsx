@@ -24,7 +24,7 @@ export default function ErrorBoundary({
       <LeavesMark className="size-12" />
       <h1 className="font-display text-3xl tracking-tight">Something broke.</h1>
       <p className="max-w-[420px] text-sm leading-relaxed text-fg-secondary">
-        That&rsquo;s on us, not you. It&rsquo;s been logged
+        The problem is on our side, not yours. It&rsquo;s been logged
         {error.digest ? ` (ref ${error.digest})` : ''} — trying again usually works.
       </p>
       <button
