@@ -716,14 +716,13 @@ function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
 
 /* ── Footer ──────────────────────────────────────────────────── */
 
-/** Tiny inline Swiss flag — an SVG rather than the 🇨🇭 emoji, which
- *  Windows browsers render as the letters "CH" instead of a flag. */
+/** Inline Swiss flag (official Pantone artwork) — an SVG rather than the
+ *  🇨🇭 emoji, which Windows browsers render as the letters "CH". */
 function SwissFlag({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 32 32" className={className} aria-label="Swiss flag" role="img">
-      <rect width="32" height="32" rx="4" fill="#DA291C" />
-      <rect x="13" y="6.5" width="6" height="19" fill="#fff" />
-      <rect x="6.5" y="13" width="19" height="6" fill="#fff" />
+      <path d="M0 0h32v32H0z" fill="#da291c" />
+      <path d="M13 6h6v7h7v6h-7v7h-6v-7H6v-6h7z" fill="#fff" />
     </svg>
   )
 }
@@ -742,6 +741,9 @@ function Footer() {
           </Link>
           <Link href="/privacy" className="hover:text-fg-primary">
             Privacy
+          </Link>
+          <Link href="/terms" className="hover:text-fg-primary">
+            Terms
           </Link>
         </div>
         <div className="flex items-center gap-2">

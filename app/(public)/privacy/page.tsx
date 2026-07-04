@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { LegalPage, LegalSection as Section } from '@/components/ui/legal-page'
 
 export const metadata = {
   title: 'Privacy policy — The Superhero',
@@ -15,35 +16,17 @@ export const metadata = {
 
 const LAST_UPDATED = '3 July 2026'
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <section className="mt-10">
-      <h2 className="mb-3 font-display text-2xl tracking-tight">{title}</h2>
-      <div className="flex flex-col gap-3 text-[15px] leading-relaxed text-fg-secondary">
-        {children}
-      </div>
-    </section>
-  )
-}
-
 export default function PrivacyPage() {
   return (
-    <div className="mx-auto w-full max-w-[760px] px-4 py-12 sm:px-8 sm:py-16">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-amber-500">
-        Legal
-      </p>
-      <h1 className="font-display text-[clamp(32px,4vw,44px)] leading-tight tracking-tight">
-        Privacy policy
-      </h1>
-      <p className="mt-3 text-sm text-fg-tertiary">Last updated: {LAST_UPDATED}</p>
+    <LegalPage title="Privacy policy" updated={LAST_UPDATED}>
 
       <Section title="Who we are">
         <p>
           The Superhero (thesuperhe.ro) is a platform that connects people with climate and
           sustainability projects. It is operated from Switzerland. For anything related to
           your data, contact us at{' '}
-          <a href="mailto:privacy@thesuperhe.ro" className="text-amber-500 hover:underline">
-            privacy@thesuperhe.ro
+          <a href="mailto:support@thesuperhe.ro" className="text-amber-500 hover:underline">
+            support@thesuperhe.ro
           </a>
           . We are the data controller for the personal data described below, and we handle
           it under the Swiss Federal Act on Data Protection (FADP) and, where it applies,
@@ -150,8 +133,8 @@ export default function PrivacyPage() {
           Under the FADP and GDPR you can ask us for access to the data we hold about you,
           have it corrected or deleted, receive a copy in a portable format, or object to
           or restrict how we process it. Write to{' '}
-          <a href="mailto:privacy@thesuperhe.ro" className="text-amber-500 hover:underline">
-            privacy@thesuperhe.ro
+          <a href="mailto:support@thesuperhe.ro" className="text-amber-500 hover:underline">
+            support@thesuperhe.ro
           </a>{' '}
           and we&rsquo;ll respond within 30 days. You can also delete your account yourself
           from your profile settings at any time.
@@ -174,11 +157,12 @@ export default function PrivacyPage() {
 
       <p className="mt-12 text-sm text-fg-tertiary">
         Questions?{' '}
-        <a href="mailto:privacy@thesuperhe.ro" className="text-amber-500 hover:underline">
-          privacy@thesuperhe.ro
+        <a href="mailto:support@thesuperhe.ro" className="text-amber-500 hover:underline">
+          support@thesuperhe.ro
         </a>{' '}
+· <Link href="/terms" className="text-amber-500 hover:underline">Terms of service</Link>{' '}
         · <Link href="/" className="text-amber-500 hover:underline">Back to the homepage</Link>
       </p>
-    </div>
+    </LegalPage>
   )
 }
