@@ -28,6 +28,12 @@ export function PublicNavbar() {
             Browse projects
           </Link>
           <Link
+            href="/blueprints"
+            className="transition-colors duration-fast hover:text-fg-primary"
+          >
+            Browse blueprints
+          </Link>
+          <Link
             href="/#how"
             className="transition-colors duration-fast hover:text-fg-primary"
           >
