@@ -125,7 +125,7 @@ type ProjectSummary = Awaited<ReturnType<typeof getRecentProjects>>[number]
 function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
   return (
     <nav className="sticky top-0 z-50 border-b border-white/[0.07] bg-blue-900/[0.78] backdrop-blur-2xl backdrop-saturate-[1.4]">
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-4 px-4 py-3 sm:gap-8 sm:px-8 sm:py-4">
+      <div className="mx-auto flex max-w-[1420px] items-center justify-between gap-4 px-4 py-3 sm:gap-8 sm:px-8 sm:py-4">
         <Link href="/" className="flex items-center gap-2 sm:gap-3">
           <LeavesMark className="size-7 sm:size-8" />
           <span className="font-display text-base tracking-tight sm:text-xl">
@@ -136,6 +136,9 @@ function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
         <div className="hidden gap-8 text-sm text-neutral-300 lg:flex">
           <Link href="/projects" className="transition-colors duration-fast hover:text-fg-primary">
             Browse projects
+          </Link>
+          <Link href="/blueprints" className="transition-colors duration-fast hover:text-fg-primary">
+            Browse blueprints
           </Link>
           <Link href="#how" className="transition-colors duration-fast hover:text-fg-primary">
             How it works
@@ -220,7 +223,7 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
         }}
       />
 
-      <div className="relative mx-auto grid max-w-[1280px] grid-cols-1 items-center gap-10 px-4 sm:gap-16 sm:px-8 lg:grid-cols-[1.15fr_1fr]">
+      <div className="relative mx-auto grid max-w-[1420px] grid-cols-1 items-center gap-10 px-4 sm:gap-16 sm:px-8 lg:grid-cols-[1.15fr_1fr]">
         {/* Left — copy */}
         <div>
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/[0.13] px-3.5 py-1.5 text-xs font-medium uppercase tracking-[0.12em] text-neutral-300 animate-[rise_800ms_ease-out_100ms_backwards]">
@@ -231,19 +234,18 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
           <h1 className="mb-6 font-display text-[clamp(48px,6.2vw,80px)] leading-[0.98] tracking-[-0.025em] animate-[rise_800ms_ease-out_200ms_backwards]">
             Don&apos;t act alone.
             <br />
-            Be a{' '}
+            Let&apos;s be{' '}
             <span className="relative italic text-amber-500">
-              superhero
+              superheroes
               <span className="absolute inset-x-0 bottom-2 -z-10 h-2 rounded-sm bg-amber-500/[0.18]" />
             </span>
-            ,
             <br />
             together.
           </h1>
 
           <p className="mb-10 max-w-[540px] text-xl leading-relaxed text-neutral-300 animate-[rise_800ms_ease-out_300ms_backwards]">
-            Find climate and sustainability projects that need your skills — or
-            bring your own idea, and let collaborators help you make it real.
+            Find climate and sustainability projects that need your skills, or
+            bring your own idea and let collaborators help you make it real.
           </p>
 
           <div className="mb-10 flex items-center gap-3 animate-[rise_800ms_ease-out_400ms_backwards]">
@@ -390,7 +392,7 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
 function EntryPoints({ isSignedIn }: { isSignedIn: boolean }) {
   return (
     <section className="border-t border-white/[0.07] py-12 sm:py-20">
-      <div className="mx-auto grid max-w-[1280px] grid-cols-1 gap-4 px-4 sm:px-8 md:grid-cols-3">
+      <div className="mx-auto grid max-w-[1420px] grid-cols-1 gap-4 px-4 sm:px-8 md:grid-cols-3">
         {/* Browse — featured */}
         <Link
           href="/projects"
@@ -468,7 +470,7 @@ function EntryPoints({ isSignedIn }: { isSignedIn: boolean }) {
 function NewProjects({ projects }: { projects: ProjectSummary[] }) {
   return (
     <section className="border-t border-white/[0.07] py-12 sm:py-20" id="browse">
-      <div className="mx-auto max-w-[1280px] px-4 sm:px-8">
+      <div className="mx-auto max-w-[1420px] px-4 sm:px-8">
         {/* Section header */}
         <div className="mb-12 flex items-end justify-between gap-8">
           <div>
@@ -477,12 +479,11 @@ function NewProjects({ projects }: { projects: ProjectSummary[] }) {
               Fresh on the platform
             </div>
             <h2 className="font-display text-[clamp(36px,4vw,56px)] leading-[1.05] tracking-[-0.02em]">
-              New projects,{' '}
-              <em className="italic text-amber-500">looking for you</em>.
+              New projects{' '}
+              <em className="not-italic text-amber-500">looking for you</em>.
             </h2>
             <p className="mt-4 max-w-[600px] text-lg leading-relaxed text-neutral-300">
-              Just launched — most still need their first contributors. Most
-              steps take less than 4 hours.
+              Just launched, and in need of their first contributors. Steps usually take less than 2 hours.
             </p>
           </div>
           <Link
@@ -604,12 +605,12 @@ const STEPS = [
   {
     num: '01',
     title: 'Tell us your skills',
-    desc: "Add the things you're good at — and the ones you actually want to use on a project. A burnt-out accountant doesn't have to do finance.",
+    desc: "Add the things you're good at, and the ones you actually want to use on a project. A burnt-out developer doesn't have to do coding.",
   },
   {
     num: '02',
     title: 'Find a fit',
-    desc: 'Browse whole projects, or just single steps. The smallest unit can be a 1-hour task — perfect for a quiet evening.',
+    desc: 'Browse whole projects, or just single steps. The smallest unit can be a 30-minute task, perfect for a quiet evening.',
   },
   {
     num: '03',
@@ -621,15 +622,15 @@ const STEPS = [
 function HowItWorks() {
   return (
     <section className="border-t border-white/[0.07] py-12 sm:py-20" id="how">
-      <div className="mx-auto max-w-[1280px] px-4 sm:px-8">
+      <div className="mx-auto max-w-[1420px] px-4 sm:px-8">
         <div className="mb-12">
           <div className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.12em] text-amber-500">
             <span className="h-px w-6 bg-amber-500" />
             How it works
           </div>
           <h2 className="max-w-[780px] font-display text-[clamp(36px,4vw,56px)] leading-[1.05] tracking-[-0.02em]">
-            Contribute as much, or as{' '}
-            <em className="italic text-amber-500">little</em>, as your time
+            Contribute as much, {' '}
+            <em className="not-italic text-amber-500">or as little</em>, as your time
             allows.
           </h2>
         </div>
@@ -660,7 +661,7 @@ function HowItWorks() {
 
 function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
   return (
-    <section className="mx-auto max-w-[1280px] px-4 sm:px-8">
+    <section className="mx-auto max-w-[1420px] px-4 sm:px-8">
       <div
         className="relative my-20 overflow-hidden rounded-2xl border border-white/[0.13] p-20 text-center"
         style={{
@@ -679,7 +680,7 @@ function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
         />
         <div className="relative">
           <h2 className="mb-5 font-display text-[clamp(40px,5vw,64px)] leading-none tracking-[-0.02em]">
-            Ready to <em className="italic text-amber-500">act?</em>
+            Ready to <em className="not-italic text-amber-500">act?</em>
           </h2>
           <p className="mx-auto mb-10 max-w-[540px] text-lg text-neutral-300">
             Browse what&apos;s live right now, or sign in to see your dashboard.
@@ -715,24 +716,39 @@ function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
 
 /* ── Footer ──────────────────────────────────────────────────── */
 
+/** Inline Swiss flag (official Pantone artwork) — an SVG rather than the
+ *  🇨🇭 emoji, which Windows browsers render as the letters "CH". */
+function SwissFlag({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 32 32" className={className} aria-label="Swiss flag" role="img">
+      <path d="M0 0h32v32H0z" fill="#da291c" />
+      <path d="M13 6h6v7h7v6h-7v7h-6v-7H6v-6h7z" fill="#fff" />
+    </svg>
+  )
+}
+
 function Footer() {
   return (
     <footer className="border-t border-white/[0.07] py-10 pb-8 text-sm text-neutral-400">
-      <div className="mx-auto flex max-w-[1280px] items-center justify-between gap-6 px-4 sm:px-8">
+      <div className="mx-auto flex max-w-[1420px] flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:gap-6 sm:px-8">
         <div>&copy; 2026 The Superhero · climate &amp; sustainability collaboration</div>
-        <div className="flex gap-6">
-          <Link href="#" className="hover:text-fg-primary">
-            About
+        <div className="flex items-center gap-6">
+          <Link href="/projects" className="hover:text-fg-primary">
+            Projects
           </Link>
           <Link href="/blueprints" className="hover:text-fg-primary">
             Blueprints
           </Link>
-          <Link href="#" className="hover:text-fg-primary">
+          <Link href="/privacy" className="hover:text-fg-primary">
             Privacy
           </Link>
-          <Link href="#" className="hover:text-fg-primary">
-            Contact
+          <Link href="/terms" className="hover:text-fg-primary">
+            Terms
           </Link>
+        </div>
+        <div className="flex items-center gap-2">
+          Created in Switzerland
+          <SwissFlag className="size-4" />
         </div>
       </div>
     </footer>
