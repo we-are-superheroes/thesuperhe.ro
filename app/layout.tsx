@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { DM_Sans, DM_Serif_Display, JetBrains_Mono } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
+import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const dmSans = DM_Sans({
@@ -88,7 +89,10 @@ export default function RootLayout({
         <head>
           <script dangerouslySetInnerHTML={{ __html: THEME_INIT }} />
         </head>
-        <body className="min-h-full font-sans">{children}</body>
+        <body className="min-h-full font-sans">
+          {children}
+          <Analytics />
+        </body>
       </html>
     </ClerkProvider>
   )
