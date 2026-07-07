@@ -321,7 +321,7 @@ export function EditProjectForm({
                 eyebrow="Project status"
                 title="What's happening, in one word?"
                 desc={
-                  'This appears at the top of the project page, in listings, and in everyone’s dashboard. Set it honestly — "Needs help" gets more eyes than a passive "In progress" when you actually need hands.'
+                  'This appears at the top of the project page, in listings, and in everyone’s dashboard. Set it honestly — "Needs help" reaches more people than "In progress" when you really need them.'
                 }
               />
               <div
@@ -383,7 +383,7 @@ export function EditProjectForm({
           <CardHead
             eyebrow="The basics"
             title="What is it?"
-            desc="Two sentences are enough. You can flesh it out later."
+            desc="Two sentences are enough. You can add more detail later."
           />
           <div className="flex flex-col gap-5">
             <Field label="Title" htmlFor="fld-title">
@@ -617,7 +617,7 @@ export function EditProjectForm({
           <CardHead
             eyebrow="The plan"
             title="Steps to make it real."
-            desc="Add, edit, reorder, or remove steps. Steps that have been claimed will release their assignee if you delete them — be deliberate."
+            desc="Add, edit, reorder, or remove steps. If you delete a step someone has claimed, that person is removed from it — be careful."
           />
           <div className="flex flex-col gap-3">
             {steps.map((s, i) => (

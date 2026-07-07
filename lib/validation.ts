@@ -64,7 +64,7 @@ export function validateUpdateBody(
   const body = raw.trim()
   if (!body) return { ok: false, error: 'An update needs some text.' }
   if (body.length > MAX_UPDATE_LENGTH) {
-    return { ok: false, error: `Updates are capped at ${MAX_UPDATE_LENGTH} characters.` }
+    return { ok: false, error: `Updates are limited to ${MAX_UPDATE_LENGTH} characters.` }
   }
   return { ok: true, body }
 }

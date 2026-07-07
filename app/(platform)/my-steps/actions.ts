@@ -40,7 +40,7 @@ export async function logTimeAction(
     return { success: false, error: `Log at least ${HOURS_MIN}h.` }
   }
   if (hours > HOURS_MAX) {
-    return { success: false, error: `That's a lot — log at most ${HOURS_MAX}h per entry.` }
+    return { success: false, error: `That's too much — log at most ${HOURS_MAX}h per entry.` }
   }
   const note = rawNote?.trim() ?? ''
   if (note.length > NOTE_MAX) {

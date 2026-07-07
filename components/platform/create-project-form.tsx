@@ -323,7 +323,7 @@ function ChooserPhase({ onScratch }: { onScratch: () => void }) {
           Start a <em className="italic text-amber-500">project</em>.
         </h1>
         <p className="max-w-[600px] text-lg leading-relaxed text-fg-secondary">
-          You can begin from a clean slate, or fork a blueprint — a proven plan from someone who’s done this before.
+          You can begin with an empty plan, or fork a blueprint — a proven plan from someone who’s done this before.
         </p>
       </header>
 
@@ -331,14 +331,14 @@ function ChooserPhase({ onScratch }: { onScratch: () => void }) {
         <StartCard
           icon={<Plus className="size-6" strokeWidth={2} />}
           title="Start from scratch."
-          description="A blank canvas. Best when your project is unusual, hyper-local, or you’ve already mapped out the steps yourself."
+          description="An empty plan. Best when your project is unusual, very local, or you’ve already worked out the steps yourself."
           cta="Begin a fresh project"
           onClick={onScratch}
         />
         <StartCard
           icon={<FileText className="size-6" strokeWidth={2} />}
           title="Use a blueprint."
-          description="Steal shamelessly. Pre-built plans for repair cafés, pocket forests, mutual aid groups and more — browse the library, then fork one and adapt it to your community."
+          description="Copy freely. Pre-built plans for repair cafés, pocket forests, mutual aid groups and more — browse the library, then fork one and adapt it to your community."
           cta="Browse blueprints"
           href="/blueprints"
         />
@@ -610,7 +610,7 @@ function EditorPhase({
         <CardHead
           eyebrow="The basics"
           title="What is it?"
-          desc="Two sentences are enough. You can flesh it out later."
+          desc="Two sentences are enough. You can add more detail later."
         />
         <div className="flex flex-col gap-5">
           <Field label="Title" htmlFor="fld-title">
@@ -783,7 +783,7 @@ function EditorPhase({
         <CardHead
           eyebrow="The plan"
           title="Steps to make it real."
-          desc="Break the work into chunks someone could pick up in an evening. You can always add more later — but a starter list of 3–8 helps people see how to help."
+          desc="Break the work into small pieces someone could do in an evening. You can always add more later — but a starter list of 3–8 helps people see how to help."
         />
         <div className="flex flex-col gap-3">
           {steps.map((s, i) => (

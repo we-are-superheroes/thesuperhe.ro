@@ -247,6 +247,21 @@ export function Sidebar({
             )}
           />
         </button>
+
+        {/* Small footer links below the user card */}
+        <div className="mt-3 flex items-center gap-1.5 px-1 text-xs text-fg-tertiary">
+          <Link href="/home" className="transition-colors hover:text-fg-secondary">
+            Home
+          </Link>
+          <span aria-hidden>·</span>
+          <Link href="/privacy" className="transition-colors hover:text-fg-secondary">
+            Privacy
+          </Link>
+          <span aria-hidden>·</span>
+          <Link href="/terms" className="transition-colors hover:text-fg-secondary">
+            Terms
+          </Link>
+        </div>
       </div>
     </aside>
   )

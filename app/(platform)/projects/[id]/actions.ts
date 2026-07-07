@@ -36,7 +36,7 @@ export async function joinProjectAction(
     select: { id: true, status: true },
   })
   if (existing && (existing.status === 'active' || existing.status === 'pending')) {
-    return { success: false, error: 'You’re already in this project.' }
+    return { success: false, error: 'You’re already a member of this project.' }
   }
 
   // Look up the actor's name for the notification copy.

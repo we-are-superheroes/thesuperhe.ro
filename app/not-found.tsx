@@ -14,7 +14,7 @@ export default function NotFound() {
           Woops, this page doesn’t exist <em className="italic text-amber-500">yet</em>.
         </h1>
         <p className="text-lg leading-relaxed text-fg-secondary">
-          We’re probably working on it. In the meantime, head back home and find something to be a superhero about.
+          We’re probably working on it. For now, go back home and find a project that needs a superhero.
         </p>
         <Link
           href="/"

@@ -54,7 +54,7 @@ const STATUS_HINT: Record<StepStatusKey, string> = {
   open: 'Available · nobody on it',
   defining: 'Still being scoped',
   in_progress: 'Actively being worked on',
-  needs_help: 'Asking for hands',
+  needs_help: 'Asking for help',
   completed: 'Done',
 }
 

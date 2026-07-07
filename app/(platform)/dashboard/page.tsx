@@ -311,7 +311,7 @@ export default async function DashboardPage() {
           <section>
             <SectionHeader
               eyebrow="Get started"
-              title={<>Three quick things, and you&apos;re <em className="italic text-amber-500">in</em>.</>}
+              title={<>Three quick things, and you&apos;re <em className="italic text-amber-500">ready</em>.</>}
               rightContent={
                 <span className="text-sm text-fg-tertiary">{checklistCount} of 3 done</span>
               }
@@ -348,7 +348,7 @@ export default async function DashboardPage() {
             <>
               <SectionHeader
                 eyebrow="Pinned projects"
-                title={<>The work you&apos;re <em className="italic text-amber-500">closest</em> to.</>}
+                title={<>The work you&apos;re <em className="italic text-amber-500">most involved</em> in.</>}
                 linkLabel="See all my projects"
                 linkHref="/my-projects"
               />
@@ -446,7 +446,7 @@ export default async function DashboardPage() {
             <>
               <SectionHeader
                 eyebrow="Your next steps"
-                title="Pick one, ship one."
+                title="Pick one, finish one."
                 linkLabel={`View all ${openStepCount} steps`}
                 linkHref="/my-steps"
               />

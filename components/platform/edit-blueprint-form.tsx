@@ -207,7 +207,7 @@ export function EditBlueprintForm({
             <CardHead
               eyebrow="The basics"
               title="What is this blueprint?"
-              desc="Two sentences are enough to describe the pattern. You can flesh it out later."
+              desc="Two sentences are enough to describe the pattern. You can add more detail later."
             />
             <div className="flex flex-col gap-5">
               <Field label="Title" htmlFor="fld-bp-title">
