@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { MapPin, Globe, Pencil, Star } from 'lucide-react'
 import { db } from '@/lib/db'
+import { visibleProjectsWhere } from '@/lib/orgs'
 import {
   analyseMatch,
   cityOf,
@@ -79,7 +80,10 @@ export default async function SkillMatchesPage() {
         where: {
           status: { in: [...JOINABLE_STEP_STATUSES] },
           skills: { some: { skill: skillFilter } },
-          project: { status: { in: [...LIVE_PROJECT_STATUSES] } },
+          project: {
+            status: { in: [...LIVE_PROJECT_STATUSES] },
+            AND: [visibleProjectsWhere(userId)],
+          },
           contributions: {
             none: { userId, status: { in: ['active', 'pending'] } },
           },
@@ -108,6 +112,7 @@ export default async function SkillMatchesPage() {
       db.project.findMany({
         where: {
           status: { in: [...LIVE_PROJECT_STATUSES] },
+          AND: [visibleProjectsWhere(userId)],
           steps: { some: { skills: { some: { skill: skillFilter } } } },
           contributions: {
             none: { userId, projectStepId: null, status: { in: ['active', 'pending'] } },

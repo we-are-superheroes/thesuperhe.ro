@@ -80,6 +80,8 @@ export function CreateProjectForm({
   variantIntent,
   variantParentId,
   skills,
+  myOrgs,
+  initialOrgSlug,
 }: {
   /** The blueprint the editor was opened from (via ?blueprint=), or null. */
   sourceBlueprint: BlueprintOption | null
@@ -89,6 +91,10 @@ export function CreateProjectForm({
   /** Family root to parent a saved variant under (resolved server-side). */
   variantParentId: string | null
   skills: SkillOption[]
+  /** Active organisations the user belongs to (empty for most users). */
+  myOrgs: Array<{ id: string; slug: string; name: string }>
+  /** Pre-selected org when arriving via "+ New organisation project". */
+  initialOrgSlug: string | null
 }) {
   const router = useRouter()
 
@@ -119,6 +125,10 @@ export function CreateProjectForm({
     sourceBlueprint ? 'some' : 'yes',
   )
   const [joinPolicy, setJoinPolicy] = useState<'open' | 'approval_required'>('open')
+  const [orgId, setOrgId] = useState<string | null>(
+    () => myOrgs.find((o) => o.slug === initialOrgSlug)?.id ?? null,
+  )
+  const [orgVisibility, setOrgVisibility] = useState<'public' | 'org_members'>('public')
   const [projectTypeId, setProjectTypeId] = useState<string | null>(
     sourceBlueprint?.projectTypeId ?? null,
   )
@@ -185,6 +195,8 @@ export function CreateProjectForm({
     languageCode,
     remote,
     joinPolicy,
+    orgId,
+    visibility: orgId ? orgVisibility : 'public',
     projectTypeId,
     parentBlueprintId,
     blueprintId: origin?.kind === 'blueprint' ? origin.blueprint.id : null,
@@ -283,6 +295,9 @@ export function CreateProjectForm({
             languageCode={languageCode}
             remote={remote}
             joinPolicy={joinPolicy}
+            myOrgs={myOrgs}
+            orgId={orgId}
+            orgVisibility={orgVisibility}
             steps={steps}
             skills={skills}
             error={error}
@@ -298,6 +313,8 @@ export function CreateProjectForm({
             setLanguageCode={setLanguageCode}
             setRemote={setRemote}
             setJoinPolicy={setJoinPolicy}
+            setOrgId={setOrgId}
+            setOrgVisibility={setOrgVisibility}
             updateStep={updateStep}
             removeStep={removeStep}
             addStep={addStep}
@@ -520,6 +537,9 @@ function EditorPhase({
   languageCode,
   remote,
   joinPolicy,
+  myOrgs,
+  orgId,
+  orgVisibility,
   steps,
   skills,
   error,
@@ -535,6 +555,8 @@ function EditorPhase({
   setLanguageCode,
   setRemote,
   setJoinPolicy,
+  setOrgId,
+  setOrgVisibility,
   updateStep,
   removeStep,
   addStep,
@@ -554,6 +576,9 @@ function EditorPhase({
   languageCode: string | null
   remote: 'yes' | 'some' | 'no'
   joinPolicy: 'open' | 'approval_required'
+  myOrgs: Array<{ id: string; slug: string; name: string }>
+  orgId: string | null
+  orgVisibility: 'public' | 'org_members'
   steps: FormStep[]
   skills: SkillOption[]
   error: string | null
@@ -569,6 +594,8 @@ function EditorPhase({
   setLanguageCode: (v: string | null) => void
   setRemote: (v: 'yes' | 'some' | 'no') => void
   setJoinPolicy: (v: 'open' | 'approval_required') => void
+  setOrgId: (v: string | null) => void
+  setOrgVisibility: (v: 'public' | 'org_members') => void
   updateStep: (id: string, patch: Partial<FormStep>) => void
   removeStep: (id: string) => void
   addStep: () => void
@@ -775,6 +802,82 @@ function EditorPhase({
               })}
             </div>
           </Field>
+
+          {myOrgs.length > 0 && (
+            <>
+              <Field label="Organisation">
+                <SelectBox
+                  value={orgId ?? ''}
+                  onChange={(e) => setOrgId(e.target.value || null)}
+                >
+                  <option value="">Personal project — no organisation</option>
+                  {myOrgs.map((o) => (
+                    <option key={o.id} value={o.id}>
+                      {o.name}
+                    </option>
+                  ))}
+                </SelectBox>
+                <span className="mt-1 text-xs text-fg-tertiary">
+                  Organisation projects show the organisation&rsquo;s name and count towards its
+                  contribution totals.
+                </span>
+              </Field>
+
+              {orgId && (
+                <Field label="Who can see it?">
+                  <div
+                    role="radiogroup"
+                    aria-label="Project visibility"
+                    className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+                  >
+                    {(
+                      [
+                        {
+                          value: 'public' as const,
+                          label: 'Public',
+                          description: 'Anyone can find and join it — with the organisation’s name on it.',
+                        },
+                        {
+                          value: 'org_members' as const,
+                          label: 'Members only',
+                          description: 'Only members of the organisation can see or join it.',
+                        },
+                      ]
+                    ).map((opt) => {
+                      const checked = orgVisibility === opt.value
+                      return (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          role="radio"
+                          aria-checked={checked}
+                          onClick={() => setOrgVisibility(opt.value)}
+                          className={cn(
+                            'flex flex-col items-start gap-1 rounded-lg border bg-bg-base p-4 text-left transition-colors',
+                            checked
+                              ? 'border-amber-500/40 bg-amber-500/[0.06]'
+                              : 'border-neutral-700 hover:border-neutral-600',
+                          )}
+                        >
+                          <span
+                            className={cn(
+                              'text-sm font-medium',
+                              checked ? 'text-amber-500' : 'text-fg-primary',
+                            )}
+                          >
+                            {opt.label}
+                          </span>
+                          <span className="text-xs leading-relaxed text-fg-tertiary">
+                            {opt.description}
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </Field>
+              )}
+            </>
+          )}
         </div>
       </Card>
 

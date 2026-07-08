@@ -20,13 +20,17 @@ enum UserRole {
   admin
 }
 
+// Two org types, one product surface. Type is a billing/vetting attribute
+// set by the operator during approval — never a feature fork.
 enum OrgType {
-  ngo
-  academic
-  corporate
-  government
-  community
-  other
+  nonprofit // free tier
+  company   // paid tier
+}
+
+enum OrgStatus {
+  pending   // request submitted, not yet approved by the operator
+  active
+  suspended // kill switch: page hidden from non-members, memberships frozen
 }
 
 enum OrgRole {
@@ -75,6 +79,11 @@ enum UpdateVisibility {
   members  // Only active project members (and platform admins) can read it.
 }
 
+enum ProjectVisibility {
+  public      // browsable by everyone
+  org_members // visible to active members of the owning org only
+}
+
 enum ProjectJoinPolicy {
   open               // Anyone can join instantly.
   approval_required  // Joins land as `pending` Contributions; lead must accept.
@@ -116,6 +125,7 @@ model User {
   conversations   ConversationParticipant[]
   messagesSent    Message[]          @relation("MessageSender")
   projectUpdates  ProjectUpdate[]    @relation("UpdateAuthor")
+  orgInvitesCreated OrganisationInvite[] @relation("InvitesCreated")
 
   @@map("users")
 }
@@ -156,36 +166,71 @@ model UserSkill {
 // ORGANISATIONS
 // =============================================================================
 
+// Created `pending` by the request form; the operator approves (→ active)
+// and sets `type` out-of-band. No self-serve creation. Deleting an org that
+// owns projects fails at the DB (FK has no cascade) — suspend instead.
 model Organisation {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   name        String
-  slug        String   @unique
+  slug        String    @unique
   type        OrgType
+  status      OrgStatus @default(pending)
   description String?
-  logoUrl     String?  @map("logo_url")
+  logoUrl     String?   @map("logo_url")
+  bannerUrl   String?   @map("banner_url")
   website     String?
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
   members  UserOrganisation[]
+  invites  OrganisationInvite[]
   projects Project[]
 
   @@map("organisations")
 }
 
-// Junction: users ↔ organisations
+// Junction: users ↔ organisations. One row per (user, org): leaving sets
+// leftAt (soft leave — historical hours stay in org aggregates); re-joining
+// reactivates the row with joinedAt reset.
 model UserOrganisation {
   userId String @map("user_id")
   orgId  String @map("org_id")
 
   role     OrgRole
-  joinedAt DateTime @default(now()) @map("joined_at")
+  // Whether this member's contributions to non-org public projects count in
+  // this org's aggregates and exports. Own-project hours always count.
+  shareContributions Boolean @default(true) @map("share_contributions")
+  joinedAt DateTime  @default(now()) @map("joined_at")
+  leftAt   DateTime? @map("left_at")
 
   user User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   org  Organisation @relation(fields: [orgId], references: [id], onDelete: Cascade)
 
   @@id([userId, orgId])
+  @@index([userId, leftAt])
+  @@index([orgId, leftAt])
   @@map("user_organisations")
+}
+
+// Invite codes. email null = open shareable code; email set = targeted
+// invite for that address (delivered in-app for MVP; Resend later).
+model OrganisationInvite {
+  id          String    @id @default(uuid())
+  orgId       String    @map("org_id")
+  code        String    @unique
+  email       String?
+  invitedById String    @map("invited_by_id")
+  maxUses     Int?      @map("max_uses") // null = unlimited within expiry
+  useCount    Int       @default(0) @map("use_count")
+  expiresAt   DateTime? @map("expires_at")
+  revokedAt   DateTime? @map("revoked_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+
+  org       Organisation @relation(fields: [orgId], references: [id], onDelete: Cascade)
+  invitedBy User         @relation("InvitesCreated", fields: [invitedById], references: [id], onDelete: Cascade)
+
+  @@index([orgId])
+  @@map("organisation_invites")
 }
 
 // =============================================================================
@@ -284,6 +329,9 @@ model Project {
   language              String?
   country               String?
   remoteOk              Boolean  @default(true) @map("remote_ok")
+  // org_members requires orgId (DB CHECK projects_org_visibility_check).
+  // Every read path for org_members projects must verify active membership.
+  visibility            ProjectVisibility @default(public)
   timeCommitmentHrs     Int?     @map("time_commitment_hrs")
   coverImageUrl         String?  @map("cover_image_url")
   joinPolicy            ProjectJoinPolicy @default(open) @map("join_policy")
@@ -300,6 +348,7 @@ model Project {
 
   @@index([country])
   @@index([language])
+  @@index([orgId, visibility])
   @@map("projects")
 }
 

@@ -1,4 +1,6 @@
+import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+import { visibleProjectsWhere, getUserActiveOrgs } from '@/lib/orgs'
 import { BrowseProjectsClient, type BrowseProject } from '@/components/platform/browse-projects-client'
 import {
   COUNTRIES as ISO_COUNTRIES,
@@ -28,7 +30,7 @@ const TYPE_IMG_KEY: Record<string, string> = {
   'Ocean & Marine': 'water',
 }
 
-async function getBrowseData(): Promise<{
+async function getBrowseData(userId: string | null): Promise<{
   projects: BrowseProject[]
   projectTypes: { id: string; name: string; count: number }[]
   skills: { id: string; name: string; count: number }[]
@@ -38,7 +40,12 @@ async function getBrowseData(): Promise<{
 }> {
   const [projects, projectTypes, skills] = await Promise.all([
     db.project.findMany({
-      where: { status: { in: ['defining', 'needs_help', 'in_progress'] } },
+      where: {
+        status: { in: ['defining', 'needs_help', 'in_progress'] },
+        // Public projects for everyone; members-only projects appear for
+        // members of the owning org (with a lock badge).
+        AND: [visibleProjectsWhere(userId)],
+      },
       orderBy: { createdAt: 'desc' },
       // Ceiling for the fetch-all + client-side-filter approach. Move to
       // real pagination when the catalogue approaches this.
@@ -54,6 +61,8 @@ async function getBrowseData(): Promise<{
         timeCommitmentHrs: true,
         coverImageUrl: true,
         createdAt: true,
+        visibility: true,
+        organisation: { select: { slug: true, name: true } },
         projectType: { select: { id: true, name: true } },
         steps: {
           select: {
@@ -116,6 +125,8 @@ async function getBrowseData(): Promise<{
       needs,
       progress,
       contributors: p.contributions.length,
+      org: p.organisation ? { slug: p.organisation.slug, name: p.organisation.name } : null,
+      membersOnly: p.visibility === 'org_members',
       posted: postedLabel(daysAgo(p.createdAt)),
       sortRecent: daysAgo(p.createdAt),
       sortNeeds: needs,
@@ -184,7 +195,17 @@ export const metadata = {
 }
 
 export default async function BrowseProjectsPage() {
-  const data = await getBrowseData()
+  const { userId } = await auth()
+  const [data, myOrgRows] = await Promise.all([
+    getBrowseData(userId),
+    userId ? getUserActiveOrgs(userId) : Promise.resolve([]),
+  ])
+
+  const myOrgs = myOrgRows.map((row) => ({
+    slug: row.org.slug,
+    name: row.org.name,
+    count: data.projects.filter((p) => p.org?.slug === row.org.slug).length,
+  }))
 
   return (
     <BrowseProjectsClient
@@ -194,6 +215,7 @@ export default async function BrowseProjectsPage() {
       locations={data.locations}
       countries={data.countries}
       languages={data.languages}
+      myOrgs={myOrgs}
     />
   )
 }

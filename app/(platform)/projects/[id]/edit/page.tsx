@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+import { isOrgAdminOfProject } from '@/lib/orgs'
 import { COUNTRIES } from '@/lib/locales'
 import {
   EditProjectForm,
@@ -87,8 +88,9 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
 
   if (!project) notFound()
 
-  // Authz: only the lead can edit. Non-leads bounce to the project view.
-  if (project.contributions.length === 0) {
+  // Authz: the lead — or an admin of the owning organisation (spec D4) —
+  // can edit. Everyone else bounces to the project view.
+  if (project.contributions.length === 0 && !(await isOrgAdminOfProject(id, userId))) {
     redirect(`/projects/${id}`)
   }
 

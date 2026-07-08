@@ -31,6 +31,10 @@ export interface CreateProjectInput {
   languageCode: string | null
   remote: 'yes' | 'some' | 'no'
   joinPolicy: 'open' | 'approval_required'
+  /** Owning organisation (the creator must be an active member), or null. */
+  orgId: string | null
+  /** org_members is only valid together with orgId. */
+  visibility: 'public' | 'org_members'
   projectTypeId: string | null
   blueprintId: string | null
   /** Parent blueprint when saving a new blueprint as a localised variant. */
@@ -67,6 +71,30 @@ export async function launchProjectAction(
       success: false,
       error: e instanceof Error ? e.message : 'Locale code not recognised.',
     }
+  }
+
+  // Org ownership: the creator must be an active member of an active org
+  // (spec invariant 2), and members-only visibility requires an org.
+  let orgId: string | null = null
+  let visibility: 'public' | 'org_members' = 'public'
+  let orgSlug: string | null = null
+  if (data.orgId) {
+    const membership = await db.userOrganisation.findUnique({
+      where: { userId_orgId: { userId, orgId: data.orgId } },
+      select: { leftAt: true, org: { select: { status: true, slug: true } } },
+    })
+    if (!membership || membership.leftAt !== null) {
+      return { success: false, error: 'You are not a member of that organisation.' }
+    }
+    if (membership.org.status !== 'active') {
+      return {
+        success: false,
+        error: 'That organisation is not active yet, so it cannot own projects.',
+      }
+    }
+    orgId = data.orgId
+    orgSlug = membership.org.slug
+    visibility = data.visibility === 'org_members' ? 'org_members' : 'public'
   }
 
   // Verify blueprint id if supplied, and inherit its locale when the user
@@ -136,6 +164,8 @@ export async function launchProjectAction(
           // 'yes' or 'some' → remote contributors welcome.
           remoteOk: data.remote === 'yes' || data.remote === 'some',
           joinPolicy: data.joinPolicy,
+          orgId,
+          visibility,
           projectTypeId: data.projectTypeId,
           blueprintId,
         },
@@ -196,7 +226,9 @@ export async function launchProjectAction(
 
       // Skill-match fanout. Find users who list any of this project's step
       // skills as seeking — excluding the creator. Keep it bounded.
-      if (newStepSkillIds.size > 0) {
+      // Members-only projects never fan out: the notification would leak the
+      // title to people outside the organisation.
+      if (newStepSkillIds.size > 0 && visibility === 'public') {
         const matchers = await tx.userSkill.findMany({
           where: {
             skillId: { in: Array.from(newStepSkillIds) },
@@ -237,6 +269,7 @@ export async function launchProjectAction(
     revalidatePath('/projects')
     revalidatePath('/my-projects')
     revalidatePath('/notifications')
+    if (orgSlug) revalidatePath(`/orgs/${orgSlug}`)
     return { success: true, data: { projectId: project.id } }
   } catch {
     return { success: false, error: 'Could not launch the project.' }

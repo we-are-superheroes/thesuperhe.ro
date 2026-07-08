@@ -508,6 +508,24 @@ function NotificationRow({
             )
           })()}
 
+        {/* Organisation invites deep-link to the org page, where the code
+            from the notification body can be redeemed. */}
+        {item.type === 'invite_received' &&
+          (() => {
+            const orgSlug = (item.data as { orgSlug?: string } | null)?.orgSlug
+            if (!orgSlug) return null
+            return (
+              <Link
+                href={`/orgs/${orgSlug}`}
+                onClick={(e) => e.stopPropagation()}
+                className="inline-flex w-fit items-center gap-1 text-xs font-medium text-amber-500 hover:underline"
+              >
+                Open the organisation page
+                <ArrowRight className="size-3" strokeWidth={2.5} />
+              </Link>
+            )
+          })()}
+
         {/* Generic deep link for non-actionable rows when a project is attached */}
         {item.type !== 'message_received' && !ACTIONABLE_TYPES.has(item.type) && item.project && (
           <Link

@@ -20,6 +20,7 @@ import {
   type UpdatesFeedItem,
 } from '@/components/platform/project-updates'
 import { isCurrentUserAdmin } from '@/lib/auth'
+import { canViewProject } from '@/lib/orgs'
 import { AVATAR_GRADIENTS, initialOf, initialsOf } from '@/lib/avatar'
 
 /* ================================================================
@@ -58,9 +59,19 @@ export async function generateMetadata({ params }: ProjectViewParams) {
   const { id } = await params
   const project = await db.project.findUnique({
     where: { id },
-    select: { title: true, description: true, coverImageUrl: true, location: true },
+    select: {
+      title: true,
+      description: true,
+      coverImageUrl: true,
+      location: true,
+      visibility: true,
+    },
   })
   if (!project) return { title: 'Project not found — The Superhero' }
+  // Members-only projects don't leak their title into tags/crawlers.
+  if (project.visibility !== 'public') {
+    return { title: 'Members-only project — The Superhero' }
+  }
   const description = project.description.split(/\n+/)[0].slice(0, 160)
   return {
     title: `${project.title} — The Superhero`,
@@ -90,6 +101,9 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       timeCommitmentHrs: true,
       coverImageUrl: true,
       createdAt: true,
+      orgId: true,
+      visibility: true,
+      organisation: { select: { slug: true, name: true, type: true } },
       projectType: { select: { name: true } },
       steps: {
         orderBy: { order: 'asc' },
@@ -146,6 +160,10 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   })
 
   if (!project) notFound()
+
+  // Members-only projects are invisible to everyone outside the owning
+  // organisation — same response as a project that doesn't exist.
+  if (!(await canViewProject(project, userId))) notFound()
 
   // Build the public Google Maps URL once — address plus the coarse
   // location so Google can disambiguate; null if neither is set.
@@ -494,6 +512,30 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 </span>
               )}
               <ProjectStatusPill status={project.status} label={statusText} />
+              {project.organisation && (
+                <Link
+                  href={`/orgs/${project.organisation.slug}`}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.15] bg-[rgba(14,26,43,0.6)] px-3 py-1.5 text-xs font-semibold text-fg-primary backdrop-blur-sm transition-colors hover:border-amber-500/50"
+                >
+                  <span
+                    className="flex size-4 items-center justify-center rounded-[5px] text-[9px] font-bold text-white"
+                    style={{
+                      background:
+                        project.organisation.type === 'company'
+                          ? 'linear-gradient(135deg, #1B3A6B, #4A7FD4)'
+                          : 'linear-gradient(135deg, #1A5C40, #3DAF7C)',
+                    }}
+                  >
+                    {project.organisation.name.charAt(0).toUpperCase()}
+                  </span>
+                  {project.organisation.name}
+                </Link>
+              )}
+              {project.visibility === 'org_members' && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/[0.16] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-400 backdrop-blur-sm">
+                  Members only
+                </span>
+              )}
               {isLead && (
                 <Link
                   href={`/projects/${id}/edit#sec-status`}

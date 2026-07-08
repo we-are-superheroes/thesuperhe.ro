@@ -239,6 +239,10 @@ export function EditProjectForm({
         // from them pick their own. Pass a valid default to satisfy the
         // shared validator.
         joinPolicy: 'open',
+        // Blueprints stay organisation-free (org-scoped blueprints are a
+        // later feature) — these only exist to satisfy the shared input type.
+        orgId: null,
+        visibility: 'public',
         projectTypeId: null,
         blueprintId: null,
         parentBlueprintId: null,

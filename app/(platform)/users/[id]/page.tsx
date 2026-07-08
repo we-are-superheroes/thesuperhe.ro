@@ -88,7 +88,13 @@ export default async function UserProfilePage({ params }: Params) {
           },
         },
         contributions: {
-          where: { projectStepId: null, status: 'active' },
+          // Public projects only: members-only org projects must not leak
+          // their titles through a member's public profile.
+          where: {
+            projectStepId: null,
+            status: 'active',
+            project: { visibility: 'public' },
+          },
           orderBy: { joinedAt: 'desc' },
           select: {
             role: true,

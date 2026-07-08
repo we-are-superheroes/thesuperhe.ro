@@ -1,5 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+import { visibleProjectsWhere } from '@/lib/orgs'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -134,6 +135,7 @@ async function getDashboardData(userId: string) {
       where: {
         status: { in: ['defining', 'needs_help', 'in_progress'] },
         id: { notIn: projectIds.length > 0 ? projectIds : ['__none__'] },
+        AND: [visibleProjectsWhere(userId)],
         steps: {
           some: {
             status: 'needs_help',

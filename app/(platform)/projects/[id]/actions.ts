@@ -4,6 +4,7 @@ import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { ensureUserExists } from '@/lib/users'
+import { canViewProject } from '@/lib/orgs'
 import { notify, getProjectLeadIds } from '@/lib/notifications'
 import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import type { ServerActionResult } from '@/types'
@@ -24,9 +25,14 @@ export async function joinProjectAction(
 
   const project = await db.project.findUnique({
     where: { id: projectId },
-    select: { id: true, title: true, joinPolicy: true },
+    select: { id: true, title: true, joinPolicy: true, visibility: true, orgId: true },
   })
   if (!project) return { success: false, error: 'Project not found.' }
+  // Members-only projects can only be joined from inside the owning org.
+  // Same response as a missing project — don't confirm it exists.
+  if (!(await canViewProject(project, userId))) {
+    return { success: false, error: 'Project not found.' }
+  }
   const approvalRequired = project.joinPolicy === 'approval_required'
 
   // Project-level uniqueness must be checked manually because Postgres treats
