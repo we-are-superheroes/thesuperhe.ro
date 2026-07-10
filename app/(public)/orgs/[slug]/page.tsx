@@ -27,7 +27,7 @@ import {
 
 interface Params {
   params: Promise<{ slug: string }>
-  searchParams?: Promise<{ invite?: string }>
+  searchParams?: Promise<{ invite?: string; from?: string }>
 }
 
 const TYPE_IMG_KEY: Record<string, string> = {
@@ -109,10 +109,19 @@ export default async function OrgPage({ params, searchParams }: Params) {
   // Invite links (/orgs/<slug>?invite=CODE) pre-fill the join box so a
   // shared URL is all a new member needs. Redemption still validates
   // server-side.
-  const rawInvite = (await searchParams)?.invite
+  const sp = await searchParams
+  const rawInvite = sp?.invite
   const inviteCode =
     typeof rawInvite === 'string' && /^[A-Z0-9-]{4,40}$/i.test(rawInvite.trim())
       ? rawInvite.trim().toUpperCase()
+      : null
+  // ?from= carries the internal page the visitor arrived from (set by the
+  // org badge on project pages) — client-side navigation never updates
+  // document.referrer, so the origin must travel in the URL.
+  const rawFrom = sp?.from
+  const from =
+    typeof rawFrom === 'string' && /^\/projects(\/[A-Za-z0-9-]+)?$/.test(rawFrom)
+      ? rawFrom
       : null
   const { userId } = await auth()
 
@@ -255,6 +264,14 @@ export default async function OrgPage({ params, searchParams }: Params) {
       role: admin ? 'admin' : member ? 'member' : 'visitor',
     },
     inviteCode,
+    backLink: from
+      ? {
+          href: from,
+          label: from === '/projects' ? 'Back to projects' : 'Back to the project',
+        }
+      : userId
+        ? { href: '/organisations', label: 'Back to organisations' }
+        : { href: '/projects', label: 'Back to projects' },
     stats: {
       members: activeMemberCount,
       hours: Math.round(attribution.orgHours + attribution.sharedHours),

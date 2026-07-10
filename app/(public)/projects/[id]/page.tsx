@@ -520,7 +520,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               <ProjectStatusPill status={project.status} label={statusText} />
               {project.organisation && (
                 <Link
-                  href={`/orgs/${project.organisation.slug}`}
+                  href={`/orgs/${project.organisation.slug}?from=/projects/${project.id}`}
                   className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.15] bg-[rgba(14,26,43,0.6)] px-3 py-1.5 text-xs font-semibold text-fg-primary backdrop-blur-sm transition-colors hover:border-amber-500/50"
                 >
                   <span
