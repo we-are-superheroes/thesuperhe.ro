@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { MapPin, Star, Users, MessageSquare, Check } from 'lucide-react'
+import { MapPin, Star, Users, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export interface ProfileProject {
@@ -11,7 +11,7 @@ export interface ProfileProject {
   type: string
   imgKey: string
   location: string
-  role: 'lead' | 'contributor' | 'advisor' | 'observer'
+  role: 'lead' | 'contributor'
   status: 'active' | 'finished'
   progress: number
   since: string
@@ -40,13 +40,10 @@ const IMG_CLASS: Record<string, string> = {
 const ROLE_LABEL: Record<ProfileProject['role'], string> = {
   lead: 'Leading',
   contributor: 'Contributing',
-  advisor: 'Advising',
-  observer: 'Watching',
 }
 
 function RoleIcon({ role, className }: { role: ProfileProject['role']; className?: string }) {
   if (role === 'lead') return <Star className={cn('fill-current', className)} strokeWidth={0} />
-  if (role === 'advisor') return <MessageSquare className={className} strokeWidth={2.5} />
   return <Users className={className} strokeWidth={2.5} />
 }
 
@@ -130,11 +127,10 @@ function TabButton({
 
 function ProjectCard({ project: p }: { project: ProfileProject }) {
   const finished = p.status === 'finished'
-  const roleClass = (() => {
-    if (p.role === 'lead') return 'text-amber-500 border-amber-500/40'
-    if (p.role === 'advisor') return 'text-green-300 border-green-500/40'
-    return 'text-blue-300 border-blue-500/40'
-  })()
+  const roleClass =
+    p.role === 'lead'
+      ? 'text-amber-500 border-amber-500/40'
+      : 'text-blue-300 border-blue-500/40'
   return (
     <Link
       href={`/projects/${p.id}`}

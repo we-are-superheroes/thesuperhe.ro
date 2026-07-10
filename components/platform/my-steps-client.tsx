@@ -22,6 +22,7 @@ export interface MyStep {
   name: string
   project: { id: string; title: string }
   stepStatus: string
+  helpWanted: boolean
   skill: string | null
   isCoordinator: boolean
   myHoursLogged: number
@@ -34,17 +35,13 @@ type GroupKey = 'none' | 'project'
 
 const STATUS_LABEL: Record<string, string> = {
   open: 'Open',
-  defining: 'Being defined',
   in_progress: 'In progress',
-  needs_help: 'Needs help',
   completed: 'Completed',
 }
 
 const STATUS_PILL_CLASSES: Record<string, string> = {
   open: 'border-white/[0.12] bg-bg-surface-2 text-fg-secondary',
-  defining: 'border-blue-400/40 bg-blue-500/10 text-blue-200',
   in_progress: 'border-blue-400/50 bg-blue-500/[0.18] text-blue-200',
-  needs_help: 'border-amber-500/50 bg-amber-500/[0.14] text-amber-400',
   completed: 'border-green-500/40 bg-green-500/[0.14] text-green-300',
 }
 
@@ -369,6 +366,11 @@ function StepRow({
             >
               {STATUS_LABEL[step.stepStatus] ?? step.stepStatus}
             </span>
+            {step.helpWanted && step.stepStatus !== 'completed' && (
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-amber-500/50 bg-amber-500/[0.14] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-400">
+                Needs help
+              </span>
+            )}
             {step.isCoordinator && (
               <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/[0.10] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-500">
                 Coordinator

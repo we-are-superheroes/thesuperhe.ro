@@ -32,6 +32,7 @@ import {
 export type NotificationType =
   | 'project_join'
   | 'project_join_request'
+  | 'project_join_declined'
   | 'project_leave'
   | 'project_updated'
   | 'project_status_changed'
@@ -341,6 +342,7 @@ function Feed({
 const ICON_CLASS: Record<NotificationType, string> = {
   project_join: 'bg-blue-500/[0.16] text-blue-300',
   project_join_request: 'bg-amber-500/[0.16] text-amber-500',
+  project_join_declined: 'bg-bg-surface-3 text-fg-secondary',
   project_leave: 'bg-bg-surface-3 text-fg-secondary',
   project_updated: 'bg-bg-surface-3 text-fg-secondary',
   project_status_changed: 'bg-bg-surface-3 text-fg-secondary',
@@ -362,6 +364,7 @@ const ICON_CLASS: Record<NotificationType, string> = {
 const ICON_FOR: Record<NotificationType, React.ComponentType<{ className?: string }>> = {
   project_join: UserPlus,
   project_join_request: UserPlus,
+  project_join_declined: MessageSquare,
   project_leave: UserPlus,
   project_updated: MessageSquare,
   project_status_changed: Sparkles,

@@ -1,6 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { visibleProjectsWhere } from '@/lib/orgs'
+import { normaliseStepStatus, stepNeedsHelp } from '@/lib/step-status'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -49,7 +50,7 @@ async function getDashboardData(userId: string) {
             coverImageUrl: true,
             projectType: { select: { name: true } },
             steps: {
-              select: { id: true, status: true },
+              select: { id: true, status: true, helpWanted: true },
             },
           },
         },
@@ -76,6 +77,7 @@ async function getDashboardData(userId: string) {
     id: string
     title: string
     status: string
+    helpWanted: boolean
     estimatedHrs: number | null
     project: { title: string }
     skills: Array<{ skill: { name: string } }>
@@ -85,12 +87,13 @@ async function getDashboardData(userId: string) {
     mySteps = await db.projectStep.findMany({
       where: {
         projectId: { in: projectIds },
-        status: { in: ['needs_help', 'in_progress', 'defining', 'open'] },
+        status: { not: 'completed' },
       },
       select: {
         id: true,
         title: true,
         status: true,
+        helpWanted: true,
         estimatedHrs: true,
         project: { select: { title: true } },
         skills: { select: { skill: { select: { name: true } } } },
@@ -100,21 +103,19 @@ async function getDashboardData(userId: string) {
     })
   }
 
-  // Sort steps by status priority: needs_help > in_progress > not_started
+  // Sort steps by urgency: asking for help > in progress > open
   const statusPriority: Record<string, number> = {
-    needs_help: 0,
     in_progress: 1,
-    defining: 2,
-    open: 3,
+    open: 2,
   }
-  mySteps.sort((a, b) => (statusPriority[a.status] ?? 99) - (statusPriority[b.status] ?? 99))
+  const stepPriority = (s: (typeof mySteps)[number]) =>
+    stepNeedsHelp(s) ? 0 : (statusPriority[normaliseStepStatus(s.status, true)] ?? 99)
+  mySteps.sort((a, b) => stepPriority(a) - stepPriority(b))
 
   // Open steps count (across all contributed projects)
   let openStepCount = 0
   for (const c of pinnedProjects) {
-    openStepCount += c.project.steps.filter(
-      (s) => s.status === 'needs_help' || s.status === 'in_progress' || s.status === 'defining' || s.status === 'open',
-    ).length
+    openStepCount += c.project.steps.filter((s) => s.status !== 'completed').length
   }
 
   // Suggested projects (skill match) — only if user has skills
@@ -138,7 +139,8 @@ async function getDashboardData(userId: string) {
         AND: [visibleProjectsWhere(userId)],
         steps: {
           some: {
-            status: 'needs_help',
+            helpWanted: true,
+            status: { not: 'completed' },
             skills: {
               some: { skillId: { in: userSkillIds } },
             },
@@ -360,7 +362,7 @@ export default async function DashboardPage() {
                   const doneCount = steps.filter((s) => s.status === 'completed').length
                   const totalSteps = steps.length
                   const progressPct = totalSteps > 0 ? Math.round((doneCount / totalSteps) * 100) : 0
-                  const needsHelpCount = steps.filter((s) => s.status === 'needs_help').length
+                  const needsHelpCount = steps.filter(stepNeedsHelp).length
 
                   return (
                     <Link
@@ -458,7 +460,9 @@ export default async function DashboardPage() {
                     key={step.id}
                     className={`flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-2 px-4 py-4 transition-colors duration-fast hover:bg-bg-surface-2 sm:px-6 sm:py-5 ${i < mySteps.length - 1 ? 'border-b border-white/[0.08]' : ''}`}
                   >
-                    <StepStatusIndicator status={step.status} />
+                    <StepStatusIndicator
+                      status={stepNeedsHelp(step) ? 'needs_help' : normaliseStepStatus(step.status, true)}
+                    />
                     <div className="flex min-w-0 flex-1 flex-col gap-1">
                       <span className="truncate text-base font-medium text-fg-primary">
                         {step.title}

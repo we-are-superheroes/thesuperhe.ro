@@ -1,6 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { visibleProjectsWhere, getUserActiveOrgs } from '@/lib/orgs'
+import { stepNeedsHelp } from '@/lib/step-status'
 import { BrowseProjectsClient, type BrowseProject } from '@/components/platform/browse-projects-client'
 import {
   COUNTRIES as ISO_COUNTRIES,
@@ -67,6 +68,7 @@ async function getBrowseData(userId: string | null): Promise<{
         steps: {
           select: {
             status: true,
+            helpWanted: true,
             skills: {
               select: {
                 skill: { select: { id: true, name: true } },
@@ -97,7 +99,7 @@ async function getBrowseData(userId: string | null): Promise<{
     const totalSteps = p.steps.length
     const doneSteps = p.steps.filter((s) => s.status === 'completed').length
     const progress = totalSteps > 0 ? Math.round((doneSteps / totalSteps) * 100) : 0
-    const needs = p.steps.filter((s) => s.status === 'needs_help').length
+    const needs = p.steps.filter(stepNeedsHelp).length
 
     // Unique skill names across all steps
     const skillNameSet = new Set<string>()

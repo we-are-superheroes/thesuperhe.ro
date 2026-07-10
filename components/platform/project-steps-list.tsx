@@ -6,59 +6,38 @@ import { ArrowRight, ChevronDown, Check, LogIn, Pencil } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { joinStepAction, leaveStepAction } from '@/app/(platform)/projects/[id]/actions'
 import {
-  setStepStatusAction,
+  completeStepAction,
+  reopenStepAction,
+  setStepHelpWantedAction,
   setStepCoordinatorAction,
 } from '@/app/(platform)/projects/[id]/step-actions'
+import { normaliseStepStatus, type LiveStepStatus } from '@/lib/step-status'
 import {
   StepTimeLog,
   type StepTimeLogData,
 } from '@/components/platform/step-time-log'
 
 /* ================================================================
-   Step status — new vocabulary (matches the Project View design).
+   Step status — maintained by the system, not a menu:
 
-     open         — Available, nobody on it
-     defining     — Still being scoped
-     in_progress  — Actively being worked on
-     needs_help   — Asking for hands (amber, attention-grabbing)
-     completed    — Done
+     open         — nobody on it (joining flips it onwards)
+     in_progress  — has people on it
+     completed    — done (Mark complete / Reopen)
 
-   Any signed-in member can transition any step freely between
-   states via the popover menu on each step card.
+   "Needs help" is the orthogonal helpWanted flag — a step can be
+   in progress AND asking for more hands. The lead and the people
+   on a step get two controls: the help toggle and complete/reopen.
    ================================================================ */
 
-export type StepStatusKey =
-  | 'open'
-  | 'defining'
-  | 'in_progress'
-  | 'needs_help'
-  | 'completed'
-
-const STATUS_ORDER: StepStatusKey[] = [
-  'open',
-  'defining',
-  'in_progress',
-  'needs_help',
-  'completed',
-]
+export type StepStatusKey = LiveStepStatus
 
 const STATUS_LABEL: Record<StepStatusKey, string> = {
   open: 'Open',
-  defining: 'Being defined',
   in_progress: 'In progress',
-  needs_help: 'Needs help',
   completed: 'Completed',
 }
 
-const STATUS_HINT: Record<StepStatusKey, string> = {
-  open: 'Available · nobody on it',
-  defining: 'Still being scoped',
-  in_progress: 'Actively being worked on',
-  needs_help: 'Asking for help',
-  completed: 'Done',
-}
-
-type FilterKey = 'all' | StepStatusKey
+type FilterKey = 'all' | 'needs_help' | StepStatusKey
 
 export interface StepJoiner {
   id: string
@@ -73,6 +52,7 @@ export interface StepCardData {
   title: string
   description: string | null
   status: string
+  helpWanted: boolean
   order: number
   totalSteps: number
   estimatedHrs: number | null
@@ -97,7 +77,6 @@ export function ProjectStepsList({
   stepCounts: {
     needs_help: number
     in_progress: number
-    defining: number
     open: number
     completed: number
   }
@@ -107,48 +86,55 @@ export function ProjectStepsList({
 }) {
   const [filter, setFilter] = useState<FilterKey>('all')
   const [showAll, setShowAll] = useState(false)
+  // Optimistic local overrides for status + help flag, ahead of the
+  // server round-trip.
   const [localStatuses, setLocalStatuses] = useState<Record<string, StepStatusKey>>(
     {},
   )
+  const [localHelp, setLocalHelp] = useState<Record<string, boolean>>({})
 
-  // Pull the live status for a given step, preferring the optimistic local
-  // override over the server-rendered prop.
   const statusOf = (s: StepCardData): StepStatusKey =>
-    (localStatuses[s.id] ?? s.status) as StepStatusKey
+    localStatuses[s.id] ?? normaliseStepStatus(s.status, s.joiners.length > 0)
+  const helpOf = (s: StepCardData): boolean =>
+    (localHelp[s.id] ?? (s.helpWanted || s.status === 'needs_help')) &&
+    statusOf(s) !== 'completed'
+
+  const matchesFilter = (s: StepCardData): boolean => {
+    if (filter === 'all') return true
+    if (filter === 'needs_help') return helpOf(s)
+    return statusOf(s) === filter
+  }
 
   const filtered = useMemo(() => {
-    if (filter === 'all') return steps
-    return steps.filter((s) => statusOf(s) === filter)
+    return steps.filter(matchesFilter)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [steps, filter, localStatuses])
+  }, [steps, filter, localStatuses, localHelp])
 
   const visible = showAll ? filtered : filtered.slice(0, INITIAL_VISIBLE)
   const hiddenCount = filtered.length - visible.length
 
   const liveCounts = useMemo(() => {
-    // If anyone has changed a status locally, recompute counts so the chips
-    // match what they're seeing.
-    if (Object.keys(localStatuses).length === 0) {
-      return {
-        all: steps.length,
-        needs_help: stepCounts.needs_help,
-        in_progress: stepCounts.in_progress,
-        defining: stepCounts.defining,
-        open: stepCounts.open,
-        completed: stepCounts.completed,
-      }
+    // If nothing changed locally, trust the server-computed counts.
+    if (
+      Object.keys(localStatuses).length === 0 &&
+      Object.keys(localHelp).length === 0
+    ) {
+      return { all: steps.length, ...stepCounts }
     }
-    const c = { needs_help: 0, in_progress: 0, defining: 0, open: 0, completed: 0 }
+    const c = { needs_help: 0, in_progress: 0, open: 0, completed: 0 }
     for (const s of steps) {
-      const k = statusOf(s)
-      if (k in c) c[k as keyof typeof c] += 1
+      c[statusOf(s)] += 1
+      if (helpOf(s)) c.needs_help += 1
     }
     return { all: steps.length, ...c }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [steps, stepCounts, localStatuses])
+  }, [steps, stepCounts, localStatuses, localHelp])
 
   const handleStatusChange = (stepId: string, next: StepStatusKey) => {
     setLocalStatuses((prev) => ({ ...prev, [stepId]: next }))
+  }
+  const handleHelpChange = (stepId: string, next: boolean) => {
+    setLocalHelp((prev) => ({ ...prev, [stepId]: next }))
   }
 
   return (
@@ -172,12 +158,6 @@ export function ProjectStepsList({
           label="In progress"
           count={liveCounts.in_progress}
           onClick={() => setFilter('in_progress')}
-        />
-        <FilterChip
-          active={filter === 'defining'}
-          label="Being defined"
-          count={liveCounts.defining}
-          onClick={() => setFilter('defining')}
         />
         <FilterChip
           active={filter === 'open'}
@@ -206,10 +186,12 @@ export function ProjectStepsList({
               projectId={projectId}
               step={step}
               status={statusOf(step)}
+              helpWanted={helpOf(step)}
               isSignedIn={isSignedIn}
               isMember={isMember}
               isLead={isLead}
               onStatusChange={(next) => handleStatusChange(step.id, next)}
+              onHelpChange={(next) => handleHelpChange(step.id, next)}
             />
           ))
         )}
@@ -276,27 +258,28 @@ function StepCard({
   projectId,
   step,
   status,
+  helpWanted,
   isSignedIn,
   isMember,
   isLead,
   onStatusChange,
+  onHelpChange,
 }: {
   projectId: string
   step: StepCardData
   status: StepStatusKey
+  helpWanted: boolean
   isSignedIn: boolean
   isMember: boolean
   isLead: boolean
   onStatusChange: (next: StepStatusKey) => void
+  onHelpChange: (next: boolean) => void
 }) {
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
-  const isNeedsHelp = status === 'needs_help'
-  const isInProgress = status === 'in_progress'
+  const isNeedsHelp = helpWanted && status !== 'completed'
   const isDone = status === 'completed'
-  const isDefining = status === 'defining'
-  const isOpen = status === 'open'
 
   const join = () => {
     setError(null)
@@ -340,16 +323,23 @@ function StepCard({
             {step.title}
           </span>
         </div>
-        <StatusPillButton
-          projectId={projectId}
-          stepId={step.id}
-          status={status}
-          isSignedIn={isSignedIn}
-          isMember={isMember}
-          isLead={isLead}
-          meOnStep={step.meOnStep}
-          onChange={onStatusChange}
-        />
+        <div className="flex shrink-0 flex-col items-end gap-1.5 sm:flex-row sm:items-center sm:gap-2">
+          {isNeedsHelp && (
+            <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-amber-500/50 bg-amber-500/[0.14] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-amber-400 shadow-glow-amber">
+              <HelpGlyph />
+              Needs help
+            </span>
+          )}
+          <span
+            className={cn(
+              'inline-flex items-center gap-2 whitespace-nowrap rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider',
+              STATUS_PILL_CLASSES[status],
+            )}
+          >
+            <StatusGlyph status={status} />
+            {STATUS_LABEL[status]}
+          </span>
+        </div>
       </div>
 
       {/* Description (skip on completed cards) */}
@@ -387,18 +377,19 @@ function StepCard({
         </div>
 
         <StepAction
+          projectId={projectId}
           step={step}
+          status={status}
+          helpWanted={helpWanted}
           isSignedIn={isSignedIn}
           isMember={isMember}
-          isJoinable={isNeedsHelp || isOpen || isDefining || isInProgress}
-          isInProgress={isInProgress}
-          isDone={isDone}
-          isDefining={isDefining}
-          isOpen={isOpen}
+          canManage={isSignedIn && isMember && (isLead || step.meOnStep)}
           pending={pending}
           error={error}
           onJoin={join}
           onLeave={leave}
+          onStatusChange={onStatusChange}
+          onHelpChange={onHelpChange}
         />
       </div>
 
@@ -619,224 +610,38 @@ function firstName(name: string): string {
   return name.split(/\s+/)[0] ?? name
 }
 
-/* ================================================================
-   Status pill — visible button + popover menu
-   ================================================================ */
-
-function StatusPillButton({
-  projectId,
-  stepId,
-  status,
-  isSignedIn,
-  isMember,
-  isLead,
-  meOnStep,
-  onChange,
-}: {
-  projectId: string
-  stepId: string
-  status: StepStatusKey
-  isSignedIn: boolean
-  isMember: boolean
-  isLead: boolean
-  meOnStep: boolean
-  onChange: (next: StepStatusKey) => void
-}) {
-  const [open, setOpen] = useState(false)
-  const [, startTransition] = useTransition()
-  const wrapRef = useRef<HTMLDivElement>(null)
-
-  // Click outside / Esc to close.
-  useEffect(() => {
-    if (!open) return
-    const onDown = (e: MouseEvent) => {
-      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false)
-    }
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
-    document.addEventListener('mousedown', onDown)
-    document.addEventListener('keydown', onKey)
-    return () => {
-      document.removeEventListener('mousedown', onDown)
-      document.removeEventListener('keydown', onKey)
-    }
-  }, [open])
-
-  // The lead can change any step; everyone else must join the step first
-  // (enforced server-side in setStepStatusAction too).
-  const canEdit = isSignedIn && isMember && (isLead || meOnStep)
-
-  const pick = (next: StepStatusKey) => {
-    setOpen(false)
-    if (next === status) return
-    const prev = status
-    onChange(next) // optimistic
-    startTransition(async () => {
-      const result = await setStepStatusAction(projectId, stepId, next)
-      if (!result.success) {
-        // Rollback on failure.
-        onChange(prev)
-      }
-    })
-  }
-
-  return (
-    <div ref={wrapRef} className="relative shrink-0">
-      <button
-        type="button"
-        onClick={() => canEdit && setOpen((v) => !v)}
-        aria-haspopup="menu"
-        aria-expanded={open}
-        disabled={!canEdit}
-        title={
-          !canEdit && isSignedIn && isMember
-            ? 'Join this step to change its status'
-            : undefined
-        }
-        className={cn(
-          'inline-flex items-center gap-2 whitespace-nowrap rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider transition-all',
-          STATUS_PILL_CLASSES[status],
-          canEdit
-            ? 'cursor-pointer hover:brightness-110'
-            : 'cursor-default',
-        )}
-      >
-        <StatusGlyph status={status} />
-        {STATUS_LABEL[status]}
-        {canEdit && (
-          <ChevronDown
-            className={cn(
-              'size-3 opacity-60 transition-transform',
-              open && 'rotate-180',
-            )}
-            strokeWidth={2.5}
-          />
-        )}
-      </button>
-
-      {open && (
-        <div
-          role="menu"
-          className="absolute right-0 top-full z-50 mt-2 flex w-[260px] flex-col gap-0.5 rounded-xl border border-neutral-700 bg-bg-surface-2 p-1.5 shadow-lg"
-        >
-          {STATUS_ORDER.map((s, idx) => (
-            <>
-              {s === 'completed' && (
-                <div key="sep" className="my-1 h-px bg-white/[0.08]" />
-              )}
-              <button
-                key={s}
-                type="button"
-                role="menuitem"
-                onClick={() => pick(s)}
-                className={cn(
-                  'flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-sm text-fg-primary transition-colors hover:bg-bg-surface-3',
-                  s === status && 'bg-amber-500/[0.06]',
-                )}
-              >
-                <span
-                  className={cn(
-                    'inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider',
-                    STATUS_PILL_CLASSES[s],
-                  )}
-                >
-                  <StatusGlyph status={s} small />
-                  {STATUS_LABEL[s]}
-                </span>
-                <span className="ml-1 text-xs text-fg-tertiary">
-                  {STATUS_HINT[s]}
-                </span>
-                {s === status && (
-                  <Check
-                    className="ml-auto size-3.5 text-amber-500"
-                    strokeWidth={2.5}
-                  />
-                )}
-              </button>
-              {idx === -1 ? null : null}
-            </>
-          ))}
-          <div className="px-2 pb-1 pt-2 text-[11px] leading-snug text-fg-tertiary">
-            Anyone in the project can change a step&apos;s state.
-          </div>
-        </div>
-      )}
-    </div>
-  )
-}
-
 /* ── Status visuals ─────────────────────────────────────────────── */
 
 const STATUS_PILL_CLASSES: Record<StepStatusKey, string> = {
   open: 'border-white/[0.12] bg-bg-surface-2 text-fg-secondary',
-  defining: 'border-blue-400/40 bg-blue-500/10 text-blue-200',
   in_progress: 'border-blue-400/50 bg-blue-500/[0.18] text-blue-200',
-  needs_help:
-    'border-amber-500/50 bg-amber-500/[0.14] text-amber-400 shadow-glow-amber',
   completed: 'border-green-500/40 bg-green-500/[0.14] text-green-300',
 }
 
-function StatusGlyph({
-  status,
-  small = false,
-}: {
-  status: StepStatusKey
-  small?: boolean
-}) {
-  const sz = small ? 'size-3' : 'size-3.5'
+function HelpGlyph() {
+  return (
+    <span className="inline-flex size-3.5 items-center justify-center rounded-full bg-amber-500 font-display text-[9px] font-bold leading-none text-amber-900 shadow-[0_0_6px_rgba(244,165,53,0.7)]">
+      !
+    </span>
+  )
+}
+
+function StatusGlyph({ status }: { status: StepStatusKey }) {
   if (status === 'open') {
     return (
-      <span
-        className={cn(
-          sz,
-          'rounded-full border-[1.5px] border-current bg-transparent',
-        )}
-      />
-    )
-  }
-  if (status === 'defining') {
-    return (
-      <span
-        className={cn(
-          sz,
-          'relative rounded-full border-[1.5px] border-dashed border-blue-300',
-        )}
-      >
-        <span className="absolute left-1/2 top-1/2 h-px w-2 -translate-x-1/2 -translate-y-1/2 -rotate-45 bg-blue-300" />
-      </span>
+      <span className="size-3.5 rounded-full border-[1.5px] border-current bg-transparent" />
     )
   }
   if (status === 'in_progress') {
     return (
-      <span
-        className={cn(
-          sz,
-          'relative inline-flex items-center justify-center rounded-full border-[1.5px] border-blue-400',
-        )}
-      >
+      <span className="relative inline-flex size-3.5 items-center justify-center rounded-full border-[1.5px] border-blue-400">
         <span className="size-1.5 animate-pulse rounded-full bg-blue-300" />
-      </span>
-    )
-  }
-  if (status === 'needs_help') {
-    return (
-      <span
-        className={cn(
-          sz,
-          'inline-flex items-center justify-center rounded-full bg-amber-500 font-display text-[9px] font-bold leading-none text-amber-900 shadow-[0_0_6px_rgba(244,165,53,0.7)]',
-        )}
-      >
-        !
       </span>
     )
   }
   // completed
   return (
-    <span
-      className={cn(
-        sz,
-        'inline-flex items-center justify-center rounded-full bg-green-500 text-blue-900',
-      )}
-    >
+    <span className="inline-flex size-3.5 items-center justify-center rounded-full bg-green-500 text-blue-900">
       <svg
         viewBox="0 0 24 24"
         fill="none"
@@ -854,79 +659,170 @@ function StatusGlyph({
 
 /* ── Action footer ──────────────────────────────────────────────── */
 
+/**
+ * The footer holds membership (join/leave) plus the only two step controls
+ * that remain: the "Ask for help" toggle and "Mark complete / Reopen".
+ * Controls appear only for people who can actually use them — the project
+ * lead and the people on this step. Status itself moves automatically.
+ */
 function StepAction({
+  projectId,
   step,
+  status,
+  helpWanted,
   isSignedIn,
   isMember,
-  isJoinable,
-  isInProgress,
-  isDone,
-  isDefining,
-  isOpen,
+  canManage,
   pending,
   error,
   onJoin,
   onLeave,
+  onStatusChange,
+  onHelpChange,
 }: {
+  projectId: string
   step: StepCardData
+  status: StepStatusKey
+  helpWanted: boolean
   isSignedIn: boolean
   isMember: boolean
-  isJoinable: boolean
-  isInProgress: boolean
-  isDone: boolean
-  isDefining: boolean
-  isOpen: boolean
+  canManage: boolean
   pending: boolean
   error: string | null
   onJoin: () => void
   onLeave: () => void
+  onStatusChange: (next: StepStatusKey) => void
+  onHelpChange: (next: boolean) => void
 }) {
-  // I'm on the step.
-  if (step.meOnStep) {
+  const [ctrlPending, startCtrl] = useTransition()
+  const [ctrlError, setCtrlError] = useState<string | null>(null)
+  const busy = pending || ctrlPending
+  const isDone = status === 'completed'
+
+  const toggleHelp = () => {
+    setCtrlError(null)
+    const next = !helpWanted
+    onHelpChange(next) // optimistic
+    startCtrl(async () => {
+      const result = await setStepHelpWantedAction(projectId, step.id, next)
+      if (!result.success) {
+        onHelpChange(!next)
+        setCtrlError(result.error)
+      }
+    })
+  }
+
+  const complete = () => {
+    setCtrlError(null)
+    const prev = status
+    onStatusChange('completed') // optimistic
+    onHelpChange(false)
+    startCtrl(async () => {
+      const result = await completeStepAction(projectId, step.id)
+      if (!result.success) {
+        onStatusChange(prev)
+        setCtrlError(result.error)
+      }
+    })
+  }
+
+  const reopen = () => {
+    setCtrlError(null)
+    onStatusChange(step.joiners.length > 0 ? 'in_progress' : 'open') // optimistic
+    startCtrl(async () => {
+      const result = await reopenStepAction(projectId, step.id)
+      if (!result.success) {
+        onStatusChange('completed')
+        setCtrlError(result.error)
+      } else {
+        onStatusChange(
+          normaliseStepStatus(result.data.status, step.joiners.length > 0),
+        )
+      }
+    })
+  }
+
+  const ctrlButtonClass =
+    'cursor-pointer rounded-full border border-neutral-700 px-3 py-1 text-xs text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary disabled:cursor-not-allowed disabled:opacity-60'
+
+  // Signed out: a completed step needs no call to action.
+  if (!isSignedIn) {
+    if (isDone) return <span className="text-sm text-fg-tertiary">Done</span>
     return (
-      <div className="flex items-center gap-3">
-        {error && <span className="text-xs text-red-300">{error}</span>}
-        <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-300">
-          <Check className="size-3.5" strokeWidth={2.5} />
-          You&apos;re on this
-        </span>
-        <button
-          type="button"
-          disabled={pending}
-          onClick={onLeave}
-          className="cursor-pointer text-sm text-fg-tertiary underline-offset-2 transition-colors hover:text-fg-secondary hover:underline disabled:cursor-not-allowed disabled:opacity-60"
-        >
-          {pending ? 'Leaving…' : 'Leave step'}
-        </button>
-      </div>
+      <Link
+        href="/sign-in"
+        className="inline-flex items-center gap-1 text-sm font-medium text-fg-tertiary hover:text-fg-primary"
+      >
+        <LogIn className="size-3.5" />
+        Sign in to join
+      </Link>
     )
   }
-  if (isDone) return <span className="text-sm text-fg-tertiary">Done</span>
 
-  // Anyone who's not on it can join (steps are multi-joiner now).
-  if (isJoinable) {
-    if (!isSignedIn) {
-      return (
-        <Link
-          href="/sign-in"
-          className="inline-flex items-center gap-1 text-sm font-medium text-fg-tertiary hover:text-fg-primary"
-        >
-          <LogIn className="size-3.5" />
-          Sign in to join
-        </Link>
-      )
-    }
-    if (!isMember) {
-      return (
-        <span className="text-sm text-fg-tertiary">Join project to join step</span>
-      )
-    }
+  if (!isMember) {
     return (
-      <div className="flex items-center gap-3">
-        {error && <span className="text-xs text-red-300">{error}</span>}
+      <span className="text-sm text-fg-tertiary">
+        {isDone ? 'Done' : 'Join the project to join this step'}
+      </span>
+    )
+  }
+
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      {(error || ctrlError) && (
+        <span className="text-xs text-red-300">{error ?? ctrlError}</span>
+      )}
+
+      {canManage && !isDone && (
         <button
           type="button"
-          disabled={pending}
+          disabled={busy}
+          onClick={toggleHelp}
+          className={cn(
+            ctrlButtonClass,
+            helpWanted && 'border-amber-500/50 text-amber-400 hover:border-amber-500 hover:text-amber-300',
+          )}
+        >
+          {helpWanted ? 'Withdraw help request' : 'Ask for help'}
+        </button>
+      )}
+      {canManage &&
+        (isDone ? (
+          <button type="button" disabled={busy} onClick={reopen} className={ctrlButtonClass}>
+            Reopen
+          </button>
+        ) : (
+          <button
+            type="button"
+            disabled={busy}
+            onClick={complete}
+            className={cn(ctrlButtonClass, 'border-green-500/40 text-green-300 hover:border-green-500 hover:text-green-200')}
+          >
+            Mark complete
+          </button>
+        ))}
+
+      {step.meOnStep ? (
+        <>
+          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-300">
+            <Check className="size-3.5" strokeWidth={2.5} />
+            You&apos;re on this
+          </span>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={onLeave}
+            className="cursor-pointer text-sm text-fg-tertiary underline-offset-2 transition-colors hover:text-fg-secondary hover:underline disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {pending ? 'Leaving…' : 'Leave step'}
+          </button>
+        </>
+      ) : isDone ? (
+        !canManage && <span className="text-sm text-fg-tertiary">Done</span>
+      ) : (
+        <button
+          type="button"
+          disabled={busy}
           onClick={onJoin}
           className="inline-flex cursor-pointer items-center gap-1 text-sm font-medium text-amber-500 transition-colors hover:text-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
         >
@@ -937,12 +833,7 @@ function StepAction({
               : 'Join too'}
           {!pending && <ArrowRight className="size-3.5" strokeWidth={2.5} />}
         </button>
-      </div>
-    )
-  }
-
-  if (isDefining) return <span className="text-sm text-fg-tertiary">Still being scoped</span>
-  if (isOpen) return <span className="text-sm text-fg-tertiary">Coming up</span>
-  if (isInProgress) return <span className="text-sm text-fg-tertiary">In progress</span>
-  return null
+      )}
+    </div>
+  )
 }

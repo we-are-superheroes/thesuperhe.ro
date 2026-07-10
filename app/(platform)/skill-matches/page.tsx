@@ -25,7 +25,7 @@ import {
    ================================================================ */
 
 const LIVE_PROJECT_STATUSES = ['defining', 'needs_help', 'in_progress'] as const
-const JOINABLE_STEP_STATUSES = ['open', 'defining', 'needs_help', 'in_progress'] as const
+const JOINABLE_STEP_STATUSES = ['open', 'in_progress'] as const
 
 export default async function SkillMatchesPage() {
   const { userId } = await auth()

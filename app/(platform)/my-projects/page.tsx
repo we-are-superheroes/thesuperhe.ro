@@ -1,6 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
+import { normaliseStepStatus, stepNeedsHelp } from '@/lib/step-status'
 import { MyProjectsClient, type MyProject } from '@/components/platform/my-projects-client'
 
 const TYPE_IMG_KEY: Record<string, string> = {
@@ -53,10 +54,8 @@ function dueLabel(due: Date | null): { text: string; urgent: boolean; sort: numb
 }
 
 const STEP_PRIORITY: Record<string, number> = {
-  needs_help: 0,
   in_progress: 1,
-  defining: 2,
-  open: 3,
+  open: 2,
 }
 
 export default async function MyProjectsPage() {
@@ -85,6 +84,7 @@ export default async function MyProjectsPage() {
               id: true,
               title: true,
               status: true,
+              helpWanted: true,
               order: true,
               dueDate: true,
               contributions: {
@@ -119,31 +119,23 @@ export default async function MyProjectsPage() {
     // My next step: any step I've joined that isn't done, ordered by status
     // priority then order. With multi-joiner steps, "joined" is determined by
     // whether the user has an active step-level contribution.
+    const stepPriority = (s: (typeof p.steps)[number]) =>
+      stepNeedsHelp(s) ? 0 : (STEP_PRIORITY[normaliseStepStatus(s.status, true)] ?? 99)
     const mySteps = p.steps
-      .filter(
-        (s) =>
-          s.contributions.length > 0 &&
-          (s.status === 'needs_help' ||
-            s.status === 'in_progress' ||
-            s.status === 'defining' ||
-            s.status === 'open'),
-      )
-      .sort(
-        (a, b) =>
-          (STEP_PRIORITY[a.status] ?? 99) - (STEP_PRIORITY[b.status] ?? 99) || a.order - b.order,
-      )
+      .filter((s) => s.contributions.length > 0 && s.status !== 'completed')
+      .sort((a, b) => stepPriority(a) - stepPriority(b) || a.order - b.order)
     const next = mySteps[0]
     const due = next ? dueLabel(next.dueDate) : null
     const nextStep = next && due
       ? {
           id: next.id,
           name: next.title,
-          // Map StepStatus → card status indicator key
-          status: (next.status === 'needs_help'
+          // Map step state → card status indicator key
+          status: (stepNeedsHelp(next)
             ? 'needs_help'
-            : next.status === 'in_progress'
+            : normaliseStepStatus(next.status, true) === 'in_progress'
               ? 'in_progress'
-              : 'review') as 'needs_help' | 'in_progress' | 'review',
+              : 'open') as 'needs_help' | 'in_progress' | 'open',
           due: due.text,
           urgent: due.urgent,
           dueSort: due.sort,

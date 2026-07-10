@@ -21,6 +21,7 @@ import {
 } from '@/components/platform/project-updates'
 import { isCurrentUserAdmin } from '@/lib/auth'
 import { canViewProject } from '@/lib/orgs'
+import { normaliseStepStatus, stepNeedsHelp } from '@/lib/step-status'
 import { AVATAR_GRADIENTS, initialOf, initialsOf } from '@/lib/avatar'
 
 /* ================================================================
@@ -112,6 +113,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           title: true,
           description: true,
           status: true,
+          helpWanted: true,
           order: true,
           estimatedHrs: true,
           completedAt: true,
@@ -264,10 +266,13 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
 
   const totalSteps = project.steps.length
   const stepsByStatus = {
-    needs_help: project.steps.filter((s) => s.status === 'needs_help').length,
-    in_progress: project.steps.filter((s) => s.status === 'in_progress').length,
-    defining: project.steps.filter((s) => s.status === 'defining').length,
-    open: project.steps.filter((s) => s.status === 'open').length,
+    needs_help: project.steps.filter(stepNeedsHelp).length,
+    in_progress: project.steps.filter(
+      (s) => normaliseStepStatus(s.status, s.contributions.length > 0) === 'in_progress',
+    ).length,
+    open: project.steps.filter(
+      (s) => normaliseStepStatus(s.status, s.contributions.length > 0) === 'open',
+    ).length,
     completed: project.steps.filter((s) => s.status === 'completed').length,
   }
 
@@ -411,6 +416,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       title: s.title,
       description: s.description,
       status: s.status,
+      helpWanted: s.helpWanted,
       order: s.order,
       totalSteps,
       estimatedHrs: s.estimatedHrs,

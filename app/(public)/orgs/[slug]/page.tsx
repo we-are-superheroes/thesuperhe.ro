@@ -10,6 +10,7 @@ import {
   getMemberHours,
 } from '@/lib/orgs'
 import { ORG_TYPE_LABEL, isOrgAdminRole } from '@/lib/org-utils'
+import { stepNeedsHelp } from '@/lib/step-status'
 import { gradientFor, initialsOf } from '@/lib/avatar'
 import {
   OrgPageClient,
@@ -57,7 +58,7 @@ const projectCardSelect = {
   coverImageUrl: true,
   status: true,
   projectType: { select: { name: true } },
-  steps: { select: { status: true } },
+  steps: { select: { status: true, helpWanted: true } },
   contributions: {
     where: { status: 'active' },
     select: { userId: true },
@@ -72,7 +73,7 @@ function toCard(p: {
   coverImageUrl: string | null
   status: string
   projectType: { name: string } | null
-  steps: Array<{ status: string }>
+  steps: Array<{ status: string; helpWanted: boolean }>
   contributions: Array<{ userId: string }>
 }): OrgProjectCard {
   return {
@@ -85,7 +86,7 @@ function toCard(p: {
     membersOnly: p.visibility === 'org_members',
     live: p.status !== 'completed',
     contributors: new Set(p.contributions.map((c) => c.userId)).size,
-    needsHelp: p.steps.filter((s) => s.status === 'needs_help').length,
+    needsHelp: p.steps.filter(stepNeedsHelp).length,
   }
 }
 

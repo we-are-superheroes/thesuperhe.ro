@@ -392,6 +392,10 @@ model ProjectStep {
   order        Int
   estimatedHrs Int?       @map("estimated_hrs")
   status       StepStatus @default(open)
+  // Orthogonal to status: a step can be in progress AND asking for more
+  // hands. Toggled by leads/step joiners; auto-raised when the last joiner
+  // abandons an in-progress step; cleared on completion.
+  helpWanted   Boolean    @default(false) @map("help_wanted")
   dueDate      DateTime?  @map("due_date")
   completedAt  DateTime?  @map("completed_at")
   createdAt    DateTime   @default(now()) @map("created_at")
@@ -488,6 +492,7 @@ model TimeLog {
 enum NotificationType {
   project_join
   project_join_request
+  project_join_declined
   project_leave
   project_updated
   project_status_changed

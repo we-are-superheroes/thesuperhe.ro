@@ -12,35 +12,33 @@ import {
 import type { ServerActionResult } from '@/types'
 
 /* ================================================================
-   setStepStatusAction — free state machine, gated by involvement.
-   The project lead can change any step's status; everyone else must
-   have joined the specific step first. The contribution status on a
-   step-level row is kept in sync (active vs completed) so dashboard
-   counts and "my steps" lists stay coherent. step_completed and
-   step_needs_help notifications fan out on the transitions that
-   matter.
+   Step lifecycle actions. A step's status is maintained by the
+   system (joining/leaving flips open ↔ in_progress); people get two
+   controls: "Mark complete / Reopen" and the "Ask for help" toggle
+   (helpWanted — orthogonal to status, so a step can be in progress
+   AND asking for more hands). All three are gated the same way:
+   the project lead can act on any step, everyone else must have
+   joined that step.
    ================================================================ */
 
-const VALID_STATUSES = new Set<StepStatus>([
-  'open',
-  'defining',
-  'in_progress',
-  'needs_help',
-  'completed',
-])
-
-export async function setStepStatusAction(
+/** Shared gate: the step (with project title), or a friendly error. */
+async function requireStepInvolvement(
   projectId: string,
   stepId: string,
-  next: StepStatus,
-): Promise<ServerActionResult<{ status: StepStatus }>> {
-  const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
-
-  if (!VALID_STATUSES.has(next)) {
-    return { success: false, error: 'Unknown status.' }
-  }
-
+  userId: string,
+): Promise<
+  | { ok: false; error: string }
+  | {
+      ok: true
+      step: {
+        id: string
+        title: string
+        status: StepStatus
+        helpWanted: boolean
+        projectTitle: string
+      }
+    }
+> {
   const step = await db.projectStep.findUnique({
     where: { id: stepId },
     select: {
@@ -48,80 +46,155 @@ export async function setStepStatusAction(
       projectId: true,
       title: true,
       status: true,
-      project: { select: { id: true, title: true } },
+      helpWanted: true,
+      project: { select: { title: true } },
     },
   })
   if (!step || step.projectId !== projectId) {
-    return { success: false, error: 'Step not found.' }
+    return { ok: false, error: 'Step not found.' }
   }
 
-  // Authz: the project lead can change any step; everyone else must have
-  // joined this specific step first.
   const myRows = await db.contribution.findMany({
-    where: {
-      userId,
-      projectId,
-      status: { in: ['active', 'pending'] },
-    },
+    where: { userId, projectId, status: { in: ['active', 'pending'] } },
     select: { projectStepId: true, role: true, status: true },
   })
   const isLead = myRows.some((r) => r.projectStepId === null && r.role === 'lead')
   const onStep = myRows.some((r) => r.projectStepId === stepId && r.status === 'active')
   if (!isLead && !onStep) {
-    if (myRows.length === 0) {
-      return { success: false, error: 'Join the project to change step statuses.' }
+    return {
+      ok: false,
+      error:
+        myRows.length === 0
+          ? 'Join the project to work on its steps.'
+          : 'Join this step before changing it.',
     }
-    return { success: false, error: 'Join this step before changing its status.' }
   }
 
-  const prev = step.status as StepStatus
-  if (prev === next) return { success: true, data: { status: next } }
+  return {
+    ok: true,
+    step: {
+      id: step.id,
+      title: step.title,
+      status: step.status,
+      helpWanted: step.helpWanted,
+      projectTitle: step.project.title,
+    },
+  }
+}
 
-  const actor = await db.user.findUnique({
-    where: { id: userId },
-    select: { name: true },
-  })
-  const actorName = actor?.name ?? 'A contributor'
+async function actorNameOf(userId: string): Promise<string> {
+  const actor = await db.user.findUnique({ where: { id: userId }, select: { name: true } })
+  return actor?.name ?? 'A contributor'
+}
+
+function revalidateStepSurfaces(projectId: string) {
+  revalidatePath(`/projects/${projectId}`)
+  revalidatePath('/my-steps')
+  revalidatePath('/my-projects')
+  revalidatePath('/dashboard')
+  revalidatePath('/notifications')
+}
+
+/** Mark a step done: sets completedAt, clears the help flag, tells the team. */
+export async function completeStepAction(
+  projectId: string,
+  stepId: string,
+): Promise<ServerActionResult<{ status: StepStatus }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const gate = await requireStepInvolvement(projectId, stepId, userId)
+  if (!gate.ok) return { success: false, error: gate.error }
+  if (gate.step.status === 'completed') {
+    return { success: true, data: { status: 'completed' } }
+  }
+
+  const actorName = await actorNameOf(userId)
 
   try {
     await db.$transaction(async (tx) => {
       await tx.projectStep.update({
         where: { id: stepId },
-        data: {
-          status: next,
-          completedAt: next === 'completed' ? new Date() : null,
-        },
+        data: { status: 'completed', completedAt: new Date(), helpWanted: false },
       })
-
-      // Keep all step-level contributions on this step in sync — every
-      // joiner's row moves to "completed" when the step is done, and back to
-      // "active" if the step is re-opened.
-      await tx.contribution.updateMany({
-        where: {
-          projectId,
-          projectStepId: stepId,
-          status: { in: ['active', 'completed'] },
-        },
-        data: {
-          status: next === 'completed' ? 'completed' : 'active',
-        },
+      const recipients = await getActiveProjectMemberIds(tx, projectId)
+      await notify(tx, {
+        type: 'step_completed',
+        recipients,
+        actorId: userId,
+        projectId,
+        stepId,
+        title: `${actorName} finished “${gate.step.title}” in ${gate.step.projectTitle}.`,
       })
+    })
+  } catch {
+    return { success: false, error: 'Could not complete the step.' }
+  }
 
-      // step_completed fans out on the open → done transition.
-      if (next === 'completed' && prev !== 'completed') {
-        const recipients = await getActiveProjectMemberIds(tx, projectId)
-        await notify(tx, {
-          type: 'step_completed',
-          recipients,
-          actorId: userId,
-          projectId,
-          stepId,
-          title: `${actorName} finished “${step.title}” in ${step.project.title}.`,
-        })
-      }
+  revalidateStepSurfaces(projectId)
+  return { success: true, data: { status: 'completed' } }
+}
 
-      // step_needs_help: ping the leads when a step is flipped into need.
-      if (next === 'needs_help' && prev !== 'needs_help') {
+/** Reopen a completed step: back to in_progress if anyone is on it, else open. */
+export async function reopenStepAction(
+  projectId: string,
+  stepId: string,
+): Promise<ServerActionResult<{ status: StepStatus }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const gate = await requireStepInvolvement(projectId, stepId, userId)
+  if (!gate.ok) return { success: false, error: gate.error }
+  if (gate.step.status !== 'completed') {
+    return { success: true, data: { status: gate.step.status } }
+  }
+
+  try {
+    const next = await db.$transaction(async (tx) => {
+      const joiners = await tx.contribution.count({
+        where: { projectId, projectStepId: stepId, status: 'active' },
+      })
+      const status: StepStatus = joiners > 0 ? 'in_progress' : 'open'
+      await tx.projectStep.update({
+        where: { id: stepId },
+        data: { status, completedAt: null },
+      })
+      return status
+    })
+    revalidateStepSurfaces(projectId)
+    return { success: true, data: { status: next } }
+  } catch {
+    return { success: false, error: 'Could not reopen the step.' }
+  }
+}
+
+/** Toggle the "Ask for help" flag. Turning it on tells the leads. */
+export async function setStepHelpWantedAction(
+  projectId: string,
+  stepId: string,
+  helpWanted: boolean,
+): Promise<ServerActionResult<{ helpWanted: boolean }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const gate = await requireStepInvolvement(projectId, stepId, userId)
+  if (!gate.ok) return { success: false, error: gate.error }
+  if (gate.step.status === 'completed' && helpWanted) {
+    return { success: false, error: 'This step is already completed.' }
+  }
+  if (gate.step.helpWanted === helpWanted) {
+    return { success: true, data: { helpWanted } }
+  }
+
+  const actorName = await actorNameOf(userId)
+
+  try {
+    await db.$transaction(async (tx) => {
+      await tx.projectStep.update({
+        where: { id: stepId },
+        data: { helpWanted },
+      })
+      if (helpWanted) {
         const leadIds = await getProjectLeadIds(tx, projectId)
         await notify(tx, {
           type: 'step_needs_help',
@@ -129,7 +202,7 @@ export async function setStepStatusAction(
           actorId: userId,
           projectId,
           stepId,
-          title: `${actorName} flagged “${step.title}” as needing help in ${step.project.title}.`,
+          title: `${actorName} asked for help on “${gate.step.title}” in ${gate.step.projectTitle}.`,
         })
       }
     })
@@ -137,12 +210,8 @@ export async function setStepStatusAction(
     return { success: false, error: 'Could not update the step.' }
   }
 
-  revalidatePath(`/projects/${projectId}`)
-  revalidatePath('/my-steps')
-  revalidatePath('/my-projects')
-  revalidatePath('/dashboard')
-  revalidatePath('/notifications')
-  return { success: true, data: { status: next } }
+  revalidateStepSurfaces(projectId)
+  return { success: true, data: { helpWanted } }
 }
 
 /* ================================================================
