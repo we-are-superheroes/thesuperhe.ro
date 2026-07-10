@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -129,12 +129,7 @@ export function OrgPageClient({ data }: { data: OrgPageData }) {
       <div className="relative h-[180px] shrink-0 overflow-hidden sm:h-[220px]">
         <div className="absolute inset-0" style={{ background: BANNER_BG[cls] }} />
         <div className="absolute inset-0 bg-gradient-to-t from-bg-base to-transparent" />
-        <Link
-          href="/projects"
-          className="absolute left-4 top-5 z-[2] inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-[rgba(10,16,26,0.45)] px-3.5 py-1.5 text-sm text-white/85 backdrop-blur-md transition-colors hover:text-white sm:left-10"
-        >
-          <ArrowLeft className="size-3.5" /> Back to browse
-        </Link>
+        <BackLink signedIn={viewer.signedIn} />
       </div>
 
       <div className="mx-auto flex w-full max-w-[1080px] flex-col gap-8 px-4 pb-16 sm:px-10">
@@ -224,6 +219,51 @@ export function OrgPageClient({ data }: { data: OrgPageData }) {
         )}
       </div>
     </div>
+  )
+}
+
+/* ── Back link ──────────────────────────────────────────────── */
+
+/**
+ * Where "back" goes depends on how the visitor arrived: from a project
+ * page (org badge on the project), back to that project; otherwise to the
+ * organisations list — or project browse for signed-out visitors, who
+ * can't open /organisations. The referrer is only readable in the
+ * browser, so the destination is upgraded after mount.
+ */
+function BackLink({ signedIn }: { signedIn: boolean }) {
+  const fallback = signedIn
+    ? { href: '/organisations', label: 'Back to organisations' }
+    : { href: '/projects', label: 'Back to projects' }
+  const [target, setTarget] = useState(fallback)
+
+  useEffect(() => {
+    // rAF defers the state write out of the effect body (lint: no
+    // synchronous setState in effects) — one frame is imperceptible here.
+    const raf = requestAnimationFrame(() => {
+      try {
+        const ref = document.referrer ? new URL(document.referrer) : null
+        if (ref && ref.origin === window.location.origin) {
+          if (/^\/projects\/[^/]+$/.test(ref.pathname)) {
+            setTarget({ href: ref.pathname, label: 'Back to the project' })
+          } else if (ref.pathname === '/projects') {
+            setTarget({ href: '/projects', label: 'Back to projects' })
+          }
+        }
+      } catch {
+        // Unparseable referrer — keep the fallback.
+      }
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
+  return (
+    <Link
+      href={target.href}
+      className="absolute left-4 top-5 z-[2] inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-[rgba(10,16,26,0.45)] px-3.5 py-1.5 text-sm text-white/85 backdrop-blur-md transition-colors hover:text-white sm:left-10"
+    >
+      <ArrowLeft className="size-3.5" /> {target.label}
+    </Link>
   )
 }
 
