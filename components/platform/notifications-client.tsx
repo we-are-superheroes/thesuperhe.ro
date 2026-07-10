@@ -515,11 +515,12 @@ function NotificationRow({
             from the notification body can be redeemed. */}
         {item.type === 'invite_received' &&
           (() => {
-            const orgSlug = (item.data as { orgSlug?: string } | null)?.orgSlug
+            const d = item.data as { orgSlug?: string; code?: string } | null
+            const orgSlug = d?.orgSlug
             if (!orgSlug) return null
             return (
               <Link
-                href={`/orgs/${orgSlug}`}
+                href={`/orgs/${orgSlug}${d?.code ? `?invite=${d.code}` : ''}`}
                 onClick={(e) => e.stopPropagation()}
                 className="inline-flex w-fit items-center gap-1 text-xs font-medium text-amber-500 hover:underline"
               >

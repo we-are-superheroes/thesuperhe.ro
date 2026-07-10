@@ -27,6 +27,7 @@ import {
 
 interface Params {
   params: Promise<{ slug: string }>
+  searchParams?: Promise<{ invite?: string }>
 }
 
 const TYPE_IMG_KEY: Record<string, string> = {
@@ -103,8 +104,16 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   }
 }
 
-export default async function OrgPage({ params }: Params) {
+export default async function OrgPage({ params, searchParams }: Params) {
   const { slug } = await params
+  // Invite links (/orgs/<slug>?invite=CODE) pre-fill the join box so a
+  // shared URL is all a new member needs. Redemption still validates
+  // server-side.
+  const rawInvite = (await searchParams)?.invite
+  const inviteCode =
+    typeof rawInvite === 'string' && /^[A-Z0-9-]{4,40}$/i.test(rawInvite.trim())
+      ? rawInvite.trim().toUpperCase()
+      : null
   const { userId } = await auth()
 
   const org = await db.organisation.findUnique({
@@ -245,6 +254,7 @@ export default async function OrgPage({ params }: Params) {
       signedIn: !!userId,
       role: admin ? 'admin' : member ? 'member' : 'visitor',
     },
+    inviteCode,
     stats: {
       members: activeMemberCount,
       hours: Math.round(attribution.orgHours + attribution.sharedHours),

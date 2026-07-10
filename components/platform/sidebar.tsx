@@ -13,6 +13,7 @@ import {
   Search,
   Star,
   FileText,
+  Building2,
   User as UserIcon,
   LogOut,
   ChevronUp,
@@ -113,6 +114,7 @@ export function Sidebar({
         { label: 'Browse projects', icon: Search, href: '/projects' },
         { label: 'Skill matches', icon: Star, href: '/skill-matches' },
         { label: 'Blueprints', icon: FileText, href: '/blueprints' },
+        { label: 'Organizations', icon: Building2, href: '/organizations' },
       ],
     },
     {

@@ -10,6 +10,7 @@ import {
   Check,
   Download,
   Globe,
+  Link as LinkIcon,
   Lock,
   Pencil,
   Plus,
@@ -62,6 +63,8 @@ export interface OrgPageData {
     signedIn: boolean
     role: 'visitor' | 'member' | 'admin'
   }
+  /** Code from an ?invite= link, pre-filled into the join box. */
+  inviteCode: string | null
   stats: { members: number; hours: number; publicProjects: number }
   publicProjects: OrgProjectCard[]
   orgProjects: OrgProjectCard[]
@@ -120,8 +123,10 @@ export function OrgPageClient({ data }: { data: OrgPageData }) {
 
   return (
     <div className="flex flex-1 flex-col overflow-y-auto">
-      {/* Banner */}
-      <div className="relative h-[180px] overflow-hidden sm:h-[220px]">
+      {/* Banner. shrink-0 matters: inside the platform shell this page is a
+          flex column with a fixed-height scroll area, and without it the
+          banner gets compressed, cutting off the overlapping header. */}
+      <div className="relative h-[180px] shrink-0 overflow-hidden sm:h-[220px]">
         <div className="absolute inset-0" style={{ background: BANNER_BG[cls] }} />
         <div className="absolute inset-0 bg-gradient-to-t from-bg-base to-transparent" />
         <Link
@@ -487,9 +492,13 @@ function ProjectCard({ p }: { p: OrgProjectCard }) {
 
 function LockedTeaser({ data }: { data: OrgPageData }) {
   const router = useRouter()
-  const [code, setCode] = useState('')
+  const [code, setCode] = useState(data.inviteCode ?? '')
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
+
+  // Arriving via an invite link while signed out: sign in, then come
+  // straight back here with the code still in the URL.
+  const returnTo = `/orgs/${data.org.slug}${data.inviteCode ? `?invite=${data.inviteCode}` : ''}`
 
   const join = () => {
     setError(null)
@@ -532,10 +541,10 @@ function LockedTeaser({ data }: { data: OrgPageData }) {
           </div>
         ) : (
           <Link
-            href="/sign-in"
+            href={`/sign-in?redirect_url=${encodeURIComponent(returnTo)}`}
             className="mt-2 rounded-lg bg-gradient-to-br from-amber-500 to-amber-400 px-4 py-2 text-sm font-semibold text-amber-950"
           >
-            Sign in to use an invite code
+            {data.inviteCode ? 'Sign in to accept the invite' : 'Sign in to use an invite code'}
           </Link>
         )}
         {error && <p className="text-sm text-red-400">{error}</p>}
@@ -735,7 +744,19 @@ function InvitesSection({ data }: { data: OrgPageData }) {
   const [email, setEmail] = useState('')
   const [notice, setNotice] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [copiedId, setCopiedId] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
+
+  const copyLink = async (inviteId: string, code: string) => {
+    const url = `${window.location.origin}/orgs/${data.org.slug}?invite=${code}`
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopiedId(inviteId)
+      setTimeout(() => setCopiedId((prev) => (prev === inviteId ? null : prev)), 2000)
+    } catch {
+      setError('Could not copy — copy the code by hand instead.')
+    }
+  }
 
   const run = (fn: () => Promise<{ success: boolean } & Record<string, unknown>>) => {
     setError(null)
@@ -802,14 +823,31 @@ function InvitesSection({ data }: { data: OrgPageData }) {
                     {i.meta}
                   </span>
                   {!i.revoked && (
-                    <button
-                      type="button"
-                      disabled={pending}
-                      onClick={() => revoke(i.id)}
-                      className="cursor-pointer rounded-full border border-neutral-700 px-2.5 py-1 text-xs text-fg-tertiary transition-colors hover:border-red-400/50 hover:text-red-400 disabled:opacity-60"
-                    >
-                      Cancel code
-                    </button>
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => copyLink(i.id, i.code)}
+                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-neutral-700 px-2.5 py-1 text-xs text-fg-secondary transition-colors hover:border-amber-500/50 hover:text-amber-400"
+                      >
+                        {copiedId === i.id ? (
+                          <>
+                            <Check className="size-3" /> Copied
+                          </>
+                        ) : (
+                          <>
+                            <LinkIcon className="size-3" /> Copy invite link
+                          </>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        disabled={pending}
+                        onClick={() => revoke(i.id)}
+                        className="cursor-pointer rounded-full border border-neutral-700 px-2.5 py-1 text-xs text-fg-tertiary transition-colors hover:border-red-400/50 hover:text-red-400 disabled:opacity-60"
+                      >
+                        Cancel code
+                      </button>
+                    </>
                   )}
                 </div>
               ))}
