@@ -7,13 +7,13 @@ import { ORG_TYPE_LABEL, isOrgAdminRole } from '@/lib/org-utils'
 import { cn } from '@/lib/utils'
 
 /* ================================================================
-   /organizations — a lightweight home for the organisations the
+   /organisations — a lightweight home for the organisations the
    signed-in user belongs to, plus the way in for new ones (the
    gated request form). Org pages themselves live at /orgs/[slug].
    ================================================================ */
 
 export const metadata = {
-  title: 'Organizations — The Superhero',
+  title: 'Organisations — The Superhero',
 }
 
 const LOGO_BG = {
@@ -21,7 +21,7 @@ const LOGO_BG = {
   company: 'linear-gradient(135deg, #1B3A6B, #4A7FD4)',
 } as const
 
-export default async function OrganizationsPage() {
+export default async function OrganisationsPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
 
@@ -56,7 +56,7 @@ export default async function OrganizationsPage() {
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="mb-3 font-display text-[clamp(32px,4vw,48px)] font-normal leading-none tracking-tight">
-              Your <em className="italic text-amber-500">organizations</em>.
+              Your <em className="italic text-amber-500">organisations</em>.
             </h1>
             <p className="max-w-[540px] text-lg leading-relaxed text-fg-secondary">
               The groups you belong to on The Superhero — each with its own page, members-only
@@ -68,7 +68,7 @@ export default async function OrganizationsPage() {
             className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-amber-500 to-amber-400 px-4 py-2.5 text-sm font-semibold text-amber-950 transition-transform hover:-translate-y-px"
           >
             <Plus className="size-3.5" strokeWidth={2.5} />
-            Request an organization
+            Request an organisation
           </Link>
         </header>
 
@@ -77,10 +77,10 @@ export default async function OrganizationsPage() {
             <div className="mb-2 flex size-14 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-2 text-fg-tertiary">
               <Building2 className="size-6" />
             </div>
-            <h2 className="font-display text-2xl font-normal">No organizations yet.</h2>
+            <h2 className="font-display text-2xl font-normal">No organisations yet.</h2>
             <p className="max-w-[460px] text-sm leading-relaxed text-fg-secondary">
               Join one with an invite link from its admins — or bring your own group onto the
-              platform with the request button above. We approve each organization by hand.
+              platform with the request button above. We approve each organisation by hand.
             </p>
           </div>
         ) : (
@@ -141,7 +141,7 @@ export default async function OrganizationsPage() {
         )}
 
         <p className="text-xs leading-relaxed text-fg-tertiary">
-          Control what each organization sees of your hours in your{' '}
+          Control what each organisation sees of your hours in your{' '}
           <Link href="/profile#sec-orgs" className="text-amber-500 hover:underline">
             profile settings
           </Link>
