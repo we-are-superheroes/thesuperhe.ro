@@ -208,49 +208,15 @@ export function OrgPageClient({ data }: { data: OrgPageData }) {
           </section>
         )}
 
-        {/* Public projects */}
-        <section>
-          <SectionHead
-            title="Public projects"
-            sub={`${data.publicProjects.filter((p) => p.live).length} live`}
-          />
-          {data.publicProjects.length === 0 ? (
-            <EmptyRow text="No public projects yet." />
-          ) : (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {data.publicProjects.map((p) => (
-                <ProjectCard key={p.id} p={p} />
-              ))}
-            </div>
-          )}
-        </section>
+        {/* Organisation projects — public + members-only in one section.
+            Visitors only ever receive public ones, so they get no filter. */}
+        <OrgProjectsSection data={data} isMember={isMember} />
 
         {/* ── Members-only boundary ── */}
         {!isMember ? (
           <LockedTeaser data={data} />
         ) : (
           <>
-            <section>
-              <SectionHead
-                title="Organisation projects"
-                lock="Members only"
-                subNode={
-                  <Link href={`/projects/new?org=${org.slug}`} className="text-sm text-amber-500 hover:underline">
-                    + New organisation project
-                  </Link>
-                }
-              />
-              {data.orgProjects.length === 0 ? (
-                <EmptyRow text="No members-only projects yet. Any member can start one." />
-              ) : (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {data.orgProjects.map((p) => (
-                    <ProjectCard key={p.id} p={p} />
-                  ))}
-                </div>
-              )}
-            </section>
-
             <Dashboard data={data} isAdmin={isAdmin} />
             <MembersSection data={data} isAdmin={isAdmin} />
             {isAdmin && <InvitesSection data={data} />}
@@ -485,6 +451,108 @@ function ProjectCard({ p }: { p: OrgProjectCard }) {
         </div>
       </div>
     </Link>
+  )
+}
+
+/* ── Organisation projects (public + members-only, filterable) ── */
+
+type ProjectFilter = 'all' | 'public' | 'members'
+
+function OrgProjectsSection({
+  data,
+  isMember,
+}: {
+  data: OrgPageData
+  isMember: boolean
+}) {
+  const [filter, setFilter] = useState<ProjectFilter>('all')
+
+  const all = [...data.publicProjects, ...data.orgProjects]
+  const visible =
+    filter === 'public'
+      ? all.filter((p) => !p.membersOnly)
+      : filter === 'members'
+        ? all.filter((p) => p.membersOnly)
+        : all
+
+  const counts = {
+    all: all.length,
+    public: data.publicProjects.length,
+    members: data.orgProjects.length,
+  }
+
+  const emptyText =
+    filter === 'members'
+      ? 'No members-only projects yet. Any member can start one.'
+      : filter === 'public'
+        ? 'No public projects yet.'
+        : isMember
+          ? 'No projects yet. Any member can start one.'
+          : 'No public projects yet.'
+
+  return (
+    <section>
+      <SectionHead
+        title="Organisation projects"
+        sub={!isMember ? `${all.filter((p) => p.live).length} live` : undefined}
+        subNode={
+          isMember ? (
+            <Link
+              href={`/projects/new?org=${data.org.slug}`}
+              className="text-sm text-amber-500 hover:underline"
+            >
+              + New organisation project
+            </Link>
+          ) : undefined
+        }
+      />
+
+      {/* Visibility filter — members only: visitors never receive
+          members-only projects, so the pills would mislead them. */}
+      {isMember && (
+        <div className="mb-4 flex flex-wrap gap-2">
+          {(
+            [
+              { key: 'all', label: 'All', count: counts.all },
+              { key: 'public', label: 'Public', count: counts.public },
+              { key: 'members', label: 'Members only', count: counts.members },
+            ] as const
+          ).map((f) => (
+            <button
+              key={f.key}
+              type="button"
+              onClick={() => setFilter(f.key)}
+              className={cn(
+                'inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs transition-colors duration-fast',
+                filter === f.key
+                  ? 'border-amber-500/40 bg-amber-500/[0.12] text-amber-500'
+                  : 'border-neutral-700 bg-bg-surface text-fg-secondary hover:border-neutral-600 hover:text-fg-primary',
+              )}
+            >
+              {f.label}
+              <span
+                className={cn(
+                  'rounded-full px-[7px] py-px text-[10px] font-semibold',
+                  filter === f.key ? 'bg-amber-500/20' : 'bg-bg-surface-2',
+                )}
+              >
+                {f.count}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {visible.length === 0 ? (
+        <EmptyRow text={emptyText} />
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {visible.map((p) => (
+            <ProjectCard key={p.id} p={p} />
+          ))}
+        </div>
+      )}
+    </section>
   )
 }
 
