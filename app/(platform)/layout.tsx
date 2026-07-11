@@ -30,6 +30,7 @@ export default async function PlatformLayout({
             hoursContributed: true,
             projectId: true,
             projectStepId: true,
+            projectStep: { select: { status: true } },
           },
         },
       },
@@ -51,7 +52,11 @@ export default async function PlatformLayout({
   // Compute sidebar counts from contributions
   const uniqueProjectIds = new Set(user?.contributions?.map((c) => c.projectId) ?? [])
   const projectCount = uniqueProjectIds.size
-  const stepCount = user?.contributions?.filter((c) => c.projectStepId != null).length ?? 0
+  // Badge = steps still to do: joined and not yet completed.
+  const stepCount =
+    user?.contributions?.filter(
+      (c) => c.projectStepId != null && c.projectStep?.status !== 'completed',
+    ).length ?? 0
   const hoursContributed = user?.contributions?.reduce((sum, c) => sum + c.hoursContributed, 0) ?? 0
 
   return (
