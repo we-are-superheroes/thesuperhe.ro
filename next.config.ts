@@ -15,6 +15,14 @@ const supabaseHost = (() => {
 })()
 
 const nextConfig: NextConfig = {
+  experimental: {
+    serverActions: {
+      // Image uploads travel through server actions; the default 1 MB body
+      // cap rejected files well under our own storage limits (8 MB banners).
+      // 10 MB leaves headroom for multipart overhead.
+      bodySizeLimit: '10mb',
+    },
+  },
   images: {
     remotePatterns: [
       ...(supabaseHost

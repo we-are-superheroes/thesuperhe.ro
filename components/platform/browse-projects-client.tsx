@@ -545,7 +545,7 @@ function CheckList({
     return <div className="text-sm text-fg-tertiary">No matches.</div>
   }
   return (
-    <div className="flex max-h-[96px] shrink-0 flex-col gap-2 overflow-y-auto pr-1">
+    <div className="flex max-h-[152px] shrink-0 flex-col gap-2 overflow-y-auto pr-1">
       {items.map((item) => {
         const isChecked = selected.has(item.id)
         return (

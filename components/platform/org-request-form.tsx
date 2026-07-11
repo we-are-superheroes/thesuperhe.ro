@@ -47,29 +47,43 @@ export function OrgRequestForm() {
   const submit = () => {
     setError(null)
     startTransition(async () => {
-      const result = await requestOrganisationAction({
-        name,
-        type,
-        website,
-        intendedUse,
-        listed,
-      })
+      let result: Awaited<ReturnType<typeof requestOrganisationAction>>
+      try {
+        result = await requestOrganisationAction({
+          name,
+          type,
+          website,
+          intendedUse,
+          listed,
+        })
+      } catch {
+        setError('Something went wrong sending the request. Try again.')
+        return
+      }
       if (!result.success) {
         setError(result.error)
         return
       }
       // The requester is the org's creator, so they may upload its images
-      // straight away. A failed upload doesn't fail the request.
+      // straight away. A failed upload must never sink the request — the
+      // organisation already exists, so always reach the done screen and
+      // report image problems as warnings.
       const warnings: string[] = []
       for (const [image, file] of [
         ['logo', logoFile],
         ['banner', bannerFile],
       ] as const) {
         if (!file) continue
-        const fd = new FormData()
-        fd.set('file', file)
-        const up = await uploadOrgImageAction(result.data.orgId, image, fd)
-        if (!up.success) warnings.push(`The ${image} was not saved: ${up.error}`)
+        try {
+          const fd = new FormData()
+          fd.set('file', file)
+          const up = await uploadOrgImageAction(result.data.orgId, image, fd)
+          if (!up.success) warnings.push(`The ${image} was not saved: ${up.error}`)
+        } catch {
+          warnings.push(
+            `The ${image} could not be uploaded — you can add it later from “Edit organisation”.`,
+          )
+        }
       }
       setImageWarning(warnings.length > 0 ? warnings.join(' ') : null)
       setDone(result.data.slug)

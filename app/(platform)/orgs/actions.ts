@@ -83,6 +83,20 @@ export async function requestOrganisationAction(input: {
   }
   const website = input.website.trim().replace(/^https?:\/\//, '').replace(/\/+$/, '')
 
+  // Idempotent retry guard: if this user already requested an organisation
+  // with this name (e.g. resubmitting after a flaky upload), hand back the
+  // existing one instead of creating a duplicate.
+  const existing = await db.organisation.findFirst({
+    where: {
+      name: { equals: name, mode: 'insensitive' },
+      members: { some: { userId, role: 'owner' } },
+    },
+    select: { id: true, slug: true },
+  })
+  if (existing) {
+    return { success: true, data: { slug: existing.slug, orgId: existing.id } }
+  }
+
   try {
     // Uniquify the slug: base, base-2, base-3, …
     const base = slugifyOrgName(name)
