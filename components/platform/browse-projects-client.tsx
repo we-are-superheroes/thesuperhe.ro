@@ -293,8 +293,11 @@ export function BrowseProjectsClient({
           {/* Filters */}
           <aside
             className={cn(
-              'flex flex-col gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6',
-              'lg:sticky lg:top-6',
+              'flex flex-col gap-5 rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6',
+              // Never taller than the viewport: every filter group stays
+              // reachable without scrolling past the results; the panel
+              // scrolls itself if a short screen still can't fit it.
+              'lg:sticky lg:top-6 lg:max-h-[calc(100vh-48px)] lg:overflow-y-auto',
               mobileFiltersOpen ? 'flex' : 'hidden lg:flex',
             )}
           >
@@ -542,7 +545,7 @@ function CheckList({
     return <div className="text-sm text-fg-tertiary">No matches.</div>
   }
   return (
-    <div className="flex max-h-[200px] flex-col gap-2 overflow-y-auto pr-1">
+    <div className="flex max-h-[96px] shrink-0 flex-col gap-2 overflow-y-auto pr-1">
       {items.map((item) => {
         const isChecked = selected.has(item.id)
         return (
