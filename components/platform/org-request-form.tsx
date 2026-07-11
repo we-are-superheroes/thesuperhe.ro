@@ -1,10 +1,13 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { requestOrganisationAction } from '@/app/(platform)/orgs/actions'
+import {
+  requestOrganisationAction,
+  uploadOrgImageAction,
+} from '@/app/(platform)/orgs/actions'
 
 /* ================================================================
    /orgs/request — gated organisation creation (spec F1). The form
@@ -33,16 +36,43 @@ export function OrgRequestForm() {
   const [type, setType] = useState<'nonprofit' | 'company'>('nonprofit')
   const [website, setWebsite] = useState('')
   const [intendedUse, setIntendedUse] = useState('')
+  const [listed, setListed] = useState(true)
+  const [logoFile, setLogoFile] = useState<File | null>(null)
+  const [bannerFile, setBannerFile] = useState<File | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [imageWarning, setImageWarning] = useState<string | null>(null)
   const [done, setDone] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
   const submit = () => {
     setError(null)
     startTransition(async () => {
-      const result = await requestOrganisationAction({ name, type, website, intendedUse })
-      if (!result.success) setError(result.error)
-      else setDone(result.data.slug)
+      const result = await requestOrganisationAction({
+        name,
+        type,
+        website,
+        intendedUse,
+        listed,
+      })
+      if (!result.success) {
+        setError(result.error)
+        return
+      }
+      // The requester is the org's creator, so they may upload its images
+      // straight away. A failed upload doesn't fail the request.
+      const warnings: string[] = []
+      for (const [image, file] of [
+        ['logo', logoFile],
+        ['banner', bannerFile],
+      ] as const) {
+        if (!file) continue
+        const fd = new FormData()
+        fd.set('file', file)
+        const up = await uploadOrgImageAction(result.data.orgId, image, fd)
+        if (!up.success) warnings.push(`The ${image} was not saved: ${up.error}`)
+      }
+      setImageWarning(warnings.length > 0 ? warnings.join(' ') : null)
+      setDone(result.data.slug)
     })
   }
 
@@ -61,6 +91,7 @@ export function OrgRequestForm() {
           </Link>
           . We will contact you by email if we have questions.
         </p>
+        {imageWarning && <p className="max-w-[460px] text-sm text-amber-400">{imageWarning}</p>}
       </div>
     )
   }
@@ -137,6 +168,37 @@ export function OrgRequestForm() {
         </span>
       </label>
 
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <FilePick
+          label="Logo (optional)"
+          hint="Square works best."
+          file={logoFile}
+          onFile={setLogoFile}
+        />
+        <FilePick
+          label="Banner (optional)"
+          hint="Wide image, about 1600×400."
+          file={bannerFile}
+          onFile={setBannerFile}
+        />
+      </div>
+
+      <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-neutral-700 bg-bg-base px-3.5 py-3">
+        <input
+          type="checkbox"
+          checked={listed}
+          onChange={(e) => setListed(e.target.checked)}
+          className="mt-0.5 size-4 accent-amber-500"
+        />
+        <span className="flex flex-col gap-0.5 text-sm">
+          <span className="font-medium text-fg-primary">List in the directory once approved</span>
+          <span className="text-xs leading-relaxed text-fg-tertiary">
+            Listed organisations appear on the Organisations page for everyone. You can change
+            this any time.
+          </span>
+        </span>
+      </label>
+
       {error && <p className="text-sm text-red-400">{error}</p>}
 
       <button
@@ -147,6 +209,55 @@ export function OrgRequestForm() {
       >
         {pending ? 'Sending…' : 'Send request'}
       </button>
+    </div>
+  )
+}
+
+/** Small file picker row: choose / replace / clear, nothing uploads yet. */
+function FilePick({
+  label,
+  hint,
+  file,
+  onFile,
+}: {
+  label: string
+  hint: string
+  file: File | null
+  onFile: (f: File | null) => void
+}) {
+  const inputRef = useRef<HTMLInputElement>(null)
+  return (
+    <div className="flex flex-col gap-1.5 text-sm text-fg-secondary">
+      {label}
+      <div className="flex items-center gap-3 rounded-lg border border-neutral-700 bg-bg-base px-3.5 py-3">
+        <span className="min-w-0 flex-1 truncate text-xs text-fg-tertiary">
+          {file ? file.name : 'No file chosen'}
+        </span>
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="cursor-pointer rounded-full border border-neutral-700 px-3 py-1 text-xs text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
+        >
+          {file ? 'Replace' : 'Choose file'}
+        </button>
+        {file && (
+          <button
+            type="button"
+            onClick={() => onFile(null)}
+            className="cursor-pointer rounded-full border border-neutral-700 px-3 py-1 text-xs text-fg-tertiary transition-colors hover:border-red-400/50 hover:text-red-400"
+          >
+            Clear
+          </button>
+        )}
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif"
+          className="hidden"
+          onChange={(e) => onFile(e.target.files?.[0] ?? null)}
+        />
+      </div>
+      <span className="text-xs text-fg-tertiary">{hint}</span>
     </div>
   )
 }

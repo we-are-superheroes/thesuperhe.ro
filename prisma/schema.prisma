@@ -175,6 +175,9 @@ model Organisation {
   slug        String    @unique
   type        OrgType
   status      OrgStatus @default(pending)
+  // Opt-in to the public directory on /organisations. Unlisted orgs are
+  // reachable by URL/invite link but not browsable by non-members.
+  listed      Boolean   @default(false)
   description String?
   logoUrl     String?   @map("logo_url")
   bannerUrl   String?   @map("banner_url")

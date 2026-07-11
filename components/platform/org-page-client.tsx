@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useRef, useState, useTransition } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
+  clearOrgImageAction,
   createInviteCodeAction,
   inviteByEmailAction,
   promoteMemberAction,
@@ -24,6 +25,7 @@ import {
   removeMemberAction,
   revokeInviteAction,
   updateOrgProfileAction,
+  uploadOrgImageAction,
 } from '@/app/(platform)/orgs/actions'
 
 /* ================================================================
@@ -54,9 +56,11 @@ export interface OrgPageData {
     typeLabel: string
     isCompany: boolean
     status: 'pending' | 'active' | 'suspended'
+    listed: boolean
     description: string | null
     website: string | null
     logoUrl: string | null
+    bannerUrl: string | null
     sinceLabel: string
   }
   viewer: {
@@ -130,6 +134,16 @@ export function OrgPageClient({ data }: { data: OrgPageData }) {
           banner gets compressed, cutting off the overlapping header. */}
       <div className="relative h-[180px] shrink-0 overflow-hidden sm:h-[220px]">
         <div className="absolute inset-0" style={{ background: BANNER_BG[cls] }} />
+        {org.bannerUrl && (
+          <Image
+            src={org.bannerUrl}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-bg-base to-transparent" />
         <Link
           href={data.backLink.href}
@@ -232,7 +246,7 @@ export function OrgPageClient({ data }: { data: OrgPageData }) {
 /* ── Header actions ─────────────────────────────────────────── */
 
 function HeaderActions({ data }: { data: OrgPageData }) {
-  const { viewer, org } = data
+  const { viewer } = data
   const [editing, setEditing] = useState(false)
 
   if (viewer.role === 'visitor') {
@@ -254,38 +268,31 @@ function HeaderActions({ data }: { data: OrgPageData }) {
         <Check className="size-3.5" /> {viewer.role === 'admin' ? 'Admin' : 'Member'}
       </span>
       {viewer.role === 'admin' && (
-        <>
-          <button
-            type="button"
-            onClick={() => setEditing((v) => !v)}
-            className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
-          >
-            <Pencil className="size-3.5" /> Edit profile
-          </button>
-          <a
-            href={`/api/orgs/${org.slug}/export`}
-            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-amber-500 to-amber-400 px-4 py-2.5 text-sm font-semibold text-amber-950 transition-transform hover:-translate-y-px"
-          >
-            <Download className="size-3.5" /> Export CSV
-          </a>
-        </>
+        <button
+          type="button"
+          onClick={() => setEditing((v) => !v)}
+          className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
+        >
+          <Pencil className="size-3.5" /> Edit organisation
+        </button>
       )}
-      {editing && <EditProfilePanel data={data} onDone={() => setEditing(false)} />}
+      {editing && <EditOrganisationPanel data={data} onDone={() => setEditing(false)} />}
     </div>
   )
 }
 
-function EditProfilePanel({ data, onDone }: { data: OrgPageData; onDone: () => void }) {
+function EditOrganisationPanel({ data, onDone }: { data: OrgPageData; onDone: () => void }) {
   const router = useRouter()
   const [description, setDescription] = useState(data.org.description ?? '')
   const [website, setWebsite] = useState(data.org.website ?? '')
+  const [listed, setListed] = useState(data.org.listed)
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
   const save = () => {
     setError(null)
     startTransition(async () => {
-      const result = await updateOrgProfileAction(data.org.id, { description, website })
+      const result = await updateOrgProfileAction(data.org.id, { description, website, listed })
       if (!result.success) setError(result.error)
       else {
         onDone()
@@ -295,7 +302,24 @@ function EditProfilePanel({ data, onDone }: { data: OrgPageData; onDone: () => v
   }
 
   return (
-    <div className="flex w-full flex-col gap-3 rounded-2xl border border-white/[0.08] bg-bg-surface p-5">
+    <div className="flex w-full flex-col gap-4 rounded-2xl border border-white/[0.08] bg-bg-surface p-5">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <OrgImageField
+          orgId={data.org.id}
+          image="logo"
+          label="Logo"
+          hint="Square works best — shown on the page and on project cards."
+          currentUrl={data.org.logoUrl}
+        />
+        <OrgImageField
+          orgId={data.org.id}
+          image="banner"
+          label="Banner"
+          hint="Wide image for the top of this page (about 1600×400)."
+          currentUrl={data.org.bannerUrl}
+        />
+      </div>
+
       <label className="flex flex-col gap-1.5 text-sm text-fg-secondary">
         About
         <textarea
@@ -315,6 +339,23 @@ function EditProfilePanel({ data, onDone }: { data: OrgPageData; onDone: () => v
           className="rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 text-sm text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
         />
       </label>
+
+      <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-3">
+        <input
+          type="checkbox"
+          checked={listed}
+          onChange={(e) => setListed(e.target.checked)}
+          className="mt-0.5 size-4 accent-amber-500"
+        />
+        <span className="flex flex-col gap-0.5 text-sm">
+          <span className="font-medium text-fg-primary">List in the directory</span>
+          <span className="text-xs leading-relaxed text-fg-tertiary">
+            Listed organisations appear on the Organisations page for everyone. Unlisted ones can
+            still be reached by link or invite.
+          </span>
+        </span>
+      </label>
+
       {error && <p className="text-sm text-red-400">{error}</p>}
       <div className="flex gap-2">
         <button
@@ -333,6 +374,100 @@ function EditProfilePanel({ data, onDone }: { data: OrgPageData; onDone: () => v
           Cancel
         </button>
       </div>
+    </div>
+  )
+}
+
+/** Upload / replace / remove one org image. Uploads apply immediately. */
+function OrgImageField({
+  orgId,
+  image,
+  label,
+  hint,
+  currentUrl,
+}: {
+  orgId: string
+  image: 'logo' | 'banner'
+  label: string
+  hint: string
+  currentUrl: string | null
+}) {
+  const router = useRouter()
+  const inputRef = useRef<HTMLInputElement>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [pending, startTransition] = useTransition()
+
+  const onFile = (file: File | null) => {
+    if (!file) return
+    setError(null)
+    const fd = new FormData()
+    fd.set('file', file)
+    startTransition(async () => {
+      const result = await uploadOrgImageAction(orgId, image, fd)
+      if (!result.success) setError(result.error)
+      else router.refresh()
+    })
+  }
+
+  const remove = () => {
+    setError(null)
+    startTransition(async () => {
+      const result = await clearOrgImageAction(orgId, image)
+      if (!result.success) setError(result.error)
+      else router.refresh()
+    })
+  }
+
+  return (
+    <div className="flex flex-col gap-1.5 text-sm text-fg-secondary">
+      {label}
+      <div className="flex items-center gap-3 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-3">
+        {currentUrl ? (
+          <Image
+            src={currentUrl}
+            alt=""
+            width={image === 'logo' ? 40 : 72}
+            height={40}
+            className={cn(
+              'shrink-0 object-cover',
+              image === 'logo' ? 'size-10 rounded-lg' : 'h-10 w-[72px] rounded-md',
+            )}
+          />
+        ) : (
+          <span className="flex h-10 shrink-0 items-center justify-center rounded-lg border border-dashed border-neutral-700 px-3 text-xs text-fg-tertiary">
+            None yet
+          </span>
+        )}
+        <div className="flex flex-wrap gap-2">
+          <button
+            type="button"
+            disabled={pending}
+            onClick={() => inputRef.current?.click()}
+            className="cursor-pointer rounded-full border border-neutral-700 px-3 py-1 text-xs text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary disabled:opacity-60"
+          >
+            {pending ? 'Uploading…' : currentUrl ? 'Replace' : 'Upload'}
+          </button>
+          {currentUrl && (
+            <button
+              type="button"
+              disabled={pending}
+              onClick={remove}
+              className="cursor-pointer rounded-full border border-neutral-700 px-3 py-1 text-xs text-fg-tertiary transition-colors hover:border-red-400/50 hover:text-red-400 disabled:opacity-60"
+            >
+              Remove
+            </button>
+          )}
+        </div>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/png,image/jpeg,image/webp,image/gif"
+          className="hidden"
+          onChange={(e) => onFile(e.target.files?.[0] ?? null)}
+        />
+      </div>
+      <span className="text-xs text-fg-tertiary">{hint}</span>
+      {error && <span className="text-xs text-red-400">{error}</span>}
     </div>
   )
 }

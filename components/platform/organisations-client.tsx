@@ -2,12 +2,14 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { ArrowRight, Building2, Plus, Search } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 /* ================================================================
    /organisations — client half. Standard platform topbar (search +
-   primary action) over the list of the user's organisations.
+   primary action) over the user's organisations and the public
+   directory of listed organisations.
    ================================================================ */
 
 export interface OrganisationRow {
@@ -17,6 +19,7 @@ export interface OrganisationRow {
   type: 'nonprofit' | 'company'
   typeLabel: string
   status: 'pending' | 'active' | 'suspended'
+  logoUrl: string | null
   isAdmin: boolean
   isCreator: boolean
   members: number
@@ -24,19 +27,74 @@ export interface OrganisationRow {
   joinedLabel: string
 }
 
+export interface DirectoryRow {
+  id: string
+  slug: string
+  name: string
+  type: 'nonprofit' | 'company'
+  typeLabel: string
+  logoUrl: string | null
+  description: string | null
+  members: number
+  projects: number
+}
+
 const LOGO_BG = {
   nonprofit: 'linear-gradient(135deg, #1A5C40, #3DAF7C)',
   company: 'linear-gradient(135deg, #1B3A6B, #4A7FD4)',
 } as const
 
-export function OrganisationsClient({ orgs }: { orgs: OrganisationRow[] }) {
+function OrgLogo({
+  name,
+  type,
+  logoUrl,
+}: {
+  name: string
+  type: 'nonprofit' | 'company'
+  logoUrl: string | null
+}) {
+  if (logoUrl) {
+    return (
+      <Image
+        src={logoUrl}
+        alt=""
+        width={48}
+        height={48}
+        className="size-12 shrink-0 rounded-xl object-cover"
+      />
+    )
+  }
+  return (
+    <span
+      className="flex size-12 shrink-0 items-center justify-center rounded-xl font-display text-xl text-white"
+      style={{ background: LOGO_BG[type] }}
+    >
+      {name.charAt(0).toUpperCase()}
+    </span>
+  )
+}
+
+export function OrganisationsClient({
+  orgs,
+  directory,
+}: {
+  orgs: OrganisationRow[]
+  directory: DirectoryRow[]
+}) {
   const [query, setQuery] = useState('')
+  const q = query.trim().toLowerCase()
 
   const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase()
     if (!q) return orgs
     return orgs.filter((o) => `${o.name} ${o.typeLabel}`.toLowerCase().includes(q))
-  }, [orgs, query])
+  }, [orgs, q])
+
+  const filteredDirectory = useMemo(() => {
+    if (!q) return directory
+    return directory.filter((o) =>
+      `${o.name} ${o.typeLabel} ${o.description ?? ''}`.toLowerCase().includes(q),
+    )
+  }, [directory, q])
 
   return (
     <div className="flex h-full flex-1 flex-col overflow-y-auto">
@@ -82,13 +140,14 @@ export function OrganisationsClient({ orgs }: { orgs: OrganisationRow[] }) {
             </div>
             <h2 className="font-display text-2xl font-normal">No organisations yet.</h2>
             <p className="max-w-[460px] text-sm leading-relaxed text-fg-secondary">
-              Join one with an invite link from its admins — or bring your own group onto the
-              platform with the request button above. We approve each organisation by hand.
+              Join one from the directory below or with an invite link from its admins — or bring
+              your own group onto the platform with the request button above. We approve each
+              organisation by hand.
             </p>
           </div>
         ) : filtered.length === 0 ? (
           <div className="rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-bg-surface px-8 py-10 text-center text-sm text-fg-tertiary">
-            Nothing matches &ldquo;{query.trim()}&rdquo;.
+            None of your organisations match &ldquo;{query.trim()}&rdquo;.
           </div>
         ) : (
           <div className="flex flex-col gap-3">
@@ -98,12 +157,7 @@ export function OrganisationsClient({ orgs }: { orgs: OrganisationRow[] }) {
                 href={`/orgs/${o.slug}`}
                 className="group flex items-center gap-4 rounded-2xl border border-white/[0.08] bg-bg-surface px-4 py-4 transition-all duration-fast hover:-translate-y-px hover:border-neutral-600 hover:shadow-md sm:px-5"
               >
-                <span
-                  className="flex size-12 shrink-0 items-center justify-center rounded-xl font-display text-xl text-white"
-                  style={{ background: LOGO_BG[o.type] }}
-                >
-                  {o.name.charAt(0).toUpperCase()}
-                </span>
+                <OrgLogo name={o.name} type={o.type} logoUrl={o.logoUrl} />
                 <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                   <span className="flex flex-wrap items-center gap-2">
                     <span className="truncate font-display text-lg leading-tight">{o.name}</span>
@@ -143,6 +197,58 @@ export function OrganisationsClient({ orgs }: { orgs: OrganisationRow[] }) {
             ))}
           </div>
         )}
+
+        {/* Directory — listed, active organisations the user isn't in. */}
+        <section>
+          <div className="mb-4 flex items-baseline gap-4">
+            <h2 className="font-display text-2xl font-normal tracking-tight">Directory</h2>
+            <span className="h-px flex-1 self-center bg-white/[0.08]" />
+            <span className="whitespace-nowrap text-sm text-fg-tertiary">
+              {directory.length} listed
+            </span>
+          </div>
+          {directory.length === 0 ? (
+            <div className="rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-bg-surface px-8 py-10 text-center text-sm text-fg-tertiary">
+              No organisations have listed themselves yet.
+            </div>
+          ) : filteredDirectory.length === 0 ? (
+            <div className="rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-bg-surface px-8 py-10 text-center text-sm text-fg-tertiary">
+              Nothing in the directory matches &ldquo;{query.trim()}&rdquo;.
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3">
+              {filteredDirectory.map((o) => (
+                <Link
+                  key={o.id}
+                  href={`/orgs/${o.slug}`}
+                  className="group flex items-center gap-4 rounded-2xl border border-white/[0.08] bg-bg-surface px-4 py-4 transition-all duration-fast hover:-translate-y-px hover:border-neutral-600 hover:shadow-md sm:px-5"
+                >
+                  <OrgLogo name={o.name} type={o.type} logoUrl={o.logoUrl} />
+                  <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+                    <span className="flex flex-wrap items-center gap-2">
+                      <span className="truncate font-display text-lg leading-tight">{o.name}</span>
+                      <span
+                        className={cn(
+                          'rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest',
+                          o.type === 'company'
+                            ? 'border-blue-400/45 bg-blue-400/10 text-blue-300'
+                            : 'border-emerald-500/45 bg-emerald-500/10 text-emerald-300',
+                        )}
+                      >
+                        {o.typeLabel}
+                      </span>
+                    </span>
+                    <span className="truncate text-sm text-fg-tertiary">
+                      {o.description ??
+                        `${o.members} member${o.members === 1 ? '' : 's'} · ${o.projects} public project${o.projects === 1 ? '' : 's'}`}
+                    </span>
+                  </span>
+                  <ArrowRight className="size-4 shrink-0 text-fg-tertiary transition-transform group-hover:translate-x-0.5 group-hover:text-fg-primary" />
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
 
         <p className="text-xs leading-relaxed text-fg-tertiary">
           Control what each organisation sees of your hours in your{' '}

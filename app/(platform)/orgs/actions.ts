@@ -4,6 +4,7 @@ import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { ensureUserExists } from '@/lib/users'
+import { uploadImage, deleteImageByUrl } from '@/lib/storage'
 import { notify } from '@/lib/notifications'
 import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import {
@@ -52,7 +53,8 @@ export async function requestOrganisationAction(input: {
   type: OrgType
   website: string
   intendedUse: string
-}): Promise<ServerActionResult<{ slug: string }>> {
+  listed: boolean
+}): Promise<ServerActionResult<{ slug: string; orgId: string }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
 
@@ -94,13 +96,14 @@ export async function requestOrganisationAction(input: {
     let slug = base
     for (let i = 2; takenSet.has(slug); i++) slug = `${base}-${i}`
 
-    await db.$transaction(async (tx) => {
+    const orgId = await db.$transaction(async (tx) => {
       const org = await tx.organisation.create({
         data: {
           name,
           slug,
           type: input.type,
           status: 'pending',
+          listed: !!input.listed,
           description: intendedUse,
           website: website || null,
         },
@@ -109,9 +112,10 @@ export async function requestOrganisationAction(input: {
       await tx.userOrganisation.create({
         data: { userId, orgId: org.id, role: 'owner' },
       })
+      return org.id
     })
 
-    return { success: true, data: { slug } }
+    return { success: true, data: { slug, orgId } }
   } catch {
     return { success: false, error: 'Could not submit the request.' }
   }
@@ -473,7 +477,7 @@ export async function setShareContributionsAction(
 
 export async function updateOrgProfileAction(
   orgId: string,
-  input: { description: string; website: string },
+  input: { description: string; website: string; listed: boolean },
 ): Promise<ServerActionResult<{ updated: true }>> {
   const { userId } = await auth()
   if (!userId) return { success: false, error: 'You need to sign in first.' }
@@ -492,8 +496,110 @@ export async function updateOrgProfileAction(
 
   await db.organisation.update({
     where: { id: orgId },
-    data: { description: description || null, website: website || null },
+    data: {
+      description: description || null,
+      website: website || null,
+      listed: !!input.listed,
+    },
   })
   revalidatePath(`/orgs/${gate.org.slug}`)
+  revalidatePath('/organisations')
   return { success: true, data: { updated: true } }
+}
+
+/* ── Logo + banner images ───────────────────────────────────── */
+
+const ORG_IMAGE_FIELD = {
+  logo: { column: 'logoUrl', kind: 'orgLogo' },
+  banner: { column: 'bannerUrl', kind: 'orgBanner' },
+} as const
+
+export type OrgImageKind = keyof typeof ORG_IMAGE_FIELD
+
+export async function uploadOrgImageAction(
+  orgId: string,
+  image: OrgImageKind,
+  formData: FormData,
+): Promise<ServerActionResult<{ url: string }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const rl = rateLimit(`${userId}:org-image`, 10, 60_000)
+  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+
+  const field = ORG_IMAGE_FIELD[image]
+  if (!field) return { success: false, error: 'Unknown image type.' }
+
+  const gate = await requireAdmin(orgId, userId)
+  if (!gate.ok) return { success: false, error: gate.error }
+
+  const file = formData.get('file')
+  if (!(file instanceof File) || file.size === 0) {
+    return { success: false, error: 'No file provided.' }
+  }
+
+  const existing = await db.organisation.findUnique({
+    where: { id: orgId },
+    select: { logoUrl: true, bannerUrl: true },
+  })
+
+  let url: string
+  try {
+    const result = await uploadImage(file, field.kind)
+    url = result.url
+  } catch (e) {
+    return {
+      success: false,
+      error: e instanceof Error ? e.message : 'Could not upload the image.',
+    }
+  }
+
+  try {
+    await db.organisation.update({
+      where: { id: orgId },
+      data: { [field.column]: url },
+    })
+  } catch {
+    // The file made it into storage but the DB write failed. Clean up.
+    await deleteImageByUrl(url)
+    return { success: false, error: 'Could not save the image.' }
+  }
+
+  // Now that the new URL is committed, prune the old object.
+  const oldUrl = image === 'logo' ? existing?.logoUrl : existing?.bannerUrl
+  if (oldUrl && oldUrl !== url) await deleteImageByUrl(oldUrl)
+
+  revalidatePath(`/orgs/${gate.org.slug}`)
+  revalidatePath('/organisations')
+  return { success: true, data: { url } }
+}
+
+export async function clearOrgImageAction(
+  orgId: string,
+  image: OrgImageKind,
+): Promise<ServerActionResult<{ cleared: true }>> {
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: 'You need to sign in first.' }
+
+  const field = ORG_IMAGE_FIELD[image]
+  if (!field) return { success: false, error: 'Unknown image type.' }
+
+  const gate = await requireAdmin(orgId, userId)
+  if (!gate.ok) return { success: false, error: gate.error }
+
+  const existing = await db.organisation.findUnique({
+    where: { id: orgId },
+    select: { logoUrl: true, bannerUrl: true },
+  })
+  const oldUrl = image === 'logo' ? existing?.logoUrl : existing?.bannerUrl
+
+  await db.organisation.update({
+    where: { id: orgId },
+    data: { [field.column]: null },
+  })
+  if (oldUrl) await deleteImageByUrl(oldUrl)
+
+  revalidatePath(`/orgs/${gate.org.slug}`)
+  revalidatePath('/organisations')
+  return { success: true, data: { cleared: true } }
 }
