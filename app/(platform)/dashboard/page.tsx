@@ -116,11 +116,14 @@ async function getDashboardData(userId: string) {
     stepNeedsHelp(s) ? 0 : (statusPriority[normaliseStepStatus(s.status, true)] ?? 99)
   mySteps.sort((a, b) => stepPriority(a) - stepPriority(b))
 
-  // Open steps count (across all contributed projects)
-  let openStepCount = 0
-  for (const c of pinnedProjects) {
-    openStepCount += c.project.steps.filter((s) => s.status !== 'completed').length
-  }
+  // Open steps count — the user's own joined, not-yet-completed steps, so
+  // the number matches what /my-steps shows behind "View all".
+  const openStepCount = await db.projectStep.count({
+    where: {
+      status: { not: 'completed' },
+      contributions: { some: { userId, status: 'active' } },
+    },
+  })
 
   // Suggested matches — same scoring as the Skill Matches page, top 3.
   const userSkillIds = user?.skills.map((us) => us.skill.id) ?? []
