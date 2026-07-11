@@ -3,10 +3,10 @@ import { db } from '@/lib/db'
 import { getSkillMatchFeed } from '@/lib/skill-matches'
 import { normaliseStepStatus, stepNeedsHelp } from '@/lib/step-status'
 import type { MatchCardData } from '@/components/platform/skill-matches-client'
+import { GlobalSearch } from '@/components/platform/global-search'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
-  Search,
   Bell,
   Plus,
   ArrowRight,
@@ -188,14 +188,7 @@ export default async function DashboardPage() {
     <>
       {/* Topbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
-        <div className="relative order-2 w-full min-w-0 max-w-[480px] flex-1 sm:order-1 sm:w-auto">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-tertiary" />
-          <input
-            type="text"
-            placeholder="Search projects, steps, or people..."
-            className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
-          />
-        </div>
+        <GlobalSearch />
         <div className="order-1 flex items-center gap-3 sm:order-2">
           <button
             type="button"
