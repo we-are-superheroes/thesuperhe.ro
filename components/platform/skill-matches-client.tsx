@@ -12,6 +12,7 @@ import {
   Waves,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ProjectStatusBadge } from '@/components/platform/project-status-badge'
 import type { LocNote } from '@/lib/matching'
 
 /* ================================================================
@@ -30,6 +31,8 @@ export interface MatchCardData {
   /** Parent project title (steps only). */
   projectTitle: string | null
   type: string | null
+  /** The (parent) project's status — drives the shared status badge. */
+  projectStatus: string
   description: string | null
   skills: string[]
   remote: boolean
@@ -255,6 +258,7 @@ function MatchCard({ card, index }: { card: MatchCardData; index: number }) {
           >
             {card.kind}
           </span>
+          <ProjectStatusBadge status={card.projectStatus} />
           {card.type && <span className="text-xs text-fg-tertiary">{card.type}</span>}
           {card.estimatedHrs != null && (
             <span className="text-xs text-fg-tertiary">· ~{card.estimatedHrs}h</span>

@@ -252,7 +252,6 @@ export async function updateBlueprintAction(
               description: s.description || null,
               order,
               estimatedHrs: s.estimatedHrs,
-              statusDefault: 'open',
             },
             select: { id: true },
           })

@@ -4,6 +4,7 @@ import { getSkillMatchFeed } from '@/lib/skill-matches'
 import { normaliseStepStatus, stepNeedsHelp } from '@/lib/step-status'
 import type { MatchCardData } from '@/components/platform/skill-matches-client'
 import { GlobalSearch } from '@/components/platform/global-search'
+import { ProjectStatusBadge } from '@/components/platform/project-status-badge'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -47,6 +48,7 @@ async function getDashboardData(userId: string) {
           select: {
             id: true,
             title: true,
+            status: true,
             location: true,
             coverImageUrl: true,
             projectType: { select: { name: true } },
@@ -310,8 +312,14 @@ export default async function DashboardPage() {
                             className="object-cover"
                           />
                         )}
-                        <span className="absolute left-3 top-3 rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
-                          {c.role}
+                        <span className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
+                          <span className="rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
+                            {c.role}
+                          </span>
+                          <ProjectStatusBadge
+                            status={c.project.status}
+                            className="bg-blue-900/85 backdrop-blur-sm"
+                          />
                         </span>
                         {needsHelpCount > 0 && (
                           <span className="absolute right-3 top-3 flex items-center gap-[5px] rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[11px] font-semibold text-amber-500 backdrop-blur-sm">
@@ -450,7 +458,8 @@ export default async function DashboardPage() {
                     className="flex flex-col gap-3 rounded-xl border border-white/[0.08] bg-bg-surface p-5 transition-all duration-standard hover:-translate-y-0.5 hover:border-neutral-600"
                   >
                     <div className="flex items-center justify-between gap-3">
-                      <span className="text-xs tracking-tight text-fg-tertiary">
+                      <span className="flex flex-wrap items-center gap-1.5 text-xs tracking-tight text-fg-tertiary">
+                        <ProjectStatusBadge status={m.projectStatus} />
                         {m.type ?? 'Project'}
                         {m.location ? ` · ${m.location}` : m.remote ? ' · Remote' : ''}
                       </span>

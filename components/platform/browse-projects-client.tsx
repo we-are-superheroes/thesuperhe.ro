@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { SelectBox } from '@/components/platform/project-form-bits'
+import { ProjectStatusBadge } from '@/components/platform/project-status-badge'
 
 /* ================================================================
    Types
@@ -25,6 +26,7 @@ export interface BrowseProject {
   id: string
   title: string
   description: string
+  status: string
   location: string
   country: string | null
   language: string | null
@@ -594,8 +596,11 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
             className="object-cover"
           />
         )}
-        <span className="absolute left-3 top-3 rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
-          {p.type}
+        <span className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
+          <span className="rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
+            {p.type}
+          </span>
+          <ProjectStatusBadge status={p.status} className="bg-blue-900/85 backdrop-blur-sm" />
         </span>
         {p.needs > 0 && (
           <span className="absolute right-3 top-3 flex items-center gap-[5px] rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[11px] font-semibold text-amber-500 backdrop-blur-sm">
@@ -668,6 +673,7 @@ function ProjectListRow({ project: p }: { project: BrowseProject }) {
           <span className="rounded-full border border-neutral-700 bg-bg-surface-2 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-fg-primary">
             {p.type}
           </span>
+          <ProjectStatusBadge status={p.status} />
           <MapPin className="size-3 shrink-0" />
           {p.location}
           <span className="mx-1 text-neutral-600">·</span>

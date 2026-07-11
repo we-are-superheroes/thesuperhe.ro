@@ -162,6 +162,7 @@ export default async function MyProjectsPage() {
       location: p.location ?? 'Remote',
       role: c.role,
       status: bucket,
+      projectStatus: p.status,
       progress,
       contributors: contributorInitials.length,
       contributorInitials,

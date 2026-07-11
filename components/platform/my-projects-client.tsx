@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { SelectBox } from '@/components/platform/project-form-bits'
+import { ProjectStatusBadge } from '@/components/platform/project-status-badge'
 
 /* ================================================================
    Types
@@ -34,6 +35,8 @@ export interface MyProject {
   location: string
   role: string // ContributionRole — lead | contributor
   status: 'active' | 'finished' | 'archived'
+  /** Raw ProjectStatus for the shared status badge. */
+  projectStatus: string
   progress: number
   contributors: number
   contributorInitials: string[]
@@ -528,8 +531,11 @@ function ProjectCard({ project: p }: { project: MyProject }) {
             className="object-cover"
           />
         )}
-        <span className="absolute left-3 top-3 rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
-          {p.type}
+        <span className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
+          <span className="rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
+            {p.type}
+          </span>
+          <ProjectStatusBadge status={p.projectStatus} className="bg-blue-900/85 backdrop-blur-sm" />
         </span>
         <span
           className={cn(
@@ -620,8 +626,11 @@ function ProjectListRow({ project: p }: { project: MyProject }) {
           )}
         </div>
         <div className="flex min-w-0 flex-col gap-0.5">
-          <span className="truncate font-display text-base leading-tight text-fg-primary">
-            {p.title}
+          <span className="flex items-center gap-2">
+            <span className="truncate font-display text-base leading-tight text-fg-primary">
+              {p.title}
+            </span>
+            <ProjectStatusBadge status={p.projectStatus} className="shrink-0" />
           </span>
           <span className="truncate text-xs text-fg-tertiary">
             {p.location} · {p.type} · {p.lastActivity}

@@ -382,7 +382,6 @@ export async function saveBlueprintAction(
             description: s.description || null,
             order: i + 1,
             estimatedHrs: s.estimatedHrs,
-            statusDefault: 'open',
           },
         })
         if (s.skillIds.length > 0) {

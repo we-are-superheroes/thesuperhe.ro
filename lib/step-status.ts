@@ -1,13 +1,9 @@
 /* ================================================================
-   Step-status normalisation for the rollout window.
-
-   The step workflow shrank from five statuses to three (open,
-   in_progress, completed) with an orthogonal helpWanted flag. The
-   database enums are only contracted in a follow-up migration, so
-   for a short window old rows (or rows written by not-yet-replaced
-   server instances) can still carry 'defining' or 'needs_help'.
-   Normalise at read time; delete this module once the contract
-   migration has landed.
+   Step-status helpers. The database enum is contracted to the three
+   live values (open, in_progress, completed) with an orthogonal
+   helpWanted flag; this module stays as the defensive cast layer
+   between Prisma's string statuses and the UI's narrow unions, and
+   still tolerates the retired values just in case.
    ================================================================ */
 
 export type LiveStepStatus = 'open' | 'in_progress' | 'completed'

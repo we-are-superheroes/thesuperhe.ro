@@ -16,6 +16,7 @@ import {
   Plus,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { ProjectStatusBadge } from '@/components/platform/project-status-badge'
 import {
   clearOrgImageAction,
   createInviteCodeAction,
@@ -40,6 +41,7 @@ export interface OrgProjectCard {
   title: string
   description: string
   type: string
+  status: string
   imgKey: string
   coverImageUrl: string | null
   membersOnly: boolean
@@ -561,8 +563,11 @@ function ProjectCard({ p }: { p: OrgProjectCard }) {
         {p.coverImageUrl && (
           <Image src={p.coverImageUrl} alt="" fill className="object-cover" sizes="(max-width: 640px) 100vw, 500px" />
         )}
-        <span className="absolute left-3 top-3 rounded-full border border-white/15 bg-[rgba(14,26,43,0.85)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
-          {p.type}
+        <span className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
+          <span className="rounded-full border border-white/15 bg-[rgba(14,26,43,0.85)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
+            {p.type}
+          </span>
+          <ProjectStatusBadge status={p.status} className="bg-[rgba(14,26,43,0.85)] backdrop-blur-md" />
         </span>
         {p.membersOnly && (
           <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full border border-amber-500/35 bg-[rgba(14,26,43,0.85)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-300 backdrop-blur-md">

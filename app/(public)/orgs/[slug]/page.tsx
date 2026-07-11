@@ -82,6 +82,7 @@ function toCard(p: {
     title: p.title,
     description: p.description.split(/\n+/)[0],
     type: p.projectType?.name ?? 'Project',
+    status: p.status,
     imgKey: (p.projectType?.name && TYPE_IMG_KEY[p.projectType.name]) || 'rewild',
     coverImageUrl: p.coverImageUrl,
     membersOnly: p.visibility === 'org_members',
