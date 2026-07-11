@@ -1,7 +1,8 @@
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
-import { visibleProjectsWhere } from '@/lib/orgs'
+import { getSkillMatchFeed } from '@/lib/skill-matches'
 import { normaliseStepStatus, stepNeedsHelp } from '@/lib/step-status'
+import type { MatchCardData } from '@/components/platform/skill-matches-client'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
@@ -88,6 +89,9 @@ async function getDashboardData(userId: string) {
       where: {
         projectId: { in: projectIds },
         status: { not: 'completed' },
+        // Only steps the user has actually joined — being a member of the
+        // project isn't enough for "your next steps".
+        contributions: { some: { userId, status: 'active' } },
       },
       select: {
         id: true,
@@ -118,82 +122,12 @@ async function getDashboardData(userId: string) {
     openStepCount += c.project.steps.filter((s) => s.status !== 'completed').length
   }
 
-  // Suggested projects (skill match) — only if user has skills
+  // Suggested matches — same scoring as the Skill Matches page, top 3.
   const userSkillIds = user?.skills.map((us) => us.skill.id) ?? []
-  let suggestedProjects: Array<{
-    id: string
-    title: string
-    location: string | null
-    projectType: { name: string } | null
-    matchingSkills: string[]
-    totalSkillsNeeded: number
-    matchPercent: number
-  }> = []
-
+  let suggestedMatches: MatchCardData[] = []
   if (userSkillIds.length > 0) {
-    // Find projects that need the user's skills and they're not already contributing to
-    const candidateProjects = await db.project.findMany({
-      where: {
-        status: { in: ['defining', 'needs_help', 'in_progress'] },
-        id: { notIn: projectIds.length > 0 ? projectIds : ['__none__'] },
-        AND: [visibleProjectsWhere(userId)],
-        steps: {
-          some: {
-            helpWanted: true,
-            status: { not: 'completed' },
-            skills: {
-              some: { skillId: { in: userSkillIds } },
-            },
-          },
-        },
-      },
-      select: {
-        id: true,
-        title: true,
-        location: true,
-        projectType: { select: { name: true } },
-        steps: {
-          select: {
-            skills: {
-              select: {
-                skill: { select: { id: true, name: true } },
-              },
-            },
-          },
-        },
-      },
-      take: 6,
-    })
-
-    suggestedProjects = candidateProjects.map((p) => {
-      const allSkillIds = new Set<string>()
-      const allSkillNames = new Map<string, string>()
-      const matchingSkillNames: string[] = []
-
-      for (const step of p.steps) {
-        for (const ss of step.skills) {
-          allSkillIds.add(ss.skill.id)
-          allSkillNames.set(ss.skill.id, ss.skill.name)
-          if (userSkillIds.includes(ss.skill.id) && !matchingSkillNames.includes(ss.skill.name)) {
-            matchingSkillNames.push(ss.skill.name)
-          }
-        }
-      }
-
-      const matchPercent = allSkillIds.size > 0
-        ? Math.round((matchingSkillNames.length / allSkillIds.size) * 100)
-        : 0
-
-      return {
-        id: p.id,
-        title: p.title,
-        location: p.location,
-        projectType: p.projectType,
-        matchingSkills: matchingSkillNames,
-        totalSkillsNeeded: allSkillIds.size,
-        matchPercent,
-      }
-    }).sort((a, b) => b.matchPercent - a.matchPercent).slice(0, 3)
+    const feed = await getSkillMatchFeed(userId)
+    suggestedMatches = feed.cards.slice(0, 3)
   }
 
   // Get some sample skills for the empty state skill chips
@@ -206,7 +140,7 @@ async function getDashboardData(userId: string) {
     user,
     pinnedProjects,
     mySteps,
-    suggestedProjects,
+    suggestedMatches,
     projectCount,
     openStepCount,
     totalHours,
@@ -226,7 +160,7 @@ export default async function DashboardPage() {
     user,
     pinnedProjects,
     mySteps,
-    suggestedProjects,
+    suggestedMatches,
     projectCount,
     openStepCount,
     totalHours,
@@ -504,7 +438,7 @@ export default async function DashboardPage() {
 
         {/* ── Suggested / Skill Matches ── */}
         <section>
-          {hasSkills && suggestedProjects.length > 0 ? (
+          {hasSkills && suggestedMatches.length > 0 ? (
             <>
               <SectionHeader
                 eyebrow="Matched to your skills"
@@ -513,31 +447,46 @@ export default async function DashboardPage() {
                 linkHref="/skill-matches"
               />
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {suggestedProjects.map((p) => (
+                {suggestedMatches.map((m) => (
                   <Link
-                    key={p.id}
-                    href={`/projects/${p.id}`}
+                    key={`${m.kind}-${m.id}`}
+                    href={m.href}
                     className="flex flex-col gap-3 rounded-xl border border-white/[0.08] bg-bg-surface p-5 transition-all duration-standard hover:-translate-y-0.5 hover:border-neutral-600"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-xs tracking-tight text-fg-tertiary">
-                        {p.projectType?.name ?? 'Project'}{p.location ? ` · ${p.location}` : ''}
+                        {m.type ?? 'Project'}
+                        {m.location ? ` · ${m.location}` : m.remote ? ' · Remote' : ''}
                       </span>
                       <div className="text-right">
                         <div className="font-display text-2xl leading-none text-amber-500">
-                          {p.matchPercent}%
+                          {m.score}
                         </div>
                         <div className="text-[10px] uppercase tracking-widest text-fg-tertiary">
                           Match
                         </div>
                       </div>
                     </div>
-                    <h4 className="font-display text-lg leading-snug">{p.title}</h4>
+                    <h4 className="font-display text-lg leading-snug">{m.title}</h4>
+                    {m.kind === 'step' && m.projectTitle && (
+                      <p className="-mt-2 text-xs text-fg-tertiary">
+                        A step in {m.projectTitle}
+                        {m.estimatedHrs != null && <> · ~{m.estimatedHrs}h</>}
+                      </p>
+                    )}
                     <div className="flex flex-wrap gap-1.5">
-                      {p.matchingSkills.map((skill) => (
+                      {m.direct.slice(0, 3).map((skill) => (
                         <span
                           key={skill}
-                          className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-[3px] text-[11px] text-fg-secondary"
+                          className="rounded-full border border-amber-500/40 bg-amber-500/[0.10] px-2.5 py-[3px] text-[11px] text-amber-500"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {m.related.slice(0, Math.max(0, 3 - m.direct.length)).map((skill) => (
+                        <span
+                          key={skill}
+                          className="rounded-full border border-blue-400/40 bg-blue-500/[0.10] px-2.5 py-[3px] text-[11px] text-blue-300"
                         >
                           {skill}
                         </span>
