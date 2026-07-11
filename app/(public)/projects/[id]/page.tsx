@@ -606,7 +606,6 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
 
         {/* Tabs */}
         <ProjectTabBar
-          stepCount={totalSteps}
           updatesCount={updates.length}
           topOffsetClass={userId ? 'top-0' : 'top-14 sm:top-16'}
         />
@@ -644,11 +643,10 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 createdAtMs={latestUpdate.createdAtMs}
               />
             )}
-            </ProjectTabPanel>
 
-            <ProjectTabPanel tab="steps">
-            {/* Steps */}
-            <section>
+            {/* Steps — same tab as the overview; "See open steps" buttons
+                scroll here via the anchor. */}
+            <section id="steps" className="mt-12 scroll-mt-20">
               <div className="mb-6 flex items-end justify-between gap-6">
                 <div>
                   <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">

@@ -457,6 +457,7 @@ export default async function DashboardPage() {
                       <div className="text-right">
                         <div className="font-display text-2xl leading-none text-amber-500">
                           {m.score}
+                          <span className="text-sm text-fg-tertiary">%</span>
                         </div>
                         <div className="text-[10px] uppercase tracking-widest text-fg-tertiary">
                           Match

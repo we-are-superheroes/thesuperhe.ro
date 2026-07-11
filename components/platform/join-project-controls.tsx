@@ -5,7 +5,17 @@ import Link from 'next/link'
 import { ArrowRight, Check, ChevronDown, Clock, LogIn, LogOut, CheckSquare } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { joinProjectAction, leaveProjectAction } from '@/app/(platform)/projects/[id]/actions'
-import { useProjectTabs } from './project-tabs'
+import { useProjectTabs, type ProjectTab } from './project-tabs'
+
+/** Steps live on the Overview tab — switch there and scroll to them. */
+function showSteps(
+  setTab: (tab: ProjectTab, opts?: { scroll?: boolean }) => void,
+) {
+  setTab('overview', { scroll: false })
+  requestAnimationFrame(() => {
+    document.getElementById('steps')?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+  })
+}
 
 /**
  * Top-right "Join project" button used in the project view topbar.
@@ -171,7 +181,7 @@ function JoinedDropdown({
             role="menuitem"
             onClick={() => {
               setOpen(false)
-              setTab('steps')
+              showSteps(setTab)
             }}
             className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm text-fg-secondary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary"
           >
@@ -231,7 +241,7 @@ export function JoinProjectCard({
           </p>
           <button
             type="button"
-            onClick={() => setTab('steps')}
+            onClick={() => showSteps(setTab)}
             className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
           >
             See open steps
