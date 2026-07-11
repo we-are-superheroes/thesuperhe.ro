@@ -10,9 +10,9 @@ import {
 } from 'react'
 import { cn } from '@/lib/utils'
 
-export type ProjectTab = 'overview' | 'steps' | 'updates'
+export type ProjectTab = 'overview' | 'updates'
 
-const TABS: ProjectTab[] = ['overview', 'steps', 'updates']
+const TABS: ProjectTab[] = ['overview', 'updates']
 
 function isProjectTab(value: unknown): value is ProjectTab {
   return typeof value === 'string' && (TABS as string[]).includes(value)
@@ -117,11 +117,9 @@ export function ProjectTabsProvider({
  * signed-out pages scroll the window beneath the sticky public navbar.
  */
 export function ProjectTabBar({
-  stepCount,
   updatesCount,
   topOffsetClass,
 }: {
-  stepCount: number
   updatesCount: number
   topOffsetClass: string
 }) {
@@ -129,7 +127,6 @@ export function ProjectTabBar({
 
   const items: Array<{ key: ProjectTab; label: string; count?: number }> = [
     { key: 'overview', label: 'Overview' },
-    { key: 'steps', label: 'Steps', count: stepCount },
     { key: 'updates', label: 'Updates', count: updatesCount },
   ]
 

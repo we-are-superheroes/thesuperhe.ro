@@ -11,6 +11,7 @@ import {
   MapPin,
   LayoutGrid,
   List,
+  Lock,
   SlidersHorizontal,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -36,6 +37,8 @@ export interface BrowseProject {
   needs: number
   progress: number
   contributors: number
+  org: { slug: string; name: string } | null
+  membersOnly: boolean
   posted: string
   sortRecent: number
   sortNeeds: number
@@ -88,6 +91,7 @@ export function BrowseProjectsClient({
   locations,
   countries,
   languages,
+  myOrgs,
 }: {
   projects: BrowseProject[]
   projectTypes: FilterOption[]
@@ -95,6 +99,8 @@ export function BrowseProjectsClient({
   locations: LocationOption[]
   countries: CodeOption[]
   languages: CodeOption[]
+  /** Orgs the viewer belongs to — the org filter only exists for members. */
+  myOrgs: Array<{ slug: string; name: string; count: number }>
 }) {
   const [query, setQuery] = useState('')
   const [skillSearch, setSkillSearch] = useState('')
@@ -105,6 +111,7 @@ export function BrowseProjectsClient({
   const [selectedLocations, setSelectedLocations] = useState<Set<string>>(new Set())
   const [selectedCountries, setSelectedCountries] = useState<Set<string>>(new Set())
   const [selectedLanguages, setSelectedLanguages] = useState<Set<string>>(new Set())
+  const [selectedOrgs, setSelectedOrgs] = useState<Set<string>>(new Set())
   const [sort, setSort] = useState<SortKey>('recent')
   const [view, setView] = useState<'grid' | 'list'>('grid')
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
@@ -124,6 +131,7 @@ export function BrowseProjectsClient({
         if (selectedLocations.size && !selectedLocations.has(p.location)) return false
         if (selectedCountries.size && (!p.country || !selectedCountries.has(p.country))) return false
         if (selectedLanguages.size && (!p.language || !selectedLanguages.has(p.language))) return false
+        if (selectedOrgs.size && (!p.org || !selectedOrgs.has(p.org.slug))) return false
         return true
       })
       .sort((a, b) => {
@@ -140,6 +148,7 @@ export function BrowseProjectsClient({
     selectedLocations,
     selectedCountries,
     selectedLanguages,
+    selectedOrgs,
     sort,
   ])
 
@@ -160,6 +169,7 @@ export function BrowseProjectsClient({
     setSelectedLocations(new Set())
     setSelectedCountries(new Set())
     setSelectedLanguages(new Set())
+    setSelectedOrgs(new Set())
   }
 
   // Active chips derived from current state
@@ -184,6 +194,10 @@ export function BrowseProjectsClient({
     const l = languages.find((x) => x.code === code)
     if (l) activeChips.push({ kind: 'language', key: code, label: l.label })
   }
+  for (const slug of selectedOrgs) {
+    const o = myOrgs.find((x) => x.slug === slug)
+    if (o) activeChips.push({ kind: 'org', key: slug, label: o.name })
+  }
 
   const removeChip = (kind: string, key: string) => {
     if (kind === 'query') setQuery('')
@@ -192,6 +206,7 @@ export function BrowseProjectsClient({
     else if (kind === 'location') toggle(selectedLocations, setSelectedLocations, key)
     else if (kind === 'country') toggle(selectedCountries, setSelectedCountries, key)
     else if (kind === 'language') toggle(selectedLanguages, setSelectedLanguages, key)
+    else if (kind === 'org') toggle(selectedOrgs, setSelectedOrgs, key)
   }
 
   // Apply skill / location search filters to the visible filter list
@@ -212,14 +227,14 @@ export function BrowseProjectsClient({
     <>
       {/* Topbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
-        <div className="relative order-2 w-full min-w-0 max-w-[560px] flex-1 sm:order-1 sm:w-auto">
-          <Search className="absolute left-3.5 top-1/2 size-[18px] -translate-y-1/2 text-fg-tertiary" />
+        <div className="relative order-2 w-full min-w-0 max-w-[480px] flex-1 sm:order-1 sm:w-auto">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-tertiary" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search projects..."
-            className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-3 pl-11 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
+            className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
           />
         </div>
         <div className="order-1 flex items-center gap-3 sm:order-2">
@@ -291,6 +306,17 @@ export function BrowseProjectsClient({
                 Clear all
               </button>
             </div>
+
+            {/* Your organisations (only shown to members of at least one) */}
+            {myOrgs.length > 0 && (
+              <FilterGroup label="Your organisations">
+                <CheckList
+                  items={myOrgs.map((o) => ({ id: o.slug, label: o.name, count: o.count }))}
+                  selected={selectedOrgs}
+                  onToggle={(k) => toggle(selectedOrgs, setSelectedOrgs, k)}
+                />
+              </FilterGroup>
+            )}
 
             {/* Type */}
             <FilterGroup label="Type of project">
@@ -577,6 +603,12 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
             {p.needs} need{p.needs === 1 ? 's' : ''} help
           </span>
         )}
+        {p.membersOnly && (
+          <span className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full border border-amber-500/35 bg-blue-900/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-400 backdrop-blur-sm">
+            <Lock className="size-2.5" />
+            Members only
+          </span>
+        )}
       </div>
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex items-center gap-2 text-xs text-fg-tertiary">
@@ -584,6 +616,12 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
           {p.location}
           <span className="mx-1 text-neutral-600">·</span>
           Posted {p.posted}
+          {p.org && (
+            <>
+              <span className="mx-1 text-neutral-600">·</span>
+              <span className="truncate text-fg-secondary">{p.org.name}</span>
+            </>
+          )}
         </div>
         <h3 className="font-display text-xl leading-snug">{p.title}</h3>
         <p className="line-clamp-2 text-sm leading-normal text-fg-secondary">{p.description}</p>
@@ -634,6 +672,18 @@ function ProjectListRow({ project: p }: { project: BrowseProject }) {
           {p.location}
           <span className="mx-1 text-neutral-600">·</span>
           {p.posted}
+          {p.org && (
+            <>
+              <span className="mx-1 text-neutral-600">·</span>
+              <span className="truncate text-fg-secondary">{p.org.name}</span>
+            </>
+          )}
+          {p.membersOnly && (
+            <span className="ml-1 inline-flex items-center gap-1 rounded-full border border-amber-500/35 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-400">
+              <Lock className="size-2.5" />
+              Members only
+            </span>
+          )}
         </div>
         <h3 className="truncate font-display text-lg">{p.title}</h3>
         <p className="line-clamp-1 text-sm text-fg-secondary">{p.description}</p>

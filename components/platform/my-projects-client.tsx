@@ -11,7 +11,6 @@ import {
   Clock,
   Star,
   Users,
-  MessageSquare,
   AlertCircle,
   LayoutGrid,
   List as ListIcon,
@@ -24,7 +23,7 @@ import { SelectBox } from '@/components/platform/project-form-bits'
    Types
    ================================================================ */
 
-type CardStepStatus = 'needs_help' | 'in_progress' | 'review' | 'done'
+type CardStepStatus = 'needs_help' | 'in_progress' | 'open' | 'done'
 
 export interface MyProject {
   id: string
@@ -33,7 +32,7 @@ export interface MyProject {
   imgKey: string
   coverImageUrl: string | null
   location: string
-  role: string // ContributionRole — lead | contributor | advisor | observer
+  role: string // ContributionRole — lead | contributor
   status: 'active' | 'finished' | 'archived'
   progress: number
   contributors: number
@@ -52,7 +51,7 @@ export interface MyProject {
 }
 
 type Tab = 'active' | 'finished' | 'archived'
-type RoleFilter = 'all' | 'lead' | 'contributor' | 'advisor' | 'needs_action'
+type RoleFilter = 'all' | 'lead' | 'contributor' | 'needs_action'
 type SortKey = 'recent' | 'due' | 'progress' | 'title'
 
 /* ================================================================
@@ -88,8 +87,6 @@ const AVATAR_PALETTE = [
 const ROLE_LABEL: Record<string, string> = {
   lead: 'Leading',
   contributor: 'Contributing',
-  advisor: 'Advising',
-  observer: 'Watching',
 }
 
 /* ================================================================
@@ -125,7 +122,6 @@ export function MyProjectsClient({
       all: inTab.length,
       lead: inTab.filter((p) => p.role === 'lead').length,
       contributor: inTab.filter((p) => p.role === 'contributor').length,
-      advisor: inTab.filter((p) => p.role === 'advisor').length,
       needs_action: inTab.filter((p) => p.nextStep?.urgent).length,
     }
   }, [projects, tab])
@@ -257,13 +253,6 @@ export function MyProjectsClient({
               label="Contributing"
               count={roleCounts.contributor}
               onClick={() => setRole('contributor')}
-            />
-            <FilterPill
-              active={role === 'advisor'}
-              icon={<MessageSquare className="size-3.5" strokeWidth={2.5} />}
-              label="Advising"
-              count={roleCounts.advisor}
-              onClick={() => setRole('advisor')}
             />
             <FilterPill
               active={role === 'needs_action'}
@@ -439,10 +428,9 @@ function RoleBadge({ role }: { role: string }) {
   const className = (() => {
     if (role === 'lead') return 'border-amber-500/40 bg-amber-500/[0.10] text-amber-500'
     if (role === 'contributor') return 'border-blue-500/40 bg-blue-500/[0.10] text-blue-300'
-    if (role === 'advisor') return 'border-green-500/40 bg-green-500/[0.10] text-green-300'
     return 'border-neutral-700 bg-bg-surface-2 text-fg-secondary'
   })()
-  const Icon = role === 'lead' ? Star : role === 'advisor' ? MessageSquare : Users
+  const Icon = role === 'lead' ? Star : Users
   return (
     <span
       className={cn(
@@ -471,20 +459,10 @@ function StepStatusDot({ status }: { status: CardStepStatus }) {
       </div>
     )
   }
-  if (status === 'review') {
+  if (status === 'open') {
     return (
-      <div className="flex size-[22px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-green-500 bg-green-500/15">
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="#7DD3B0"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="size-3"
-        >
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
+      <div className="flex size-[22px] shrink-0 items-center justify-center rounded-full border-[1.5px] border-neutral-600 bg-bg-surface-2">
+        <span className="size-2 rounded-full border border-fg-tertiary" />
       </div>
     )
   }
@@ -558,12 +536,10 @@ function ProjectCard({ project: p }: { project: MyProject }) {
             'absolute right-3 top-3 inline-flex items-center gap-1.5 rounded-full border bg-blue-900/85 px-2.5 py-1 text-[11px] font-semibold backdrop-blur-sm',
             p.role === 'lead' && 'border-amber-500/40 text-amber-500',
             p.role === 'contributor' && 'border-blue-500/40 text-blue-300',
-            p.role === 'advisor' && 'border-green-500/40 text-green-300',
-            p.role === 'observer' && 'border-neutral-700 text-fg-secondary',
           )}
         >
           {(() => {
-            const Icon = p.role === 'lead' ? Star : p.role === 'advisor' ? MessageSquare : Users
+            const Icon = p.role === 'lead' ? Star : Users
             return <Icon className="size-2.5" strokeWidth={2.5} />
           })()}
           {ROLE_LABEL[p.role] ?? p.role}

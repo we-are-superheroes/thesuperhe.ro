@@ -88,7 +88,13 @@ export default async function UserProfilePage({ params }: Params) {
           },
         },
         contributions: {
-          where: { projectStepId: null, status: 'active' },
+          // Public projects only: members-only org projects must not leak
+          // their titles through a member's public profile.
+          where: {
+            projectStepId: null,
+            status: 'active',
+            project: { visibility: 'public' },
+          },
           orderBy: { joinedAt: 'desc' },
           select: {
             role: true,
@@ -110,13 +116,14 @@ export default async function UserProfilePage({ params }: Params) {
       },
     }),
     // "Completed" steps stat — count steps that are done *and* that the user
-    // was actively on. With the multi-joiner model this is a contribution
-    // count, not a step-assignee count.
+    // is actively on. Done-ness lives on the step now, not mirrored onto
+    // the contribution.
     db.contribution.count({
       where: {
         userId: id,
         projectStepId: { not: null },
-        status: 'completed',
+        status: 'active',
+        projectStep: { status: 'completed' },
       },
     }),
     db.blueprint.aggregate({
@@ -173,7 +180,9 @@ export default async function UserProfilePage({ params }: Params) {
       type: p.projectType?.name ?? 'Other',
       imgKey: (p.projectType?.name && TYPE_IMG_KEY[p.projectType.name]) ?? 'rewild',
       location: p.location ?? 'Remote',
-      role: c.role,
+      // advisor/observer no longer exist as live roles; any rollout-window
+      // straggler reads as a contributor.
+      role: c.role === 'lead' ? 'lead' : 'contributor',
       status,
       progress,
       since: status === 'active'

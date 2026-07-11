@@ -4,6 +4,7 @@ import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { ensureUserExists } from '@/lib/users'
+import { canViewProject } from '@/lib/orgs'
 import { notify, getProjectLeadIds } from '@/lib/notifications'
 import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import type { ServerActionResult } from '@/types'
@@ -24,9 +25,14 @@ export async function joinProjectAction(
 
   const project = await db.project.findUnique({
     where: { id: projectId },
-    select: { id: true, title: true, joinPolicy: true },
+    select: { id: true, title: true, joinPolicy: true, visibility: true, orgId: true },
   })
   if (!project) return { success: false, error: 'Project not found.' }
+  // Members-only projects can only be joined from inside the owning org.
+  // Same response as a missing project — don't confirm it exists.
+  if (!(await canViewProject(project, userId))) {
+    return { success: false, error: 'Project not found.' }
+  }
   const approvalRequired = project.joinPolicy === 'approval_required'
 
   // Project-level uniqueness must be checked manually because Postgres treats
@@ -178,7 +184,7 @@ export async function joinStepAction(
       // First joiner becomes the coordinator + flips an idle step into motion.
       const stepUpdate: { coordinatorId?: string; status?: typeof step.status } = {}
       if (!step.coordinatorId) stepUpdate.coordinatorId = userId
-      if (step.status === 'open' || step.status === 'defining') {
+      if (step.status === 'open') {
         stepUpdate.status = 'in_progress'
       }
       if (Object.keys(stepUpdate).length > 0) {
@@ -263,12 +269,16 @@ export async function leaveStepAction(
       const stepUpdate: {
         coordinatorId?: string | null
         status?: typeof step.status
+        helpWanted?: boolean
       } = {}
       if (step.coordinatorId === userId) {
         stepUpdate.coordinatorId = remainingJoiners[0]?.userId ?? null
       }
+      // Abandoned mid-work: back to open, waving for help. step_unclaimed
+      // below already tells the leads, so no separate needs-help ping.
       if (remainingJoiners.length === 0 && step.status === 'in_progress') {
-        stepUpdate.status = 'needs_help'
+        stepUpdate.status = 'open'
+        stepUpdate.helpWanted = true
       }
       if (Object.keys(stepUpdate).length > 0) {
         await tx.projectStep.update({
@@ -368,12 +378,17 @@ export async function leaveProjectAction(
           orderBy: { joinedAt: 'asc' },
           select: { userId: true },
         })
-        const update: { coordinatorId?: string | null; status?: typeof s.status } = {}
+        const update: {
+          coordinatorId?: string | null
+          status?: typeof s.status
+          helpWanted?: boolean
+        } = {}
         if (s.coordinatorId === userId) {
           update.coordinatorId = remaining[0]?.userId ?? null
         }
         if (remaining.length === 0 && s.status === 'in_progress') {
-          update.status = 'needs_help'
+          update.status = 'open'
+          update.helpWanted = true
         }
         if (Object.keys(update).length > 0) {
           await tx.projectStep.update({ where: { id: s.id }, data: update })

@@ -1,7 +1,9 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
+import { ORG_TYPE_LABEL, isOrgAdminRole } from '@/lib/org-utils'
 import { ProfileEditForm, type ProfileFormInitial, type SkillOption } from '@/components/platform/profile-edit-form'
+import { ProfileOrgsSection, type ProfileOrgRow } from '@/components/platform/profile-orgs-section'
 
 const TIMEZONE_OPTIONS = [
   '(GMT−08:00) Pacific — Los Angeles',
@@ -43,6 +45,27 @@ export default async function ProfilePage() {
     }),
   ])
 
+  const memberships = await db.userOrganisation.findMany({
+    where: { userId, leftAt: null },
+    orderBy: { joinedAt: 'asc' },
+    select: {
+      role: true,
+      shareContributions: true,
+      org: { select: { id: true, slug: true, name: true, type: true, status: true } },
+    },
+  })
+
+  const orgRows: ProfileOrgRow[] = memberships.map((m) => ({
+    orgId: m.org.id,
+    slug: m.org.slug,
+    name: m.org.name,
+    typeLabel: ORG_TYPE_LABEL[m.org.type],
+    status: m.org.status,
+    roleLabel: m.role === 'owner' ? 'Creator' : m.role === 'admin' ? 'Admin' : 'Member',
+    isAdmin: isOrgAdminRole(m.role),
+    shareContributions: m.shareContributions,
+  }))
+
   const skillOptions: SkillOption[] = allSkills.map((s) => ({
     id: s.id,
     name: s.name,
@@ -71,6 +94,7 @@ export default async function ProfilePage() {
       initial={initial}
       skillOptions={skillOptions}
       timezones={TIMEZONE_OPTIONS}
+      orgsSlot={<ProfileOrgsSection orgs={orgRows} />}
     />
   )
 }

@@ -1,9 +1,12 @@
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+import { getSkillMatchFeed } from '@/lib/skill-matches'
+import { normaliseStepStatus, stepNeedsHelp } from '@/lib/step-status'
+import type { MatchCardData } from '@/components/platform/skill-matches-client'
+import { GlobalSearch } from '@/components/platform/global-search'
 import Link from 'next/link'
 import Image from 'next/image'
 import {
-  Search,
   Bell,
   Plus,
   ArrowRight,
@@ -48,7 +51,7 @@ async function getDashboardData(userId: string) {
             coverImageUrl: true,
             projectType: { select: { name: true } },
             steps: {
-              select: { id: true, status: true },
+              select: { id: true, status: true, helpWanted: true },
             },
           },
         },
@@ -75,6 +78,7 @@ async function getDashboardData(userId: string) {
     id: string
     title: string
     status: string
+    helpWanted: boolean
     estimatedHrs: number | null
     project: { title: string }
     skills: Array<{ skill: { name: string } }>
@@ -84,12 +88,16 @@ async function getDashboardData(userId: string) {
     mySteps = await db.projectStep.findMany({
       where: {
         projectId: { in: projectIds },
-        status: { in: ['needs_help', 'in_progress', 'defining', 'open'] },
+        status: { not: 'completed' },
+        // Only steps the user has actually joined — being a member of the
+        // project isn't enough for "your next steps".
+        contributions: { some: { userId, status: 'active' } },
       },
       select: {
         id: true,
         title: true,
         status: true,
+        helpWanted: true,
         estimatedHrs: true,
         project: { select: { title: true } },
         skills: { select: { skill: { select: { name: true } } } },
@@ -99,97 +107,30 @@ async function getDashboardData(userId: string) {
     })
   }
 
-  // Sort steps by status priority: needs_help > in_progress > not_started
+  // Sort steps by urgency: asking for help > in progress > open
   const statusPriority: Record<string, number> = {
-    needs_help: 0,
     in_progress: 1,
-    defining: 2,
-    open: 3,
+    open: 2,
   }
-  mySteps.sort((a, b) => (statusPriority[a.status] ?? 99) - (statusPriority[b.status] ?? 99))
+  const stepPriority = (s: (typeof mySteps)[number]) =>
+    stepNeedsHelp(s) ? 0 : (statusPriority[normaliseStepStatus(s.status, true)] ?? 99)
+  mySteps.sort((a, b) => stepPriority(a) - stepPriority(b))
 
-  // Open steps count (across all contributed projects)
-  let openStepCount = 0
-  for (const c of pinnedProjects) {
-    openStepCount += c.project.steps.filter(
-      (s) => s.status === 'needs_help' || s.status === 'in_progress' || s.status === 'defining' || s.status === 'open',
-    ).length
-  }
+  // Open steps count — the user's own joined, not-yet-completed steps, so
+  // the number matches what /my-steps shows behind "View all".
+  const openStepCount = await db.projectStep.count({
+    where: {
+      status: { not: 'completed' },
+      contributions: { some: { userId, status: 'active' } },
+    },
+  })
 
-  // Suggested projects (skill match) — only if user has skills
+  // Suggested matches — same scoring as the Skill Matches page, top 3.
   const userSkillIds = user?.skills.map((us) => us.skill.id) ?? []
-  let suggestedProjects: Array<{
-    id: string
-    title: string
-    location: string | null
-    projectType: { name: string } | null
-    matchingSkills: string[]
-    totalSkillsNeeded: number
-    matchPercent: number
-  }> = []
-
+  let suggestedMatches: MatchCardData[] = []
   if (userSkillIds.length > 0) {
-    // Find projects that need the user's skills and they're not already contributing to
-    const candidateProjects = await db.project.findMany({
-      where: {
-        status: { in: ['defining', 'needs_help', 'in_progress'] },
-        id: { notIn: projectIds.length > 0 ? projectIds : ['__none__'] },
-        steps: {
-          some: {
-            status: 'needs_help',
-            skills: {
-              some: { skillId: { in: userSkillIds } },
-            },
-          },
-        },
-      },
-      select: {
-        id: true,
-        title: true,
-        location: true,
-        projectType: { select: { name: true } },
-        steps: {
-          select: {
-            skills: {
-              select: {
-                skill: { select: { id: true, name: true } },
-              },
-            },
-          },
-        },
-      },
-      take: 6,
-    })
-
-    suggestedProjects = candidateProjects.map((p) => {
-      const allSkillIds = new Set<string>()
-      const allSkillNames = new Map<string, string>()
-      const matchingSkillNames: string[] = []
-
-      for (const step of p.steps) {
-        for (const ss of step.skills) {
-          allSkillIds.add(ss.skill.id)
-          allSkillNames.set(ss.skill.id, ss.skill.name)
-          if (userSkillIds.includes(ss.skill.id) && !matchingSkillNames.includes(ss.skill.name)) {
-            matchingSkillNames.push(ss.skill.name)
-          }
-        }
-      }
-
-      const matchPercent = allSkillIds.size > 0
-        ? Math.round((matchingSkillNames.length / allSkillIds.size) * 100)
-        : 0
-
-      return {
-        id: p.id,
-        title: p.title,
-        location: p.location,
-        projectType: p.projectType,
-        matchingSkills: matchingSkillNames,
-        totalSkillsNeeded: allSkillIds.size,
-        matchPercent,
-      }
-    }).sort((a, b) => b.matchPercent - a.matchPercent).slice(0, 3)
+    const feed = await getSkillMatchFeed(userId)
+    suggestedMatches = feed.cards.slice(0, 3)
   }
 
   // Get some sample skills for the empty state skill chips
@@ -202,7 +143,7 @@ async function getDashboardData(userId: string) {
     user,
     pinnedProjects,
     mySteps,
-    suggestedProjects,
+    suggestedMatches,
     projectCount,
     openStepCount,
     totalHours,
@@ -222,7 +163,7 @@ export default async function DashboardPage() {
     user,
     pinnedProjects,
     mySteps,
-    suggestedProjects,
+    suggestedMatches,
     projectCount,
     openStepCount,
     totalHours,
@@ -247,14 +188,7 @@ export default async function DashboardPage() {
     <>
       {/* Topbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
-        <div className="relative order-2 w-full min-w-0 max-w-[480px] flex-1 sm:order-1 sm:w-auto">
-          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-tertiary" />
-          <input
-            type="text"
-            placeholder="Search projects, steps, or people..."
-            className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
-          />
-        </div>
+        <GlobalSearch />
         <div className="order-1 flex items-center gap-3 sm:order-2">
           <button
             type="button"
@@ -358,7 +292,7 @@ export default async function DashboardPage() {
                   const doneCount = steps.filter((s) => s.status === 'completed').length
                   const totalSteps = steps.length
                   const progressPct = totalSteps > 0 ? Math.round((doneCount / totalSteps) * 100) : 0
-                  const needsHelpCount = steps.filter((s) => s.status === 'needs_help').length
+                  const needsHelpCount = steps.filter(stepNeedsHelp).length
 
                   return (
                     <Link
@@ -456,7 +390,9 @@ export default async function DashboardPage() {
                     key={step.id}
                     className={`flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-2 px-4 py-4 transition-colors duration-fast hover:bg-bg-surface-2 sm:px-6 sm:py-5 ${i < mySteps.length - 1 ? 'border-b border-white/[0.08]' : ''}`}
                   >
-                    <StepStatusIndicator status={step.status} />
+                    <StepStatusIndicator
+                      status={stepNeedsHelp(step) ? 'needs_help' : normaliseStepStatus(step.status, true)}
+                    />
                     <div className="flex min-w-0 flex-1 flex-col gap-1">
                       <span className="truncate text-base font-medium text-fg-primary">
                         {step.title}
@@ -498,7 +434,7 @@ export default async function DashboardPage() {
 
         {/* ── Suggested / Skill Matches ── */}
         <section>
-          {hasSkills && suggestedProjects.length > 0 ? (
+          {hasSkills && suggestedMatches.length > 0 ? (
             <>
               <SectionHeader
                 eyebrow="Matched to your skills"
@@ -507,31 +443,47 @@ export default async function DashboardPage() {
                 linkHref="/skill-matches"
               />
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {suggestedProjects.map((p) => (
+                {suggestedMatches.map((m) => (
                   <Link
-                    key={p.id}
-                    href={`/projects/${p.id}`}
+                    key={`${m.kind}-${m.id}`}
+                    href={m.href}
                     className="flex flex-col gap-3 rounded-xl border border-white/[0.08] bg-bg-surface p-5 transition-all duration-standard hover:-translate-y-0.5 hover:border-neutral-600"
                   >
                     <div className="flex items-center justify-between gap-3">
                       <span className="text-xs tracking-tight text-fg-tertiary">
-                        {p.projectType?.name ?? 'Project'}{p.location ? ` · ${p.location}` : ''}
+                        {m.type ?? 'Project'}
+                        {m.location ? ` · ${m.location}` : m.remote ? ' · Remote' : ''}
                       </span>
                       <div className="text-right">
                         <div className="font-display text-2xl leading-none text-amber-500">
-                          {p.matchPercent}%
+                          {m.score}
+                          <span className="text-sm text-fg-tertiary">%</span>
                         </div>
                         <div className="text-[10px] uppercase tracking-widest text-fg-tertiary">
                           Match
                         </div>
                       </div>
                     </div>
-                    <h4 className="font-display text-lg leading-snug">{p.title}</h4>
+                    <h4 className="font-display text-lg leading-snug">{m.title}</h4>
+                    {m.kind === 'step' && m.projectTitle && (
+                      <p className="-mt-2 text-xs text-fg-tertiary">
+                        A step in {m.projectTitle}
+                        {m.estimatedHrs != null && <> · ~{m.estimatedHrs}h</>}
+                      </p>
+                    )}
                     <div className="flex flex-wrap gap-1.5">
-                      {p.matchingSkills.map((skill) => (
+                      {m.direct.slice(0, 3).map((skill) => (
                         <span
                           key={skill}
-                          className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-[3px] text-[11px] text-fg-secondary"
+                          className="rounded-full border border-amber-500/40 bg-amber-500/[0.10] px-2.5 py-[3px] text-[11px] text-amber-500"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                      {m.related.slice(0, Math.max(0, 3 - m.direct.length)).map((skill) => (
+                        <span
+                          key={skill}
+                          className="rounded-full border border-blue-400/40 bg-blue-500/[0.10] px-2.5 py-[3px] text-[11px] text-blue-300"
                         >
                           {skill}
                         </span>

@@ -191,18 +191,30 @@ export async function declineJoinRequestAction(
   if (!loaded.ok) return { success: false, error: loaded.error }
   const { notification: n, contributionId } = loaded
 
+  const projectTitle = n.project?.title ?? 'the project'
+
   try {
     await db.$transaction(async (tx) => {
       // Delete the pending Contribution — keeps the unique slot free so the
       // applicant could request again later if they wanted.
-      await tx.contribution.deleteMany({
+      const deleted = await tx.contribution.deleteMany({
         where: { id: contributionId, status: 'pending' },
       })
       await tx.notification.update({
         where: { id: n.id },
         data: { resolvedAt: new Date(), readAt: new Date() },
       })
-      // Silent decline: no fanout to the applicant for v1.
+      // Tell the applicant — being quietly ignored is worse than a polite no.
+      // Only on the first resolution (deleted.count guards double-decline).
+      if (deleted.count > 0) {
+        await notify(tx, {
+          type: 'project_join_declined',
+          recipients: [n.actorId],
+          projectId: n.projectId,
+          title: `Your request to join ${projectTitle} wasn't accepted this time.`,
+          body: 'Thanks for offering to help — the team cannot take this one forward right now. Plenty of other projects need your skills.',
+        })
+      }
     })
   } catch {
     return { success: false, error: 'Could not decline the join request.' }

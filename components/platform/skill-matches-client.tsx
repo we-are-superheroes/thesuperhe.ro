@@ -220,6 +220,7 @@ function ScoreRing({ score, strong }: { score: number; strong: boolean }) {
         </svg>
         <span className="absolute inset-0 flex items-center justify-center font-display text-base">
           {score}
+          <span className="text-[10px] text-fg-tertiary">%</span>
         </span>
       </div>
       <span className="text-[10px] font-semibold uppercase tracking-widest text-fg-tertiary">

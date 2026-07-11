@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+import { stepNeedsHelp } from '@/lib/step-status'
 import { LeavesMark } from '@/components/ui/logo'
 import {
   ArrowRight,
@@ -23,7 +24,10 @@ import {
 
 async function getRecentProjects() {
   const projects = await db.project.findMany({
-    where: { status: { in: ['defining', 'needs_help', 'in_progress'] } },
+    where: {
+      status: { in: ['defining', 'needs_help', 'in_progress'] },
+      visibility: 'public',
+    },
     orderBy: { createdAt: 'desc' },
     take: 6,
     select: {
@@ -36,7 +40,7 @@ async function getRecentProjects() {
       createdAt: true,
       projectType: { select: { name: true } },
       steps: {
-        select: { status: true },
+        select: { status: true, helpWanted: true },
       },
       contributions: {
         select: { id: true },
@@ -53,7 +57,7 @@ async function getRecentProjects() {
     timeCommitmentHrs: p.timeCommitmentHrs,
     createdAt: p.createdAt,
     projectType: p.projectType?.name ?? null,
-    needsHelpCount: p.steps.filter((s) => s.status === 'needs_help').length,
+    needsHelpCount: p.steps.filter(stepNeedsHelp).length,
     contributorCount: p.contributions.length,
     daysAgo: Math.floor(
       (Date.now() - p.createdAt.getTime()) / (1000 * 60 * 60 * 24),

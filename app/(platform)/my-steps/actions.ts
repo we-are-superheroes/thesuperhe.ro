@@ -54,8 +54,10 @@ export async function logTimeAction(
   }
 
   // The contribution row is the source of truth for who's on which step.
+  // ('completed' contributions no longer exist — done-ness lives on the
+  // step, and active joiners can still log time after completion.)
   const contribution = await db.contribution.findFirst({
-    where: { userId, projectStepId, status: { in: ['active', 'completed'] } },
+    where: { userId, projectStepId, status: 'active' },
     select: { id: true, projectId: true, hoursContributed: true },
   })
   if (!contribution) {

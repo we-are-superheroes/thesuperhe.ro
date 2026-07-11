@@ -20,6 +20,8 @@ import {
   type UpdatesFeedItem,
 } from '@/components/platform/project-updates'
 import { isCurrentUserAdmin } from '@/lib/auth'
+import { canViewProject } from '@/lib/orgs'
+import { normaliseStepStatus, stepNeedsHelp } from '@/lib/step-status'
 import { AVATAR_GRADIENTS, initialOf, initialsOf } from '@/lib/avatar'
 
 /* ================================================================
@@ -58,9 +60,19 @@ export async function generateMetadata({ params }: ProjectViewParams) {
   const { id } = await params
   const project = await db.project.findUnique({
     where: { id },
-    select: { title: true, description: true, coverImageUrl: true, location: true },
+    select: {
+      title: true,
+      description: true,
+      coverImageUrl: true,
+      location: true,
+      visibility: true,
+    },
   })
   if (!project) return { title: 'Project not found — The Superhero' }
+  // Members-only projects don't leak their title into tags/crawlers.
+  if (project.visibility !== 'public') {
+    return { title: 'Members-only project — The Superhero' }
+  }
   const description = project.description.split(/\n+/)[0].slice(0, 160)
   return {
     title: `${project.title} — The Superhero`,
@@ -90,6 +102,9 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       timeCommitmentHrs: true,
       coverImageUrl: true,
       createdAt: true,
+      orgId: true,
+      visibility: true,
+      organisation: { select: { slug: true, name: true, type: true } },
       projectType: { select: { name: true } },
       steps: {
         orderBy: { order: 'asc' },
@@ -98,6 +113,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
           title: true,
           description: true,
           status: true,
+          helpWanted: true,
           order: true,
           estimatedHrs: true,
           completedAt: true,
@@ -146,6 +162,10 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   })
 
   if (!project) notFound()
+
+  // Members-only projects are invisible to everyone outside the owning
+  // organisation — same response as a project that doesn't exist.
+  if (!(await canViewProject(project, userId))) notFound()
 
   // Build the public Google Maps URL once — address plus the coarse
   // location so Google can disambiguate; null if neither is set.
@@ -246,10 +266,13 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
 
   const totalSteps = project.steps.length
   const stepsByStatus = {
-    needs_help: project.steps.filter((s) => s.status === 'needs_help').length,
-    in_progress: project.steps.filter((s) => s.status === 'in_progress').length,
-    defining: project.steps.filter((s) => s.status === 'defining').length,
-    open: project.steps.filter((s) => s.status === 'open').length,
+    needs_help: project.steps.filter(stepNeedsHelp).length,
+    in_progress: project.steps.filter(
+      (s) => normaliseStepStatus(s.status, s.contributions.length > 0) === 'in_progress',
+    ).length,
+    open: project.steps.filter(
+      (s) => normaliseStepStatus(s.status, s.contributions.length > 0) === 'open',
+    ).length,
     completed: project.steps.filter((s) => s.status === 'completed').length,
   }
 
@@ -393,6 +416,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
       title: s.title,
       description: s.description,
       status: s.status,
+      helpWanted: s.helpWanted,
       order: s.order,
       totalSteps,
       estimatedHrs: s.estimatedHrs,
@@ -494,6 +518,30 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 </span>
               )}
               <ProjectStatusPill status={project.status} label={statusText} />
+              {project.organisation && (
+                <Link
+                  href={`/orgs/${project.organisation.slug}?from=/projects/${project.id}`}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.15] bg-[rgba(14,26,43,0.6)] px-3 py-1.5 text-xs font-semibold text-fg-primary backdrop-blur-sm transition-colors hover:border-amber-500/50"
+                >
+                  <span
+                    className="flex size-4 items-center justify-center rounded-[5px] text-[9px] font-bold text-white"
+                    style={{
+                      background:
+                        project.organisation.type === 'company'
+                          ? 'linear-gradient(135deg, #1B3A6B, #4A7FD4)'
+                          : 'linear-gradient(135deg, #1A5C40, #3DAF7C)',
+                    }}
+                  >
+                    {project.organisation.name.charAt(0).toUpperCase()}
+                  </span>
+                  {project.organisation.name}
+                </Link>
+              )}
+              {project.visibility === 'org_members' && (
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/[0.16] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-400 backdrop-blur-sm">
+                  Members only
+                </span>
+              )}
               {isLead && (
                 <Link
                   href={`/projects/${id}/edit#sec-status`}
@@ -558,7 +606,6 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
 
         {/* Tabs */}
         <ProjectTabBar
-          stepCount={totalSteps}
           updatesCount={updates.length}
           topOffsetClass={userId ? 'top-0' : 'top-14 sm:top-16'}
         />
@@ -596,11 +643,10 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 createdAtMs={latestUpdate.createdAtMs}
               />
             )}
-            </ProjectTabPanel>
 
-            <ProjectTabPanel tab="steps">
-            {/* Steps */}
-            <section>
+            {/* Steps — same tab as the overview; "See open steps" buttons
+                scroll here via the anchor. */}
+            <section id="steps" className="mt-12 scroll-mt-20">
               <div className="mb-6 flex items-end justify-between gap-6">
                 <div>
                   <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">

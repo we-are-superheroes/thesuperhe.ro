@@ -9,11 +9,13 @@ import { notify, getActiveProjectMemberIds } from '@/lib/notifications'
 import { buildLocation } from '@/lib/location'
 import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
 import { validateProjectFields, validateProjectStatus } from '@/lib/validation'
+import { isOrgAdminOfProject } from '@/lib/orgs'
 import type { ServerActionResult } from '@/types'
 
 /**
- * Authz helper — confirm the calling user is the project's lead. Returns
- * the project id on success so callers can chain.
+ * Authz helper — confirm the calling user may manage this project: its lead,
+ * or an admin of the organisation that owns it (spec D4). Returns the
+ * project id on success so callers can chain.
  */
 async function requireLead(
   userId: string,
@@ -29,7 +31,12 @@ async function requireLead(
     },
     select: { id: true },
   })
-  if (!lead) return { success: false, error: 'Only the project lead can edit this project.' }
+  if (!lead && !(await isOrgAdminOfProject(projectId, userId))) {
+    return {
+      success: false,
+      error: 'Only the project lead or an organisation admin can edit this project.',
+    }
+  }
   return { success: true, data: { projectId } }
 }
 
@@ -97,18 +104,9 @@ export async function updateProjectAction(
     }
   }
 
-  // Authz: caller must be the project's lead.
-  const lead = await db.contribution.findFirst({
-    where: {
-      userId,
-      projectId,
-      projectStepId: null,
-      role: 'lead',
-      status: { in: ['active', 'pending'] },
-    },
-    select: { id: true },
-  })
-  if (!lead) return { success: false, error: 'Only the project lead can edit this project.' }
+  // Authz: caller must be the project's lead or an owning-org admin.
+  const gate = await requireLead(userId, projectId)
+  if (!gate.success) return { success: false, error: gate.error }
 
   // Verify the requested skill ids exist (across every step's skillIds).
   const requestedSkillIds = Array.from(

@@ -1,4 +1,6 @@
+import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
+import { getUserActiveOrgs } from '@/lib/orgs'
 import {
   CreateProjectForm,
   type BlueprintOption,
@@ -22,15 +24,16 @@ import {
    ================================================================ */
 
 interface SearchParams {
-  searchParams: Promise<{ blueprint?: string; variant?: string }>
+  searchParams: Promise<{ blueprint?: string; variant?: string; org?: string }>
 }
 
 export default async function CreateProjectPage({ searchParams }: SearchParams) {
   const params = await searchParams
   const blueprintId = params.blueprint?.trim() || null
   const variantIntent = params.variant === '1'
+  const { userId } = await auth()
 
-  const [source, skills] = await Promise.all([
+  const [source, skills, orgRows] = await Promise.all([
     blueprintId
       ? db.blueprint.findUnique({
           where: { id: blueprintId },
@@ -58,7 +61,13 @@ export default async function CreateProjectPage({ searchParams }: SearchParams) 
       orderBy: [{ category: 'asc' }, { name: 'asc' }],
       select: { id: true, name: true, category: true },
     }),
+    userId ? getUserActiveOrgs(userId) : Promise.resolve([]),
   ])
+
+  // Only active orgs can own projects — hide pending ones from the picker.
+  const myOrgs = orgRows
+    .filter((row) => row.org.status === 'active')
+    .map((row) => ({ id: row.org.id, slug: row.org.slug, name: row.org.name }))
 
   const sourceBlueprint: BlueprintOption | null = source
     ? {
@@ -95,6 +104,8 @@ export default async function CreateProjectPage({ searchParams }: SearchParams) 
       variantIntent={variantIntent}
       variantParentId={variantParentId}
       skills={skillOptions}
+      myOrgs={myOrgs}
+      initialOrgSlug={params.org?.trim() || null}
     />
   )
 }

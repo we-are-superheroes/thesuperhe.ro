@@ -189,14 +189,14 @@ export function BlueprintsClient({
     <>
       {/* Topbar */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
-        <div className="relative order-2 w-full min-w-0 max-w-[560px] flex-1 sm:order-1 sm:w-auto">
-          <Search className="absolute left-3.5 top-1/2 size-[18px] -translate-y-1/2 text-fg-tertiary" />
+        <div className="relative order-2 w-full min-w-0 max-w-[480px] flex-1 sm:order-1 sm:w-auto">
+          <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-fg-tertiary" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search blueprints..."
-            className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-3 pl-11 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
+            className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
           />
         </div>
         <div className="order-1 flex items-center gap-3 sm:order-2">

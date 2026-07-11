@@ -1,6 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
+import { normaliseStepStatus, impliedHelpWanted } from '@/lib/step-status'
 import { MyStepsClient, type MyStep } from '@/components/platform/my-steps-client'
 
 /* ================================================================
@@ -33,7 +34,7 @@ export default async function MyStepsPage() {
     where: {
       userId,
       projectStepId: { not: null },
-      status: { in: ['active', 'completed'] },
+      status: 'active',
     },
     orderBy: { updatedAt: 'desc' },
     select: {
@@ -45,6 +46,7 @@ export default async function MyStepsPage() {
           id: true,
           title: true,
           status: true,
+          helpWanted: true,
           order: true,
           coordinatorId: true,
           project: { select: { id: true, title: true } },
@@ -124,7 +126,8 @@ export default async function MyStepsPage() {
         id: s.id,
         name: s.title,
         project: { id: s.project.id, title: s.project.title },
-        stepStatus: s.status,
+        stepStatus: normaliseStepStatus(s.status, true),
+        helpWanted: s.helpWanted || impliedHelpWanted(s.status),
         skill: s.skills[0]?.skill.name ?? null,
         isCoordinator: s.coordinatorId === userId,
         myHoursLogged: c.hoursContributed,

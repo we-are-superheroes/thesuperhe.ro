@@ -68,10 +68,13 @@ export function ProfileEditForm({
   initial,
   skillOptions,
   timezones,
+  orgsSlot,
 }: {
   initial: ProfileFormInitial
   skillOptions: SkillOption[]
   timezones: string[]
+  /** Server-rendered organisations section (memberships + sharing toggles). */
+  orgsSlot?: React.ReactNode
 }) {
   const [name, setName] = useState(initial.name)
   const [bio, setBio] = useState(initial.bio)
@@ -311,6 +314,7 @@ export function ProfileEditForm({
           <TocLink href="#sec-identity">About you</TocLink>
           <TocLink href="#sec-skills">Skills</TocLink>
           <TocLink href="#sec-where">Where & when</TocLink>
+          <TocLink href="#sec-orgs">Organisations</TocLink>
           <TocLink href="#sec-appearance">Appearance</TocLink>
         </nav>
 
@@ -600,6 +604,8 @@ export function ProfileEditForm({
           </Card>
 
           {/* Appearance — device preference, independent of Save */}
+          {orgsSlot}
+
           <Card id="sec-appearance">
             <CardHead
               eyebrow="Appearance"

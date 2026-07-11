@@ -20,6 +20,8 @@ const BUCKET = 'public-images'
 export const STORAGE_LIMITS = {
   avatar: { maxBytes: 4 * 1024 * 1024, prefix: 'avatars' },
   cover: { maxBytes: 8 * 1024 * 1024, prefix: 'covers' },
+  orgLogo: { maxBytes: 4 * 1024 * 1024, prefix: 'org-logos' },
+  orgBanner: { maxBytes: 8 * 1024 * 1024, prefix: 'org-banners' },
 } as const
 
 const ALLOWED_MIME = new Set([

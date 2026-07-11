@@ -22,7 +22,10 @@ const isPublicRoute = createRouteMatcher([
   '/projects/(.*)',
   '/blueprints',
   '/blueprints/(.*)',
+  '/orgs/(.*)',
 ])
+
+const isProtectedOrgSubroute = createRouteMatcher(['/orgs/request'])
 
 const isProtectedBlueprintSubroute = createRouteMatcher([
   '/blueprints/(.*)/edit',
@@ -34,7 +37,11 @@ const isProtectedProjectSubroute = createRouteMatcher([
 ])
 
 export default clerkMiddleware(async (auth, req) => {
-  if (isProtectedProjectSubroute(req) || isProtectedBlueprintSubroute(req)) {
+  if (
+    isProtectedProjectSubroute(req) ||
+    isProtectedBlueprintSubroute(req) ||
+    isProtectedOrgSubroute(req)
+  ) {
     await auth.protect()
     return
   }

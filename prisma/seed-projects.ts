@@ -59,7 +59,10 @@ async function main() {
         description: step.description,
         order: step.order,
         estimatedHrs: step.estimatedHrs,
-        status: step.status,
+        // 'needs_help' in the seed data is the old vocabulary: an open
+        // step with the help flag raised.
+        status: step.status === 'needs_help' ? 'open' : step.status,
+        helpWanted: step.status === 'needs_help',
       },
     })
     for (const skillId of step.skillIds) {
@@ -101,7 +104,10 @@ async function main() {
         description: step.description,
         order: step.order,
         estimatedHrs: step.estimatedHrs,
-        status: step.status,
+        // 'needs_help' in the seed data is the old vocabulary: an open
+        // step with the help flag raised.
+        status: step.status === 'needs_help' ? 'open' : step.status,
+        helpWanted: step.status === 'needs_help',
       },
     })
     for (const skillId of step.skillIds) {
@@ -143,7 +149,10 @@ async function main() {
         description: step.description,
         order: step.order,
         estimatedHrs: step.estimatedHrs,
-        status: step.status,
+        // 'needs_help' in the seed data is the old vocabulary: an open
+        // step with the help flag raised.
+        status: step.status === 'needs_help' ? 'open' : step.status,
+        helpWanted: step.status === 'needs_help',
       },
     })
     for (const skillId of step.skillIds) {
