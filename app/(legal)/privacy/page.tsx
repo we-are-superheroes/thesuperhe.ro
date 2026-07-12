@@ -14,7 +14,7 @@ export const metadata = {
    especially if analytics or email sending are added.
    ================================================================ */
 
-const LAST_UPDATED = '3 July 2026'
+const LAST_UPDATED = '12 July 2026'
 
 export default function PrivacyPage() {
   return (
@@ -88,7 +88,9 @@ export default function PrivacyPage() {
       <Section title="Cookies">
         <p>
           We use only cookies that are strictly necessary to run the service: the session
-          cookies set by Clerk to keep you signed in. Your theme preference is stored in
+          cookies set by Clerk to keep you signed in, and a{' '}
+          <code className="text-fg-primary">superhero-locale</code> cookie that remembers
+          which language you chose for the site. Your theme preference is stored in
           your browser&rsquo;s local storage and never leaves your device. There are no
           advertising, analytics or third-party tracking cookies, which is why you
           don&rsquo;t see a cookie banner.

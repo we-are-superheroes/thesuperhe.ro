@@ -4,6 +4,7 @@ import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { stepNeedsHelp } from '@/lib/step-status'
 import { LeavesMark } from '@/components/ui/logo'
+import { LocaleSwitcher } from '@/components/ui/locale-switcher'
 import {
   ArrowRight,
   Search,
@@ -749,6 +750,7 @@ function Footer() {
           <Link href="/terms" className="hover:text-fg-primary">
             Terms
           </Link>
+          <LocaleSwitcher />
         </div>
         <div className="flex items-center gap-2">
           Created in Switzerland

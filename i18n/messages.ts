@@ -1,4 +1,4 @@
-import type { Locale } from '@/lib/locale'
+import type { Locale } from '@/lib/locale-shared'
 
 /* ================================================================
    Message catalogs live in messages/<locale>/<namespace>.json.
@@ -48,6 +48,9 @@ export const GROUP_NAMESPACES = {
   public: ['common', 'nav', 'errors', 'browse', 'project', 'steps', 'blueprints', 'orgs', 'users', 'search'],
   marketing: ['common', 'nav'],
   auth: ['common', 'auth'],
+  // Legal pages are fully server-rendered; the shared chrome (navbar
+  // with the language switcher) is the only client consumer.
+  legal: ['common', 'nav'],
 } as const satisfies Record<string, readonly string[]>
 
 type MessageTree = { [key: string]: string | MessageTree }

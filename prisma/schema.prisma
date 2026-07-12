@@ -105,6 +105,10 @@ model User {
   bio        String?
   location   String?
   timezone   String?
+  // Preferred UI language (ISO 639-1). Null = no explicit choice; the
+  // request falls back to cookie → Accept-Language → en. Set only by
+  // setLocaleAction — the Clerk webhook never touches it (like `role`).
+  locale     String?
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 

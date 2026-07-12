@@ -23,6 +23,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { LeavesMark } from '@/components/ui/logo'
+import { LocaleSwitcher } from '@/components/ui/locale-switcher'
 
 interface NavItem {
   label: string
@@ -396,6 +397,7 @@ export function Sidebar({
             <Link href="/terms" className="transition-colors hover:text-fg-secondary">
               Terms
             </Link>
+            <LocaleSwitcher className="ml-auto" />
           </div>
         )}
       </div>

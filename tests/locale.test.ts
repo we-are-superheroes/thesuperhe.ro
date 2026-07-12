@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { pickFromAcceptLanguage, isSupportedLocale } from '@/lib/locale'
+import { pickFromAcceptLanguage, isSupportedLocale } from '@/lib/locale-shared'
 
 describe('pickFromAcceptLanguage', () => {
   it('returns null for missing or empty headers', () => {

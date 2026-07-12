@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { readdirSync, readFileSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 import { parse, TYPE, type MessageFormatElement } from '@formatjs/icu-messageformat-parser'
-import { SUPPORTED_LOCALES } from '@/lib/locale'
+import { SUPPORTED_LOCALES } from '@/lib/locale-shared'
 import { NAMESPACES } from '@/i18n/messages'
 
 /* ================================================================

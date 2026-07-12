@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { LeavesMark } from '@/components/ui/logo'
+import { LocaleSwitcher } from '@/components/ui/locale-switcher'
 
 /**
  * Public top nav shown to anonymous viewers on routes that don't require
@@ -42,6 +43,7 @@ export function PublicNavbar() {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          <LocaleSwitcher className="hidden md:inline-flex" />
           <Link
             href="/sign-in"
             className="hidden items-center gap-2 rounded-md border border-white/[0.13] bg-transparent px-[18px] py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-white/[0.04] sm:inline-flex"

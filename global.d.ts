@@ -1,5 +1,5 @@
 import type common from './messages/en/common.json'
-import type { Locale } from './lib/locale'
+import type { Locale } from './lib/locale-shared'
 
 /**
  * Type-safe message keys: augmenting next-intl with the shape of the
