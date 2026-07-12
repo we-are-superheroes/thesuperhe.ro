@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { countUnreadConversations } from '@/lib/messages'
 import { PlatformShell } from '@/components/platform/platform-shell'
+import { GroupIntlProvider } from '@/i18n/provider'
 
 export default async function PlatformLayout({
   children,
@@ -60,16 +61,18 @@ export default async function PlatformLayout({
   const hoursContributed = user?.contributions?.reduce((sum, c) => sum + c.hoursContributed, 0) ?? 0
 
   return (
-    <PlatformShell
-      userName={name}
-      userInitials={initials}
-      projectCount={projectCount}
-      stepCount={stepCount}
-      hoursContributed={hoursContributed}
-      notificationsBadge={unreadNotifications}
-      messagesBadge={messagesBadge}
-    >
-      {children}
-    </PlatformShell>
+    <GroupIntlProvider group="platform">
+      <PlatformShell
+        userName={name}
+        userInitials={initials}
+        projectCount={projectCount}
+        stepCount={stepCount}
+        hoursContributed={hoursContributed}
+        notificationsBadge={unreadNotifications}
+        messagesBadge={messagesBadge}
+      >
+        {children}
+      </PlatformShell>
+    </GroupIntlProvider>
   )
 }

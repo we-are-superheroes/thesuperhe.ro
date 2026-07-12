@@ -2,8 +2,21 @@ import type { Metadata, Viewport } from 'next'
 import { DM_Sans, DM_Serif_Display, JetBrains_Mono } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
+import { deDE, esES, frFR, itIT, ptPT, ruRU, ukUA } from '@clerk/localizations'
 import { Analytics } from '@vercel/analytics/next'
+import { resolveLocale, type Locale } from '@/lib/locale'
 import './globals.css'
+
+/** Clerk widget translations per locale; English uses Clerk's default. */
+const CLERK_LOCALIZATIONS: Partial<Record<Locale, typeof frFR>> = {
+  fr: frFR,
+  de: deDE,
+  es: esES,
+  it: itIT,
+  ru: ruRU,
+  uk: ukUA,
+  pt: ptPT,
+}
 
 const dmSans = DM_Sans({
   variable: '--font-dm-sans',
@@ -43,11 +56,13 @@ export const viewport: Viewport = {
  */
 const THEME_INIT = `(function(){try{var t=localStorage.getItem('superhero-theme');if(t&&t!=='dark'){document.documentElement.classList.add('theme-'+t);}}catch(e){}})();`
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await resolveLocale()
   return (
     <ClerkProvider
+      localization={CLERK_LOCALIZATIONS[locale]}
       appearance={{
         baseTheme: dark,
         // The CDN-loaded clerk-js runtime ignores the legacy appearance
@@ -82,7 +97,7 @@ export default function RootLayout({
       }}
     >
       <html
-        lang="en"
+        lang={locale}
         suppressHydrationWarning
         className={`${dmSans.variable} ${dmSerifDisplay.variable} ${jetbrainsMono.variable} h-full antialiased`}
       >
