@@ -1,0 +1,124 @@
+{
+  "counts": {
+    "launches": "{count, plural, one {<strong>#</strong> Start} other {<strong>#</strong> Starts}}",
+    "steps": "{count, plural, one {# Schritt} other {# Schritte}}",
+    "variants": "{count, plural, one {# Variante} other {# Varianten}}"
+  },
+  "cta": {
+    "use": "Blaupause verwenden",
+    "createVariant": "Variante erstellen",
+    "createVariantTitle": "Diese Blaupause für einen anderen Ort oder eine andere Sprache anpassen",
+    "modify": "Blaupause bearbeiten"
+  },
+  "list": {
+    "searchPlaceholder": "Blaupausen durchsuchen...",
+    "saveYourOwn": "Eigene Blaupause speichern",
+    "newShort": "Neu",
+    "eyebrow": "Blaupausen-Bibliothek",
+    "heading": "Starte mit einem <em>bewährten</em> Muster.",
+    "intro": "Blaupausen sind erprobte Projektrezepte — an einem Ort entstanden, für andere angepasst. Wähl ein Modell, das zu deinem Umfeld, deinem Land und deiner Sprache passt; den Rest richten wir drumherum ein.",
+    "stats": {
+      "families": "Familien",
+      "variants": "Varianten",
+      "launches": "Starts"
+    },
+    "showing": "Zeige <strong>{shown}</strong> von {total, plural, one {# Blaupause} other {# Blaupausen}}"
+  },
+  "sort": {
+    "popular": "Am häufigsten genutzt",
+    "recent": "Zuletzt hinzugefügt",
+    "variants": "Meiste Varianten",
+    "az": "A–Z"
+  },
+  "filters": {
+    "title": "Filter",
+    "show": "Filter anzeigen",
+    "hide": "Filter ausblenden",
+    "clearAll": "Alle löschen",
+    "type": "Typ",
+    "country": "Land",
+    "language": "Sprache",
+    "searchCountriesPlaceholder": "Länder durchsuchen...",
+    "noMatches": "Keine Treffer."
+  },
+  "chips": {
+    "search": "Suche",
+    "type": "Typ",
+    "country": "Land",
+    "language": "Sprache",
+    "remove": "Filter entfernen"
+  },
+  "empty": {
+    "title": "Keine Blaupause passt.",
+    "body": "Lockere einen Filter — oder speichere selbst die erste Blaupause für diese Nische."
+  },
+  "card": {
+    "originalRecipe": "Das Originalrezept — pass es für deine Gegend an.",
+    "availableIn": "Verfügbar in",
+    "localeNotSet": "Region nicht festgelegt"
+  },
+  "variants": {
+    "original": "Original"
+  },
+  "steps": {
+    "orderOfTotal": "Schritt {order} von {total}",
+    "estimatedHours": "~{hours} Std."
+  },
+  "detail": {
+    "breadcrumbRoot": "Blaupausen",
+    "variantBadge": "Variante",
+    "createdBy": "Erstellt von <author>{name}</author>",
+    "someone": "jemandem",
+    "estimatedTotal": "~{hours} Std. geschätzt",
+    "aboutEyebrow": "Über diese Blaupause",
+    "aboutHeading": "Was du damit aufbaust.",
+    "planEyebrow": "Der Plan",
+    "stepsHeading": "{count, plural, one {# Schritt} other {# Schritte}} bis zum Ziel.",
+    "noSteps": "Diese Blaupause hat noch keine Schritte.",
+    "family": "Familie",
+    "detailsTitle": "Details",
+    "type": "Typ",
+    "country": "Land",
+    "language": "Sprache",
+    "projectsForked": "Übernommene Projekte",
+    "notSet": "Nicht festgelegt",
+    "any": "Beliebig"
+  },
+  "edit": {
+    "breadcrumbModify": "Bearbeiten",
+    "backToBlueprint": "Zurück zur Blaupause",
+    "modifying": "Bearbeiten von",
+    "blueprintBadge": "Blaupause",
+    "untitledBlueprint": "Blaupause ohne Titel",
+    "basics": {
+      "eyebrow": "Die Grundlagen",
+      "title": "Was ist diese Blaupause?",
+      "desc": "Zwei Sätze reichen, um das Muster zu beschreiben. Mehr Details kannst du später ergänzen.",
+      "titleLabel": "Titel",
+      "titlePlaceholder": "z. B. Repair Café",
+      "descriptionLabel": "Beschreibung",
+      "descriptionHelp": "Der erste Absatz erscheint auf der Blaupausen-Karte.",
+      "descriptionPlaceholder": "Welches Problem löst dieses Muster, und wie sieht die Umsetzung aus?",
+      "projectTypeLabel": "Projekttyp",
+      "noneOption": "— keiner —"
+    },
+    "locale": {
+      "eyebrow": "Region",
+      "title": "Wo und in welcher Sprache?",
+      "desc": "Projekte, die diese Blaupause übernehmen, erben diese Angaben standardmäßig. Varianten müssen mindestens Land oder Sprache angeben.",
+      "countryLabel": "Land (optional, außer bei einer Variante)",
+      "languageLabel": "Arbeitssprache (optional, außer bei einer Variante)",
+      "familyLabel": "Familie",
+      "familyHelpVariant": "Diese Blaupause ist derzeit eine Variante der Familie unten. Wähle „Eigenständig“, um sie zu einer eigenen Wurzel zu machen.",
+      "familyHelpRoot": "Optional. Wenn du ein bestehendes Muster anpasst, verknüpfe es mit dem Original, damit beide zusammen als Familie erscheinen.",
+      "standaloneOption": "Eigenständig (keine übergeordnete Blaupause)",
+      "hasVariantsNotice": "Diese Blaupause hat bereits <strong>{count, plural, one {# eigene Variante} other {# eigene Varianten}}</strong> und bleibt daher eine Familienwurzel."
+    },
+    "steps": {
+      "eyebrow": "Der Plan",
+      "title": "Schritte zur Umsetzung des Musters.",
+      "desc": "Wer diese Blaupause übernimmt, startet mit diesen Schritten. Bearbeite, sortiere oder entferne sie nach Bedarf."
+    },
+    "saveChanges": "Änderungen speichern"
+  }
+}

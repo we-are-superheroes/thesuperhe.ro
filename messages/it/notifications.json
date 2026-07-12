@@ -1,0 +1,66 @@
+{
+  "titles": {
+    "projectJoinWelcome": "{leadName} ti ha dato il benvenuto in {projectTitle}.",
+    "projectJoin": "{actorName} si è unito a {projectTitle}.",
+    "projectJoinRequest": "{actorName} vuole unirsi a {projectTitle}.",
+    "projectJoinDeclined": "La tua richiesta di unirti a {projectTitle} questa volta non è stata accettata.",
+    "projectLeave": "{actorName} ha lasciato {projectTitle}.",
+    "projectUpdated": "{actorName} ha aggiornato {projectTitle}.",
+    "projectRenamed": "{actorName} ha rinominato “{oldTitle}” in “{newTitle}”.",
+    "updatePosted": "{actorName} ha pubblicato un aggiornamento in {projectTitle}.",
+    "stepClaimed": "{actorName} si è unito a “{stepTitle}” in {projectTitle}.",
+    "stepUnclaimed": "{actorName} ha lasciato “{stepTitle}” in {projectTitle}.",
+    "stepCompleted": "{actorName} ha finito “{stepTitle}” in {projectTitle}.",
+    "stepNeedsHelp": "{actorName} ha chiesto aiuto su “{stepTitle}” in {projectTitle}.",
+    "blueprintForked": "{actorName} ha adattato il tuo modello “{blueprintTitle}” come “{projectTitle}”.",
+    "skillMatch": "Il nuovo progetto “{projectTitle}” cerca {skillName}.",
+    "inviteReceived": "{actorName} ti ha invitato a unirti a {orgName}.",
+    "messageReceived": "{count, plural, one {{senderName} ti ha inviato un messaggio.} other {# nuovi messaggi da {senderName}.}}"
+  },
+  "bodies": {
+    "projectJoinDeclined": "Grazie per esserti offerto di aiutare — la squadra al momento non può portare avanti questa richiesta. Tanti altri progetti hanno bisogno delle tue competenze.",
+    "inviteReceived": "Usa il codice di invito {code} sulla pagina dell'organizzazione."
+  },
+  "ui": {
+    "header": {
+      "title": "Le tue <em>notifiche</em>.",
+      "subtitle": "Le cose che chiedono la tua attenzione — e qualcuna che ti farà piacere sapere.",
+      "markAllRead": "Segna tutte come lette"
+    },
+    "tabs": {
+      "all": "Tutte",
+      "unread": "Non lette",
+      "action": "Serve un'azione",
+      "mention": "Menzioni"
+    },
+    "groups": {
+      "today": "Oggi",
+      "yesterday": "Ieri",
+      "week": "Questa settimana",
+      "earlier": "Prima"
+    },
+    "empty": {
+      "unreadTitle": "Niente di non letto. Sei in pari.",
+      "unreadSubtitle": "Le nuove attività compariranno qui man mano.",
+      "mentionTitle": "Ancora nessuna menzione.",
+      "mentionSubtitle": "Le menzioni dalle bacheche e dalle discussioni dei progetti finiranno qui.",
+      "actionTitle": "Niente in attesa di te.",
+      "actionSubtitle": "Le richieste di adesione e gli inviti compariranno qui quando servirà una decisione.",
+      "allTitle": "Niente qui.",
+      "allSubtitle": "Quando ti unisci a progetti e prendi in carico passaggi, gli aggiornamenti della tua squadra compaiono qui."
+    },
+    "joinRequest": {
+      "accept": "Dai il benvenuto",
+      "decline": "Non fa al caso"
+    },
+    "resolution": {
+      "accepted": "Persona accolta nel progetto.",
+      "declined": "Rifiutata con gentilezza."
+    },
+    "links": {
+      "openConversation": "Apri la conversazione",
+      "openOrgPage": "Apri la pagina dell'organizzazione",
+      "openProject": "Apri {name}"
+    }
+  }
+}

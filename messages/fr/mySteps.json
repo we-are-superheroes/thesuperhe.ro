@@ -1,0 +1,50 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Rechercher des étapes…",
+    "findStep": "Trouver une étape à rejoindre",
+    "findStepShort": "Trouver"
+  },
+  "hero": {
+    "title": "Ton <em>temps</em>, enregistré.",
+    "subtitle": "Suis les heures que tu as consacrées à chaque étape que tu as rejointe. Change le statut d’une étape depuis la page du projet quand tu es prêt."
+  },
+  "stats": {
+    "active": "Actives",
+    "completed": "Terminées",
+    "myHours": "Mes heures"
+  },
+  "filter": {
+    "active": "Actives",
+    "completed": "Terminées"
+  },
+  "sort": {
+    "recentlyLogged": "Récemment enregistré",
+    "byProject": "Par projet",
+    "byName": "Par nom"
+  },
+  "group": {
+    "title": "Grouper par",
+    "none": "Sans groupes",
+    "byProject": "Grouper par projet"
+  },
+  "badge": {
+    "coordinator": "Coordinateur"
+  },
+  "row": {
+    "myHours": "Toi : {hours}"
+  },
+  "hours": {
+    "zero": "0h",
+    "hoursOnly": "{hours}h",
+    "hoursMinutes": "{hours}h {minutes}m",
+    "minutesOnly": "{minutes}m"
+  },
+  "empty": {
+    "searchTitle": "Aucune étape ne correspond à cette recherche.",
+    "searchDescription": "Essaie un autre mot-clé ou vide la recherche.",
+    "completedTitle": "Rien de terminé pour l’instant.",
+    "completedDescription": "Marque une étape comme terminée depuis la page du projet et elle apparaîtra ici.",
+    "activeTitle": "Tu n’as pas encore rejoint d’étapes.",
+    "activeDescription": "Trouve un projet, rejoins une étape, puis reviens ici pour enregistrer ton temps."
+  }
+}

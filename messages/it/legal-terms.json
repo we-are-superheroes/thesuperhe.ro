@@ -1,0 +1,70 @@
+{
+  "chrome": {
+    "eyebrow": "Note legali",
+    "title": "Termini di servizio",
+    "lastUpdated": "Ultimo aggiornamento: {date}"
+  },
+  "sections": {
+    "shortVersion": {
+      "title": "La versione breve",
+      "p1": "The Superhero mette in contatto le persone con progetti per il clima e la sostenibilità. Resti proprietario di ciò che pubblichi, sei responsabile di ciò che pubblichi e di ciò che fai fuori dalla piattaforma, comportati in modo corretto con gli altri, e noi possiamo rimuovere contenuti o account che violano queste regole. Segue la versione lunga.",
+      "englishPrevails": "Questi termini sono disponibili in più lingue per comodità — se una traduzione dovesse discostarsi dalla versione inglese, prevale la versione inglese."
+    },
+    "agreement": {
+      "title": "1. Chi siamo e cosa stai accettando",
+      "p1": "The Superhero (thesuperhe.ro) è gestito dalla Svizzera. Creando un account o usando la piattaforma accetti questi termini e la nostra <link>informativa sulla privacy</link>. Se non sei d'accordo, non usare la piattaforma."
+    },
+    "account": {
+      "title": "2. Il tuo account",
+      "p1": "Devi avere almeno 16 anni per usare The Superhero. Usa la tua identità reale, custodisci le tue credenziali di accesso e non condividere né vendere il tuo account. Sei responsabile di ciò che avviene tramite di esso. Puoi eliminare il tuo account in qualsiasi momento dalle impostazioni del profilo."
+    },
+    "platform": {
+      "title": "3. Cosa è (e cosa non è) la piattaforma",
+      "p1": "Noi forniamo l'infrastruttura: pagine dei progetti, modelli, passaggi, aggiornamenti, messaggistica e abbinamento delle competenze. I progetti stessi sono creati e gestiti dai loro responsabili, non da noi. Non verifichiamo i progetti né i loro organizzatori, non garantiamo che un progetto si realizzi o riesca, e unirsi a un progetto crea un accordo tra te e la comunità di quel progetto — non con noi.",
+      "p2": "Molti progetti comportano attività nel mondo reale — piantare, riparare, organizzare eventi. Valutale con lo stesso giudizio che applicheresti a qualsiasi attività di volontariato: la tua sicurezza, l'assicurazione, i permessi e gli obblighi legali per le attività offline riguardano te e il progetto a cui ti unisci, e restano tua responsabilità."
+    },
+    "content": {
+      "title": "4. I tuoi contenuti",
+      "p1": "Ciò che crei qui è tuo — descrizioni dei progetti, modelli, passaggi, aggiornamenti e messaggi. Affinché la piattaforma possa funzionare, ci concedi una licenza non esclusiva e valida in tutto il mondo per ospitare, mostrare e distribuire i tuoi contenuti all'interno del servizio. I contenuti che contrassegni come pubblici sono visibili a chiunque su internet.",
+      "p2": "I modelli sono un caso particolare: il loro scopo è proprio il riutilizzo. Pubblicando un modello permetti agli altri membri di adattarlo, modificarlo e tradurlo sulla piattaforma, con l'originale accreditato come capostipite della famiglia.",
+      "p3": "Pubblica solo ciò che hai il diritto di pubblicare. Se un contenuto che carichi viola i diritti di qualcun altro, la responsabilità è tua — e lo rimuoveremo quando ne verremo a conoscenza."
+    },
+    "acceptableUse": {
+      "title": "5. Uso accettabile",
+      "intro": "Non usare la piattaforma per:",
+      "items": {
+        "unlawful": "pubblicare contenuti illeciti, diffamatori, molesti, di incitamento all'odio o ingannevoli;",
+        "impersonate": "fingerti qualcun altro o presentare in modo ingannevole un progetto o un'affiliazione;",
+        "spam": "inviare spam ai membri tramite messaggi, aggiornamenti o richieste di adesione;",
+        "advertise": "pubblicizzare servizi commerciali estranei;",
+        "scrape": "estrarre dati dalla piattaforma, sondarne la sicurezza o interferire con il suo funzionamento (i limiti di frequenza esistono per un motivo);",
+        "collect": "raccogliere dati personali di altri membri oltre quanto la collaborazione richiede."
+      }
+    },
+    "moderation": {
+      "title": "6. Moderazione",
+      "p1": "Possiamo rimuovere contenuti, passaggi, progetti o modelli, e sospendere o chiudere account, quando questi termini vengono violati o quando la legge lo richiede. Useremo questo potere con parsimonia e con giudizio — la piattaforma esiste per far succedere i progetti, non per sorvegliarli. I responsabili dei progetti moderano inoltre i propri progetti (accettando membri, gestendo passaggi e aggiornamenti)."
+    },
+    "availability": {
+      "title": "7. Disponibilità e modifiche",
+      "p1": "La piattaforma è fornita “così com'è” e a titolo gratuito. Lavoriamo per mantenerla disponibile e corretta, ma non garantiamo un funzionamento ininterrotto o privo di errori, e potremmo modificare, sospendere o interrompere delle funzionalità. Se mai dovessimo chiudere del tutto la piattaforma, daremo un preavviso ragionevole affinché tu possa esportare ciò che ti sta a cuore."
+    },
+    "liability": {
+      "title": "8. Responsabilità",
+      "p1": "Nella misura consentita dalla legge, non siamo responsabili per danni indiretti, perdita di dati, mancato guadagno, i contenuti pubblicati da altri membri, o qualsiasi cosa avvenga nelle attività dei progetti nel mondo reale. Nulla in questi termini esclude la responsabilità per dolo o colpa grave, o qualsiasi altra responsabilità che non possa essere esclusa ai sensi del diritto svizzero."
+    },
+    "termsChanges": {
+      "title": "9. Modifiche a questi termini",
+      "p1": "Potremmo aggiornare questi termini man mano che la piattaforma evolve. La data in alto ti dice quando. Per le modifiche sostanziali ti avviseremo nell'app, e continuare a usare la piattaforma dopo di ciò significa che accetti la nuova versione."
+    },
+    "law": {
+      "title": "10. Legge applicabile",
+      "p1": "Questi termini sono regolati dal diritto svizzero. Sono competenti i tribunali della sede del gestore in Svizzera, fatti salvi eventuali fori inderogabili di tutela dei consumatori che si applicano a te."
+    }
+  },
+  "footer": {
+    "questions": "Domande?",
+    "privacyLink": "Informativa sulla privacy",
+    "homeLink": "Torna alla pagina iniziale"
+  }
+}

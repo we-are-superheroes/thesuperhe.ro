@@ -1,0 +1,63 @@
+{
+  "hero": {
+    "title": "Passend zu <em>deinen Fähigkeiten</em>.",
+    "subtitle": "Schritte und Projekte, ausgewählt nach dem, was du gut kannst — und wo du bist. Remote-Arbeit wird stattdessen über deine Sprachen zugeordnet."
+  },
+  "basis": {
+    "ariaLabel": "Worauf diese Treffer beruhen",
+    "matchingOn": "Abgleich über",
+    "noSkills": "Noch keine Fähigkeiten in deinem Profil",
+    "editProfile": "Profil bearbeiten"
+  },
+  "emptyProfile": {
+    "title": "Sag uns, was du gut kannst.",
+    "description": "Treffer entstehen aus den Fähigkeiten in deinem Profil. Füge ein paar hinzu — jede Fähigkeit zählt, nicht nur technische — und die Treffer erscheinen hier.",
+    "cta": "Fähigkeiten zum Profil hinzufügen"
+  },
+  "pills": {
+    "all": "Alle",
+    "steps": "Schritte",
+    "projects": "Projekte"
+  },
+  "tools": {
+    "searchPlaceholder": "Treffer durchsuchen…",
+    "remoteOnly": "Nur remote"
+  },
+  "emptyFiltered": {
+    "title": "Keine Treffer mit diesen Filtern.",
+    "description": "Schalte „Nur remote“ aus, leere die Suche — oder füge deinem Profil mehr Fähigkeiten hinzu, um mehr Treffer zu sehen."
+  },
+  "groups": {
+    "strongTitle": "Starke Treffer",
+    "strongSub": "{count} — sie brauchen eine Fähigkeit, die du schon hast",
+    "adjacentTitle": "Nah an deinen Fähigkeiten",
+    "adjacentSub": "{count} — im selben Fähigkeitsbereich, eine Chance, etwas Neues zu lernen"
+  },
+  "ring": {
+    "percentSign": "%",
+    "matchLabel": "Treffer"
+  },
+  "card": {
+    "kindStep": "Schritt",
+    "kindProject": "Projekt",
+    "estimatedHours": "· ~{hours} Std.",
+    "claimStep": "Diesen Schritt übernehmen",
+    "viewProject": "Projekt ansehen"
+  },
+  "why": {
+    "needsSkills": "Braucht {skills} — du hast {count, plural, one {sie} other {beide}}",
+    "andJoiner": " und ",
+    "relatedSkills": "{skills} liegt nah an deinen Fähigkeiten",
+    "near": "In {city}, wie du",
+    "far": "{location} — Anreise nötig",
+    "locationUnknown": "Ort unbekannt",
+    "remoteLang": "Remote, arbeitet auf {language}",
+    "remoteNoLang": "Remote, läuft aber auf {language}",
+    "remoteUnknown": "Remote-Mitwirkende willkommen"
+  },
+  "rail": {
+    "remote": "Remote",
+    "nearYou": "{location} · in deiner Nähe",
+    "locationNotSet": "Ort nicht festgelegt"
+  }
+}

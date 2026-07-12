@@ -1,0 +1,70 @@
+{
+  "chrome": {
+    "eyebrow": "Legal",
+    "title": "Condiciones del servicio",
+    "lastUpdated": "Última actualización: {date}"
+  },
+  "sections": {
+    "shortVersion": {
+      "title": "La versión corta",
+      "p1": "The Superhero conecta a personas con proyectos de clima y sostenibilidad. Conservas la propiedad de lo que publicas, eres responsable de lo que publicas y de lo que haces fuera de la plataforma, trataos bien entre vosotros, y podemos retirar contenido o cuentas que incumplan estas reglas. La versión larga viene a continuación.",
+      "englishPrevails": "Estas condiciones están disponibles en varios idiomas por comodidad — si una traducción alguna vez discrepa de la versión en inglés, prevalece la versión en inglés."
+    },
+    "agreement": {
+      "title": "1. Quiénes somos y qué estás aceptando",
+      "p1": "The Superhero (thesuperhe.ro) se opera desde Suiza. Al crear una cuenta o usar la plataforma aceptas estas condiciones y nuestra <link>política de privacidad</link>. Si no estás de acuerdo con ellas, no uses la plataforma."
+    },
+    "account": {
+      "title": "2. Tu cuenta",
+      "p1": "Necesitas tener al menos 16 años para usar The Superhero. Usa tu identidad real, guarda tus credenciales de acceso para ti y no compartas ni vendas tu cuenta. Eres responsable de lo que ocurra bajo ella. Puedes eliminar tu cuenta en cualquier momento desde la configuración de tu perfil."
+    },
+    "platform": {
+      "title": "3. Qué es (y qué no es) la plataforma",
+      "p1": "Nosotros proporcionamos la infraestructura: páginas de proyecto, plantillas, pasos, actualizaciones, mensajería y emparejamiento de habilidades. Los proyectos en sí los crean y dirigen sus responsables, no nosotros. No verificamos los proyectos ni a sus organizadores, no garantizamos que un proyecto vaya a realizarse o a tener éxito, y unirte a un proyecto crea un acuerdo entre tú y la comunidad de ese proyecto — no con nosotros.",
+      "p2": "Muchos proyectos implican actividades en el mundo real — plantar, reparar, organizar eventos. Evalúalos con el mismo criterio que aplicarías a cualquier actividad de voluntariado: tu seguridad, los seguros, los permisos y las obligaciones legales de las actividades fuera de la plataforma son cosa tuya y del proyecto al que te unes, y siguen siendo tu propia responsabilidad."
+    },
+    "content": {
+      "title": "4. Tu contenido",
+      "p1": "Lo que creas aquí es tuyo — descripciones de proyecto, plantillas, pasos, actualizaciones y mensajes. Para que la plataforma pueda funcionar, nos concedes una licencia no exclusiva y mundial para alojar, mostrar y distribuir tu contenido dentro del servicio. El contenido que marcas como público es visible para cualquier persona en internet.",
+      "p2": "Las plantillas son especiales: toda su razón de ser es la reutilización. Al publicar una plantilla permites que otros miembros la adapten, la modifiquen y la traduzcan en la plataforma, con el original acreditado como raíz de la familia.",
+      "p3": "Publica solo lo que tienes derecho a publicar. Si el contenido que subes infringe los derechos de otra persona, la responsabilidad es tuya — y lo retiraremos cuando se nos comunique."
+    },
+    "acceptableUse": {
+      "title": "5. Uso aceptable",
+      "intro": "No uses la plataforma para:",
+      "items": {
+        "unlawful": "publicar contenido ilícito, difamatorio, acosador, de odio o engañoso;",
+        "impersonate": "suplantar a alguien o falsear un proyecto o una afiliación;",
+        "spam": "enviar spam a los miembros mediante mensajes, actualizaciones o solicitudes de incorporación;",
+        "advertise": "anunciar servicios comerciales no relacionados;",
+        "scrape": "extraer datos de la plataforma, sondear su seguridad o interferir en su funcionamiento (los límites de uso existen por algo);",
+        "collect": "recopilar datos personales de otros miembros más allá de lo que requiere la colaboración."
+      }
+    },
+    "moderation": {
+      "title": "6. Moderación",
+      "p1": "Podemos retirar contenido, pasos, proyectos o plantillas, y suspender o cancelar cuentas, cuando se incumplen estas condiciones o cuando la ley lo exige. Usaremos ese poder con moderación y criterio — la plataforma existe para que los proyectos salgan adelante, no para vigilarlos. Los responsables de proyecto moderan además sus propios proyectos (aceptar miembros, gestionar pasos y actualizaciones)."
+    },
+    "availability": {
+      "title": "7. Disponibilidad y cambios",
+      "p1": "La plataforma se proporciona «tal cual» y de forma gratuita. Trabajamos para mantenerla disponible y correcta, pero no garantizamos un funcionamiento ininterrumpido ni libre de errores, y podemos cambiar, suspender o retirar funciones. Si alguna vez retiramos la plataforma por completo, avisaremos con una antelación razonable para que puedas exportar lo que te importa."
+    },
+    "liability": {
+      "title": "8. Responsabilidad",
+      "p1": "En la medida en que la ley lo permita, no somos responsables de daños indirectos, pérdida de datos, lucro cesante, el contenido que publican otros miembros ni nada de lo que ocurra en las actividades de los proyectos en el mundo real. Nada en estas condiciones excluye la responsabilidad por dolo o negligencia grave, ni ninguna otra responsabilidad que no pueda excluirse conforme al derecho suizo."
+    },
+    "termsChanges": {
+      "title": "9. Cambios en estas condiciones",
+      "p1": "Podemos actualizar estas condiciones a medida que la plataforma evoluciona. La fecha de la parte superior te indica cuándo. Para los cambios sustanciales te lo notificaremos en la aplicación, y seguir usando la plataforma después de eso significa que aceptas la nueva versión."
+    },
+    "law": {
+      "title": "10. Ley aplicable",
+      "p1": "Estas condiciones se rigen por el derecho suizo. Los tribunales de la sede del operador en Suiza tienen jurisdicción, sin perjuicio de los foros imperativos de protección al consumidor que te sean aplicables."
+    }
+  },
+  "footer": {
+    "questions": "¿Preguntas?",
+    "privacyLink": "Política de privacidad",
+    "homeLink": "Volver a la página de inicio"
+  }
+}

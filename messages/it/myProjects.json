@@ -1,0 +1,93 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Cerca tra i tuoi progetti…",
+    "notificationsTitle": "Notifiche",
+    "startProject": "Avvia un progetto",
+    "startProjectShort": "Avvia"
+  },
+  "hero": {
+    "title": "I tuoi <em>progetti</em>.",
+    "subtitle": "Tutto ciò a cui stai contribuendo, in un unico posto. Vedi cosa è bloccato e riprendi da dove ti eri fermato."
+  },
+  "stats": {
+    "active": "Attivi",
+    "openSteps": "Passaggi aperti",
+    "contributed": "Contributo",
+    "hoursSuffix": "h"
+  },
+  "tabs": {
+    "active": "Attivi",
+    "finished": "Finiti",
+    "archived": "Archiviati"
+  },
+  "roleFilter": {
+    "all": "Tutti i ruoli",
+    "leading": "Da responsabile",
+    "contributing": "Da collaboratore",
+    "needsAction": "Serve una tua azione"
+  },
+  "sort": {
+    "recent": "Ultima attività",
+    "due": "Scadenza più vicina",
+    "progress": "Più vicini alla fine",
+    "title": "Titolo (A–Z)"
+  },
+  "view": {
+    "grid": "Vista a griglia",
+    "list": "Vista a elenco"
+  },
+  "role": {
+    "lead": "Responsabile",
+    "contributor": "Collaboratore"
+  },
+  "listHeader": {
+    "project": "Progetto",
+    "nextStep": "Il tuo prossimo passaggio",
+    "role": "Ruolo",
+    "progress": "Avanzamento"
+  },
+  "card": {
+    "lastActivity": "Ultima attività {when}",
+    "noOpenSteps": "Nessun passaggio aperto per te.",
+    "percent": "{progress}%"
+  },
+  "listRow": {
+    "noOpenStep": "Nessun passaggio aperto.",
+    "progressSummary": "{progress}% completato · {count, plural, one {# collaboratore} other {# collaboratori}}"
+  },
+  "fallback": {
+    "type": "Altro",
+    "location": "A distanza"
+  },
+  "relative": {
+    "justNow": "proprio ora",
+    "minutesAgo": "{count, plural, one {# minuto fa} other {# minuti fa}}",
+    "hoursAgo": "{count, plural, one {# ora fa} other {# ore fa}}",
+    "yesterday": "ieri",
+    "daysAgo": "{count, plural, one {# giorno fa} other {# giorni fa}}",
+    "weeksAgo": "{count, plural, one {# settimana fa} other {# settimane fa}}",
+    "monthsAgo": "{count, plural, one {# mese fa} other {# mesi fa}}",
+    "yearsAgo": "{count, plural, one {# anno fa} other {# anni fa}}"
+  },
+  "due": {
+    "whenYouCan": "Quando puoi",
+    "overdueBy": "{count, plural, one {In ritardo di # giorno} other {In ritardo di # giorni}}",
+    "today": "Scade oggi",
+    "tomorrow": "Scade domani",
+    "inDays": "{count, plural, one {Scade tra # giorno} other {Scade tra # giorni}}",
+    "inOneWeek": "Scade tra 1 settimana"
+  },
+  "empty": {
+    "activeFilteredTitle": "Nessun progetto corrisponde a questi filtri.",
+    "activeFilteredDescription": "Prova a svuotare la ricerca o a cambiare ruolo.",
+    "activeTitle": "Non ti sei ancora unito a un progetto.",
+    "activeDescription": "Esplora cosa è attivo in questo momento e trovane uno che fa per te — anche un passaggio da un'ora conta.",
+    "clearFilters": "Azzera i filtri",
+    "browseProjects": "Esplora i progetti",
+    "startYourOwn": "Avvia il tuo",
+    "finishedTitle": "Ancora niente di finito.",
+    "finishedDescription": "Quando un progetto si conclude, si sposta qui come traccia di ciò che hai aiutato a realizzare.",
+    "archivedTitle": "Nessun progetto archiviato.",
+    "archivedDescription": "I progetti da cui ti sei allontanato compariranno qui."
+  }
+}

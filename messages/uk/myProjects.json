@@ -1,0 +1,93 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Шукати серед ваших проєктів…",
+    "notificationsTitle": "Сповіщення",
+    "startProject": "Почати проєкт",
+    "startProjectShort": "Почати"
+  },
+  "hero": {
+    "title": "Ваші <em>проєкти</em>.",
+    "subtitle": "Усе, до чого ви долучаєтеся, в одному місці. Дивіться, що заблоковано, і продовжуйте з того місця, де зупинилися."
+  },
+  "stats": {
+    "active": "Активні",
+    "openSteps": "Відкриті кроки",
+    "contributed": "Внесок",
+    "hoursSuffix": " год"
+  },
+  "tabs": {
+    "active": "Активні",
+    "finished": "Завершені",
+    "archived": "Архів"
+  },
+  "roleFilter": {
+    "all": "Усі ролі",
+    "leading": "Керую",
+    "contributing": "Беру участь",
+    "needsAction": "Потрібна ваша дія"
+  },
+  "sort": {
+    "recent": "Остання активність",
+    "due": "Найближчий термін",
+    "progress": "Найближчі до завершення",
+    "title": "Назва (А–Я)"
+  },
+  "view": {
+    "grid": "Сітка",
+    "list": "Список"
+  },
+  "role": {
+    "lead": "Керую",
+    "contributor": "Беру участь"
+  },
+  "listHeader": {
+    "project": "Проєкт",
+    "nextStep": "Ваш наступний крок",
+    "role": "Роль",
+    "progress": "Прогрес"
+  },
+  "card": {
+    "lastActivity": "Остання активність {when}",
+    "noOpenSteps": "Для вас немає відкритих кроків.",
+    "percent": "{progress}%"
+  },
+  "listRow": {
+    "noOpenStep": "Немає відкритого кроку.",
+    "progressSummary": "{progress}% виконано · {count, plural, one {# учасник} few {# учасники} many {# учасників} other {# учасника}}"
+  },
+  "fallback": {
+    "type": "Інше",
+    "location": "Дистанційно"
+  },
+  "relative": {
+    "justNow": "щойно",
+    "minutesAgo": "{count, plural, one {# хвилину тому} few {# хвилини тому} many {# хвилин тому} other {# хвилини тому}}",
+    "hoursAgo": "{count, plural, one {# годину тому} few {# години тому} many {# годин тому} other {# години тому}}",
+    "yesterday": "вчора",
+    "daysAgo": "{count, plural, one {# день тому} few {# дні тому} many {# днів тому} other {# дня тому}}",
+    "weeksAgo": "{count, plural, one {# тиждень тому} few {# тижні тому} many {# тижнів тому} other {# тижня тому}}",
+    "monthsAgo": "{count, plural, one {# місяць тому} few {# місяці тому} many {# місяців тому} other {# місяця тому}}",
+    "yearsAgo": "{count, plural, one {# рік тому} few {# роки тому} many {# років тому} other {# року тому}}"
+  },
+  "due": {
+    "whenYouCan": "Коли зможете",
+    "overdueBy": "{count, plural, one {Прострочено на # день} few {Прострочено на # дні} many {Прострочено на # днів} other {Прострочено на # дня}}",
+    "today": "Термін — сьогодні",
+    "tomorrow": "Термін — завтра",
+    "inDays": "{count, plural, one {Термін через # день} few {Термін через # дні} many {Термін через # днів} other {Термін через # дня}}",
+    "inOneWeek": "Термін через 1 тиждень"
+  },
+  "empty": {
+    "activeFilteredTitle": "Жоден проєкт не відповідає цим фільтрам.",
+    "activeFilteredDescription": "Спробуйте очистити пошук або змінити роль.",
+    "activeTitle": "Ви ще не приєдналися до жодного проєкту.",
+    "activeDescription": "Перегляньте, що зараз активне, і знайдіть щось до душі — навіть годинний крок має значення.",
+    "clearFilters": "Очистити фільтри",
+    "browseProjects": "Переглядати проєкти",
+    "startYourOwn": "Почати власний",
+    "finishedTitle": "Поки нічого не завершено.",
+    "finishedDescription": "Коли проєкт завершиться, він переміститься сюди — як запис того, що ви допомогли зробити.",
+    "archivedTitle": "Немає архівованих проєктів.",
+    "archivedDescription": "Проєкти, які ви залишили, з’являться тут."
+  }
+}

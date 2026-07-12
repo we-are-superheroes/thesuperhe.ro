@@ -1,0 +1,62 @@
+{
+  "chrome": {
+    "eyebrow": "Legal",
+    "title": "Política de privacidade",
+    "lastUpdated": "Última atualização: {date}"
+  },
+  "sections": {
+    "whoWeAre": {
+      "title": "Quem somos",
+      "p1": "The Superhero (thesuperhe.ro) é uma plataforma que liga pessoas a projetos de clima e sustentabilidade. É operada a partir da Suíça. Para qualquer assunto relacionado com os seus dados, contacte-nos em <link>{email}</link>. Somos o responsável pelo tratamento dos dados pessoais descritos abaixo e tratamo-los ao abrigo da Lei Federal Suíça de Proteção de Dados (FADP) e, quando aplicável, do Regulamento Geral de Proteção de Dados da UE (RGPD).",
+      "englishPrevails": "Esta página está disponível em vários idiomas por conveniência — se alguma tradução divergir da versão em inglês, prevalece a versão em inglês."
+    },
+    "whatWeCollect": {
+      "title": "O que recolhemos",
+      "p1": "<strong>Dados de conta.</strong> Quando você se regista, o nosso fornecedor de autenticação (Clerk) recolhe o seu nome, endereço de email e, se você usar um login social, a sua foto de perfil. Guardamos uma cópia destes dados na nossa própria base de dados para que a plataforma possa mostrar quem você é.",
+      "p2": "<strong>Dados de perfil que você escolhe adicionar.</strong> Uma bio, uma localização, um fuso horário, uma foto de perfil e as habilidades que você declara ter — incluindo se você procura usá-las. Tudo isto é opcional.",
+      "p3": "<strong>Conteúdo que você cria.</strong> Projetos, modelos, etapas de projeto, atualizações, mensagens a outros membros, as etapas em que você entra e as horas que regista. Parte disto é público por definição (veja abaixo).",
+      "p4": "<strong>Dados técnicos.</strong> O nosso fornecedor de alojamento (Vercel) mantém registos de servidor de curta duração (endereço IP, caminho do pedido, data e hora) para operar e proteger o serviço. Não usamos rastreadores de publicidade nem de análise."
+    },
+    "whatWeUseItFor": {
+      "title": "Para que os usamos",
+      "p1": "Para operar a plataforma: mostrar o seu perfil a outros membros, ligar as suas habilidades a etapas que precisam delas, enviar notificações dentro da aplicação e permitir que você troque mensagens com outros membros. A base legal é a execução do nosso contrato com você (a prestação do serviço em que você se registou) e o nosso interesse legítimo em manter a plataforma segura e funcional. Não vendemos os seus dados e não os usamos para publicidade."
+    },
+    "whatIsPublic": {
+      "title": "O que é público",
+      "p1": "Esta é uma plataforma de colaboração, por isso algumas coisas são visíveis para qualquer pessoa na internet: os projetos e as suas etapas, os modelos e a sua autoria, as atualizações de projeto marcadas como “públicas” e o seu nome no conteúdo com que você contribuiu publicamente. As atualizações só para membros são visíveis apenas para os membros de um projeto. As mensagens são visíveis apenas para você e para a pessoa com quem você escreve. O seu endereço de email nunca é mostrado a outros utilizadores.",
+      "p2": "As imagens enviadas (fotos de perfil, capas de projeto) são armazenadas num repositório acessível publicamente — qualquer pessoa com o link pode vê-las, por isso não envie imagens que você não gostaria de ver públicas."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "p1": "Usamos apenas cookies estritamente necessários para operar o serviço: os cookies de sessão definidos pelo Clerk para manter você com sessão iniciada, e um cookie <code>superhero-locale</code> que lembra o idioma que você escolheu para o site. A sua preferência de tema é guardada no armazenamento local do seu navegador e nunca sai do seu dispositivo. Não existem cookies de publicidade, de análise ou de rastreamento de terceiros — é por isso que você não vê um aviso de cookies."
+    },
+    "processors": {
+      "title": "Onde ficam os seus dados",
+      "intro": "Os nossos prestadores de serviços (subcontratantes) são:",
+      "items": {
+        "supabase": "<strong>Supabase</strong> — base de dados e armazenamento de imagens, alojado na AWS na UE (Irlanda, eu-west-1).",
+        "clerk": "<strong>Clerk</strong> — autenticação, sediado nos Estados Unidos. As transferências estão cobertas pelas Cláusulas Contratuais-Tipo da UE.",
+        "vercel": "<strong>Vercel</strong> — alojamento da aplicação e registos de servidor."
+      },
+      "outro": "Cada um deles trata dados apenas segundo as nossas instruções e ao abrigo de um acordo de tratamento de dados."
+    },
+    "retention": {
+      "title": "Por quanto tempo os guardamos",
+      "p1": "Enquanto você tiver uma conta. Se você apagar a sua conta, o seu perfil, as suas habilidades e as suas contribuições são apagados com ela. O conteúdo de que outras pessoas dependem — mensagens que você enviou, atualizações públicas que você publicou — é mantido, mas desligado da sua identidade e mostrado como vindo de um membro apagado ou antigo. Os registos de servidor são retidos pelo nosso fornecedor de alojamento por um curto período e depois descartados."
+    },
+    "yourRights": {
+      "title": "Os seus direitos",
+      "p1": "Ao abrigo da FADP e do RGPD, você pode pedir-nos acesso aos dados que temos sobre você, a sua correção ou eliminação, receber uma cópia num formato portátil, ou opor-se ao tratamento ou restringi-lo. Escreva para <link>{email}</link> e responderemos dentro de 30 dias. Você também pode apagar a sua conta a qualquer momento nas configurações do perfil.",
+      "p2": "Se você acredita que estamos a tratar mal os seus dados, tem o direito de apresentar queixa a uma autoridade de controlo — na Suíça, o Comissário Federal para a Proteção de Dados e a Informação (FDPIC), ou a sua autoridade local de proteção de dados na UE/EEE."
+    },
+    "policyChanges": {
+      "title": "Alterações a esta política",
+      "p1": "Se mudarmos a forma como tratamos os seus dados — por exemplo, se começarmos a enviar notificações por email — atualizaremos esta página e a data no topo. Para alterações significativas, avisaremos você dentro da aplicação."
+    }
+  },
+  "footer": {
+    "questions": "Perguntas?",
+    "termsLink": "Termos de serviço",
+    "homeLink": "Voltar à página inicial"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "sidebar": {
+    "primaryNavAriaLabel": "Navegación principal",
+    "closeMenuAriaLabel": "Cerrar menú",
+    "expandTitle": "Expandir la barra lateral",
+    "collapseTitle": "Plegar la barra lateral",
+    "resizeAriaLabel": "Cambiar el tamaño de la barra lateral",
+    "groups": {
+      "overview": "Resumen",
+      "discover": "Descubrir",
+      "account": "Cuenta"
+    },
+    "items": {
+      "dashboard": "Mi panel",
+      "myProjects": "Mis proyectos",
+      "mySteps": "Mis pasos",
+      "messages": "Mensajes",
+      "notifications": "Notificaciones",
+      "browseProjects": "Explorar proyectos",
+      "skillMatches": "Habilidades buscadas",
+      "blueprints": "Plantillas",
+      "organisations": "Organizaciones",
+      "profile": "Perfil"
+    },
+    "accountMenuAriaLabel": "Menú de cuenta",
+    "signOut": "Cerrar sesión",
+    "accountFallback": "Cuenta",
+    "userFallbackName": "Héroe",
+    "metaContributions": "{count, plural, one {# proyecto} other {# proyectos}} · {hours}h",
+    "metaNewHere": "Recién llegado · 0h",
+    "footer": {
+      "home": "Inicio",
+      "privacy": "Privacidad",
+      "terms": "Condiciones"
+    }
+  },
+  "shell": {
+    "openMenuAriaLabel": "Abrir menú",
+    "closeMenuAriaLabel": "Cerrar menú"
+  },
+  "publicNav": {
+    "browseProjects": "Explorar proyectos",
+    "browseBlueprints": "Explorar plantillas",
+    "howItWorks": "Cómo funciona",
+    "signIn": "Iniciar sesión",
+    "getStarted": "Empezar"
+  },
+  "themePicker": {
+    "themes": {
+      "dark": {
+        "name": "Medianoche",
+        "badge": "Predeterminado",
+        "desc": "El original: azul profundo y ámbar."
+      },
+      "daylight": {
+        "name": "Luz de día",
+        "desc": "Blanco fresco y nítido con gris azulado."
+      },
+      "paper": {
+        "name": "Papel",
+        "desc": "Marfil cálido, con el ámbar en primer plano."
+      },
+      "contrast": {
+        "name": "Alto contraste",
+        "badge": "A11Y",
+        "desc": "Máxima legibilidad — texto WCAG AAA y foco bien marcado."
+      }
+    }
+  }
+}

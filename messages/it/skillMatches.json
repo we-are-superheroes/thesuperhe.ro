@@ -1,0 +1,63 @@
+{
+  "hero": {
+    "title": "In linea con le <em>tue competenze</em>.",
+    "subtitle": "Passaggi e progetti scelti in base a ciò che sai fare — e a dove sei. Il lavoro a distanza è invece abbinato alle lingue che parli."
+  },
+  "basis": {
+    "ariaLabel": "Su cosa si basano queste corrispondenze",
+    "matchingOn": "Abbinamento su",
+    "noSkills": "Ancora nessuna competenza sul tuo profilo",
+    "editProfile": "Modifica il profilo"
+  },
+  "emptyProfile": {
+    "title": "Dicci in cosa sei bravo.",
+    "description": "Le corrispondenze nascono dalle competenze sul tuo profilo. Aggiungine qualcuna — ogni competenza conta, non solo quelle tecniche — e le corrispondenze compariranno qui.",
+    "cta": "Aggiungi competenze al tuo profilo"
+  },
+  "pills": {
+    "all": "Tutto",
+    "steps": "Passaggi",
+    "projects": "Progetti"
+  },
+  "tools": {
+    "searchPlaceholder": "Cerca tra le corrispondenze…",
+    "remoteOnly": "Solo a distanza"
+  },
+  "emptyFiltered": {
+    "title": "Nessuna corrispondenza con questi filtri.",
+    "description": "Prova a disattivare “Solo a distanza”, a svuotare la ricerca — o aggiungi altre competenze al tuo profilo per vedere più corrispondenze."
+  },
+  "groups": {
+    "strongTitle": "Corrispondenze forti",
+    "strongSub": "{count} — cercano una competenza che hai già",
+    "adjacentTitle": "Vicine alle tue competenze",
+    "adjacentSub": "{count} — negli stessi ambiti, un'occasione per imparare qualcosa di nuovo"
+  },
+  "ring": {
+    "percentSign": "%",
+    "matchLabel": "Corrispondenza"
+  },
+  "card": {
+    "kindStep": "passaggio",
+    "kindProject": "progetto",
+    "estimatedHours": "· ~{hours}h",
+    "claimStep": "Prendi in carico questo passaggio",
+    "viewProject": "Vedi il progetto"
+  },
+  "why": {
+    "needsSkills": "Serve {skills} — {count, plural, one {ce l'hai} other {le hai entrambe}}",
+    "andJoiner": " e ",
+    "relatedSkills": "{skills} è vicina alle tue competenze",
+    "near": "A {city}, come te",
+    "far": "{location} — serve spostarsi",
+    "locationUnknown": "Luogo sconosciuto",
+    "remoteLang": "A distanza, si lavora in {language}",
+    "remoteNoLang": "A distanza, ma si svolge in {language}",
+    "remoteUnknown": "Collaboratori a distanza benvenuti"
+  },
+  "rail": {
+    "remote": "A distanza",
+    "nearYou": "{location} · vicino a te",
+    "locationNotSet": "Luogo non impostato"
+  }
+}

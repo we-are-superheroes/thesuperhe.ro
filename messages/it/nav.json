@@ -1,0 +1,70 @@
+{
+  "sidebar": {
+    "primaryNavAriaLabel": "Navigazione principale",
+    "closeMenuAriaLabel": "Chiudi il menu",
+    "expandTitle": "Espandi la barra laterale",
+    "collapseTitle": "Riduci la barra laterale",
+    "resizeAriaLabel": "Ridimensiona la barra laterale",
+    "groups": {
+      "overview": "Panoramica",
+      "discover": "Scopri",
+      "account": "Account"
+    },
+    "items": {
+      "dashboard": "La mia bacheca",
+      "myProjects": "I miei progetti",
+      "mySteps": "I miei passaggi",
+      "messages": "Messaggi",
+      "notifications": "Notifiche",
+      "browseProjects": "Esplora i progetti",
+      "skillMatches": "Competenze richieste",
+      "blueprints": "Modelli",
+      "organisations": "Organizzazioni",
+      "profile": "Profilo"
+    },
+    "accountMenuAriaLabel": "Menu account",
+    "signOut": "Esci",
+    "accountFallback": "Account",
+    "userFallbackName": "Hero",
+    "metaContributions": "{count, plural, one {# progetto} other {# progetti}} · {hours}h",
+    "metaNewHere": "Nuovo qui · 0h",
+    "footer": {
+      "home": "Home",
+      "privacy": "Privacy",
+      "terms": "Termini"
+    }
+  },
+  "shell": {
+    "openMenuAriaLabel": "Apri il menu",
+    "closeMenuAriaLabel": "Chiudi il menu"
+  },
+  "publicNav": {
+    "browseProjects": "Esplora i progetti",
+    "browseBlueprints": "Esplora i modelli",
+    "howItWorks": "Come funziona",
+    "signIn": "Accedi",
+    "getStarted": "Inizia"
+  },
+  "themePicker": {
+    "themes": {
+      "dark": {
+        "name": "Midnight",
+        "badge": "Predefinito",
+        "desc": "L'originale blu profondo e ambra."
+      },
+      "daylight": {
+        "name": "Daylight",
+        "desc": "Bianco fresco e nitido con grigio-blu."
+      },
+      "paper": {
+        "name": "Paper",
+        "desc": "Avorio caldo, con l'ambra in primo piano."
+      },
+      "contrast": {
+        "name": "Alto contrasto",
+        "badge": "A11Y",
+        "desc": "Massima leggibilità — testo WCAG AAA e focus ben visibile."
+      }
+    }
+  }
+}

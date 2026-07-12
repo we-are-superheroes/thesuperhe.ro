@@ -1,0 +1,63 @@
+{
+  "hero": {
+    "title": "Escolhido para <em>as suas habilidades</em>.",
+    "subtitle": "Etapas e projetos escolhidos pelo que você sabe fazer — e por onde você está. Para trabalho remoto, a combinação usa os idiomas que você fala."
+  },
+  "basis": {
+    "ariaLabel": "Em que se baseiam estas combinações",
+    "matchingOn": "Com base em",
+    "noSkills": "Ainda sem habilidades no seu perfil",
+    "editProfile": "Editar perfil"
+  },
+  "emptyProfile": {
+    "title": "Diga-nos o que você sabe fazer bem.",
+    "description": "As combinações vêm das habilidades no seu perfil. Adicione algumas — qualquer habilidade conta, não só as técnicas — e as combinações aparecem aqui.",
+    "cta": "Adicionar habilidades ao seu perfil"
+  },
+  "pills": {
+    "all": "Tudo",
+    "steps": "Etapas",
+    "projects": "Projetos"
+  },
+  "tools": {
+    "searchPlaceholder": "Pesquisar combinações…",
+    "remoteOnly": "Só remoto"
+  },
+  "emptyFiltered": {
+    "title": "Nenhuma combinação com esses filtros.",
+    "description": "Experimente desligar “Só remoto”, limpar a pesquisa — ou adicione mais habilidades ao seu perfil para ver mais combinações."
+  },
+  "groups": {
+    "strongTitle": "Combinações fortes",
+    "strongSub": "{count} — precisam de uma habilidade que você já tem",
+    "adjacentTitle": "Perto das suas habilidades",
+    "adjacentSub": "{count} — nas mesmas áreas, uma chance de aprender algo novo"
+  },
+  "ring": {
+    "percentSign": "%",
+    "matchLabel": "Compatível"
+  },
+  "card": {
+    "kindStep": "etapa",
+    "kindProject": "projeto",
+    "estimatedHours": "· ~{hours}h",
+    "claimStep": "Assumir esta etapa",
+    "viewProject": "Ver projeto"
+  },
+  "why": {
+    "needsSkills": "Precisa de {skills} — você tem {count, plural, one {essa habilidade} other {as duas}}",
+    "andJoiner": " e ",
+    "relatedSkills": "{skills} está perto das suas habilidades",
+    "near": "Em {city}, como você",
+    "far": "{location} — é preciso viajar",
+    "locationUnknown": "Local desconhecido",
+    "remoteLang": "Remoto, funciona em {language}",
+    "remoteNoLang": "Remoto, mas funciona em {language}",
+    "remoteUnknown": "Colaboradores remotos são bem-vindos"
+  },
+  "rail": {
+    "remote": "Remoto",
+    "nearYou": "{location} · perto de você",
+    "locationNotSet": "Local não definido"
+  }
+}

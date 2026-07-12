@@ -1,0 +1,62 @@
+{
+  "chrome": {
+    "eyebrow": "Rechtliches",
+    "title": "Datenschutzerklärung",
+    "lastUpdated": "Zuletzt aktualisiert: {date}"
+  },
+  "sections": {
+    "whoWeAre": {
+      "title": "Wer wir sind",
+      "p1": "The Superhero (thesuperhe.ro) ist eine Plattform, die Menschen mit Klima- und Nachhaltigkeitsprojekten verbindet. Sie wird von der Schweiz aus betrieben. Bei allen Fragen zu deinen Daten erreichst du uns unter <link>{email}</link>. Wir sind die verantwortliche Stelle für die unten beschriebenen personenbezogenen Daten und verarbeiten sie nach dem Schweizer Bundesgesetz über den Datenschutz (DSG) und, soweit anwendbar, der EU-Datenschutz-Grundverordnung (DSGVO).",
+      "englishPrevails": "Diese Seite ist der Einfachheit halber in mehreren Sprachen verfügbar — weicht eine Übersetzung von der englischen Fassung ab, gilt die englische Fassung."
+    },
+    "whatWeCollect": {
+      "title": "Was wir erheben",
+      "p1": "<strong>Kontodaten.</strong> Bei der Registrierung erhebt unser Authentifizierungsanbieter (Clerk) deinen Namen, deine E-Mail-Adresse und, wenn du dich über ein soziales Netzwerk anmeldest, dein Profilbild. Wir halten eine Kopie davon in unserer eigenen Datenbank, damit die Plattform zeigen kann, wer du bist.",
+      "p2": "<strong>Profildaten, die du selbst hinzufügst.</strong> Eine Bio, ein Ort, eine Zeitzone, ein Profilfoto und die Fähigkeiten, die du angibst — einschließlich der Angabe, ob du sie einsetzen möchtest. All das ist freiwillig.",
+      "p3": "<strong>Inhalte, die du erstellst.</strong> Projekte, Blaupausen, Projektschritte, Updates, Nachrichten an andere Mitglieder, die Schritte, denen du beitrittst, und die Stunden, die du erfasst. Einiges davon ist bewusst öffentlich (siehe unten).",
+      "p4": "<strong>Technische Daten.</strong> Unser Hosting-Anbieter (Vercel) speichert kurzlebige Server-Logs (IP-Adresse, Anfragepfad, Zeitstempel), um den Dienst zu betreiben und abzusichern. Wir setzen keine Werbe- oder Analyse-Tracker ein."
+    },
+    "whatWeUseItFor": {
+      "title": "Wofür wir die Daten nutzen",
+      "p1": "Um die Plattform zu betreiben: dein Profil anderen Mitgliedern zu zeigen, deine Fähigkeiten mit passenden Schritten abzugleichen, dir In-App-Benachrichtigungen zu senden und dir das Schreiben an andere Mitglieder zu ermöglichen. Rechtsgrundlage sind die Erfüllung unseres Vertrags mit dir (die Bereitstellung des Dienstes, für den du dich angemeldet hast) und unser berechtigtes Interesse an einer sicheren und funktionsfähigen Plattform. Wir verkaufen deine Daten nicht und nutzen sie nicht für Werbung."
+    },
+    "whatIsPublic": {
+      "title": "Was öffentlich ist",
+      "p1": "Dies ist eine Plattform für Zusammenarbeit, daher sind manche Dinge für alle im Internet sichtbar: Projekte und ihre Schritte, Blaupausen und ihre Urheberschaft, als „öffentlich“ markierte Projekt-Updates sowie dein Name bei Inhalten, zu denen du öffentlich beigetragen hast. Updates nur für Mitglieder sehen ausschließlich die Mitglieder eines Projekts. Nachrichten sehen nur du und die Person, mit der du schreibst. Deine E-Mail-Adresse wird anderen Nutzerinnen und Nutzern niemals angezeigt.",
+      "p2": "Hochgeladene Bilder (Profilfotos, Projekt-Titelbilder) liegen in einem öffentlich zugänglichen Speicher — jede Person mit dem Link kann sie ansehen. Lade also keine Bilder hoch, die nicht öffentlich sein sollen."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "p1": "Wir verwenden nur Cookies, die für den Betrieb des Dienstes zwingend nötig sind: die Sitzungs-Cookies von Clerk, die dich angemeldet halten, und ein <code>superhero-locale</code>-Cookie, das sich merkt, welche Sprache du für die Seite gewählt hast. Deine Theme-Einstellung wird im lokalen Speicher deines Browsers abgelegt und verlässt dein Gerät nie. Es gibt keine Werbe-, Analyse- oder Dritt-Tracking-Cookies — deshalb siehst du auch kein Cookie-Banner."
+    },
+    "processors": {
+      "title": "Wo deine Daten liegen",
+      "intro": "Unsere Dienstleister (Auftragsverarbeiter) sind:",
+      "items": {
+        "supabase": "<strong>Supabase</strong> — Datenbank und Bildspeicher, gehostet auf AWS in der EU (Irland, eu-west-1).",
+        "clerk": "<strong>Clerk</strong> — Authentifizierung, mit Sitz in den USA. Übermittlungen sind durch die EU-Standardvertragsklauseln abgesichert.",
+        "vercel": "<strong>Vercel</strong> — Anwendungs-Hosting und Server-Logs."
+      },
+      "outro": "Jeder dieser Anbieter verarbeitet Daten nur auf unsere Weisung und auf Grundlage eines Auftragsverarbeitungsvertrags."
+    },
+    "retention": {
+      "title": "Wie lange wir sie aufbewahren",
+      "p1": "So lange, wie du ein Konto hast. Wenn du dein Konto löschst, werden dein Profil, deine Fähigkeiten und deine Beiträge mitgelöscht. Inhalte, auf die andere angewiesen sind — Nachrichten, die du gesendet hast, öffentliche Updates, die du veröffentlicht hast — bleiben erhalten, werden aber von deiner Identität getrennt und als Beitrag eines gelöschten oder ehemaligen Mitglieds angezeigt. Server-Logs bewahrt unser Hosting-Anbieter für kurze Zeit auf und verwirft sie dann."
+    },
+    "yourRights": {
+      "title": "Deine Rechte",
+      "p1": "Nach DSG und DSGVO kannst du Auskunft über die Daten verlangen, die wir über dich haben, sie berichtigen oder löschen lassen, eine Kopie in einem übertragbaren Format erhalten oder der Verarbeitung widersprechen bzw. sie einschränken lassen. Schreib an <link>{email}</link> — wir antworten innerhalb von 30 Tagen. Du kannst dein Konto außerdem jederzeit selbst in deinen Profileinstellungen löschen.",
+      "p2": "Wenn du der Ansicht bist, dass wir mit deinen Daten falsch umgehen, hast du das Recht auf Beschwerde bei einer Aufsichtsbehörde — in der Schweiz beim Eidgenössischen Datenschutz- und Öffentlichkeitsbeauftragten (EDÖB), in der EU/im EWR bei deiner örtlichen Datenschutzbehörde."
+    },
+    "policyChanges": {
+      "title": "Änderungen dieser Erklärung",
+      "p1": "Wenn wir ändern, wie wir mit deinen Daten umgehen — zum Beispiel, wenn wir anfangen, E-Mail-Benachrichtigungen zu senden —, aktualisieren wir diese Seite und passen das Datum oben an. Über wesentliche Änderungen informieren wir dich in der App."
+    }
+  },
+  "footer": {
+    "questions": "Fragen?",
+    "termsLink": "Nutzungsbedingungen",
+    "homeLink": "Zurück zur Startseite"
+  }
+}

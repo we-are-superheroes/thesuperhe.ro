@@ -1,0 +1,65 @@
+{
+  "status": {
+    "open": "Offen",
+    "in_progress": "In Arbeit",
+    "completed": "Abgeschlossen"
+  },
+  "needsHelp": "Hilfe gesucht",
+  "filter": {
+    "all": "Alle"
+  },
+  "list": {
+    "empty": "Keine Schritte in diesem Status.",
+    "showAll": "Alle {count, plural, one {# Schritt} other {# Schritte}} anzeigen"
+  },
+  "card": {
+    "orderOfTotal": "Schritt {order} von {total}",
+    "estimatedHours": "~{hours} Std.",
+    "noSkills": "Keine Fähigkeiten nötig"
+  },
+  "joiners": {
+    "coordinatorName": "{name} (Koordination)",
+    "youCoordinate": "Du koordinierst",
+    "nameCoordinates": "{name} koordiniert",
+    "changeCoordinator": "Koordination ändern",
+    "menuTitle": "Schritt-Koordination",
+    "noCoordinator": "Keine Koordination"
+  },
+  "action": {
+    "done": "Fertig",
+    "signInToJoin": "Zum Mitmachen anmelden",
+    "joinProjectFirst": "Tritt dem Projekt bei, um diesen Schritt zu übernehmen",
+    "askForHelp": "Um Hilfe bitten",
+    "withdrawHelpRequest": "Hilfegesuch zurückziehen",
+    "markComplete": "Als abgeschlossen markieren",
+    "reopen": "Wieder öffnen",
+    "youreOnThis": "Du bist dabei",
+    "leaveStep": "Schritt verlassen",
+    "leaving": "Wird verlassen…",
+    "joinThisStep": "Diesen Schritt übernehmen",
+    "joinToo": "Auch mitmachen",
+    "joining": "Beitritt läuft…"
+  },
+  "timeLog": {
+    "hoursOnly": "{hours} Std.",
+    "hoursMinutes": "{hours} Std. {minutes} Min.",
+    "minutesOnly": "{minutes} Min.",
+    "noTimeYet": "Noch keine Zeit erfasst",
+    "totalLogged": "<strong>{hours}</strong> erfasst",
+    "byName": "von {name}",
+    "contributorCount": "{count, plural, one {# Mitwirkende(r)} other {# Mitwirkende}}",
+    "logTime": "Zeit erfassen",
+    "beFirst": "Erfasse als erste Person Zeit auf diesem Schritt.",
+    "nothingLogged": "Noch nichts erfasst.",
+    "earlierEntries": "+ {count, plural, one {# früherer Eintrag} other {# frühere Einträge}}",
+    "hoursPlaceholder": "0,5",
+    "hourSymbol": "h",
+    "dateTitle": "Wann hast du die Arbeit gemacht?",
+    "notePlaceholder": "Was hast du gemacht? (optional)",
+    "log": "Erfassen",
+    "quickAddMinutes": "+{minutes} Min.",
+    "quickAddHours": "+{hours} Std.",
+    "someone": "Jemand",
+    "deleteEntry": "Eintrag löschen"
+  }
+}

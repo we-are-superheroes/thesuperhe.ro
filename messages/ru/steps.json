@@ -1,0 +1,65 @@
+{
+  "status": {
+    "open": "Открыт",
+    "in_progress": "В работе",
+    "completed": "Завершён"
+  },
+  "needsHelp": "Нужна помощь",
+  "filter": {
+    "all": "Все"
+  },
+  "list": {
+    "empty": "Нет шагов в этом состоянии.",
+    "showAll": "Показать {count, plural, one {# шаг} few {все # шага} many {все # шагов} other {# шага}}"
+  },
+  "card": {
+    "orderOfTotal": "Шаг {order} из {total}",
+    "estimatedHours": "~{hours} ч",
+    "noSkills": "Навыки не требуются"
+  },
+  "joiners": {
+    "coordinatorName": "{name} (координатор)",
+    "youCoordinate": "Вы координируете",
+    "nameCoordinates": "{name} координирует",
+    "changeCoordinator": "Сменить координатора",
+    "menuTitle": "Координатор шага",
+    "noCoordinator": "Без координатора"
+  },
+  "action": {
+    "done": "Готово",
+    "signInToJoin": "Войдите, чтобы присоединиться",
+    "joinProjectFirst": "Присоединитесь к проекту, чтобы участвовать в этом шаге",
+    "askForHelp": "Попросить помощи",
+    "withdrawHelpRequest": "Отозвать просьбу о помощи",
+    "markComplete": "Отметить завершённым",
+    "reopen": "Открыть снова",
+    "youreOnThis": "Вы участвуете",
+    "leaveStep": "Покинуть шаг",
+    "leaving": "Выходим…",
+    "joinThisStep": "Присоединиться к шагу",
+    "joinToo": "Тоже участвовать",
+    "joining": "Присоединяемся…"
+  },
+  "timeLog": {
+    "hoursOnly": "{hours} ч",
+    "hoursMinutes": "{hours} ч {minutes} мин",
+    "minutesOnly": "{minutes} мин",
+    "noTimeYet": "Время пока не отмечено",
+    "totalLogged": "<strong>{hours}</strong> отмечено",
+    "byName": "от {name}",
+    "contributorCount": "{count, plural, one {# участник} few {# участника} many {# участников} other {# участника}}",
+    "logTime": "Отметить время",
+    "beFirst": "Отметьте время на этом шаге первым.",
+    "nothingLogged": "Пока ничего не отмечено.",
+    "earlierEntries": "+ {count, plural, one {# более ранняя запись} few {# более ранние записи} many {# более ранних записей} other {# более ранней записи}}",
+    "hoursPlaceholder": "0,5",
+    "hourSymbol": "ч",
+    "dateTitle": "Когда вы делали эту работу?",
+    "notePlaceholder": "Что вы сделали? (необязательно)",
+    "log": "Записать",
+    "quickAddMinutes": "+{minutes} мин",
+    "quickAddHours": "+{hours} ч",
+    "someone": "Кто-то",
+    "deleteEntry": "Удалить запись"
+  }
+}

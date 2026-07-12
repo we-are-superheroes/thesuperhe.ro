@@ -1,0 +1,93 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Поиск в ваших проектах…",
+    "notificationsTitle": "Уведомления",
+    "startProject": "Начать проект",
+    "startProjectShort": "Начать"
+  },
+  "hero": {
+    "title": "Ваши <em>проекты</em>.",
+    "subtitle": "Всё, в чём вы участвуете, в одном месте. Смотрите, что застряло, и продолжайте с того места, где остановились."
+  },
+  "stats": {
+    "active": "Активные",
+    "openSteps": "Открытые шаги",
+    "contributed": "Вложено",
+    "hoursSuffix": " ч"
+  },
+  "tabs": {
+    "active": "Активные",
+    "finished": "Завершённые",
+    "archived": "Архив"
+  },
+  "roleFilter": {
+    "all": "Все роли",
+    "leading": "Руковожу",
+    "contributing": "Участвую",
+    "needsAction": "Ждут вашего действия"
+  },
+  "sort": {
+    "recent": "Последняя активность",
+    "due": "Ближайший срок",
+    "progress": "Ближе к завершению",
+    "title": "Название (А–Я)"
+  },
+  "view": {
+    "grid": "Сетка",
+    "list": "Список"
+  },
+  "role": {
+    "lead": "Руковожу",
+    "contributor": "Участвую"
+  },
+  "listHeader": {
+    "project": "Проект",
+    "nextStep": "Ваш следующий шаг",
+    "role": "Роль",
+    "progress": "Прогресс"
+  },
+  "card": {
+    "lastActivity": "Последняя активность {when}",
+    "noOpenSteps": "Для вас нет открытых шагов.",
+    "percent": "{progress}%"
+  },
+  "listRow": {
+    "noOpenStep": "Нет открытого шага.",
+    "progressSummary": "{progress}% готово · {count, plural, one {# участник} few {# участника} many {# участников} other {# участника}}"
+  },
+  "fallback": {
+    "type": "Другое",
+    "location": "Удалённо"
+  },
+  "relative": {
+    "justNow": "только что",
+    "minutesAgo": "{count, plural, one {# минуту назад} few {# минуты назад} many {# минут назад} other {# минуты назад}}",
+    "hoursAgo": "{count, plural, one {# час назад} few {# часа назад} many {# часов назад} other {# часа назад}}",
+    "yesterday": "вчера",
+    "daysAgo": "{count, plural, one {# день назад} few {# дня назад} many {# дней назад} other {# дня назад}}",
+    "weeksAgo": "{count, plural, one {# неделю назад} few {# недели назад} many {# недель назад} other {# недели назад}}",
+    "monthsAgo": "{count, plural, one {# месяц назад} few {# месяца назад} many {# месяцев назад} other {# месяца назад}}",
+    "yearsAgo": "{count, plural, one {# год назад} few {# года назад} many {# лет назад} other {# года назад}}"
+  },
+  "due": {
+    "whenYouCan": "Когда сможете",
+    "overdueBy": "{count, plural, one {Просрочен на # день} few {Просрочен на # дня} many {Просрочен на # дней} other {Просрочен на # дня}}",
+    "today": "Срок сегодня",
+    "tomorrow": "Срок завтра",
+    "inDays": "{count, plural, one {Срок через # день} few {Срок через # дня} many {Срок через # дней} other {Срок через # дня}}",
+    "inOneWeek": "Срок через неделю"
+  },
+  "empty": {
+    "activeFilteredTitle": "Под эти фильтры не подходит ни один проект.",
+    "activeFilteredDescription": "Попробуйте очистить поиск или сменить роль.",
+    "activeTitle": "Вы пока не присоединились ни к одному проекту.",
+    "activeDescription": "Посмотрите, что идёт прямо сейчас, и найдите подходящее — даже шаг на один час имеет значение.",
+    "clearFilters": "Сбросить фильтры",
+    "browseProjects": "Смотреть проекты",
+    "startYourOwn": "Начать свой",
+    "finishedTitle": "Пока ничего не завершено.",
+    "finishedDescription": "Когда проект закончится, он переедет сюда — как память о том, что вы помогли сделать.",
+    "archivedTitle": "В архиве нет проектов.",
+    "archivedDescription": "Проекты, из которых вы вышли, появятся здесь."
+  }
+}

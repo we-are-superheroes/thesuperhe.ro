@@ -1,0 +1,83 @@
+{
+  "nav": {
+    "browseProjects": "Explorar proyectos",
+    "browseBlueprints": "Explorar plantillas",
+    "howItWorks": "Cómo funciona",
+    "dashboard": "Panel",
+    "signIn": "Iniciar sesión",
+    "getStarted": "Empezar",
+    "signOut": "Cerrar sesión"
+  },
+  "hero": {
+    "badge": "Clima y sostenibilidad — en equipo",
+    "title": "No actúes en solitario.<br></br>Seamos <em>superhéroes</em><br></br>juntos.",
+    "subtitle": "Encuentra proyectos de clima y sostenibilidad que necesitan tus habilidades, o trae tu propia idea y deja que otros te ayuden a hacerla realidad.",
+    "browseProjects": "Explorar proyectos",
+    "startProject": "Iniciar un proyecto",
+    "timeNote": "Desde tareas de 1 hora hasta proyectos largos",
+    "skillsNote": "Todas las habilidades son bienvenidas",
+    "annotation": "proyectos reales, impacto real",
+    "contributors": "{count, plural, one {# colaborador} other {# colaboradores}}",
+    "stepsNeedHelp": "{count, plural, one {# paso necesita ayuda} other {# pasos necesitan ayuda}}",
+    "commitment": "~{hours}h de dedicación",
+    "showcaseKicker": "Repair Café",
+    "showcaseQuote": "«Tráelo roto, llévatelo arreglado.»",
+    "showcaseMeta": "★ Camden, cada mes"
+  },
+  "entry": {
+    "browseTitle": "Explorar proyectos",
+    "browseDesc": "Filtra por habilidad, ubicación y dedicación de tiempo. Encuentra uno que te encaje y súmate.",
+    "browseCta": "Explorar",
+    "dashboardTitle": "Tu panel",
+    "dashboardDesc": "Proyectos fijados, próximos pasos y lo que pasa en los proyectos a los que te has unido.",
+    "dashboardCta": "Abrir panel",
+    "signInTitle": "Iniciar sesión",
+    "signInTitleSignedIn": "Hola de nuevo",
+    "signInDesc": "¿Ya tienes cuenta? Retoma donde lo dejaste. ¿Nuevo por aquí? Crea una cuenta en menos de un minuto.",
+    "signInDescSignedIn": "Ya has iniciado sesión. Ve a tu panel para ver tus proyectos.",
+    "signInCta": "Iniciar sesión",
+    "signInCtaSignedIn": "Ir al panel"
+  },
+  "projects": {
+    "kicker": "Recién llegados a la plataforma",
+    "title": "Proyectos nuevos <em>que te buscan</em>.",
+    "subtitle": "Recién lanzados y en busca de sus primeros colaboradores. Los pasos suelen tomar menos de 2 horas.",
+    "seeAll": "Ver todos los proyectos",
+    "card": {
+      "remoteOk": "A distancia OK",
+      "stepsNeedHelp": "{count, plural, one {# paso necesita ayuda} other {# pasos necesitan ayuda}}",
+      "ageToday": "Nuevo · hoy",
+      "ageDaysAgo": "Nuevo · hace {days}d",
+      "ageWeekAgo": "Nuevo · hace 1 sem",
+      "time": "~{hours}h",
+      "joined": "{count} dentro",
+      "view": "Ver →"
+    }
+  },
+  "how": {
+    "kicker": "Cómo funciona",
+    "title": "Contribuye tanto, <em>o tan poco</em>, como te permita tu tiempo.",
+    "step1Title": "Cuéntanos tus habilidades",
+    "step1Desc": "Añade lo que se te da bien, y lo que de verdad quieres usar en un proyecto. Un desarrollador quemado no tiene por qué programar.",
+    "step2Title": "Encuentra tu encaje",
+    "step2Desc": "Explora proyectos completos, o solo pasos sueltos. La unidad más pequeña puede ser una tarea de 30 minutos, perfecta para una tarde tranquila.",
+    "step3Title": "Manos a la obra",
+    "step3Desc": "Únete al equipo, encárgate de un paso y entrega algo real junto a gente a la que le importa lo mismo que a ti."
+  },
+  "cta": {
+    "title": "¿A punto para <em>actuar?</em>",
+    "subtitle": "Explora lo que está activo ahora mismo, o inicia sesión para ver tu panel.",
+    "browseProjects": "Explorar proyectos",
+    "dashboard": "Ir al panel",
+    "signIn": "Iniciar sesión"
+  },
+  "footer": {
+    "copyright": "© {year} The Superhero · colaboración por el clima y la sostenibilidad",
+    "projects": "Proyectos",
+    "blueprints": "Plantillas",
+    "privacy": "Privacidad",
+    "terms": "Condiciones",
+    "createdIn": "Creado en Suiza",
+    "swissFlagAlt": "Bandera suiza"
+  }
+}

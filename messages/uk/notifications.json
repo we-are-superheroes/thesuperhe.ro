@@ -1,0 +1,66 @@
+{
+  "titles": {
+    "projectJoinWelcome": "{leadName} привітав(-ла) вас у проєкті {projectTitle}.",
+    "projectJoin": "{actorName} приєднався(-лася) до {projectTitle}.",
+    "projectJoinRequest": "{actorName} хоче приєднатися до {projectTitle}.",
+    "projectJoinDeclined": "Ваш запит на приєднання до {projectTitle} цього разу не прийняли.",
+    "projectLeave": "{actorName} залишив(-ла) {projectTitle}.",
+    "projectUpdated": "{actorName} оновив(-ла) {projectTitle}.",
+    "projectRenamed": "{actorName} перейменував(-ла) «{oldTitle}» на «{newTitle}».",
+    "updatePosted": "{actorName} опублікував(-ла) оновлення в {projectTitle}.",
+    "stepClaimed": "{actorName} приєднався(-лася) до кроку «{stepTitle}» в {projectTitle}.",
+    "stepUnclaimed": "{actorName} залишив(-ла) крок «{stepTitle}» в {projectTitle}.",
+    "stepCompleted": "{actorName} завершив(-ла) крок «{stepTitle}» в {projectTitle}.",
+    "stepNeedsHelp": "{actorName} попросив(-ла) допомоги з кроком «{stepTitle}» в {projectTitle}.",
+    "blueprintForked": "{actorName} адаптував(-ла) ваш шаблон «{blueprintTitle}» як «{projectTitle}».",
+    "skillMatch": "Новому проєкту «{projectTitle}» потрібна навичка: {skillName}.",
+    "inviteReceived": "{actorName} запросив(-ла) вас приєднатися до {orgName}.",
+    "messageReceived": "{count, plural, one {{senderName} надіслав(-ла) вам повідомлення.} few {# нові повідомлення від {senderName}.} many {# нових повідомлень від {senderName}.} other {# нового повідомлення від {senderName}.}}"
+  },
+  "bodies": {
+    "projectJoinDeclined": "Дякуємо, що запропонували допомогу — команда зараз не може взяти цю заявку. Багато інших проєктів потребують ваших навичок.",
+    "inviteReceived": "Скористайтеся кодом запрошення {code} на сторінці організації."
+  },
+  "ui": {
+    "header": {
+      "title": "Ваші <em>сповіщення</em>.",
+      "subtitle": "Те, що потребує вашої уваги — і трохи того, що вас потішить.",
+      "markAllRead": "Позначити все прочитаним"
+    },
+    "tabs": {
+      "all": "Усі",
+      "unread": "Непрочитані",
+      "action": "Потрібна дія",
+      "mention": "Згадки"
+    },
+    "groups": {
+      "today": "Сьогодні",
+      "yesterday": "Вчора",
+      "week": "Раніше цього тижня",
+      "earlier": "Раніше"
+    },
+    "empty": {
+      "unreadTitle": "Нічого непрочитаного. Ви все переглянули.",
+      "unreadSubtitle": "Нова активність з’являтиметься тут у міру подій.",
+      "mentionTitle": "Згадок поки немає.",
+      "mentionSubtitle": "Згадки з дощок і обговорень проєктів опинятимуться тут.",
+      "actionTitle": "Ніщо не чекає на вас.",
+      "actionSubtitle": "Запити на приєднання і запрошення з’являтимуться тут, коли потребуватимуть рішення.",
+      "allTitle": "Тут порожньо.",
+      "allSubtitle": "Коли ви приєднуватиметеся до проєктів і братимете кроки, оновлення від вашої команди з’являтимуться тут."
+    },
+    "joinRequest": {
+      "accept": "Прийняти до команди",
+      "decline": "Не підходить"
+    },
+    "resolution": {
+      "accepted": "Прийнято до проєкту.",
+      "declined": "Ввічливо відхилено."
+    },
+    "links": {
+      "openConversation": "Відкрити розмову",
+      "openOrgPage": "Відкрити сторінку організації",
+      "openProject": "Відкрити {name}"
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "chrome": {
+    "eyebrow": "Note legali",
+    "title": "Informativa sulla privacy",
+    "lastUpdated": "Ultimo aggiornamento: {date}"
+  },
+  "sections": {
+    "whoWeAre": {
+      "title": "Chi siamo",
+      "p1": "The Superhero (thesuperhe.ro) è una piattaforma che mette in contatto le persone con progetti per il clima e la sostenibilità. È gestita dalla Svizzera. Per qualsiasi questione relativa ai tuoi dati, contattaci all'indirizzo <link>{email}</link>. Siamo il titolare del trattamento per i dati personali descritti di seguito, e li trattiamo ai sensi della Legge federale svizzera sulla protezione dei dati (LPD) e, dove si applica, del Regolamento generale sulla protezione dei dati dell'UE (GDPR).",
+      "englishPrevails": "Questa pagina è disponibile in più lingue per comodità — se una traduzione dovesse discostarsi dalla versione inglese, prevale la versione inglese."
+    },
+    "whatWeCollect": {
+      "title": "Cosa raccogliamo",
+      "p1": "<strong>Dati dell'account.</strong> Quando ti registri, il nostro fornitore di autenticazione (Clerk) raccoglie il tuo nome, il tuo indirizzo email e, se usi un accesso tramite social, la tua immagine del profilo. Ne conserviamo una copia nel nostro database affinché la piattaforma possa mostrare chi sei.",
+      "p2": "<strong>Dati del profilo che scegli di aggiungere.</strong> Una bio, un luogo, un fuso orario, una foto del profilo e le competenze che dichiari di avere — incluso se desideri usarle. Tutto questo è facoltativo.",
+      "p3": "<strong>Contenuti che crei.</strong> Progetti, modelli, passaggi dei progetti, aggiornamenti, messaggi ad altri membri, i passaggi a cui ti unisci e le ore che registri. Parte di questi contenuti è pubblica per scelta di progettazione (vedi sotto).",
+      "p4": "<strong>Dati tecnici.</strong> Il nostro fornitore di hosting (Vercel) conserva log del server di breve durata (indirizzo IP, percorso della richiesta, marche temporali) per il funzionamento e la sicurezza del servizio. Non usiamo tracciatori pubblicitari né di analisi."
+    },
+    "whatWeUseItFor": {
+      "title": "Per cosa li usiamo",
+      "p1": "Per far funzionare la piattaforma: mostrare il tuo profilo agli altri membri, abbinare le tue competenze ai passaggi che le richiedono, inviarti notifiche nell'app e permetterti di scrivere agli altri membri. La base giuridica è l'esecuzione del nostro contratto con te (la fornitura del servizio per cui ti sei registrato) e il nostro legittimo interesse a mantenere la piattaforma sicura e funzionante. Non vendiamo i tuoi dati e non li usiamo per pubblicità."
+    },
+    "whatIsPublic": {
+      "title": "Cosa è pubblico",
+      "p1": "Questa è una piattaforma di collaborazione, quindi alcune cose sono visibili a chiunque su internet: i progetti e i loro passaggi, i modelli e i loro autori, gli aggiornamenti dei progetti contrassegnati come “pubblici” e il tuo nome sui contenuti a cui hai contribuito pubblicamente. Gli aggiornamenti riservati ai membri sono visibili solo ai membri di un progetto. I messaggi sono visibili solo a te e alla persona con cui scrivi. Il tuo indirizzo email non viene mai mostrato ad altri utenti.",
+      "p2": "Le immagini caricate (foto del profilo, copertine dei progetti) sono conservate in uno spazio accessibile pubblicamente — chiunque abbia il link può vederle, quindi non caricare immagini che non vorresti pubbliche."
+    },
+    "cookies": {
+      "title": "Cookie",
+      "p1": "Usiamo solo cookie strettamente necessari al funzionamento del servizio: i cookie di sessione impostati da Clerk per mantenerti connesso, e un cookie <code>superhero-locale</code> che ricorda quale lingua hai scelto per il sito. La tua preferenza di tema è salvata nella memoria locale del tuo browser e non lascia mai il tuo dispositivo. Non ci sono cookie pubblicitari, di analisi o di tracciamento di terze parti — per questo non vedi un banner sui cookie."
+    },
+    "processors": {
+      "title": "Dove si trovano i tuoi dati",
+      "intro": "I nostri fornitori di servizi (responsabili del trattamento) sono:",
+      "items": {
+        "supabase": "<strong>Supabase</strong> — database e archiviazione delle immagini, ospitati su AWS nell'UE (Irlanda, eu-west-1).",
+        "clerk": "<strong>Clerk</strong> — autenticazione, con sede negli Stati Uniti. I trasferimenti sono coperti dalle Clausole contrattuali tipo dell'UE.",
+        "vercel": "<strong>Vercel</strong> — hosting dell'applicazione e log del server."
+      },
+      "outro": "Ciascuno di questi tratta i dati solo secondo le nostre istruzioni e in base a un accordo sul trattamento dei dati."
+    },
+    "retention": {
+      "title": "Per quanto tempo li conserviamo",
+      "p1": "Per tutto il tempo in cui hai un account. Se elimini il tuo account, il tuo profilo, le competenze e i contributi vengono eliminati con esso. I contenuti da cui dipendono altre persone — i messaggi che hai inviato, gli aggiornamenti pubblici che hai pubblicato — vengono conservati ma scollegati dalla tua identità e mostrati come provenienti da un membro eliminato o da un ex membro. I log del server sono conservati dal nostro fornitore di hosting per un breve periodo e poi eliminati."
+    },
+    "yourRights": {
+      "title": "I tuoi diritti",
+      "p1": "Ai sensi della LPD e del GDPR puoi chiederci l'accesso ai dati che conserviamo su di te, farli rettificare o cancellare, riceverne una copia in formato portabile, oppure opporti al trattamento o chiederne la limitazione. Scrivi a <link>{email}</link> e risponderemo entro 30 giorni. Puoi anche eliminare il tuo account da solo, in qualsiasi momento, dalle impostazioni del profilo.",
+      "p2": "Se ritieni che stiamo trattando male i tuoi dati, hai il diritto di presentare reclamo a un'autorità di controllo — in Svizzera l'Incaricato federale della protezione dei dati e della trasparenza (IFPDT), oppure la tua autorità locale per la protezione dei dati nell'UE/SEE."
+    },
+    "policyChanges": {
+      "title": "Modifiche a questa informativa",
+      "p1": "Se cambiamo il modo in cui trattiamo i tuoi dati — per esempio, se iniziamo a inviare notifiche via email — aggiorneremo questa pagina e la data in alto. Per le modifiche significative te lo comunicheremo nell'app."
+    }
+  },
+  "footer": {
+    "questions": "Domande?",
+    "termsLink": "Termini di servizio",
+    "homeLink": "Torna alla pagina iniziale"
+  }
+}

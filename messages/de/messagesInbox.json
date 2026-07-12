@@ -1,0 +1,55 @@
+{
+  "list": {
+    "title": "Nachrichten",
+    "newMessage": "Neue Nachricht",
+    "searchPlaceholder": "Personen und Nachrichten durchsuchen",
+    "inbox": "Posteingang",
+    "archived": "Archiviert",
+    "fallbackConversationName": "Unterhaltung",
+    "noMessagesYet": "Noch keine Nachrichten",
+    "unreadCount": "{count, plural, one {# ungelesen} other {# ungelesen}}",
+    "previewYou": "Du: {body}",
+    "previewDeleted": "[gelöscht]"
+  },
+  "empty": {
+    "noMatches": "Keine Treffer.",
+    "archivedTitle": "Keine archivierten Unterhaltungen.",
+    "archivedHint": "Archiviere eine Unterhaltung über ihr <menuIcon></menuIcon>-Menü, dann landet sie hier.",
+    "inboxTitle": "Noch keine Unterhaltungen.",
+    "inboxHint": "Starte eine mit dem <plusIcon></plusIcon>-Button.",
+    "noThreadTitle": "Wähl eine Unterhaltung aus.",
+    "noThreadHint": "Oder starte eine neue — klick auf den <plusIcon></plusIcon>-Button, um jemanden zu finden."
+  },
+  "thread": {
+    "backToConversations": "Zurück zu den Unterhaltungen",
+    "online": "Online",
+    "muted": "Stummgeschaltet",
+    "viewProfile": "Profil ansehen",
+    "more": "Mehr",
+    "sayHi": "Noch keine Nachrichten. Sag {name} Hallo.",
+    "deletedMessage": "[gelöscht]",
+    "edited": "bearbeitet"
+  },
+  "time": {
+    "today": "Heute",
+    "yesterday": "Gestern"
+  },
+  "composer": {
+    "placeholder": "Nachricht schreiben…",
+    "send": "Senden",
+    "hint": "<kbd>Enter</kbd> zum Senden · <kbd>Shift</kbd> + <kbd>Enter</kbd> für eine neue Zeile",
+    "charCount": "{count} / {max}"
+  },
+  "menu": {
+    "unmute": "Stummschaltung aufheben",
+    "mute": "Benachrichtigungen stummschalten",
+    "archive": "Archivieren",
+    "unarchive": "Aus dem Archiv holen"
+  },
+  "newMessage": {
+    "searchPlaceholder": "Personen suchen…",
+    "noMatches": "Keine Treffer.",
+    "hint": "Such nach einem Namen, um eine Unterhaltung zu starten."
+  },
+  "you": "Du"
+}

@@ -1,0 +1,304 @@
+{
+  "status": {
+    "defining": "Wird definiert",
+    "needs_help": "Hilfe gesucht",
+    "in_progress": "In Arbeit",
+    "completed": "Abgeschlossen"
+  },
+  "someone": "Jemand",
+  "topbar": {
+    "browseProjects": "Projekte durchstöbern",
+    "modifyProject": "Projekt bearbeiten",
+    "modify": "Bearbeiten"
+  },
+  "hero": {
+    "membersOnly": "Nur für Mitglieder",
+    "changeStatusTitle": "Projektstatus ändern",
+    "change": "Ändern",
+    "openInGoogleMaps": "In Google Maps öffnen",
+    "remoteWelcome": "Remote-Mitwirkende willkommen",
+    "started": "Gestartet {date}"
+  },
+  "tabs": {
+    "ariaLabel": "Projektabschnitte",
+    "overview": "Überblick",
+    "updates": "Updates"
+  },
+  "about": {
+    "kicker": "Über dieses Projekt",
+    "noDescription": "Noch keine Beschreibung — die Projektleitung hat noch keine geschrieben."
+  },
+  "stepsSection": {
+    "kicker": "Anstehende Schritte",
+    "headingNeedsHelp": "{total, plural, one {# Schritt} other {# Schritte}}. Bei <em>{needing, plural, one {# wird Hilfe gesucht} other {# wird Hilfe gesucht}}</em> — jetzt gerade.",
+    "headingProgress": "{total, plural, one {# Schritt} other {# Schritte}}. Es geht gerade <em>voran</em>.",
+    "noStepsYet": "Noch keine Schritte.",
+    "emptyTitle": "Die Schrittliste ist leer.",
+    "emptyDescription": "Sobald die Projektleitung die Arbeit in Schritte aufteilt, erscheinen sie hier — und du kannst dir einen aussuchen."
+  },
+  "join": {
+    "signInToJoin": "Zum Beitreten anmelden",
+    "requestSent": "Anfrage gesendet",
+    "joining": "Beitritt läuft…",
+    "joinProject": "Projekt beitreten",
+    "leaving": "Wird verlassen…",
+    "joined": "Beigetreten",
+    "membershipMenu": "Mitgliedschaftsmenü",
+    "memberNote": "Du bist Mitglied. <b>{title}</b> erscheint in deinem Dashboard, und du siehst Updates nur für Mitglieder.",
+    "seeOpenSteps": "Offene Schritte ansehen",
+    "leaveProject": "Projekt verlassen",
+    "leaveConfirm": "{count, plural, one {Dir ist in diesem Projekt # Schritt zugeteilt. Wenn du gehst, geht er zurück ans Team.} other {Dir sind in diesem Projekt # Schritte zugeteilt. Wenn du gehst, gehen sie zurück ans Team.}}\n\nWillst du wirklich gehen?",
+    "youreAMember": "Du bist Mitglied.",
+    "memberCardBody": "Dieses Projekt ist in deinem Dashboard. Übernimm einen Schritt, um mitzuwirken, und schau für Neuigkeiten in den Updates-Tab.",
+    "requestSentHeading": "Anfrage gesendet.",
+    "requestSentBody": "Die Projektleitung bekommt eine Benachrichtigung. Sobald sie annimmt, bist du Mitglied.",
+    "wantToJoin": "Willst du mitmachen?",
+    "joinCardBody": "Tritt dem Projekt bei, um Schritte zu übernehmen, Updates in deinem Dashboard zu sehen und mit dem Team zu schreiben.",
+    "joinThisProject": "Diesem Projekt beitreten"
+  },
+  "stats": {
+    "title": "Projektzahlen",
+    "contributors": "Mitwirkende",
+    "hoursGiven": "Geleistete Stunden",
+    "stepsDone": "Erledigte Schritte",
+    "daysActive": "Aktive Tage",
+    "hoursUnit": " Std.",
+    "daysUnit": " T.",
+    "noContributors": "Noch keine Mitwirkenden — sei die erste Person.",
+    "signInToSee": "<link>Melde dich an</link>, um zu sehen, wer hier mitarbeitet."
+  },
+  "details": {
+    "title": "Details",
+    "type": "Typ",
+    "status": "Status",
+    "location": "Ort",
+    "remoteContributions": "Remote-Beiträge",
+    "timeCommitment": "Zeitaufwand",
+    "created": "Erstellt",
+    "lead": "Projektleitung",
+    "notSet": "Nicht festgelegt",
+    "notSpecified": "Nicht angegeben",
+    "remoteWelcome": "Willkommen",
+    "remoteNo": "Nicht bei diesem Projekt",
+    "avgHours": "~{hours} Std. im Schnitt",
+    "flexible": "Flexibel",
+    "daysAgo": "· {count, plural, one {vor # Tag} other {vor # Tagen}}",
+    "noLead": "Noch keine Projektleitung"
+  },
+  "updates": {
+    "openTabTitle": "Den Updates-Tab öffnen",
+    "latestUpdateBy": "Neuestes Update · {name}",
+    "noUpdatesYet": "Noch keine Updates.",
+    "updateCount": "{count, plural, one {# Update} other {# Updates}}.",
+    "forMembersOnly": "{count} nur für Mitglieder.",
+    "publicUpdateCount": "{count, plural, one {# öffentliches Update} other {# öffentliche Updates}}.",
+    "hiddenGate": "<b>{count}</b> {count, plural, one {Update nur für Mitglieder ist} other {Updates nur für Mitglieder sind}} verborgen.",
+    "joinTheProject": "Tritt dem Projekt bei,",
+    "signInAndJoin": "Melde dich an und tritt bei,",
+    "toSeeThem": "{count, plural, one {um es zu sehen.} other {um sie zu sehen.}}",
+    "emptyTitle": "Hier ist noch nichts.",
+    "emptyLead": "Veröffentliche oben das erste Update — Mitglieder werden benachrichtigt, und öffentliche Updates zeigen Besuchern, dass dieses Projekt aktiv ist.",
+    "emptyViewer": "Wenn die Projektleitung Updates veröffentlicht oder Schritte abgeschlossen werden, erscheinen sie hier.",
+    "composerPlaceholder": "Teile ein Update zu {title}…",
+    "public": "Öffentlich",
+    "membersOnly": "Nur für Mitglieder",
+    "visibleToMembers": "Nur sichtbar für {count, plural, one {das # Projektmitglied} other {die # Projektmitglieder}}",
+    "visibleToAnyone": "Sichtbar für alle, die das Projekt ansehen",
+    "posting": "Wird veröffentlicht…",
+    "postUpdate": "Update veröffentlichen",
+    "formerMember": "Ehemaliges Mitglied",
+    "leadBadge": "Leitung",
+    "postedAgo": "Veröffentlicht {ago}",
+    "edited": "· bearbeitet",
+    "confirmDelete": "Dieses Update löschen? Das lässt sich nicht rückgängig machen.",
+    "manageUpdate": "Update verwalten"
+  },
+  "milestones": {
+    "stepCompleted": "Schritt abgeschlossen —",
+    "peopleJoined": "{count, plural, one {# Person ist beigetreten —} other {# Personen sind beigetreten —}}",
+    "twoNames": "{a} und {b}",
+    "moreNames": "{first} und {last}"
+  },
+  "share": {
+    "share": "Teilen",
+    "sharePage": "Diese Seite teilen",
+    "linkCopied": "Link kopiert"
+  },
+  "form": {
+    "bits": {
+      "countryPlaceholder": "Nicht festgelegt",
+      "searchCountriesPlaceholder": "Länder durchsuchen…",
+      "countryNotSetOption": "— Nicht festgelegt —",
+      "noMatches": "Keine Treffer.",
+      "stepTitlePlaceholder": "Schritt-Titel — zum Bearbeiten klicken",
+      "stepDescriptionPlaceholder": "Optionale Details — zum Hinzufügen klicken",
+      "removeSkill": "Fähigkeit entfernen",
+      "addSkill": "Fähigkeit hinzufügen",
+      "addAnotherSkill": "Weitere hinzufügen",
+      "searchSkillsPlaceholder": "Fähigkeiten durchsuchen…",
+      "allSkillsAdded": "Alle Fähigkeiten hinzugefügt.",
+      "estimateAbbrev": "Ca.",
+      "estimatedHours": "Geschätzte Stunden",
+      "hoursUnit": " Std.",
+      "removeStep": "Schritt entfernen",
+      "addAStep": "Schritt hinzufügen"
+    },
+    "breadcrumb": {
+      "myProjects": "Meine Projekte",
+      "newProject": "Neues Projekt",
+      "newProjectFromBlueprint": "Neues Projekt (aus Blaupause)",
+      "startAProject": "Projekt starten"
+    },
+    "changeStartingPoint": "Ausgangspunkt ändern",
+    "backToProject": "Zurück zum Projekt",
+    "untitledProject": "Projekt ohne Titel",
+    "titleFromBlueprint": "{title} — deine Gegend",
+    "chooser": {
+      "heading": "Starte ein <em>Projekt</em>.",
+      "intro": "Du kannst mit einem leeren Plan beginnen — oder eine Blaupause übernehmen, einen erprobten Plan von jemandem, der das schon gemacht hat.",
+      "scratchTitle": "Von Null anfangen.",
+      "scratchDescription": "Ein leerer Plan. Am besten, wenn dein Projekt ungewöhnlich oder sehr lokal ist — oder du die Schritte schon selbst ausgearbeitet hast.",
+      "scratchCta": "Neues Projekt beginnen",
+      "blueprintTitle": "Eine Blaupause verwenden.",
+      "blueprintDescription": "Frei kopieren erlaubt. Fertige Pläne für Repair Cafés, Mini-Wälder, Nachbarschaftshilfen und mehr — durchstöbere die Bibliothek, übernimm einen und pass ihn an deine Gemeinschaft an.",
+      "blueprintCta": "Blaupausen durchstöbern"
+    },
+    "origin": {
+      "creatingVariantOf": "Du erstellst eine Variante von",
+      "forkedFrom": "Übernommen von",
+      "startingFromScratch": "Start von Null",
+      "blueprintBadge": "Blaupause „{title}“",
+      "change": "ändern"
+    },
+    "editHeader": {
+      "modifying": "Bearbeiten von",
+      "projectLead": "Projektleitung"
+    },
+    "sections": {
+      "ariaLabel": "Abschnitte",
+      "onThisPage": "Auf dieser Seite",
+      "status": "Status",
+      "basics": "Grundlagen",
+      "cover": "Titelbild",
+      "location": "Ort & Zugang",
+      "steps": "Schritte"
+    },
+    "statusCard": {
+      "eyebrow": "Projektstatus",
+      "title": "Was passiert gerade, in einem Wort?",
+      "desc": "Das erscheint oben auf der Projektseite, in Listen und im Dashboard aller Beteiligten. Sei ehrlich — „Hilfe gesucht“ erreicht mehr Menschen als „In Arbeit“, wenn du sie wirklich brauchst.",
+      "ariaLabel": "Projektstatus",
+      "descriptions": {
+        "defining": "Der Plan wird noch ausgearbeitet. Noch nicht bereit für Mitwirkende — man kann folgen, aber es gibt nichts zu tun.",
+        "needs_help": "Du brauchst mehr Leute. Hebt das Projekt in den Treffern und auf der Startseite ganz nach oben.",
+        "in_progress": "Die Arbeit läuft und das Team steht weitgehend. Der Normalzustand der meisten laufenden Projekte.",
+        "completed": "Die Arbeit ist getan. Wandert in den Tab „Abgeschlossen“. Du kannst das Projekt jederzeit wieder öffnen."
+      }
+    },
+    "basics": {
+      "eyebrow": "Die Grundlagen",
+      "title": "Worum geht es?",
+      "desc": "Zwei Sätze reichen. Mehr Details kannst du später ergänzen.",
+      "titleLabel": "Titel",
+      "titlePlaceholder": "z. B. Mini-Wald, Hackney Wick",
+      "descriptionLabel": "Beschreibung",
+      "descriptionHelp": "Der erste Absatz erscheint auf der Projektkarte.",
+      "descriptionPlaceholder": "Was willst du erreichen, und warum ist es wichtig?"
+    },
+    "cover": {
+      "eyebrow": "Titelbild",
+      "title": "Ein Bild für dein Projekt.",
+      "desc": "Erscheint auf der Projektseite und auf den Karten unter „Durchstöbern“ und „Meine Projekte“. Optional — ein farbiger Verlauf springt ein, wenn du es weglässt.",
+      "alt": "Projekt-Titelbild",
+      "uploading": "Wird hochgeladen…",
+      "replace": "Ersetzen",
+      "upload": "Titelbild hochladen",
+      "remove": "Entfernen",
+      "hint": "Breites Bild passt am besten — mindestens 1200×600. PNG, JPG, WebP oder GIF, bis 8 MB."
+    },
+    "location": {
+      "eyebrow": "Wo es stattfindet",
+      "title": "Ort & Zugang.",
+      "desc": "Hilft den richtigen Menschen, dich zu finden. Es wird nur die Gegend gezeigt, nie eine genaue Adresse.",
+      "cityLabel": "Stadt oder Gegend",
+      "cityPlaceholder": "z. B. Hackney, London",
+      "countryLabel": "Land (optional)",
+      "countryHelp": "Erscheint auf der Projektkarte und wird vom Länderfilter der Durchstöbern-Seite genutzt.",
+      "addressLabel": "Genaue Adresse oder Ortsname (optional)",
+      "addressHelp": "Sehen nur Personen, die beitreten. Lass es weg, wenn euer Treffpunkt wechselt oder du ihn lieber nicht veröffentlichst.",
+      "addressPlaceholder": "z. B. The Old Library, 2 Wallis Road, E9 5LH",
+      "languageLabel": "Arbeitssprache (optional)",
+      "languageHelp": "Wird vom Sprachfilter der Durchstöbern-Seite genutzt.",
+      "noneOption": "— keine —"
+    },
+    "remote": {
+      "label": "Können Leute remote beitragen?",
+      "ariaLabel": "Remote-Teilnahme",
+      "options": {
+        "yes": "Ja, remote-freundlich",
+        "some": "Nur manche Schritte",
+        "no": "Nein, nur vor Ort"
+      },
+      "someHint": "Bei „Nur manche Schritte“ kannst du später jeden Schritt einzeln als remote-geeignet markieren."
+    },
+    "joinPolicy": {
+      "label": "Wer darf beitreten?",
+      "ariaLabel": "Beitrittsregel",
+      "options": {
+        "open": {
+          "label": "Offen für alle",
+          "description": "Alle können sofort beitreten und loslegen."
+        },
+        "approval_required": {
+          "label": "Freigabe nötig",
+          "description": "Beitritte landen als Anfrage in deinem Posteingang — annehmen oder ablehnen."
+        }
+      }
+    },
+    "org": {
+      "label": "Organisation",
+      "personalOption": "Persönliches Projekt — keine Organisation",
+      "note": "Organisationsprojekte zeigen den Namen der Organisation und zählen zu ihren Beitragswerten.",
+      "visibilityLabel": "Wer darf es sehen?",
+      "visibilityAriaLabel": "Projektsichtbarkeit",
+      "options": {
+        "public": {
+          "label": "Öffentlich",
+          "description": "Alle können es finden und beitreten — mit dem Namen der Organisation darauf."
+        },
+        "org_members": {
+          "label": "Nur für Mitglieder",
+          "description": "Nur Mitglieder der Organisation können es sehen oder beitreten."
+        }
+      }
+    },
+    "steps": {
+      "eyebrow": "Der Plan",
+      "title": "Schritte, die es Wirklichkeit werden lassen.",
+      "createDesc": "Teile die Arbeit in kleine Stücke, die jemand an einem Abend erledigen könnte. Du kannst später immer mehr hinzufügen — aber eine Startliste von 3–8 zeigt anderen, wie sie helfen können.",
+      "editDesc": "Füge Schritte hinzu, bearbeite, sortiere oder entferne sie. Wenn du einen Schritt löschst, den jemand übernommen hat, wird diese Person davon entfernt — sei vorsichtig."
+    },
+    "saveBar": {
+      "savedVariant": "Als Blaupausen-Variante gespeichert — sie erscheint jetzt unter der Familie.",
+      "savedNew": "Als Blaupause gespeichert — andere können sie jetzt übernehmen.",
+      "savedAsBlueprint": "Als Blaupause gespeichert — andere können sie jetzt übernehmen.",
+      "draftInBrowser": "Der Entwurf liegt in deinem Browser",
+      "launching": "Wird gestartet…",
+      "launchProject": "Projekt starten",
+      "saveAsBlueprint": "Als Blaupause speichern",
+      "saveAsBlueprintVariant": "Als Blaupausen-Variante speichern",
+      "saveAsNewBlueprint": "Als neue Blaupause speichern",
+      "moreSaveOptions": "Weitere Speicheroptionen",
+      "saveChanges": "Änderungen speichern"
+    }
+  },
+  "adminDelete": {
+    "deleteKind": "{kind, select, blueprint {Blaupause} other {Projekt}} löschen",
+    "triggerTitle": "{kind, select, blueprint {Blaupause} other {Projekt}} löschen (Admin)",
+    "confirmTitle": "{kind, select, blueprint {Diese Blaupause} other {Dieses Projekt}} löschen?",
+    "confirmBody": "Du bist dabei, <b>{name}</b> endgültig zu löschen. Das lässt sich nicht rückgängig machen.",
+    "projectConsequence": "Alle Schritte, Beiträge und erfassten Zeiten gehen mit verloren.",
+    "blueprintConsequence": "Die Schritte werden entfernt; daraus übernommene Projekte und Varianten bleiben erhalten (nur ohne Verknüpfung).",
+    "deleting": "Wird gelöscht…"
+  }
+}

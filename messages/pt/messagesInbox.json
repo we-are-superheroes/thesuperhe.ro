@@ -1,0 +1,55 @@
+{
+  "list": {
+    "title": "Mensagens",
+    "newMessage": "Nova mensagem",
+    "searchPlaceholder": "Pesquisar pessoas e mensagens",
+    "inbox": "Caixa de entrada",
+    "archived": "Arquivadas",
+    "fallbackConversationName": "Conversa",
+    "noMessagesYet": "Ainda sem mensagens",
+    "unreadCount": "{count, plural, one {# não lida} other {# não lidas}}",
+    "previewYou": "Você: {body}",
+    "previewDeleted": "[apagada]"
+  },
+  "empty": {
+    "noMatches": "Nenhum resultado.",
+    "archivedTitle": "Nenhuma conversa arquivada.",
+    "archivedHint": "Arquive uma conversa no menu <menuIcon></menuIcon> e ela aparece aqui.",
+    "inboxTitle": "Ainda sem conversas.",
+    "inboxHint": "Use o botão <plusIcon></plusIcon> para começar uma.",
+    "noThreadTitle": "Escolha uma conversa.",
+    "noThreadHint": "Ou comece uma nova — clique no botão <plusIcon></plusIcon> para encontrar alguém."
+  },
+  "thread": {
+    "backToConversations": "Voltar às conversas",
+    "online": "Online",
+    "muted": "Silenciada",
+    "viewProfile": "Ver perfil",
+    "more": "Mais",
+    "sayHi": "Ainda sem mensagens. Diga olá a {name}.",
+    "deletedMessage": "[apagada]",
+    "edited": "editada"
+  },
+  "time": {
+    "today": "Hoje",
+    "yesterday": "Ontem"
+  },
+  "composer": {
+    "placeholder": "Escreva uma mensagem…",
+    "send": "Enviar",
+    "hint": "<kbd>Enter</kbd> para enviar · <kbd>Shift</kbd> + <kbd>Enter</kbd> para nova linha",
+    "charCount": "{count} / {max}"
+  },
+  "menu": {
+    "unmute": "Reativar notificações",
+    "mute": "Silenciar notificações",
+    "archive": "Arquivar",
+    "unarchive": "Desarquivar"
+  },
+  "newMessage": {
+    "searchPlaceholder": "Pesquisar pessoas…",
+    "noMatches": "Nenhum resultado.",
+    "hint": "Pesquise pelo nome para começar uma conversa."
+  },
+  "you": "Você"
+}

@@ -1,0 +1,68 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Шукати проєкти...",
+    "notificationsTitle": "Сповіщення",
+    "startProject": "Почати проєкт",
+    "startProjectShort": "Почати"
+  },
+  "header": {
+    "titleLine1": "Знайдіть проєкт,",
+    "titleLine2": "якому <em>потрібні</em> саме ви.",
+    "intro": "Кожен проєкт тут справжній, активний і шукає допомоги. Фільтруйте за тим, де ви є, що ви вмієте або яка робота вам цікава."
+  },
+  "filters": {
+    "show": "Показати фільтри",
+    "hide": "Сховати фільтри",
+    "activeCount": "{n, plural, one {# активний} few {# активні} many {# активних} other {# активного}}",
+    "title": "Фільтри",
+    "clearAll": "Очистити все",
+    "yourOrganisations": "Ваші організації",
+    "typeOfProject": "Тип проєкту",
+    "skillsNeeded": "Потрібні навички",
+    "location": "Місце",
+    "country": "Країна",
+    "language": "Мова",
+    "searchSkillsPlaceholder": "Шукати навички...",
+    "searchLocationsPlaceholder": "Шукати місця...",
+    "searchCountriesPlaceholder": "Шукати країни...",
+    "noMatches": "Нічого не знайдено."
+  },
+  "results": {
+    "showingAll": "Показано <strong>всі {total}</strong> {total, plural, one {активний проєкт} few {активні проєкти} many {активних проєктів} other {активного проєкту}}",
+    "showingFiltered": "Показано <strong>{showing}</strong> з {total, plural, one {# проєкту} few {# проєктів} many {# проєктів} other {# проєкту}}"
+  },
+  "sort": {
+    "recent": "Найновіші",
+    "needs": "Найбільше потребують допомоги",
+    "progress": "Найближчі до завершення"
+  },
+  "view": {
+    "gridTitle": "Сітка",
+    "listTitle": "Список"
+  },
+  "chips": {
+    "query": "«{query}»",
+    "removeAriaLabel": "Прибрати фільтр"
+  },
+  "empty": {
+    "title": "Жоден проєкт не відповідає цим фільтрам.",
+    "body": "Спробуйте розширити місце, прибрати навичку або очистити поле пошуку."
+  },
+  "card": {
+    "needsHelp": "{n, plural, one {# потребує допомоги} few {# потребують допомоги} many {# потребують допомоги} other {# потребує допомоги}}",
+    "membersOnly": "Лише для учасників",
+    "posted": "Опубліковано {when}",
+    "contributors": "{n, plural, one {<strong>#</strong> учасник} few {<strong>#</strong> учасники} many {<strong>#</strong> учасників} other {<strong>#</strong> учасника}}",
+    "contributorsPlain": "{n, plural, one {# учасник} few {# учасники} many {# учасників} other {# учасника}}",
+    "percentComplete": "<strong>{pct}%</strong> виконано"
+  },
+  "posted": {
+    "today": "сьогодні",
+    "daysAgo": "{n, plural, one {# день тому} few {# дні тому} many {# днів тому} other {# дня тому}}",
+    "weeksAgo": "{n, plural, one {# тиждень тому} few {# тижні тому} many {# тижнів тому} other {# тижня тому}}"
+  },
+  "fallback": {
+    "remoteLocation": "Дистанційно",
+    "otherType": "Інше"
+  }
+}

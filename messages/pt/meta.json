@@ -1,0 +1,41 @@
+{
+  "root": {
+    "title": "The Superhero — Projetos para salvar o mundo",
+    "description": "Ligue as suas habilidades a projetos de clima e sustentabilidade que precisam de você. Cada contribuição conta."
+  },
+  "browse": {
+    "title": "Explorar projetos — The Superhero",
+    "description": "Encontre projetos de clima e sustentabilidade que precisam das suas habilidades — filtre por tipo, país, idioma e tempo disponível."
+  },
+  "blueprints": {
+    "title": "Modelos — The Superhero",
+    "description": "Planos de projeto comprovados e reutilizáveis — repair cafés, mini-florestas, cooperativas solares e mais. Adapte um para a sua comunidade."
+  },
+  "blueprint": {
+    "title": "{name} — modelo — The Superhero",
+    "notFound": "Modelo não encontrado — The Superhero"
+  },
+  "project": {
+    "title": "{name} — The Superhero",
+    "notFound": "Projeto não encontrado — The Superhero",
+    "membersOnly": "Projeto só para membros — The Superhero"
+  },
+  "org": {
+    "title": "{name} — The Superhero",
+    "fallback": "Organização — The Superhero"
+  },
+  "organisations": {
+    "title": "Organizações — The Superhero"
+  },
+  "orgRequest": {
+    "title": "Solicitar uma organização — The Superhero"
+  },
+  "privacy": {
+    "title": "Política de privacidade — The Superhero",
+    "description": "Que dados o The Superhero recolhe, para que servem, onde ficam e os direitos que você tem sobre eles."
+  },
+  "terms": {
+    "title": "Termos de serviço — The Superhero",
+    "description": "As regras para usar o The Superhero: a sua conta, o seu conteúdo, o uso aceitável e aquilo por que somos (e não somos) responsáveis."
+  }
+}

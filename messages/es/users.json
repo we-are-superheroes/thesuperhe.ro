@@ -1,0 +1,69 @@
+{
+  "breadcrumb": {
+    "discover": "Descubrir",
+    "people": "Personas"
+  },
+  "hero": {
+    "joined": "Se unió el {date}",
+    "editProfile": "Editar perfil",
+    "sendMessage": "Enviar un mensaje",
+    "inviteToProject": "Invitar a un proyecto",
+    "invitesComingSoon": "Las invitaciones a proyectos llegarán pronto"
+  },
+  "stats": {
+    "projectsLabel": "Proyectos",
+    "projectsSub": "{active, plural, one {# activo} other {# activos}} · {finished, plural, one {# terminado} other {# terminados}}",
+    "contributedLabel": "Aportado",
+    "hoursUnit": "h",
+    "contributedSub": "En todos los proyectos",
+    "stepsShippedLabel": "Pasos entregados",
+    "stepsShippedSub": "Completados por esta persona",
+    "blueprintsLabel": "Plantillas",
+    "blueprintsSub": "Adaptadas {count, plural, one {# vez} other {# veces}}",
+    "none": "—"
+  },
+  "about": {
+    "eyebrow": "Acerca de",
+    "title": "Lo que le importa a {firstName}.",
+    "emptySelf": "Aún no has escrito una biografía. <link>Añade una</link> para que los responsables entiendan qué te mueve.",
+    "emptyOther": "{name} aún no ha escrito una biografía."
+  },
+  "skills": {
+    "eyebrow": "Habilidades",
+    "title": "Lo que aporta {firstName}.",
+    "emptySelf": "Aún no hay habilidades en tu perfil. <link>Añade algunas</link> para que los proyectos puedan encontrarte.",
+    "emptyOther": "{name} aún no ha añadido habilidades.",
+    "seeking": "Abierto a proyectos que necesiten esto",
+    "notSeeking": "Tiene esta habilidad, pero no busca proyectos que la necesiten"
+  },
+  "proficiency": {
+    "beginner": "Principiante",
+    "intermediate": "Intermedio",
+    "expert": "Experto"
+  },
+  "projects": {
+    "eyebrow": "Proyectos",
+    "title": "En qué anda {firstName}.",
+    "joined": "Se unió el {date}",
+    "wrapped": "Terminado el {date}",
+    "typeOther": "Otro",
+    "remote": "A distancia"
+  },
+  "role": {
+    "lead": "Responsable",
+    "contributor": "Colabora"
+  },
+  "tabs": {
+    "active": "Activos",
+    "finished": "Terminados",
+    "all": "Todos",
+    "emptyActive": "Nada activo ahora mismo.",
+    "emptyFinished": "Aún no hay nada terminado.",
+    "emptyAll": "Aún no hay proyectos."
+  },
+  "card": {
+    "completed": "Completado",
+    "activeStatus": "Activo",
+    "progressPct": "{progress}%"
+  }
+}

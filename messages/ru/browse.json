@@ -1,0 +1,68 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Поиск проектов...",
+    "notificationsTitle": "Уведомления",
+    "startProject": "Начать проект",
+    "startProjectShort": "Начать"
+  },
+  "header": {
+    "titleLine1": "Найдите проект,",
+    "titleLine2": "которому вы <em>нужны</em>.",
+    "intro": "Каждый проект здесь настоящий, активный и ищет помощь. Фильтруйте по тому, где вы находитесь, что умеете и какая работа вам интересна."
+  },
+  "filters": {
+    "show": "Показать фильтры",
+    "hide": "Скрыть фильтры",
+    "activeCount": "{n, plural, one {# активный} few {# активных} many {# активных} other {# активного}}",
+    "title": "Фильтры",
+    "clearAll": "Сбросить все",
+    "yourOrganisations": "Ваши организации",
+    "typeOfProject": "Тип проекта",
+    "skillsNeeded": "Нужные навыки",
+    "location": "Местоположение",
+    "country": "Страна",
+    "language": "Язык",
+    "searchSkillsPlaceholder": "Поиск навыков...",
+    "searchLocationsPlaceholder": "Поиск мест...",
+    "searchCountriesPlaceholder": "Поиск стран...",
+    "noMatches": "Ничего не найдено."
+  },
+  "results": {
+    "showingAll": "Показаны <strong>все {total}</strong> {total, plural, one {действующий проект} few {действующих проекта} many {действующих проектов} other {действующего проекта}}",
+    "showingFiltered": "Показано <strong>{showing}</strong> из {total, plural, one {# проекта} few {# проектов} many {# проектов} other {# проекта}}"
+  },
+  "sort": {
+    "recent": "Сначала новые",
+    "needs": "Где нужнее помощь",
+    "progress": "Ближе к завершению"
+  },
+  "view": {
+    "gridTitle": "Сетка",
+    "listTitle": "Список"
+  },
+  "chips": {
+    "query": "«{query}»",
+    "removeAriaLabel": "Убрать фильтр"
+  },
+  "empty": {
+    "title": "Под эти фильтры не подходит ни один проект.",
+    "body": "Попробуйте расширить местоположение, убрать навык или очистить строку поиска."
+  },
+  "card": {
+    "needsHelp": "{n, plural, one {# ждёт помощи} few {# ждут помощи} many {# ждут помощи} other {# ждёт помощи}}",
+    "membersOnly": "Только для участников",
+    "posted": "Опубликован {when}",
+    "contributors": "{n, plural, one {<strong>#</strong> участник} few {<strong>#</strong> участника} many {<strong>#</strong> участников} other {<strong>#</strong> участника}}",
+    "contributorsPlain": "{n, plural, one {# участник} few {# участника} many {# участников} other {# участника}}",
+    "percentComplete": "<strong>{pct}%</strong> готово"
+  },
+  "posted": {
+    "today": "сегодня",
+    "daysAgo": "{n, plural, one {# день назад} few {# дня назад} many {# дней назад} other {# дня назад}}",
+    "weeksAgo": "{n, plural, one {# неделю назад} few {# недели назад} many {# недель назад} other {# недели назад}}"
+  },
+  "fallback": {
+    "remoteLocation": "Удалённо",
+    "otherType": "Другое"
+  }
+}

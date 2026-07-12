@@ -1,0 +1,69 @@
+{
+  "breadcrumb": {
+    "discover": "Поиск",
+    "people": "Люди"
+  },
+  "hero": {
+    "joined": "На платформе с {date}",
+    "editProfile": "Изменить профиль",
+    "sendMessage": "Написать сообщение",
+    "inviteToProject": "Пригласить в проект",
+    "invitesComingSoon": "Приглашения в проекты скоро появятся"
+  },
+  "stats": {
+    "projectsLabel": "Проекты",
+    "projectsSub": "{active, plural, one {# активный} few {# активных} many {# активных} other {# активного}} · {finished, plural, one {# завершённый} few {# завершённых} many {# завершённых} other {# завершённого}}",
+    "contributedLabel": "Вложено",
+    "hoursUnit": " ч",
+    "contributedSub": "По всем проектам",
+    "stepsShippedLabel": "Шагов сделано",
+    "stepsShippedSub": "Завершены этим человеком",
+    "blueprintsLabel": "Шаблоны",
+    "blueprintsSub": "{count, plural, one {Адаптирован # раз} few {Адаптирован # раза} many {Адаптирован # раз} other {Адаптирован # раза}}",
+    "none": "—"
+  },
+  "about": {
+    "eyebrow": "О человеке",
+    "title": "Что важно для {firstName}.",
+    "emptySelf": "Вы ещё не написали о себе. <link>Добавьте пару слов</link>, чтобы руководители понимали, что вами движет.",
+    "emptyOther": "{name} пока ничего о себе не написал(а)."
+  },
+  "skills": {
+    "eyebrow": "Навыки",
+    "title": "Что приносит {firstName}.",
+    "emptySelf": "В вашем профиле пока нет навыков. <link>Добавьте несколько</link>, чтобы проекты могли вас найти.",
+    "emptyOther": "{name} пока не указал(а) навыки.",
+    "seeking": "Открыт(а) для проектов, которым это нужно",
+    "notSeeking": "Владеет этим навыком, но не ищет проекты, которым он нужен"
+  },
+  "proficiency": {
+    "beginner": "Начинающий",
+    "intermediate": "Средний",
+    "expert": "Эксперт"
+  },
+  "projects": {
+    "eyebrow": "Проекты",
+    "title": "Чем занимается {firstName}.",
+    "joined": "Вступление: {date}",
+    "wrapped": "Завершён {date}",
+    "typeOther": "Другое",
+    "remote": "Удалённо"
+  },
+  "role": {
+    "lead": "Руководит",
+    "contributor": "Участвует"
+  },
+  "tabs": {
+    "active": "Активные",
+    "finished": "Завершённые",
+    "all": "Все",
+    "emptyActive": "Сейчас ничего активного.",
+    "emptyFinished": "Пока ничего не завершено.",
+    "emptyAll": "Проектов пока нет."
+  },
+  "card": {
+    "completed": "Завершён",
+    "activeStatus": "Активный",
+    "progressPct": "{progress}%"
+  }
+}

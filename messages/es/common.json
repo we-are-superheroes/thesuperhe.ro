@@ -1,0 +1,17 @@
+{
+  "appName": "The Superhero",
+  "actions": {
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "close": "Cerrar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "back": "Volver",
+    "retry": "Intentar de nuevo"
+  },
+  "state": {
+    "loading": "Cargando…",
+    "saving": "Guardando…",
+    "sending": "Enviando…"
+  }
+}

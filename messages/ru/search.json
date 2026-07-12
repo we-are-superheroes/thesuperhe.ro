@@ -1,0 +1,16 @@
+{
+  "placeholder": "Поиск проектов, шагов или людей...",
+  "ariaLabel": "Поиск проектов, шагов или людей",
+  "searching": "Идёт поиск…",
+  "noMatches": "Ничего не подходит под «{query}».",
+  "groups": {
+    "projects": "Проекты",
+    "steps": "Шаги",
+    "people": "Люди"
+  },
+  "stepIn": "в проекте {project}",
+  "tags": {
+    "completed": "Завершён",
+    "needsHelp": "Нужна помощь"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Pesquisar etapas…",
+    "findStep": "Encontrar uma etapa para entrar",
+    "findStepShort": "Encontrar"
+  },
+  "hero": {
+    "title": "O seu <em>tempo</em>, registrado.",
+    "subtitle": "Acompanhe as horas que você dedicou a cada etapa em que entrou. Mude o estado de uma etapa na página do projeto quando estiver pronto."
+  },
+  "stats": {
+    "active": "Ativas",
+    "completed": "Concluídas",
+    "myHours": "Minhas horas"
+  },
+  "filter": {
+    "active": "Ativas",
+    "completed": "Concluídas"
+  },
+  "sort": {
+    "recentlyLogged": "Registradas há pouco",
+    "byProject": "Por projeto",
+    "byName": "Por nome"
+  },
+  "group": {
+    "title": "Agrupar por",
+    "none": "Sem grupos",
+    "byProject": "Agrupar por projeto"
+  },
+  "badge": {
+    "coordinator": "Coordena"
+  },
+  "row": {
+    "myHours": "Você: {hours}"
+  },
+  "hours": {
+    "zero": "0h",
+    "hoursOnly": "{hours}h",
+    "hoursMinutes": "{hours}h {minutes}m",
+    "minutesOnly": "{minutes}m"
+  },
+  "empty": {
+    "searchTitle": "Nenhuma etapa corresponde a essa pesquisa.",
+    "searchDescription": "Experimente outra palavra ou limpe a pesquisa.",
+    "completedTitle": "Nada concluído ainda.",
+    "completedDescription": "Marque uma etapa como concluída na página do projeto e ela aparece aqui.",
+    "activeTitle": "Você ainda não entrou em nenhuma etapa.",
+    "activeDescription": "Encontre um projeto, entre numa etapa e depois volte aqui para registrar o tempo."
+  }
+}

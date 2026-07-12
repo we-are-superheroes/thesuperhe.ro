@@ -1,0 +1,70 @@
+{
+  "sidebar": {
+    "primaryNavAriaLabel": "Основна навігація",
+    "closeMenuAriaLabel": "Закрити меню",
+    "expandTitle": "Розгорнути бічну панель",
+    "collapseTitle": "Згорнути бічну панель",
+    "resizeAriaLabel": "Змінити ширину бічної панелі",
+    "groups": {
+      "overview": "Огляд",
+      "discover": "Знайти",
+      "account": "Обліковий запис"
+    },
+    "items": {
+      "dashboard": "Моя панель",
+      "myProjects": "Мої проєкти",
+      "mySteps": "Мої кроки",
+      "messages": "Повідомлення",
+      "notifications": "Сповіщення",
+      "browseProjects": "Переглядати проєкти",
+      "skillMatches": "Відповідні навички",
+      "blueprints": "Шаблони",
+      "organisations": "Організації",
+      "profile": "Профіль"
+    },
+    "accountMenuAriaLabel": "Меню облікового запису",
+    "signOut": "Вийти",
+    "accountFallback": "Обліковий запис",
+    "userFallbackName": "Герой",
+    "metaContributions": "{count, plural, one {# проєкт} few {# проєкти} many {# проєктів} other {# проєкту}} · {hours} год",
+    "metaNewHere": "Новачок тут · 0 год",
+    "footer": {
+      "home": "Головна",
+      "privacy": "Конфіденційність",
+      "terms": "Умови"
+    }
+  },
+  "shell": {
+    "openMenuAriaLabel": "Відкрити меню",
+    "closeMenuAriaLabel": "Закрити меню"
+  },
+  "publicNav": {
+    "browseProjects": "Переглядати проєкти",
+    "browseBlueprints": "Переглядати шаблони",
+    "howItWorks": "Як це працює",
+    "signIn": "Увійти",
+    "getStarted": "Почати"
+  },
+  "themePicker": {
+    "themes": {
+      "dark": {
+        "name": "Опівніч",
+        "badge": "Типова",
+        "desc": "Первісні глибокий синій і бурштин."
+      },
+      "daylight": {
+        "name": "Денне світло",
+        "desc": "Прохолодний чистий білий і синьо-сірий."
+      },
+      "paper": {
+        "name": "Папір",
+        "desc": "Тепла слонова кістка, бурштин на передньому плані."
+      },
+      "contrast": {
+        "name": "Високий контраст",
+        "badge": "A11Y",
+        "desc": "Максимальна читабельність — текст WCAG AAA і виразний фокус."
+      }
+    }
+  }
+}

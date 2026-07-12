@@ -1,0 +1,41 @@
+{
+  "root": {
+    "title": "The Superhero — Проєкти, щоб урятувати світ",
+    "description": "Поєднайте свої навички з кліматичними та екологічними проєктами, яким потрібні саме ви. Кожен внесок має значення."
+  },
+  "browse": {
+    "title": "Переглядати проєкти — The Superhero",
+    "description": "Знайдіть кліматичні та екологічні проєкти, яким потрібні ваші навички — фільтруйте за типом, країною, мовою і витратами часу."
+  },
+  "blueprints": {
+    "title": "Шаблони — The Superhero",
+    "description": "Перевірені багаторазові плани проєктів — repair café, кишенькові ліси, сонячні кооперативи й не тільки. Адаптуйте один до своєї громади."
+  },
+  "blueprint": {
+    "title": "{name} — шаблон — The Superhero",
+    "notFound": "Шаблон не знайдено — The Superhero"
+  },
+  "project": {
+    "title": "{name} — The Superhero",
+    "notFound": "Проєкт не знайдено — The Superhero",
+    "membersOnly": "Проєкт лише для учасників — The Superhero"
+  },
+  "org": {
+    "title": "{name} — The Superhero",
+    "fallback": "Організація — The Superhero"
+  },
+  "organisations": {
+    "title": "Організації — The Superhero"
+  },
+  "orgRequest": {
+    "title": "Подати запит на організацію — The Superhero"
+  },
+  "privacy": {
+    "title": "Політика конфіденційності — The Superhero",
+    "description": "Які дані збирає The Superhero, навіщо, де вони зберігаються і які права ви щодо них маєте."
+  },
+  "terms": {
+    "title": "Умови користування — The Superhero",
+    "description": "Правила користування The Superhero: ваш обліковий запис, ваш контент, прийнятне використання і те, за що ми відповідаємо (а за що — ні)."
+  }
+}

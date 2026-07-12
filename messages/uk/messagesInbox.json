@@ -1,0 +1,55 @@
+{
+  "list": {
+    "title": "Повідомлення",
+    "newMessage": "Нове повідомлення",
+    "searchPlaceholder": "Шукати людей і повідомлення",
+    "inbox": "Вхідні",
+    "archived": "Архів",
+    "fallbackConversationName": "Розмова",
+    "noMessagesYet": "Повідомлень поки немає",
+    "unreadCount": "{count, plural, one {# непрочитане} few {# непрочитані} many {# непрочитаних} other {# непрочитаного}}",
+    "previewYou": "Ви: {body}",
+    "previewDeleted": "[видалено]"
+  },
+  "empty": {
+    "noMatches": "Нічого не знайдено.",
+    "archivedTitle": "Немає архівованих розмов.",
+    "archivedHint": "Заархівуйте розмову через її меню <menuIcon></menuIcon> — і вона опиниться тут.",
+    "inboxTitle": "Розмов поки немає.",
+    "inboxHint": "Натисніть кнопку <plusIcon></plusIcon>, щоб почати розмову.",
+    "noThreadTitle": "Оберіть розмову.",
+    "noThreadHint": "Або почніть нову — натисніть кнопку <plusIcon></plusIcon>, щоб знайти когось."
+  },
+  "thread": {
+    "backToConversations": "Назад до розмов",
+    "online": "У мережі",
+    "muted": "Без сповіщень",
+    "viewProfile": "Переглянути профіль",
+    "more": "Більше",
+    "sayHi": "Повідомлень поки немає. Привітайтеся з {name}.",
+    "deletedMessage": "[видалено]",
+    "edited": "змінено"
+  },
+  "time": {
+    "today": "Сьогодні",
+    "yesterday": "Вчора"
+  },
+  "composer": {
+    "placeholder": "Напишіть повідомлення…",
+    "send": "Надіслати",
+    "hint": "<kbd>Enter</kbd> — надіслати · <kbd>Shift</kbd> + <kbd>Enter</kbd> — новий рядок",
+    "charCount": "{count} / {max}"
+  },
+  "menu": {
+    "unmute": "Увімкнути сповіщення",
+    "mute": "Вимкнути сповіщення",
+    "archive": "Архівувати",
+    "unarchive": "Повернути з архіву"
+  },
+  "newMessage": {
+    "searchPlaceholder": "Шукати людей…",
+    "noMatches": "Нічого не знайдено.",
+    "hint": "Знайдіть людину за іменем, щоб почати розмову."
+  },
+  "you": "Ви"
+}

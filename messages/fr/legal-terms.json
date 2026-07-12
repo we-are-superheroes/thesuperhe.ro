@@ -1,0 +1,70 @@
+{
+  "chrome": {
+    "eyebrow": "Mentions légales",
+    "title": "Conditions d’utilisation",
+    "lastUpdated": "Dernière mise à jour : {date}"
+  },
+  "sections": {
+    "shortVersion": {
+      "title": "La version courte",
+      "p1": "The Superhero met des personnes en relation avec des projets climat et durabilité. Tu restes propriétaire de ce que tu publies, tu es responsable de ce que tu publies et de ce que tu fais hors ligne, soyez corrects les uns avec les autres, et nous pouvons retirer le contenu ou les comptes qui enfreignent ces règles. La version longue suit.",
+      "englishPrevails": "Ces conditions sont disponibles en plusieurs langues pour ta commodité — si une traduction contredit un jour la version anglaise, c’est la version anglaise qui fait foi."
+    },
+    "agreement": {
+      "title": "1. Qui nous sommes et ce que tu acceptes",
+      "p1": "The Superhero (thesuperhe.ro) est exploité depuis la Suisse. En créant un compte ou en utilisant la plateforme, tu acceptes ces conditions et notre <link>politique de confidentialité</link>. Si tu n’es pas d’accord avec elles, n’utilise pas la plateforme."
+    },
+    "account": {
+      "title": "2. Ton compte",
+      "p1": "Tu dois avoir au moins 16 ans pour utiliser The Superhero. Utilise ta véritable identité, garde tes identifiants de connexion pour toi, et ne partage ni ne vends ton compte. Tu es responsable de ce qui s’y passe. Tu peux supprimer ton compte à tout moment depuis les réglages de ton profil."
+    },
+    "platform": {
+      "title": "3. Ce que la plateforme est (et n’est pas)",
+      "p1": "Nous fournissons l’infrastructure : pages de projet, modèles, étapes, actualités, messagerie et mise en relation par compétences. Les projets eux-mêmes sont créés et menés par leurs responsables, pas par nous. Nous ne vérifions pas les projets ni leurs organisateurs, nous ne garantissons pas qu’un projet aura lieu ou réussira, et rejoindre un projet crée un arrangement entre toi et la communauté de ce projet — pas avec nous.",
+      "p2": "Beaucoup de projets impliquent des activités dans le monde réel — planter, réparer, organiser des événements. Évalue-les avec le même discernement que tu appliquerais à toute activité bénévole : ta sécurité, tes assurances, les autorisations et les obligations légales des activités hors ligne relèvent de toi et du projet que tu rejoins, et restent de ta propre responsabilité."
+    },
+    "content": {
+      "title": "4. Ton contenu",
+      "p1": "Tu es propriétaire de ce que tu crées ici — descriptions de projet, modèles, étapes, actualités et messages. Pour que la plateforme puisse fonctionner, tu nous accordes une licence non exclusive et mondiale pour héberger, afficher et distribuer ton contenu au sein du service. Le contenu que tu marques comme public est visible par n’importe qui sur Internet.",
+      "p2": "Les modèles sont un cas particulier : tout leur intérêt est la réutilisation. En publiant un modèle, tu autorises les autres membres à l’adapter, le modifier et le traduire sur la plateforme, l’original étant crédité comme racine de la famille.",
+      "p3": "Ne publie que ce que tu as le droit de publier. Si un contenu que tu téléverses porte atteinte aux droits de quelqu’un d’autre, c’est ta responsabilité — et nous le retirerons dès que nous en aurons connaissance."
+    },
+    "acceptableUse": {
+      "title": "5. Usage acceptable",
+      "intro": "N’utilise pas la plateforme pour :",
+      "items": {
+        "unlawful": "publier du contenu illicite, diffamatoire, harcelant, haineux ou trompeur ;",
+        "impersonate": "usurper l’identité de quelqu’un ou présenter faussement un projet ou une affiliation ;",
+        "spam": "spammer les membres via les messages, les actualités ou les demandes d’adhésion ;",
+        "advertise": "faire la publicité de services commerciaux sans rapport ;",
+        "scrape": "aspirer les données de la plateforme, sonder sa sécurité ou perturber son fonctionnement (les limites de débit existent pour une raison) ;",
+        "collect": "collecter les données personnelles des autres membres au-delà de ce que la collaboration exige."
+      }
+    },
+    "moderation": {
+      "title": "6. Modération",
+      "p1": "Nous pouvons retirer du contenu, des étapes, des projets ou des modèles, et suspendre ou résilier des comptes, lorsque ces conditions sont enfreintes ou lorsque la loi l’exige. Nous userons de ce pouvoir avec parcimonie et discernement — la plateforme existe pour faire aboutir des projets, pas pour les surveiller. Les responsables de projet modèrent en outre leurs propres projets (accepter des membres, gérer les étapes et les actualités)."
+    },
+    "availability": {
+      "title": "7. Disponibilité et modifications",
+      "p1": "La plateforme est fournie « en l’état » et gratuitement. Nous travaillons à la garder disponible et correcte, mais nous ne garantissons pas un fonctionnement ininterrompu ou sans erreur, et nous pouvons modifier, suspendre ou arrêter des fonctionnalités. Si nous devions un jour arrêter entièrement la plateforme, nous donnerions un préavis raisonnable pour que tu puisses exporter ce qui compte pour toi."
+    },
+    "liability": {
+      "title": "8. Responsabilité",
+      "p1": "Dans la mesure permise par la loi, nous ne sommes pas responsables des dommages indirects, des données perdues, des profits perdus, du contenu publié par les autres membres, ni de ce qui se passe dans les activités réelles des projets. Rien dans ces conditions n’exclut la responsabilité en cas de faute intentionnelle ou de négligence grave, ni toute autre responsabilité qui ne peut pas être exclue en droit suisse."
+    },
+    "termsChanges": {
+      "title": "9. Modifications de ces conditions",
+      "p1": "Nous pouvons mettre ces conditions à jour à mesure que la plateforme évolue. La date en haut t’indique quand. Pour les changements importants, nous te préviendrons dans l’application, et continuer à utiliser la plateforme ensuite vaut acceptation de la nouvelle version."
+    },
+    "law": {
+      "title": "10. Droit applicable",
+      "p1": "Ces conditions sont régies par le droit suisse. Les tribunaux du siège de l’exploitant en Suisse sont compétents, sous réserve des fors impératifs de protection des consommateurs qui s’appliquent à toi."
+    }
+  },
+  "footer": {
+    "questions": "Des questions ?",
+    "privacyLink": "Politique de confidentialité",
+    "homeLink": "Retour à la page d’accueil"
+  }
+}

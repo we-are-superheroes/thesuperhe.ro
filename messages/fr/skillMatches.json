@@ -1,0 +1,63 @@
+{
+  "hero": {
+    "title": "Selon <em>tes compétences</em>.",
+    "subtitle": "Des étapes et des projets choisis pour ce que tu sais faire — et là où tu es. Le travail à distance est plutôt rapproché selon les langues que tu parles."
+  },
+  "basis": {
+    "ariaLabel": "Sur quoi ces correspondances se basent",
+    "matchingOn": "Basé sur",
+    "noSkills": "Pas encore de compétences sur ton profil",
+    "editProfile": "Modifier le profil"
+  },
+  "emptyProfile": {
+    "title": "Dis-nous ce que tu sais faire.",
+    "description": "Les correspondances viennent des compétences de ton profil. Ajoutes-en quelques-unes — toutes les compétences comptent, pas seulement les techniques — et elles apparaîtront ici.",
+    "cta": "Ajouter des compétences à ton profil"
+  },
+  "pills": {
+    "all": "Tout",
+    "steps": "Étapes",
+    "projects": "Projets"
+  },
+  "tools": {
+    "searchPlaceholder": "Rechercher dans les correspondances…",
+    "remoteOnly": "À distance uniquement"
+  },
+  "emptyFiltered": {
+    "title": "Aucune correspondance avec ces filtres.",
+    "description": "Essaie de désactiver « À distance uniquement », de vider la recherche — ou ajoute plus de compétences à ton profil pour voir plus de correspondances."
+  },
+  "groups": {
+    "strongTitle": "Correspondances fortes",
+    "strongSub": "{count} — ils cherchent une compétence que tu as déjà",
+    "adjacentTitle": "Proches de tes compétences",
+    "adjacentSub": "{count} — dans les mêmes domaines, une occasion d’apprendre quelque chose de nouveau"
+  },
+  "ring": {
+    "percentSign": "%",
+    "matchLabel": "Correspondance"
+  },
+  "card": {
+    "kindStep": "étape",
+    "kindProject": "projet",
+    "estimatedHours": "· ~{hours}h",
+    "claimStep": "Prendre cette étape",
+    "viewProject": "Voir le projet"
+  },
+  "why": {
+    "needsSkills": "Cherche {skills} — tu {count, plural, one {l’as} other {as les deux}}",
+    "andJoiner": " et ",
+    "relatedSkills": "{skills} est proche de tes compétences",
+    "near": "À {city}, comme toi",
+    "far": "{location} — déplacement nécessaire",
+    "locationUnknown": "Lieu inconnu",
+    "remoteLang": "À distance, fonctionne en {language}",
+    "remoteNoLang": "À distance, mais se déroule en {language}",
+    "remoteUnknown": "Contributeurs à distance bienvenus"
+  },
+  "rail": {
+    "remote": "À distance",
+    "nearYou": "{location} · près de toi",
+    "locationNotSet": "Lieu non renseigné"
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Pesquisar os seus projetos…",
+    "notificationsTitle": "Notificações",
+    "startProject": "Começar um projeto",
+    "startProjectShort": "Começar"
+  },
+  "hero": {
+    "title": "Os seus <em>projetos</em>.",
+    "subtitle": "Tudo aquilo em que você está contribuindo, num só lugar. Veja o que está bloqueado e continue de onde parou."
+  },
+  "stats": {
+    "active": "Ativos",
+    "openSteps": "Etapas abertas",
+    "contributed": "Contribuído",
+    "hoursSuffix": "h"
+  },
+  "tabs": {
+    "active": "Ativos",
+    "finished": "Terminados",
+    "archived": "Arquivados"
+  },
+  "roleFilter": {
+    "all": "Todas as funções",
+    "leading": "Como responsável",
+    "contributing": "Como colaborador",
+    "needsAction": "Precisa da sua ação"
+  },
+  "sort": {
+    "recent": "Última atividade",
+    "due": "Prazo mais próximo",
+    "progress": "Mais perto do fim",
+    "title": "Título (A–Z)"
+  },
+  "view": {
+    "grid": "Vista em grade",
+    "list": "Vista em lista"
+  },
+  "role": {
+    "lead": "Responsável",
+    "contributor": "Colaborador"
+  },
+  "listHeader": {
+    "project": "Projeto",
+    "nextStep": "A sua próxima etapa",
+    "role": "Função",
+    "progress": "Progresso"
+  },
+  "card": {
+    "lastActivity": "Última atividade {when}",
+    "noOpenSteps": "Nenhuma etapa aberta para você.",
+    "percent": "{progress}%"
+  },
+  "listRow": {
+    "noOpenStep": "Nenhuma etapa aberta.",
+    "progressSummary": "{progress}% concluído · {count, plural, one {# colaborador} other {# colaboradores}}"
+  },
+  "fallback": {
+    "type": "Outro",
+    "location": "Remoto"
+  },
+  "relative": {
+    "justNow": "agora mesmo",
+    "minutesAgo": "{count, plural, one {há # minuto} other {há # minutos}}",
+    "hoursAgo": "{count, plural, one {há # hora} other {há # horas}}",
+    "yesterday": "ontem",
+    "daysAgo": "{count, plural, one {há # dia} other {há # dias}}",
+    "weeksAgo": "{count, plural, one {há # semana} other {há # semanas}}",
+    "monthsAgo": "{count, plural, one {há # mês} other {há # meses}}",
+    "yearsAgo": "{count, plural, one {há # ano} other {há # anos}}"
+  },
+  "due": {
+    "whenYouCan": "Quando você puder",
+    "overdueBy": "{count, plural, one {Com # dia de atraso} other {Com # dias de atraso}}",
+    "today": "Vence hoje",
+    "tomorrow": "Vence amanhã",
+    "inDays": "{count, plural, one {Vence em # dia} other {Vence em # dias}}",
+    "inOneWeek": "Vence em 1 semana"
+  },
+  "empty": {
+    "activeFilteredTitle": "Nenhum projeto corresponde a esses filtros.",
+    "activeFilteredDescription": "Experimente limpar a pesquisa ou mudar a função.",
+    "activeTitle": "Você ainda não entrou num projeto.",
+    "activeDescription": "Explore o que está ativo agora e encontre um que combine com você — até uma etapa de uma hora conta.",
+    "clearFilters": "Limpar filtros",
+    "browseProjects": "Explorar projetos",
+    "startYourOwn": "Comece o seu",
+    "finishedTitle": "Nada terminado ainda.",
+    "finishedDescription": "Quando um projeto terminar, ele passa para cá como registro do que você ajudou a entregar.",
+    "archivedTitle": "Nenhum projeto arquivado.",
+    "archivedDescription": "Os projetos de que você saiu vão aparecer aqui."
+  }
+}

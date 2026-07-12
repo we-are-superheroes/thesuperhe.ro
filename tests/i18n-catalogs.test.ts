@@ -12,7 +12,7 @@ import { NAMESPACES } from '@/i18n/messages'
    REQUIRE_ALL_LOCALES to true so a missing locale fails CI.
    ================================================================ */
 
-const REQUIRE_ALL_LOCALES = false
+const REQUIRE_ALL_LOCALES = true
 
 const MESSAGES_DIR = join(__dirname, '..', 'messages')
 

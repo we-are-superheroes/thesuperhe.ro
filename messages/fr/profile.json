@@ -1,0 +1,81 @@
+{
+  "breadcrumb": {
+    "dashboard": "Tableau de bord",
+    "editProfile": "Modifier le profil"
+  },
+  "topbar": {
+    "unsavedChanges": "Changements non enregistrés",
+    "savedJustNow": "Enregistré à l’instant",
+    "saveChanges": "Enregistrer les changements"
+  },
+  "header": {
+    "title": "Ton <em>profil</em>.",
+    "intro": "C’est ce que les responsables de projet voient quand tu proposes ton aide. Sois honnête — plus ton profil est juste, meilleures sont les correspondances."
+  },
+  "toc": {
+    "ariaLabel": "Sections du profil",
+    "onThisPage": "Sur cette page",
+    "aboutYou": "À propos de toi",
+    "skills": "Compétences",
+    "whereWhen": "Où et quand",
+    "organisations": "Organisations",
+    "appearance": "Apparence"
+  },
+  "identity": {
+    "eyebrow": "À propos de toi",
+    "title": "Raconte ton histoire.",
+    "desc": "Une courte bio et une photo aident les responsables de projet à comprendre ce qui te motive. À quel changement veux-tu prendre part ?"
+  },
+  "avatar": {
+    "label": "Photo de profil",
+    "uploading": "Envoi…",
+    "replace": "Remplacer",
+    "uploadNew": "Envoyer une nouvelle",
+    "remove": "Retirer",
+    "hint": "Carrée, au moins 256×256. PNG, JPG, WebP ou GIF, jusqu’à 4 Mo."
+  },
+  "fields": {
+    "fullName": "Nom complet",
+    "bio": "Bio",
+    "bioCounter": "{count} / {max}",
+    "bioHelp": "Deux ou trois phrases. Ce qui te tient à cœur, ce sur quoi tu travailles, ce que tu aimerais faire plus souvent.",
+    "city": "Ville",
+    "cityPlaceholder": "p. ex. Lausanne, Suisse",
+    "timezone": "Fuseau horaire"
+  },
+  "proficiency": {
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "expert": "Expert"
+  },
+  "skills": {
+    "eyebrow": "Compétences",
+    "title": "Ce que tu apportes.",
+    "desc": "Choisis ce que tu sais bien faire — et dis-nous si tu as vraiment <em>envie</em> de projets qui en ont besoin. C’est normal d’être expert dans quelque chose dont tu ne veux plus.",
+    "colSkill": "Compétence",
+    "colLevel": "Niveau",
+    "colMatchMe": "Me proposer",
+    "empty": "Pas encore de compétences — ajoutes-en ci-dessous ou choisis parmi les suggestions.",
+    "searchPlaceholder": "Ajouter une compétence — cherche par nom ou catégorie…",
+    "allAdded": "Tu as ajouté toutes les compétences de notre catalogue.",
+    "add": "Ajouter",
+    "noMatch": "Aucune compétence de notre catalogue ne correspond à <query>« {term} »</query>.",
+    "suggestions": "Suggestions :"
+  },
+  "skillRow": {
+    "matchMeMobile": "Me proposer des projets",
+    "seekingOn": "Cherche des projets",
+    "seekingOff": "Ne cherche pas en ce moment",
+    "remove": "Retirer la compétence"
+  },
+  "where": {
+    "eyebrow": "Où et quand",
+    "title": "Lieu et fuseau horaire.",
+    "desc": "Sert à te montrer des projets locaux et à organiser les appels. Nous ne montrons jamais ton adresse exacte — juste ta ville."
+  },
+  "appearance": {
+    "eyebrow": "Apparence",
+    "title": "Thème.",
+    "desc": "Choisis l’apparence de The Superhero pour toi. Ton choix est gardé dans ce navigateur et s’applique à toutes les pages — il ne dépend pas du bouton Enregistrer."
+  }
+}

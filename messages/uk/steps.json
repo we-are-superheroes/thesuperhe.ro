@@ -1,0 +1,65 @@
+{
+  "status": {
+    "open": "Відкритий",
+    "in_progress": "У роботі",
+    "completed": "Завершено"
+  },
+  "needsHelp": "Потрібна допомога",
+  "filter": {
+    "all": "Усі"
+  },
+  "list": {
+    "empty": "Немає кроків у цьому стані.",
+    "showAll": "Показати всі {count, plural, one {# крок} few {# кроки} many {# кроків} other {# кроку}}"
+  },
+  "card": {
+    "orderOfTotal": "Крок {order} з {total}",
+    "estimatedHours": "~{hours} год",
+    "noSkills": "Навички не потрібні"
+  },
+  "joiners": {
+    "coordinatorName": "{name} (координатор)",
+    "youCoordinate": "Ви координуєте",
+    "nameCoordinates": "Координує {name}",
+    "changeCoordinator": "Змінити координатора",
+    "menuTitle": "Координатор кроку",
+    "noCoordinator": "Без координатора"
+  },
+  "action": {
+    "done": "Готово",
+    "signInToJoin": "Увійдіть, щоб приєднатися",
+    "joinProjectFirst": "Приєднайтеся до проєкту, щоб приєднатися до цього кроку",
+    "askForHelp": "Попросити допомоги",
+    "withdrawHelpRequest": "Відкликати прохання про допомогу",
+    "markComplete": "Позначити завершеним",
+    "reopen": "Відкрити знову",
+    "youreOnThis": "Ви берете участь",
+    "leaveStep": "Залишити крок",
+    "leaving": "Виходимо…",
+    "joinThisStep": "Приєднатися до цього кроку",
+    "joinToo": "Теж приєднатися",
+    "joining": "Приєднуємось…"
+  },
+  "timeLog": {
+    "hoursOnly": "{hours} год",
+    "hoursMinutes": "{hours} год {minutes} хв",
+    "minutesOnly": "{minutes} хв",
+    "noTimeYet": "Час іще не зафіксовано",
+    "totalLogged": "Зафіксовано <strong>{hours}</strong>",
+    "byName": "від {name}",
+    "contributorCount": "{count, plural, one {# учасник} few {# учасники} many {# учасників} other {# учасника}}",
+    "logTime": "Зафіксувати час",
+    "beFirst": "Станьте першим, хто зафіксує час на цьому кроці.",
+    "nothingLogged": "Поки нічого не зафіксовано.",
+    "earlierEntries": "+ {count, plural, one {# раніший запис} few {# раніші записи} many {# раніших записів} other {# ранішого запису}}",
+    "hoursPlaceholder": "0.5",
+    "hourSymbol": "год",
+    "dateTitle": "Коли ви виконали цю роботу?",
+    "notePlaceholder": "Що ви зробили? (необов’язково)",
+    "log": "Записати",
+    "quickAddMinutes": "+{minutes} хв",
+    "quickAddHours": "+{hours} год",
+    "someone": "Хтось",
+    "deleteEntry": "Видалити запис"
+  }
+}

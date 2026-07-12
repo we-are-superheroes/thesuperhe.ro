@@ -1,0 +1,83 @@
+{
+  "nav": {
+    "browseProjects": "Projekte durchstöbern",
+    "browseBlueprints": "Blaupausen durchstöbern",
+    "howItWorks": "So funktioniert’s",
+    "dashboard": "Dashboard",
+    "signIn": "Anmelden",
+    "getStarted": "Loslegen",
+    "signOut": "Abmelden"
+  },
+  "hero": {
+    "badge": "Klima & Nachhaltigkeit — gemeinsam",
+    "title": "Kämpf nicht allein.<br></br>Lass uns <em>gemeinsam</em><br></br>Superhelden sein.",
+    "subtitle": "Finde Klima- und Nachhaltigkeitsprojekte, die deine Fähigkeiten brauchen — oder bring deine eigene Idee mit und lass Mitstreiter sie mit dir Wirklichkeit werden.",
+    "browseProjects": "Projekte durchstöbern",
+    "startProject": "Projekt starten",
+    "timeNote": "Von 1-Stunden-Aufgaben bis zu langen Projekten",
+    "skillsNote": "Alle Fähigkeiten willkommen",
+    "annotation": "echte Projekte, echte Wirkung",
+    "contributors": "{count, plural, one {# Mitwirkende(r)} other {# Mitwirkende}}",
+    "stepsNeedHelp": "{count, plural, one {Bei # Schritt wird Hilfe gesucht} other {Bei # Schritten wird Hilfe gesucht}}",
+    "commitment": "~{hours} Std. Einsatz",
+    "showcaseKicker": "Repair Café",
+    "showcaseQuote": "„Kaputt bringen, repariert mitnehmen.“",
+    "showcaseMeta": "★ Camden, monatlich"
+  },
+  "entry": {
+    "browseTitle": "Projekte durchstöbern",
+    "browseDesc": "Filtere nach Fähigkeit, Ort und Zeitaufwand. Finde eins, das passt, und mach mit.",
+    "browseCta": "Entdecken",
+    "dashboardTitle": "Dein Dashboard",
+    "dashboardDesc": "Angepinnte Projekte, nächste Schritte und was in deinen Projekten gerade passiert.",
+    "dashboardCta": "Dashboard öffnen",
+    "signInTitle": "Anmelden",
+    "signInTitleSignedIn": "Willkommen zurück",
+    "signInDesc": "Schon dabei? Mach weiter, wo du aufgehört hast. Neu hier? Erstell dein Konto in unter einer Minute.",
+    "signInDescSignedIn": "Du bist angemeldet. Ab zu deinem Dashboard und deinen Projekten.",
+    "signInCta": "Anmelden",
+    "signInCtaSignedIn": "Zum Dashboard"
+  },
+  "projects": {
+    "kicker": "Frisch auf der Plattform",
+    "title": "Neue Projekte, <em>die dich suchen</em>.",
+    "subtitle": "Gerade gestartet — und auf der Suche nach den ersten Mitwirkenden. Schritte dauern meist weniger als 2 Stunden.",
+    "seeAll": "Alle Projekte ansehen",
+    "card": {
+      "remoteOk": "Remote möglich",
+      "stepsNeedHelp": "{count, plural, one {Bei # Schritt wird Hilfe gesucht} other {Bei # Schritten wird Hilfe gesucht}}",
+      "ageToday": "Neu · heute",
+      "ageDaysAgo": "Neu · vor {days} T.",
+      "ageWeekAgo": "Neu · vor 1 Wo.",
+      "time": "~{hours} Std.",
+      "joined": "{count} dabei",
+      "view": "Ansehen →"
+    }
+  },
+  "how": {
+    "kicker": "So funktioniert’s",
+    "title": "Trag so viel bei — <em>oder so wenig</em> — wie deine Zeit erlaubt.",
+    "step1Title": "Sag uns deine Fähigkeiten",
+    "step1Desc": "Füge hinzu, was du gut kannst — und was du in einem Projekt wirklich einsetzen willst. Wer vom Programmieren ausgebrannt ist, muss nicht programmieren.",
+    "step2Title": "Finde, was passt",
+    "step2Desc": "Durchstöbere ganze Projekte oder nur einzelne Schritte. Die kleinste Einheit kann eine 30-Minuten-Aufgabe sein — perfekt für einen ruhigen Abend.",
+    "step3Title": "Leg los",
+    "step3Desc": "Tritt dem Team bei, übernimm einen Schritt und bring etwas Echtes auf die Straße — mit Menschen, denen dasselbe am Herzen liegt wie dir."
+  },
+  "cta": {
+    "title": "Bereit zu <em>handeln?</em>",
+    "subtitle": "Schau, was gerade läuft — oder melde dich an und öffne dein Dashboard.",
+    "browseProjects": "Projekte durchstöbern",
+    "dashboard": "Zum Dashboard",
+    "signIn": "Anmelden"
+  },
+  "footer": {
+    "copyright": "© {year} The Superhero · Zusammenarbeit für Klima & Nachhaltigkeit",
+    "projects": "Projekte",
+    "blueprints": "Blaupausen",
+    "privacy": "Datenschutz",
+    "terms": "Nutzungsbedingungen",
+    "createdIn": "Entstanden in der Schweiz",
+    "swissFlagAlt": "Schweizer Flagge"
+  }
+}
