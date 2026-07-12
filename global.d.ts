@@ -1,4 +1,5 @@
 import type common from './messages/en/common.json'
+import type steps from './messages/en/steps.json'
 import type { Locale } from './lib/locale-shared'
 
 /**
@@ -12,6 +13,7 @@ declare module 'next-intl' {
     Locale: Locale
     Messages: {
       common: typeof common
+      steps: typeof steps
     }
   }
 }

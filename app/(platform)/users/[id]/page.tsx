@@ -3,6 +3,8 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { db } from '@/lib/db'
+import { resolveLocale } from '@/lib/locale'
+import { fmtMonthYear } from '@/lib/format'
 import {
   MapPin,
   Clock,
@@ -53,8 +55,8 @@ function initialsFor(name: string): string {
   return ((parts[0][0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() || '?'
 }
 
-function joinedLabel(d: Date): string {
-  return `Joined ${d.toLocaleString('en-GB', { month: 'short', year: 'numeric' })}`
+function joinedLabel(d: Date, locale: string): string {
+  return `Joined ${fmtMonthYear(d, locale)}`
 }
 
 const LEVEL_LABEL = {
@@ -67,6 +69,7 @@ export default async function UserProfilePage({ params }: Params) {
   const { id } = await params
   const { userId: viewerId } = await auth()
   if (!viewerId) redirect('/sign-in')
+  const locale = await resolveLocale()
 
   const [user, stepsShipped, blueprintAggregate] = await Promise.all([
     db.user.findUnique({
@@ -186,8 +189,8 @@ export default async function UserProfilePage({ params }: Params) {
       status,
       progress,
       since: status === 'active'
-        ? `Joined ${c.joinedAt.toLocaleString('en-GB', { month: 'short', year: 'numeric' })}`
-        : `Wrapped ${p.updatedAt.toLocaleString('en-GB', { month: 'short', year: 'numeric' })}`,
+        ? `Joined ${fmtMonthYear(c.joinedAt, locale)}`
+        : `Wrapped ${fmtMonthYear(p.updatedAt, locale)}`,
     }
   }
 
@@ -269,7 +272,7 @@ export default async function UserProfilePage({ params }: Params) {
               )}
               <span className="inline-flex items-center gap-1.5">
                 <Calendar className="size-3.5" />
-                {joinedLabel(user.createdAt)}
+                {joinedLabel(user.createdAt, locale)}
               </span>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import { useState, useTransition, useEffect, useRef } from 'react'
 import { Clock, Plus, Minus, ArrowRight, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useLocale } from 'next-intl'
 import { fmtAgo } from '@/lib/format'
 import {
   logTimeAction,
@@ -355,6 +356,7 @@ function TimeEntry({
   pending: boolean
   onDelete?: () => void
 }) {
+  const locale = useLocale()
   const name = entry.user?.name ?? 'Someone'
   const initials = entry.user?.initials ?? '?'
   const id = entry.user?.id ?? entry.id
@@ -373,7 +375,7 @@ function TimeEntry({
             {firstName(name)}
           </strong>{' '}
           · <span className="font-semibold tabular-nums text-amber-500">{fmtHours(entry.hours)}</span>{' '}
-          · {now > 0 ? fmtAgo(entry.loggedOnMs, now) : ''}
+          · {now > 0 ? fmtAgo(entry.loggedOnMs, locale, now) : ''}
         </div>
         {entry.note && (
           <div className="text-sm leading-snug text-fg-secondary">

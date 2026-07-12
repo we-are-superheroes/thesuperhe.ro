@@ -2,7 +2,9 @@
 
 import { useState, useMemo, useEffect, useTransition } from 'react'
 import Link from 'next/link'
+import { useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { fmtAgo } from '@/lib/format'
 import {
   Bell,
   Check,
@@ -70,19 +72,6 @@ const ACTIONABLE_TYPES = new Set<NotificationType>(['project_join_request', 'inv
 /* ================================================================
    Helpers
    ================================================================ */
-
-function fmtTime(ts: number, now: number): string {
-  const diff = now - ts
-  const mins = Math.floor(diff / 60_000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
-  const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
-  const days = Math.floor(hrs / 24)
-  if (days === 1) return 'yesterday'
-  if (days < 7) return `${days}d ago`
-  return `${Math.floor(days / 7)}w ago`
-}
 
 function groupOf(ts: number, now: number): string {
   const days = Math.floor((now - ts) / (24 * 60 * 60 * 1000))
@@ -396,6 +385,7 @@ function NotificationRow({
   onAccept: (id: string) => void
   onDecline: (id: string) => void
 }) {
+  const locale = useLocale()
   const Icon = ICON_FOR[item.type]
   const unread = item.readAt === null
   const actionable = ACTIONABLE_TYPES.has(item.type) && item.resolvedAt === null
@@ -546,7 +536,7 @@ function NotificationRow({
 
       <div className="flex flex-col items-end gap-2 whitespace-nowrap">
         <span className="text-xs tabular-nums text-fg-tertiary">
-          {now > 0 ? fmtTime(item.ts, now) : ' '}
+          {now > 0 ? fmtAgo(item.ts, locale, now) : ' '}
         </span>
       </div>
     </article>

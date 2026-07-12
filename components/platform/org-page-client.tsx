@@ -15,7 +15,9 @@ import {
   Pencil,
   Plus,
 } from 'lucide-react'
+import { useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { fmtInt } from '@/lib/format'
 import { ProjectStatusBadge } from '@/components/platform/project-status-badge'
 import {
   clearOrgImageAction,
@@ -124,6 +126,7 @@ const IMG_BG: Record<string, string> = {
 }
 
 export function OrgPageClient({ data }: { data: OrgPageData }) {
+  const locale = useLocale()
   const { org, viewer } = data
   const cls = org.isCompany ? 'co' : 'np'
   const isMember = viewer.role !== 'visitor'
@@ -210,7 +213,7 @@ export function OrgPageClient({ data }: { data: OrgPageData }) {
         <section aria-label="Impact" className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Stat big={String(data.stats.members)} label={org.isCompany ? 'employees taking part' : 'members'} />
           <Stat
-            big={`${data.stats.hours.toLocaleString('en-GB')} hrs`}
+            big={`${fmtInt(data.stats.hours, locale)} hrs`}
             accent
             label="contributed so far"
             fine="Hours from this organisation's own projects, plus public-project hours its members chose to share."
@@ -766,6 +769,7 @@ function LockedTeaser({ data }: { data: OrgPageData }) {
 /* ── Contribution dashboard ─────────────────────────────────── */
 
 function Dashboard({ data, isAdmin }: { data: OrgPageData; isAdmin: boolean }) {
+  const locale = useLocale()
   const d = data.dash
   const orgPct = d.total > 0 ? Math.round((d.orgHours / d.total) * 100) : 0
   const maxRow = Math.max(1, ...d.rows.map((r) => r.hours))
@@ -782,7 +786,7 @@ function Dashboard({ data, isAdmin }: { data: OrgPageData; isAdmin: boolean }) {
           <div className="flex flex-wrap items-start gap-8">
             <div className="flex min-w-[160px] flex-col gap-0.5">
               <b className="font-display text-[52px] font-normal leading-none text-amber-500">
-                {d.total.toLocaleString('en-GB')}
+                {fmtInt(d.total, locale)}
               </b>
               <span className="text-sm text-fg-secondary">attributed hours</span>
               <span className="mt-1 max-w-[220px] text-xs leading-relaxed text-fg-tertiary">
@@ -801,11 +805,11 @@ function Dashboard({ data, isAdmin }: { data: OrgPageData; isAdmin: boolean }) {
               <div className="flex flex-wrap gap-6 text-xs text-fg-secondary">
                 <span className="inline-flex items-center gap-1.5">
                   <span className="size-[9px] rounded-[3px] bg-amber-400" /> Organisation projects —{' '}
-                  <b className="text-fg-primary">{d.orgHours.toLocaleString('en-GB')} hrs</b> (always counted)
+                  <b className="text-fg-primary">{fmtInt(d.orgHours, locale)} hrs</b> (always counted)
                 </span>
                 <span className="inline-flex items-center gap-1.5">
                   <span className="size-[9px] rounded-[3px] bg-blue-400" /> Shared public contributions —{' '}
-                  <b className="text-fg-primary">{d.sharedHours.toLocaleString('en-GB')} hrs</b> (members who opted in)
+                  <b className="text-fg-primary">{fmtInt(d.sharedHours, locale)} hrs</b> (members who opted in)
                 </span>
               </div>
               <div className="flex flex-col gap-2">

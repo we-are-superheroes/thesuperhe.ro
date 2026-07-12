@@ -10,6 +10,8 @@ import {
   getMemberHours,
 } from '@/lib/orgs'
 import { ORG_TYPE_LABEL, isOrgAdminRole } from '@/lib/org-utils'
+import { resolveLocale } from '@/lib/locale'
+import { fmtMonthYear, fmtShortDate } from '@/lib/format'
 import { stepNeedsHelp } from '@/lib/step-status'
 import { gradientFor, initialsOf } from '@/lib/avatar'
 import {
@@ -47,9 +49,6 @@ const TYPE_IMG_KEY: Record<string, string> = {
   'Ocean & Marine': 'water',
 }
 
-function monthYear(d: Date): string {
-  return d.toLocaleString('en-GB', { month: 'short', year: 'numeric' })
-}
 
 const projectCardSelect = {
   id: true,
@@ -125,6 +124,7 @@ export default async function OrgPage({ params, searchParams }: Params) {
       ? rawFrom
       : null
   const { userId } = await auth()
+  const locale = await resolveLocale()
 
   const org = await db.organisation.findUnique({
     where: { slug },
@@ -197,7 +197,7 @@ export default async function OrgPage({ params, searchParams }: Params) {
         isAdmin: isOrgAdminRole(m.role),
         isCreator: m.role === 'owner',
         isYou: m.user.id === userId,
-        meta: `Joined ${monthYear(m.joinedAt)}${hours > 0 ? ` · ${Math.round(hours)} hrs` : ''}`,
+        meta: `Joined ${fmtMonthYear(m.joinedAt, locale)}${hours > 0 ? ` · ${Math.round(hours)} hrs` : ''}`,
       }
     })
 
@@ -219,7 +219,7 @@ export default async function OrgPage({ params, searchParams }: Params) {
       invites = inviteRows.map((i) => {
         const bits: string[] = []
         if (i.revokedAt) {
-          bits.push(`Cancelled ${i.revokedAt.toLocaleDateString('en-GB')}`)
+          bits.push(`Cancelled ${fmtShortDate(i.revokedAt, locale)}`)
         } else {
           bits.push(i.email ? `For ${i.email}` : 'Open code')
           bits.push(
@@ -227,7 +227,7 @@ export default async function OrgPage({ params, searchParams }: Params) {
               ? `${i.useCount} of ${i.maxUses} uses`
               : `${i.useCount} use${i.useCount === 1 ? '' : 's'}`,
           )
-          if (i.expiresAt) bits.push(`valid until ${i.expiresAt.toLocaleDateString('en-GB')}`)
+          if (i.expiresAt) bits.push(`valid until ${fmtShortDate(i.expiresAt, locale)}`)
         }
         return { id: i.id, code: i.code, meta: bits.join(' · '), revoked: !!i.revokedAt }
       })
@@ -262,7 +262,7 @@ export default async function OrgPage({ params, searchParams }: Params) {
       website: org.website,
       logoUrl: org.logoUrl,
       bannerUrl: org.bannerUrl,
-      sinceLabel: monthYear(org.createdAt),
+      sinceLabel: fmtMonthYear(org.createdAt, locale),
     },
     viewer: {
       signedIn: !!userId,

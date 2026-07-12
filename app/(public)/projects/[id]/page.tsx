@@ -6,6 +6,8 @@ import Image from 'next/image'
 import { ChevronRight, MapPin, Globe, Calendar, FolderOpen, Clock, User, Pencil, ExternalLink } from 'lucide-react'
 import { ShareButton } from '@/components/platform/share-button'
 import { googleMapsUrl } from '@/lib/location'
+import { resolveLocale } from '@/lib/locale'
+import { fmtLongDate } from '@/lib/format'
 import { ProjectStepsList, type StepCardData } from '@/components/platform/project-steps-list'
 import { JoinProjectTopButton, JoinProjectCard } from '@/components/platform/join-project-controls'
 import { AdminDeleteButton } from '@/components/platform/admin-delete-button'
@@ -44,8 +46,8 @@ const TYPE_COVER_GRADIENT: Record<string, string> = {
   'Waste Reduction': 'radial-gradient(circle at 30% 50%, #f4a535 0%, transparent 70%), linear-gradient(160deg, #5C3600, #B86E00)',
 }
 
-function formatDate(d: Date): string {
-  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+function formatDate(d: Date, locale: string): string {
+  return fmtLongDate(d, locale)
 }
 
 function daysSince(d: Date): number {
@@ -88,6 +90,7 @@ export async function generateMetadata({ params }: ProjectViewParams) {
 export default async function ProjectViewPage({ params }: ProjectViewParams) {
   const { id } = await params
   const { userId } = await auth()
+  const locale = await resolveLocale()
 
   const project = await db.project.findUnique({
     where: { id },
@@ -593,7 +596,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               )}
               <span className="inline-flex items-center gap-2">
                 <Calendar className="size-3.5" />
-                Started {formatDate(created)}
+                Started {formatDate(created, locale)}
               </span>
             </div>
             {project.address && (
@@ -816,7 +819,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 )}
               </DetailRow>
               <DetailRow icon={<Calendar className="size-3.5" />} label="Created">
-                {formatDate(created)} <Muted>· {days} day{days === 1 ? '' : 's'} ago</Muted>
+                {formatDate(created, locale)} <Muted>· {days} day{days === 1 ? '' : 's'} ago</Muted>
               </DetailRow>
               <DetailRow icon={<User className="size-3.5" />} label="Lead">
                 {lead?.user?.name ?? <Muted>No lead yet</Muted>}

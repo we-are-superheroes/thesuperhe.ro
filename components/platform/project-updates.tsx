@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { gradientFor, initialOf } from '@/lib/avatar'
+import { useLocale } from 'next-intl'
 import { fmtAgo } from '@/lib/format'
 import {
   postUpdateAction,
@@ -60,6 +61,7 @@ export function LatestUpdateTeaser({
   createdAtMs: number
 }) {
   const { setTab } = useProjectTabs()
+  const locale = useLocale()
   return (
     <button
       type="button"
@@ -77,7 +79,7 @@ export function LatestUpdateTeaser({
         <span className="line-clamp-2 text-sm text-fg-primary">{body}</span>
       </span>
       <span className="hidden shrink-0 text-xs text-fg-tertiary sm:inline">
-        {fmtAgo(createdAtMs)}
+        {fmtAgo(createdAtMs, locale)}
       </span>
       <ArrowRight className="size-4 shrink-0 text-fg-tertiary" />
     </button>
@@ -302,6 +304,7 @@ function UpdateCard({
   const isPrivate = item.visibility === 'members'
   const authorName = item.author?.name ?? 'Former member'
   const canManage = item.isMine || isAdmin
+  const locale = useLocale()
 
   const [editing, setEditing] = useState(false)
   const [draft, setDraft] = useState(item.body)
@@ -354,7 +357,7 @@ function UpdateCard({
             </span>
           </span>
           <span className="text-xs text-fg-tertiary">
-            Posted {fmtAgo(item.createdAtMs)}
+            Posted {fmtAgo(item.createdAtMs, locale)}
             {item.editedAtMs != null && ' · edited'}
           </span>
         </div>
@@ -502,6 +505,7 @@ function MilestoneRow({
 }: {
   item: Extract<UpdatesFeedItem, { kind: 'step_completed' | 'members_joined' }>
 }) {
+  const locale = useLocale()
   return (
     <div className="flex items-center gap-3 px-2 text-sm text-fg-tertiary">
       <span className="flex size-[22px] shrink-0 items-center justify-center rounded-full bg-green-500/[0.15] text-green-300">
@@ -524,7 +528,7 @@ function MilestoneRow({
           </>
         )}
       </span>
-      <span className="ml-auto shrink-0 text-xs">{fmtAgo(item.atMs)}</span>
+      <span className="ml-auto shrink-0 text-xs">{fmtAgo(item.atMs, locale)}</span>
     </div>
   )
 }

@@ -2,6 +2,8 @@ import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { ORG_TYPE_LABEL, isOrgAdminRole } from '@/lib/org-utils'
+import { resolveLocale } from '@/lib/locale'
+import { fmtMonthYear } from '@/lib/format'
 import {
   OrganisationsClient,
   type OrganisationRow,
@@ -21,6 +23,7 @@ export const metadata = {
 export default async function OrganisationsPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
+  const locale = await resolveLocale()
 
   const memberships = await db.userOrganisation.findMany({
     where: { userId, leftAt: null },
@@ -59,7 +62,7 @@ export default async function OrganisationsPage() {
     isCreator: m.role === 'owner',
     members: m.org._count.members,
     projects: m.org._count.projects,
-    joinedLabel: m.joinedAt.toLocaleString('en-GB', { month: 'short', year: 'numeric' }),
+    joinedLabel: fmtMonthYear(m.joinedAt, locale),
   }))
 
   // The directory: active organisations that opted in, minus the user's own

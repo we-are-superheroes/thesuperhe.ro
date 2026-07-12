@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useTransition, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { ArrowRight, ChevronDown, Check, LogIn, Pencil } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { joinStepAction, leaveStepAction } from '@/app/(platform)/projects/[id]/actions'
@@ -30,12 +31,6 @@ import {
    ================================================================ */
 
 export type StepStatusKey = LiveStepStatus
-
-const STATUS_LABEL: Record<StepStatusKey, string> = {
-  open: 'Open',
-  in_progress: 'In progress',
-  completed: 'Completed',
-}
 
 type FilterKey = 'all' | 'needs_help' | StepStatusKey
 
@@ -84,6 +79,7 @@ export function ProjectStepsList({
   isMember: boolean
   isLead: boolean
 }) {
+  const t = useTranslations('steps')
   const [filter, setFilter] = useState<FilterKey>('all')
   const [showAll, setShowAll] = useState(false)
   // Optimistic local overrides for status + help flag, ahead of the
@@ -143,31 +139,31 @@ export function ProjectStepsList({
       <div className="mb-5 flex flex-wrap gap-3">
         <FilterChip
           active={filter === 'all'}
-          label="All"
+          label={t('filter.all')}
           count={liveCounts.all}
           onClick={() => setFilter('all')}
         />
         <FilterChip
           active={filter === 'needs_help'}
-          label="Needs help"
+          label={t('needsHelp')}
           count={liveCounts.needs_help}
           onClick={() => setFilter('needs_help')}
         />
         <FilterChip
           active={filter === 'in_progress'}
-          label="In progress"
+          label={t('status.in_progress')}
           count={liveCounts.in_progress}
           onClick={() => setFilter('in_progress')}
         />
         <FilterChip
           active={filter === 'open'}
-          label="Open"
+          label={t('status.open')}
           count={liveCounts.open}
           onClick={() => setFilter('open')}
         />
         <FilterChip
           active={filter === 'completed'}
-          label="Completed"
+          label={t('status.completed')}
           count={liveCounts.completed}
           onClick={() => setFilter('completed')}
         />
@@ -275,6 +271,7 @@ function StepCard({
   onStatusChange: (next: StepStatusKey) => void
   onHelpChange: (next: boolean) => void
 }) {
+  const t = useTranslations('steps')
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
@@ -327,7 +324,7 @@ function StepCard({
           {isNeedsHelp && (
             <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-amber-500/50 bg-amber-500/[0.14] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-amber-400 shadow-glow-amber">
               <HelpGlyph />
-              Needs help
+              {t('needsHelp')}
             </span>
           )}
           <span
@@ -337,7 +334,7 @@ function StepCard({
             )}
           >
             <StatusGlyph status={status} />
-            {STATUS_LABEL[status]}
+            {t(`status.${status}`)}
           </span>
         </div>
       </div>
