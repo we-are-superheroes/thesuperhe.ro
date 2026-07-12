@@ -89,7 +89,10 @@ export async function joinProjectAction(
           recipients: leadIds,
           actorId: userId,
           projectId,
-          title: `${actorName} wants to join ${project.title}.`,
+          message: {
+            key: 'projectJoinRequest',
+            params: { actorName, projectTitle: project.title },
+          },
           data: { contributionId },
         })
       } else {
@@ -98,7 +101,7 @@ export async function joinProjectAction(
           recipients: leadIds,
           actorId: userId,
           projectId,
-          title: `${actorName} joined ${project.title}.`,
+          message: { key: 'projectJoin', params: { actorName, projectTitle: project.title } },
         })
       }
     })
@@ -205,7 +208,10 @@ export async function joinStepAction(
         actorId: userId,
         projectId,
         stepId: projectStepId,
-        title: `${actorName} joined “${step.title}” in ${step.project.title}.`,
+        message: {
+          key: 'stepClaimed',
+          params: { actorName, stepTitle: step.title, projectTitle: step.project.title },
+        },
       })
     })
   } catch {
@@ -299,7 +305,10 @@ export async function leaveStepAction(
         actorId: userId,
         projectId,
         stepId: projectStepId,
-        title: `${actorName} left “${step.title}” in ${step.project.title}.`,
+        message: {
+          key: 'stepUnclaimed',
+          params: { actorName, stepTitle: step.title, projectTitle: step.project.title },
+        },
       })
     })
   } catch {
@@ -407,7 +416,7 @@ export async function leaveProjectAction(
         recipients: leadIds,
         actorId: userId,
         projectId,
-        title: `${actorName} left ${projectTitle}.`,
+        message: { key: 'projectLeave', params: { actorName, projectTitle } },
       })
     })
   } catch {

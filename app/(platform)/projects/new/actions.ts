@@ -217,7 +217,10 @@ export async function launchProjectAction(
           actorId: userId,
           projectId: created.id,
           blueprintId,
-          title: `${actorName} forked your “${bp.title}” blueprint as “${created.title}”.`,
+          message: {
+            key: 'blueprintForked',
+            params: { actorName, blueprintTitle: bp.title, projectTitle: created.title },
+          },
         })
       }
 
@@ -252,7 +255,7 @@ export async function launchProjectAction(
               recipients: [rid],
               actorId: userId,
               projectId: created.id,
-              title: `New project “${created.title}” needs ${skillName}.`,
+              message: { key: 'skillMatch', params: { projectTitle: created.title, skillName } },
               data: { skill: skillName },
             })
           }

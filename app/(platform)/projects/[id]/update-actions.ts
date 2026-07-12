@@ -66,7 +66,7 @@ export async function postUpdateAction(
         recipients: members.map((m) => m.userId),
         actorId: userId,
         projectId,
-        title: `${actorName} posted an update in ${project.title}.`,
+        message: { key: 'updatePosted', params: { actorName, projectTitle: project.title } },
         body: excerpt,
         data: { updateId: created.id, visibility },
       })

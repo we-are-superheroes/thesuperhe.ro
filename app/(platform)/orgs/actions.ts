@@ -264,8 +264,11 @@ export async function inviteByEmailAction(
           type: 'invite_received',
           recipients: [recipient.id],
           actorId: userId,
-          title: `${actor?.name ?? 'Someone'} invited you to join ${gate.org.name}.`,
-          body: `Use invite code ${code} on the organisation page.`,
+          message: {
+            key: 'inviteReceived',
+            params: { actorName: actor?.name ?? 'Someone', orgName: gate.org.name },
+          },
+          bodyMessage: { key: 'inviteReceived', params: { code } },
           data: { orgSlug: gate.org.slug, code },
         })
       }

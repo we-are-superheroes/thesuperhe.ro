@@ -1,6 +1,7 @@
 import type common from './messages/en/common.json'
 import type errors from './messages/en/errors.json'
 import type nav from './messages/en/nav.json'
+import type notifications from './messages/en/notifications.json'
 import type search from './messages/en/search.json'
 import type dashboard from './messages/en/dashboard.json'
 import type browse from './messages/en/browse.json'
@@ -30,6 +31,7 @@ declare module 'next-intl' {
       common: typeof common
       errors: typeof errors
       nav: typeof nav
+      notifications: typeof notifications
       search: typeof search
       dashboard: typeof dashboard
       browse: typeof browse

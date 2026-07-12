@@ -130,7 +130,10 @@ export async function completeStepAction(
         actorId: userId,
         projectId,
         stepId,
-        title: `${actorName} finished “${gate.step.title}” in ${gate.step.projectTitle}.`,
+        message: {
+          key: 'stepCompleted',
+          params: { actorName, stepTitle: gate.step.title, projectTitle: gate.step.projectTitle },
+        },
       })
     })
   } catch {
@@ -210,7 +213,10 @@ export async function setStepHelpWantedAction(
           actorId: userId,
           projectId,
           stepId,
-          title: `${actorName} asked for help on “${gate.step.title}” in ${gate.step.projectTitle}.`,
+          message: {
+            key: 'stepNeedsHelp',
+            params: { actorName, stepTitle: gate.step.title, projectTitle: gate.step.projectTitle },
+          },
         })
       }
     })

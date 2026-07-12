@@ -8,6 +8,7 @@ import { tError } from '@/lib/errors'
 import { db } from '@/lib/db'
 import { uploadImage, deleteImageByUrl, StorageError } from '@/lib/storage'
 import { notify, getActiveProjectMemberIds } from '@/lib/notifications'
+import type { NotificationMessage } from '@/lib/notification-messages'
 import { buildLocation } from '@/lib/location'
 import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
 import { validateProjectFields, validateProjectStatus } from '@/lib/validation'
@@ -257,16 +258,16 @@ export async function updateProjectAction(
       const recipients = await getActiveProjectMemberIds(tx, projectId)
       const newTitle = data.title.trim()
       const oldTitle = projectBefore?.title
-      const titleCopy =
+      const message: NotificationMessage =
         oldTitle && oldTitle !== newTitle
-          ? `${actorName} renamed “${oldTitle}” to “${newTitle}”.`
-          : `${actorName} updated ${newTitle}.`
+          ? { key: 'projectRenamed', params: { actorName, oldTitle, newTitle } }
+          : { key: 'projectUpdated', params: { actorName, projectTitle: newTitle } }
       await notify(tx, {
         type: 'project_updated',
         recipients,
         actorId: userId,
         projectId,
-        title: titleCopy,
+        message,
       })
     })
   } catch {

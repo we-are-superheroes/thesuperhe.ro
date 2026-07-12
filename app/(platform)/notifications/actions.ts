@@ -167,7 +167,7 @@ export async function acceptJoinRequestAction(
           recipients: [n.actorId],
           actorId: userId,
           projectId: n.projectId,
-          title: `${leadName} welcomed you to ${projectTitle}.`,
+          message: { key: 'projectJoinWelcome', params: { leadName, projectTitle } },
         })
         const leadIds = await getProjectLeadIds(tx, n.projectId)
         await notify(tx, {
@@ -175,7 +175,7 @@ export async function acceptJoinRequestAction(
           recipients: leadIds,
           actorId: n.actorId, // self-filter excludes the applicant from leadIds (they're not yet a lead anyway)
           projectId: n.projectId,
-          title: `${applicantName} joined ${projectTitle}.`,
+          message: { key: 'projectJoin', params: { actorName: applicantName, projectTitle } },
         })
       }
     })
@@ -220,8 +220,8 @@ export async function declineJoinRequestAction(
           type: 'project_join_declined',
           recipients: [n.actorId],
           projectId: n.projectId,
-          title: `Your request to join ${projectTitle} wasn't accepted this time.`,
-          body: 'Thanks for offering to help — the team cannot take this one forward right now. Plenty of other projects need your skills.',
+          message: { key: 'projectJoinDeclined', params: { projectTitle } },
+          bodyMessage: { key: 'projectJoinDeclined' },
         })
       }
     })
