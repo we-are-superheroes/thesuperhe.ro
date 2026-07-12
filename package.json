@@ -13,7 +13,9 @@
     "db:seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
-    "test": "vitest run"
+    "test": "vitest run",
+    "translate": "tsx -r dotenv/config scripts/translate.ts",
+    "translate:check": "tsx scripts/translate-check.ts"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -39,6 +41,7 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
     "@formatjs/icu-messageformat-parser": "^3.5.14",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
