@@ -386,9 +386,11 @@ export function Sidebar({
           )}
         </button>
 
-        {/* Small footer links below the user card */}
+        {/* Small footer links below the user card. flex-wrap: several
+            languages render these wider than the panel (e.g. Russian) —
+            wrap onto extra lines instead of overflowing. */}
         {!rail && (
-          <div className="mt-3 flex items-center gap-1.5 px-1 text-xs text-fg-tertiary">
+          <div className="mt-3 flex flex-wrap items-center gap-x-1.5 gap-y-1 px-1 text-xs text-fg-tertiary">
             <Link href="/home" className="transition-colors hover:text-fg-secondary">
               {t('sidebar.footer.home')}
             </Link>
