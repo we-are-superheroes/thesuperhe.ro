@@ -13,7 +13,25 @@ import type { Locale } from '@/lib/locale-shared'
  * phase-4 batch adds its namespace here in the same commit that
  * creates the catalog file.
  */
-export const NAMESPACES = ['common', 'errors', 'steps'] as const
+export const NAMESPACES = [
+  'common',
+  'errors',
+  'nav',
+  'search',
+  'dashboard',
+  'browse',
+  'project',
+  'steps',
+  'blueprints',
+  'orgs',
+  'profile',
+  'users',
+  'mySteps',
+  'myProjects',
+  'skillMatches',
+  'messagesInbox',
+  'admin',
+] as const
 
 export type Namespace = (typeof NAMESPACES)[number]
 
