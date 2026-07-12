@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { SignOutButton } from '@clerk/nextjs'
+import { useTranslations } from 'next-intl'
 import {
   LayoutDashboard,
   FolderOpen,
@@ -71,6 +72,8 @@ export function Sidebar({
   onDrawerClose?: () => void
 }) {
   const pathname = usePathname()
+  const t = useTranslations('nav')
+  const tCommon = useTranslations('common')
   const [menuOpen, setMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
 
@@ -171,19 +174,19 @@ export function Sidebar({
 
   const navGroups: NavGroup[] = [
     {
-      label: 'Overview',
+      label: t('sidebar.groups.overview'),
       items: [
-        { label: 'My dashboard', icon: LayoutDashboard, href: '/dashboard' },
-        { label: 'My projects', icon: FolderOpen, href: '/my-projects', badge: projectCount || undefined },
-        { label: 'My steps', icon: CheckSquare, href: '/my-steps', badge: stepCount || undefined },
+        { label: t('sidebar.items.dashboard'), icon: LayoutDashboard, href: '/dashboard' },
+        { label: t('sidebar.items.myProjects'), icon: FolderOpen, href: '/my-projects', badge: projectCount || undefined },
+        { label: t('sidebar.items.mySteps'), icon: CheckSquare, href: '/my-steps', badge: stepCount || undefined },
         {
-          label: 'Messages',
+          label: t('sidebar.items.messages'),
           icon: MessageSquare,
           href: '/messages',
           badge: messagesBadge || undefined,
         },
         {
-          label: 'Notifications',
+          label: t('sidebar.items.notifications'),
           icon: Bell,
           href: '/notifications',
           badge: notificationsBadge || undefined,
@@ -191,23 +194,23 @@ export function Sidebar({
       ],
     },
     {
-      label: 'Discover',
+      label: t('sidebar.groups.discover'),
       items: [
-        { label: 'Browse projects', icon: Search, href: '/projects' },
-        { label: 'Skill matches', icon: Star, href: '/skill-matches' },
-        { label: 'Blueprints', icon: FileText, href: '/blueprints' },
-        { label: 'Organisations', icon: Building2, href: '/organisations' },
+        { label: t('sidebar.items.browseProjects'), icon: Search, href: '/projects' },
+        { label: t('sidebar.items.skillMatches'), icon: Star, href: '/skill-matches' },
+        { label: t('sidebar.items.blueprints'), icon: FileText, href: '/blueprints' },
+        { label: t('sidebar.items.organisations'), icon: Building2, href: '/organisations' },
       ],
     },
     {
-      label: 'Account',
-      items: [{ label: 'Profile', icon: UserIcon, href: '/profile' }],
+      label: t('sidebar.groups.account'),
+      items: [{ label: t('sidebar.items.profile'), icon: UserIcon, href: '/profile' }],
     },
   ]
 
   const metaText = projectCount > 0
-    ? `${projectCount} project${projectCount !== 1 ? 's' : ''} · ${hoursContributed}h`
-    : `New here · 0h`
+    ? t('sidebar.metaContributions', { count: projectCount, hours: hoursContributed })
+    : t('sidebar.metaNewHere')
 
   return (
     <aside
@@ -224,7 +227,7 @@ export function Sidebar({
         'lg:static lg:z-auto lg:translate-x-0',
         drawerOpen ? 'translate-x-0 shadow-xl' : '-translate-x-full lg:translate-x-0',
       )}
-      aria-label="Primary navigation"
+      aria-label={t('sidebar.primaryNavAriaLabel')}
     >
       {/* Mobile close button */}
       {onDrawerClose && (
@@ -232,7 +235,7 @@ export function Sidebar({
           type="button"
           onClick={onDrawerClose}
           className="absolute right-3 top-3 flex size-9 items-center justify-center rounded-lg border border-white/[0.08] bg-bg-surface-2 text-fg-secondary transition-colors hover:text-fg-primary lg:hidden"
-          aria-label="Close menu"
+          aria-label={t('sidebar.closeMenuAriaLabel')}
         >
           <X className="size-4" />
         </button>
@@ -245,13 +248,13 @@ export function Sidebar({
           className="flex min-w-0 items-center gap-3 font-display text-xl tracking-tight"
         >
           <LeavesMark className="size-8 shrink-0" />
-          {!rail && <span className="truncate">The Superhero</span>}
+          {!rail && <span className="truncate">{tCommon('appName')}</span>}
         </Link>
         <button
           type="button"
           onClick={toggleCollapsed}
-          title={rail ? 'Expand the sidebar' : 'Collapse the sidebar'}
-          aria-label={rail ? 'Expand the sidebar' : 'Collapse the sidebar'}
+          title={rail ? t('sidebar.expandTitle') : t('sidebar.collapseTitle')}
+          aria-label={rail ? t('sidebar.expandTitle') : t('sidebar.collapseTitle')}
           className={cn(
             'hidden size-8 shrink-0 items-center justify-center rounded-lg text-fg-tertiary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary lg:flex',
             !rail && 'ml-auto',
@@ -330,21 +333,21 @@ export function Sidebar({
         {menuOpen && (
           <div
             role="menu"
-            aria-label="Account menu"
+            aria-label={t('sidebar.accountMenuAriaLabel')}
             className="absolute inset-x-0 bottom-full mb-2 overflow-hidden rounded-lg border border-white/[0.08] bg-bg-surface-2 py-1 shadow-xl"
           >
             <SignOutButton>
               <button
                 type="button"
                 role="menuitem"
-                title={rail ? 'Sign out' : undefined}
+                title={rail ? t('sidebar.signOut') : undefined}
                 className={cn(
                   'flex w-full items-center gap-3 px-3 py-2.5 text-left text-sm text-fg-secondary transition-colors hover:bg-bg-surface-3 hover:text-fg-primary',
                   rail && 'justify-center px-0',
                 )}
               >
                 <LogOut className="size-[18px] shrink-0" />
-                {!rail && 'Sign out'}
+                {!rail && t('sidebar.signOut')}
               </button>
             </SignOutButton>
           </div>
@@ -356,7 +359,7 @@ export function Sidebar({
           onClick={() => setMenuOpen((open) => !open)}
           aria-haspopup="menu"
           aria-expanded={menuOpen}
-          title={rail ? (userName ?? 'Account') : undefined}
+          title={rail ? (userName ?? t('sidebar.accountFallback')) : undefined}
           className={cn(
             'flex w-full items-center gap-3 rounded-lg p-1 text-left transition-colors hover:bg-bg-surface-2',
             rail && 'justify-center',
@@ -369,7 +372,7 @@ export function Sidebar({
             <>
               <div className="flex min-w-0 flex-col leading-tight">
                 <span className="truncate text-sm font-semibold text-fg-primary">
-                  {userName ?? 'Hero'}
+                  {userName ?? t('sidebar.userFallbackName')}
                 </span>
                 <span className="text-xs text-fg-tertiary">{metaText}</span>
               </div>
@@ -387,15 +390,15 @@ export function Sidebar({
         {!rail && (
           <div className="mt-3 flex items-center gap-1.5 px-1 text-xs text-fg-tertiary">
             <Link href="/home" className="transition-colors hover:text-fg-secondary">
-              Home
+              {t('sidebar.footer.home')}
             </Link>
             <span aria-hidden>·</span>
             <Link href="/privacy" className="transition-colors hover:text-fg-secondary">
-              Privacy
+              {t('sidebar.footer.privacy')}
             </Link>
             <span aria-hidden>·</span>
             <Link href="/terms" className="transition-colors hover:text-fg-secondary">
-              Terms
+              {t('sidebar.footer.terms')}
             </Link>
             <LocaleSwitcher className="ml-auto" />
           </div>
@@ -407,7 +410,7 @@ export function Sidebar({
         <div
           role="separator"
           aria-orientation="vertical"
-          aria-label="Resize the sidebar"
+          aria-label={t('sidebar.resizeAriaLabel')}
           onPointerDown={startResize}
           onDoubleClick={resetWidth}
           className={cn(

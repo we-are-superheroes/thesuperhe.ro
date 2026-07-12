@@ -3,7 +3,7 @@
 import { useState, useTransition, useEffect, useRef } from 'react'
 import { Clock, Plus, Minus, ArrowRight, Trash2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { fmtAgo } from '@/lib/format'
 import {
   logTimeAction,
@@ -60,14 +60,18 @@ function gradientFor(id: string): string {
   return AVATAR_GRADIENTS[Math.abs(h) % AVATAR_GRADIENTS.length]
 }
 
-function fmtHours(h: number): string {
-  if (h <= 0) return '0h'
+type StepsTranslator = ReturnType<typeof useTranslations<'steps'>>
+
+function fmtHours(h: number, t: StepsTranslator): string {
+  if (h <= 0) return t('timeLog.hoursOnly', { hours: 0 })
   if (h >= 1) {
     const whole = Math.floor(h)
     const min = Math.round((h - whole) * 60)
-    return min ? `${whole}h ${min}m` : `${whole}h`
+    return min
+      ? t('timeLog.hoursMinutes', { hours: whole, minutes: min })
+      : t('timeLog.hoursOnly', { hours: whole })
   }
-  return `${Math.round(h * 60)}m`
+  return t('timeLog.minutesOnly', { minutes: Math.round(h * 60) })
 }
 
 const QUICK_HOURS = [0.5, 1, 2, 4] as const
@@ -88,6 +92,8 @@ export function StepTimeLog({
   onDeleted?: (entryId: string, newTotal: number) => void
   expandedByDefault?: boolean
 }) {
+  const t = useTranslations('steps')
+  const tCommon = useTranslations('common')
   const [open, setOpen] = useState(expandedByDefault)
   const [hours, setHours] = useState('')
   const [note, setNote] = useState('')
@@ -165,8 +171,8 @@ export function StepTimeLog({
   const hiddenLogCount = Math.max(0, data.totalEntryCount - visibleLogs.length)
   const contributorBlurb =
     data.contributors.length === 1
-      ? `by ${firstName(data.contributors[0].name)}`
-      : `${data.contributors.length} contributors`
+      ? t('timeLog.byName', { name: firstName(data.contributors[0].name) })
+      : t('timeLog.contributorCount', { count: data.contributors.length })
 
   return (
     <div className="flex flex-col gap-2">
@@ -175,13 +181,17 @@ export function StepTimeLog({
         <div className="flex min-w-0 flex-wrap items-center gap-2">
           <Clock className="size-[13px] shrink-0 text-fg-secondary" />
           {summaryEmpty ? (
-            <span>No time logged yet</span>
+            <span>{t('timeLog.noTimeYet')}</span>
           ) : (
             <>
-              <strong className="font-semibold text-fg-primary">
-                {fmtHours(data.totalHours)}
-              </strong>
-              <span>logged</span>
+              {t.rich('timeLog.totalLogged', {
+                hours: fmtHours(data.totalHours, t),
+                strong: (chunks) => (
+                  <strong className="font-semibold text-fg-primary">
+                    {chunks}
+                  </strong>
+                ),
+              })}
               {data.contributors.length > 0 && (
                 <>
                   <ContributorStack contributors={data.contributors} />
@@ -209,7 +219,7 @@ export function StepTimeLog({
             ) : (
               <Plus className="size-3" strokeWidth={2.5} />
             )}
-            Log time
+            {t('timeLog.logTime')}
           </button>
         )}
       </div>
@@ -220,9 +230,7 @@ export function StepTimeLog({
           <div className="flex flex-col gap-2">
             {visibleLogs.length === 0 ? (
               <div className="py-1 text-xs italic text-fg-tertiary">
-                {canLog
-                  ? 'Be the first to log time on this step.'
-                  : 'Nothing logged yet.'}
+                {canLog ? t('timeLog.beFirst') : t('timeLog.nothingLogged')}
               </div>
             ) : (
               visibleLogs.map((entry) => (
@@ -239,8 +247,7 @@ export function StepTimeLog({
             )}
             {hiddenLogCount > 0 && (
               <div className="text-xs italic text-fg-tertiary">
-                + {hiddenLogCount} earlier{' '}
-                {hiddenLogCount === 1 ? 'entry' : 'entries'}
+                {t('timeLog.earlierEntries', { count: hiddenLogCount })}
               </div>
             )}
           </div>
@@ -260,26 +267,26 @@ export function StepTimeLog({
                   step={0.25}
                   value={hours}
                   onChange={(e) => setHours(e.target.value)}
-                  placeholder="0.5"
+                  placeholder={t('timeLog.hoursPlaceholder')}
                   required
                   className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2 pl-3 pr-6 text-sm tabular-nums text-fg-primary outline-none transition-colors placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_2px_rgba(244,165,53,0.15)]"
                 />
                 <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sm text-fg-tertiary">
-                  h
+                  {t('timeLog.hourSymbol')}
                 </span>
               </div>
               <input
                 type="date"
                 value={loggedOn}
                 onChange={(e) => setLoggedOn(e.target.value)}
-                title="When did you do the work?"
+                title={t('timeLog.dateTitle')}
                 className="rounded-lg border border-neutral-700 bg-bg-surface px-3 py-2 text-sm text-fg-primary outline-none transition-colors focus:border-amber-500 focus:shadow-[0_0_0_2px_rgba(244,165,53,0.15)] max-md:col-span-1"
               />
               <input
                 type="text"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                placeholder="What did you do? (optional)"
+                placeholder={t('timeLog.notePlaceholder')}
                 maxLength={120}
                 className="rounded-lg border border-neutral-700 bg-bg-surface px-3 py-2 text-sm text-fg-primary outline-none transition-colors placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_2px_rgba(244,165,53,0.15)] max-md:col-span-2"
               />
@@ -288,7 +295,7 @@ export function StepTimeLog({
                 disabled={!canSubmit || pending}
                 className="inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-4 text-sm font-semibold text-amber-900 transition-all hover:bg-amber-400 disabled:cursor-not-allowed disabled:bg-bg-surface-3 disabled:text-fg-tertiary max-md:col-span-1"
               >
-                {pending ? 'Saving…' : 'Log'}
+                {pending ? tCommon('state.saving') : t('timeLog.log')}
                 {!pending && <ArrowRight className="size-3" strokeWidth={2.5} />}
               </button>
               <div className="col-span-full -mt-0.5 flex flex-wrap gap-1.5">
@@ -299,7 +306,9 @@ export function StepTimeLog({
                     onClick={() => bumpQuick(q)}
                     className="inline-flex items-center rounded-full border border-dashed border-neutral-700 px-2.5 py-[3px] text-[11px] text-fg-tertiary transition-all hover:border-amber-500 hover:border-solid hover:text-amber-500"
                   >
-                    +{q === 0.5 ? '30 min' : `${q}h`}
+                    {q === 0.5
+                      ? t('timeLog.quickAddMinutes', { minutes: 30 })
+                      : t('timeLog.quickAddHours', { hours: q })}
                   </button>
                 ))}
               </div>
@@ -356,8 +365,9 @@ function TimeEntry({
   pending: boolean
   onDelete?: () => void
 }) {
+  const t = useTranslations('steps')
   const locale = useLocale()
-  const name = entry.user?.name ?? 'Someone'
+  const name = entry.user?.name ?? t('timeLog.someone')
   const initials = entry.user?.initials ?? '?'
   const id = entry.user?.id ?? entry.id
   return (
@@ -374,7 +384,7 @@ function TimeEntry({
           <strong className="font-semibold text-fg-primary">
             {firstName(name)}
           </strong>{' '}
-          · <span className="font-semibold tabular-nums text-amber-500">{fmtHours(entry.hours)}</span>{' '}
+          · <span className="font-semibold tabular-nums text-amber-500">{fmtHours(entry.hours, t)}</span>{' '}
           · {now > 0 ? fmtAgo(entry.loggedOnMs, locale, now) : ''}
         </div>
         {entry.note && (
@@ -388,7 +398,7 @@ function TimeEntry({
           type="button"
           onClick={onDelete}
           disabled={pending}
-          title="Delete entry"
+          title={t('timeLog.deleteEntry')}
           className="shrink-0 text-fg-tertiary transition-colors hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <Trash2 className="size-3.5" />

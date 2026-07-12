@@ -1,1 +1,92 @@
-{}
+{
+  "topbar": {
+    "notificationsTitle": "Notifications",
+    "startProject": "Start a project",
+    "startProjectShort": "Start"
+  },
+  "greeting": {
+    "welcomeBack": "Welcome back,",
+    "welcome": "Welcome,",
+    "fallbackName": "Hero",
+    "summary": "You have {steps, plural, one {# step} other {# steps}} across {projects, plural, one {# project} other {# projects}}.",
+    "someNeedHelp": "Some need help right now.",
+    "newUser": "You’re all set up — now let’s find you something to work on. Tell us what you’re good at, and we’ll match you to projects that need exactly that."
+  },
+  "stats": {
+    "projects": "Projects",
+    "openSteps": "Open steps",
+    "contributed": "Contributed",
+    "hoursSuffix": "h"
+  },
+  "checklist": {
+    "eyebrow": "Get started",
+    "title": "Three quick things, and you’re <em>ready</em>.",
+    "progress": "{count} of 3 done",
+    "account": {
+      "title": "Create your account",
+      "description": "Welcome, {name}.",
+      "cta": "Done"
+    },
+    "skills": {
+      "title": "Add your skills",
+      "description": "Pick the things you’re good at — and want to use. Takes ~2 minutes.",
+      "cta": "Add skills"
+    },
+    "project": {
+      "title": "Join your first project",
+      "description": "Browse open projects, or claim a single step to start small.",
+      "cta": "Browse projects"
+    }
+  },
+  "pinned": {
+    "eyebrow": "Pinned projects",
+    "title": "The work you’re <em>most involved</em> in.",
+    "seeAll": "See all my projects",
+    "role": {
+      "lead": "Lead",
+      "contributor": "Contributor",
+      "advisor": "Advisor",
+      "observer": "Observer"
+    },
+    "needHelp": "{n, plural, one {# needs help} other {# need help}}",
+    "typeFallback": "Project",
+    "progressLabel": "Progress",
+    "progressValue": "<strong>{pct}%</strong> · {done} of {total, plural, one {# step} other {# steps}}",
+    "emptyHeading": "No projects yet.",
+    "emptyTitle": "Pin a project to keep it close.",
+    "emptyDescription": "Once you join a project, pin it here for quick access. You can also browse what’s live right now and find one that fits.",
+    "browseProjects": "Browse projects",
+    "startYourOwn": "Start your own project"
+  },
+  "nextSteps": {
+    "eyebrow": "Your next steps",
+    "title": "Pick one, finish one.",
+    "viewAll": "View all {n, plural, one {# step} other {# steps}}",
+    "open": "Open",
+    "emptyHeading": "Nothing on your plate yet.",
+    "emptyTitle": "Your steps will show up here.",
+    "emptyDescription": "Once you claim a step on a project, it’ll appear here so you can track what’s next. Even a 1-hour task counts."
+  },
+  "stepStatus": {
+    "needsHelpAriaLabel": "Status: needs help",
+    "needsHelpTitle": "Needs help",
+    "inProgressAriaLabel": "Status: in progress",
+    "inProgressTitle": "In progress",
+    "notStartedAriaLabel": "Status: not started",
+    "notStartedTitle": "Not started"
+  },
+  "matches": {
+    "eyebrow": "Matched to your skills",
+    "title": "Projects that <em>need</em> you.",
+    "browseAll": "Browse all matches",
+    "typeFallback": "Project",
+    "remote": "Remote",
+    "matchLabel": "Match",
+    "stepIn": "A step in {project}",
+    "emptyHeading": "Tell us what you’re <em>good at</em>.",
+    "emptyTitle": "Add your skills to see matches.",
+    "emptyDescription": "We’ll line up projects looking for exactly what you bring. It’s also fine to pick skills you want to use, even if they’re not your day job.",
+    "addSkills": "Add my skills"
+  },
+  "estimatedHours": "~{hours}h"
+}

@@ -9,7 +9,8 @@ import {
   getOrgAttribution,
   getMemberHours,
 } from '@/lib/orgs'
-import { ORG_TYPE_LABEL, isOrgAdminRole } from '@/lib/org-utils'
+import { getTranslations } from 'next-intl/server'
+import { isOrgAdminRole } from '@/lib/org-utils'
 import { resolveLocale } from '@/lib/locale'
 import { fmtMonthYear, fmtShortDate } from '@/lib/format'
 import { stepNeedsHelp } from '@/lib/step-status'
@@ -65,22 +66,25 @@ const projectCardSelect = {
   },
 } as const
 
-function toCard(p: {
-  id: string
-  title: string
-  description: string
-  visibility: string
-  coverImageUrl: string | null
-  status: string
-  projectType: { name: string } | null
-  steps: Array<{ status: string; helpWanted: boolean }>
-  contributions: Array<{ userId: string }>
-}): OrgProjectCard {
+function toCard(
+  p: {
+    id: string
+    title: string
+    description: string
+    visibility: string
+    coverImageUrl: string | null
+    status: string
+    projectType: { name: string } | null
+    steps: Array<{ status: string; helpWanted: boolean }>
+    contributions: Array<{ userId: string }>
+  },
+  typeFallback: string,
+): OrgProjectCard {
   return {
     id: p.id,
     title: p.title,
     description: p.description.split(/\n+/)[0],
-    type: p.projectType?.name ?? 'Project',
+    type: p.projectType?.name ?? typeFallback,
     status: p.status,
     imgKey: (p.projectType?.name && TYPE_IMG_KEY[p.projectType.name]) || 'rewild',
     coverImageUrl: p.coverImageUrl,
@@ -125,6 +129,7 @@ export default async function OrgPage({ params, searchParams }: Params) {
       : null
   const { userId } = await auth()
   const locale = await resolveLocale()
+  const t = await getTranslations('orgs')
 
   const org = await db.organisation.findUnique({
     where: { slug },
@@ -186,7 +191,7 @@ export default async function OrgPage({ params, searchParams }: Params) {
       }),
       getMemberHours(org.id),
     ])
-    orgProjects = privRows.map(toCard)
+    orgProjects = privRows.map((p) => toCard(p, t('projects.typeFallback')))
     members = memberRows.map((m) => {
       const hours = memberHours.get(m.user.id) ?? 0
       return {
@@ -197,7 +202,13 @@ export default async function OrgPage({ params, searchParams }: Params) {
         isAdmin: isOrgAdminRole(m.role),
         isCreator: m.role === 'owner',
         isYou: m.user.id === userId,
-        meta: `Joined ${fmtMonthYear(m.joinedAt, locale)}${hours > 0 ? ` · ${Math.round(hours)} hrs` : ''}`,
+        meta:
+          hours > 0
+            ? t('members.metaJoinedHours', {
+                date: fmtMonthYear(m.joinedAt, locale),
+                hours: Math.round(hours),
+              })
+            : t('members.metaJoined', { date: fmtMonthYear(m.joinedAt, locale) }),
       }
     })
 
@@ -219,15 +230,19 @@ export default async function OrgPage({ params, searchParams }: Params) {
       invites = inviteRows.map((i) => {
         const bits: string[] = []
         if (i.revokedAt) {
-          bits.push(`Cancelled ${fmtShortDate(i.revokedAt, locale)}`)
+          bits.push(t('invites.meta.cancelled', { date: fmtShortDate(i.revokedAt, locale) }))
         } else {
-          bits.push(i.email ? `For ${i.email}` : 'Open code')
+          bits.push(
+            i.email ? t('invites.meta.forEmail', { email: i.email }) : t('invites.meta.openCode'),
+          )
           bits.push(
             i.maxUses !== null
-              ? `${i.useCount} of ${i.maxUses} uses`
-              : `${i.useCount} use${i.useCount === 1 ? '' : 's'}`,
+              ? t('invites.meta.usesOfMax', { used: i.useCount, max: i.maxUses })
+              : t('invites.meta.uses', { count: i.useCount }),
           )
-          if (i.expiresAt) bits.push(`valid until ${fmtShortDate(i.expiresAt, locale)}`)
+          if (i.expiresAt) {
+            bits.push(t('invites.meta.validUntil', { date: fmtShortDate(i.expiresAt, locale) }))
+          }
         }
         return { id: i.id, code: i.code, meta: bits.join(' · '), revoked: !!i.revokedAt }
       })
@@ -236,14 +251,14 @@ export default async function OrgPage({ params, searchParams }: Params) {
 
   const dashRows: OrgPageData['dash']['rows'] = attribution.byProject.map((p) => ({
     name: p.title,
-    vis: p.visibility === 'org_members' ? 'Members only' : 'Public · owned by the organisation',
+    vis: p.visibility === 'org_members' ? t('dash.visMembersOnly') : t('dash.visOrgPublic'),
     kind: 'org' as const,
     hours: Math.round(p.hours),
   }))
   if (attribution.sharedHours > 0) {
     dashRows.push({
-      name: 'Shared public contributions',
-      vis: 'Other projects · members who share their hours',
+      name: t('dash.sharedRowName'),
+      vis: t('dash.sharedRowVis'),
       kind: 'pub' as const,
       hours: Math.round(attribution.sharedHours),
     })
@@ -254,7 +269,7 @@ export default async function OrgPage({ params, searchParams }: Params) {
       id: org.id,
       slug: org.slug,
       name: org.name,
-      typeLabel: ORG_TYPE_LABEL[org.type],
+      typeLabel: t(`type.${org.type}`),
       isCompany: org.type === 'company',
       status: org.status,
       listed: org.listed,
@@ -272,17 +287,17 @@ export default async function OrgPage({ params, searchParams }: Params) {
     backLink: from
       ? {
           href: from,
-          label: from === '/projects' ? 'Back to projects' : 'Back to the project',
+          label: from === '/projects' ? t('back.toProjects') : t('back.toProject'),
         }
       : userId
-        ? { href: '/organisations', label: 'Back to organisations' }
-        : { href: '/projects', label: 'Back to projects' },
+        ? { href: '/organisations', label: t('back.toOrganisations') }
+        : { href: '/projects', label: t('back.toProjects') },
     stats: {
       members: activeMemberCount,
       hours: Math.round(attribution.orgHours + attribution.sharedHours),
       publicProjects: publicProjects.filter((p) => p.status !== 'completed').length,
     },
-    publicProjects: publicProjects.map(toCard),
+    publicProjects: publicProjects.map((p) => toCard(p, t('projects.typeFallback'))),
     orgProjects,
     dash: {
       total: Math.round(attribution.orgHours + attribution.sharedHours),

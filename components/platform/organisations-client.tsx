@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Building2, Plus, Search } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 
 /* ================================================================
@@ -81,6 +82,7 @@ export function OrganisationsClient({
   orgs: OrganisationRow[]
   directory: DirectoryRow[]
 }) {
+  const t = useTranslations('orgs')
   const [query, setQuery] = useState('')
   const q = query.trim().toLowerCase()
 
@@ -106,7 +108,7 @@ export function OrganisationsClient({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search your organisations…"
+            placeholder={t('list.searchPlaceholder')}
             className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
           />
         </div>
@@ -116,8 +118,8 @@ export function OrganisationsClient({
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
           >
             <Plus className="size-3.5" strokeWidth={2.5} />
-            <span className="hidden sm:inline">Request an organisation</span>
-            <span className="sm:hidden">Request</span>
+            <span className="hidden sm:inline">{t('list.request')}</span>
+            <span className="sm:hidden">{t('list.requestShort')}</span>
           </Link>
         </div>
       </div>
@@ -125,11 +127,12 @@ export function OrganisationsClient({
       <div className="mx-auto flex w-full max-w-[880px] flex-col gap-8 p-4 sm:p-6 lg:p-10">
         <header>
           <h1 className="mb-3 font-display text-[clamp(32px,4vw,48px)] font-normal leading-none tracking-tight">
-            Your <em className="italic text-amber-500">organisations</em>.
+            {t.rich('list.title', {
+              em: (chunks) => <em className="italic text-amber-500">{chunks}</em>,
+            })}
           </h1>
           <p className="max-w-[540px] text-lg leading-relaxed text-fg-secondary">
-            The groups you belong to on The Superhero — each with its own page, members-only
-            projects and contribution totals.
+            {t('list.intro')}
           </p>
         </header>
 
@@ -138,16 +141,14 @@ export function OrganisationsClient({
             <div className="mb-2 flex size-14 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-2 text-fg-tertiary">
               <Building2 className="size-6" />
             </div>
-            <h2 className="font-display text-2xl font-normal">No organisations yet.</h2>
+            <h2 className="font-display text-2xl font-normal">{t('list.emptyTitle')}</h2>
             <p className="max-w-[460px] text-sm leading-relaxed text-fg-secondary">
-              Join one from the directory below or with an invite link from its admins — or bring
-              your own group onto the platform with the request button above. We approve each
-              organisation by hand.
+              {t('list.emptyBody')}
             </p>
           </div>
         ) : filtered.length === 0 ? (
           <div className="rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-bg-surface px-8 py-10 text-center text-sm text-fg-tertiary">
-            None of your organisations match &ldquo;{query.trim()}&rdquo;.
+            {t('list.noMatch', { query: query.trim() })}
           </div>
         ) : (
           <div className="flex flex-col gap-3">
@@ -173,23 +174,26 @@ export function OrganisationsClient({
                     </span>
                     {o.isAdmin && (
                       <span className="rounded-full border border-amber-500/40 bg-amber-500/[0.12] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-amber-500">
-                        {o.isCreator ? 'Creator' : 'Admin'}
+                        {o.isCreator ? t('role.creator') : t('role.admin')}
                       </span>
                     )}
                     {o.status === 'pending' && (
                       <span className="rounded-full border border-neutral-700 bg-bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-fg-tertiary">
-                        Waiting for approval
+                        {t('statusBadge.pending')}
                       </span>
                     )}
                     {o.status === 'suspended' && (
                       <span className="rounded-full border border-red-400/40 bg-red-500/[0.08] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-red-300">
-                        Suspended
+                        {t('statusBadge.suspended')}
                       </span>
                     )}
                   </span>
                   <span className="text-sm text-fg-tertiary">
-                    {o.members} member{o.members === 1 ? '' : 's'} · {o.projects} project
-                    {o.projects === 1 ? '' : 's'} · joined {o.joinedLabel}
+                    {t('list.rowMeta', {
+                      members: o.members,
+                      projects: o.projects,
+                      joined: o.joinedLabel,
+                    })}
                   </span>
                 </span>
                 <ArrowRight className="size-4 shrink-0 text-fg-tertiary transition-transform group-hover:translate-x-0.5 group-hover:text-fg-primary" />
@@ -201,19 +205,21 @@ export function OrganisationsClient({
         {/* Directory — listed, active organisations the user isn't in. */}
         <section>
           <div className="mb-4 flex items-baseline gap-4">
-            <h2 className="font-display text-2xl font-normal tracking-tight">Directory</h2>
+            <h2 className="font-display text-2xl font-normal tracking-tight">
+              {t('directory.heading')}
+            </h2>
             <span className="h-px flex-1 self-center bg-white/[0.08]" />
             <span className="whitespace-nowrap text-sm text-fg-tertiary">
-              {directory.length} listed
+              {t('directory.listedCount', { count: directory.length })}
             </span>
           </div>
           {directory.length === 0 ? (
             <div className="rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-bg-surface px-8 py-10 text-center text-sm text-fg-tertiary">
-              No organisations have listed themselves yet.
+              {t('directory.empty')}
             </div>
           ) : filteredDirectory.length === 0 ? (
             <div className="rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-bg-surface px-8 py-10 text-center text-sm text-fg-tertiary">
-              Nothing in the directory matches &ldquo;{query.trim()}&rdquo;.
+              {t('directory.noMatch', { query: query.trim() })}
             </div>
           ) : (
             <div className="flex flex-col gap-3">
@@ -240,7 +246,7 @@ export function OrganisationsClient({
                     </span>
                     <span className="truncate text-sm text-fg-tertiary">
                       {o.description ??
-                        `${o.members} member${o.members === 1 ? '' : 's'} · ${o.projects} public project${o.projects === 1 ? '' : 's'}`}
+                        t('directory.meta', { members: o.members, projects: o.projects })}
                     </span>
                   </span>
                   <ArrowRight className="size-4 shrink-0 text-fg-tertiary transition-transform group-hover:translate-x-0.5 group-hover:text-fg-primary" />
@@ -251,11 +257,13 @@ export function OrganisationsClient({
         </section>
 
         <p className="text-xs leading-relaxed text-fg-tertiary">
-          Control what each organisation sees of your hours in your{' '}
-          <Link href="/profile#sec-orgs" className="text-amber-500 hover:underline">
-            profile settings
-          </Link>
-          .
+          {t.rich('list.footer', {
+            link: (chunks) => (
+              <Link href="/profile#sec-orgs" className="text-amber-500 hover:underline">
+                {chunks}
+              </Link>
+            ),
+          })}
         </p>
       </div>
     </div>

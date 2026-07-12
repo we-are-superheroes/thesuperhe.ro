@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -32,18 +33,21 @@ interface SwatchSpec {
 
 interface ThemeOption {
   key: ThemeKey
-  name: string
-  badge?: string
-  desc: string
   swatch: SwatchSpec
+}
+
+/** Themes with a `themePicker.themes.<key>.badge` catalog entry. */
+const BADGED_THEMES = ['dark', 'contrast'] as const
+
+function badgedKey(key: ThemeKey): (typeof BADGED_THEMES)[number] | null {
+  return (BADGED_THEMES as readonly string[]).includes(key)
+    ? (key as (typeof BADGED_THEMES)[number])
+    : null
 }
 
 const THEMES: ThemeOption[] = [
   {
     key: 'dark',
-    name: 'Midnight',
-    badge: 'Default',
-    desc: 'The original deep blue & amber.',
     swatch: {
       bg: '#0E1A2B',
       dot: '#F4A535',
@@ -54,8 +58,6 @@ const THEMES: ThemeOption[] = [
   },
   {
     key: 'daylight',
-    name: 'Daylight',
-    desc: 'Cool, crisp white & blue-grey.',
     swatch: {
       bg: '#F4F7FB',
       dot: '#BE7400',
@@ -67,8 +69,6 @@ const THEMES: ThemeOption[] = [
   },
   {
     key: 'paper',
-    name: 'Paper',
-    desc: 'Warm ivory, amber up front.',
     swatch: {
       bg: '#F6F1E8',
       dot: '#C2740A',
@@ -80,9 +80,6 @@ const THEMES: ThemeOption[] = [
   },
   {
     key: 'contrast',
-    name: 'High Contrast',
-    badge: 'A11Y',
-    desc: 'Maximum legibility — WCAG AAA text & strong focus.',
     swatch: {
       bg: '#FFFFFF',
       border: '1.5px solid #000',
@@ -102,6 +99,7 @@ function applyTheme(name: ThemeKey) {
 }
 
 export function ThemePicker() {
+  const t = useTranslations('nav')
   // Start at the SSR-safe default; reconcile with the stored choice on mount.
   const [selected, setSelected] = useState<ThemeKey>('dark')
 
@@ -134,6 +132,7 @@ export function ThemePicker() {
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {THEMES.map((theme) => {
         const isSelected = selected === theme.key
+        const badge = badgedKey(theme.key)
         return (
           <button
             key={theme.key}
@@ -179,15 +178,15 @@ export function ThemePicker() {
             {/* Meta */}
             <span className="flex min-w-0 flex-1 flex-col gap-[3px]">
               <span className="flex items-center gap-1.5 text-sm font-semibold text-fg-primary">
-                {theme.name}
-                {theme.badge && (
+                {t(`themePicker.themes.${theme.key}.name`)}
+                {badge && (
                   <span className="text-[10px] font-semibold uppercase tracking-[0.08em] text-fg-tertiary">
-                    {theme.badge}
+                    {t(`themePicker.themes.${badge}.badge`)}
                   </span>
                 )}
               </span>
               <span className="text-xs leading-snug text-fg-tertiary">
-                {theme.desc}
+                {t(`themePicker.themes.${theme.key}.desc`)}
               </span>
             </span>
 

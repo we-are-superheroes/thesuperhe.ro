@@ -4,6 +4,7 @@ import { useState, useEffect, useMemo, useRef, useTransition } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { useLocale, useTranslations } from 'next-intl'
 import {
   Search,
   Plus,
@@ -97,34 +98,40 @@ function gradientFor(id: string): string {
 
 const ONE_DAY = 24 * 60 * 60 * 1000
 
-function fmtRowTime(ts: number, now: number): string {
+/** Translated "Today" / "Yesterday" labels, passed into the pure helpers. */
+interface DayLabels {
+  today: string
+  yesterday: string
+}
+
+function fmtRowTime(ts: number, now: number, locale: string, labels: DayLabels): string {
   const d = new Date(ts)
   const today = new Date(now)
   const sameDay = d.toDateString() === today.toDateString()
   if (sameDay) {
-    return d.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+    return d.toLocaleTimeString(locale, { hour: 'numeric', minute: '2-digit' })
   }
   const yesterday = new Date(today)
   yesterday.setDate(today.getDate() - 1)
-  if (d.toDateString() === yesterday.toDateString()) return 'Yesterday'
-  if (now - ts < 7 * ONE_DAY) return d.toLocaleDateString([], { weekday: 'short' })
-  return d.toLocaleDateString([], { month: 'short', day: 'numeric' })
+  if (d.toDateString() === yesterday.toDateString()) return labels.yesterday
+  if (now - ts < 7 * ONE_DAY) return d.toLocaleDateString(locale, { weekday: 'short' })
+  return d.toLocaleDateString(locale, { month: 'short', day: 'numeric' })
 }
 
-function fmtMessageTime(ts: number): string {
-  return new Date(ts).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+function fmtMessageTime(ts: number, locale: string): string {
+  return new Date(ts).toLocaleTimeString(locale, { hour: 'numeric', minute: '2-digit' })
 }
 
-function dayLabel(ts: number, now: number): string {
+function dayLabel(ts: number, now: number, locale: string, labels: DayLabels): string {
   const d = new Date(ts)
   const today = new Date(now)
   const startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate())
   const startOfDate = new Date(d.getFullYear(), d.getMonth(), d.getDate())
   const daysDiff = Math.floor((startOfToday.getTime() - startOfDate.getTime()) / ONE_DAY)
-  if (daysDiff === 0) return 'Today'
-  if (daysDiff === 1) return 'Yesterday'
-  if (daysDiff < 7) return d.toLocaleDateString([], { weekday: 'long' })
-  return d.toLocaleDateString([], { month: 'long', day: 'numeric' })
+  if (daysDiff === 0) return labels.today
+  if (daysDiff === 1) return labels.yesterday
+  if (daysDiff < 7) return d.toLocaleDateString(locale, { weekday: 'long' })
+  return d.toLocaleDateString(locale, { month: 'long', day: 'numeric' })
 }
 
 /* ================================================================
@@ -146,6 +153,8 @@ export function MessagesClient({
 }) {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const t = useTranslations('messagesInbox')
+  const locale = useLocale()
 
   const [now, setNow] = useState(0)
   const [searchQuery, setSearchQuery] = useState('')
@@ -326,14 +335,14 @@ export function MessagesClient({
         <header className="flex shrink-0 flex-col gap-4 border-b border-white/[0.08] px-5 pb-4 pt-6">
           <div className="flex items-center justify-between">
             <h1 className="font-display text-3xl font-normal leading-none tracking-tight">
-              Messages
+              {t('list.title')}
             </h1>
             <div className="relative">
               <button
                 type="button"
                 onClick={() => setShowNewMessage((v) => !v)}
-                title="New message"
-                aria-label="New message"
+                title={t('list.newMessage')}
+                aria-label={t('list.newMessage')}
                 className={cn(
                   'flex size-9 items-center justify-center rounded-lg transition-all duration-fast',
                   showNewMessage
@@ -360,7 +369,7 @@ export function MessagesClient({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search people and messages"
+              placeholder={t('list.searchPlaceholder')}
               className="w-full rounded-lg border border-white/[0.08] bg-bg-surface py-2.5 pl-9 pr-3 text-sm text-fg-primary outline-none transition-colors placeholder:text-fg-tertiary focus:border-neutral-700"
             />
           </div>
@@ -375,7 +384,7 @@ export function MessagesClient({
                   : 'text-fg-secondary hover:text-fg-primary',
               )}
             >
-              Inbox
+              {t('list.inbox')}
             </Link>
             <Link
               href="/messages?view=archived"
@@ -387,7 +396,7 @@ export function MessagesClient({
               )}
             >
               <Archive className="size-3" strokeWidth={2.5} />
-              Archived
+              {t('list.archived')}
             </Link>
           </div>
         </header>
@@ -396,16 +405,20 @@ export function MessagesClient({
           {sortedConversations.length === 0 ? (
             <div className="px-5 py-16 text-center text-sm text-fg-tertiary">
               {searchQuery.trim() ? (
-                <>No matches.</>
+                <>{t('empty.noMatches')}</>
               ) : view === 'archived' ? (
                 <>
-                  <p className="mb-2 font-display text-base text-fg-primary">No archived conversations.</p>
-                  Archive a thread from its <MoreVertical className="inline size-3" /> menu and it&apos;ll land here.
+                  <p className="mb-2 font-display text-base text-fg-primary">{t('empty.archivedTitle')}</p>
+                  {t.rich('empty.archivedHint', {
+                    menuIcon: () => <MoreVertical className="inline size-3" />,
+                  })}
                 </>
               ) : (
                 <>
-                  <p className="mb-2 font-display text-base text-fg-primary">No conversations yet.</p>
-                  Use the <Plus className="inline size-3" /> button to start one.
+                  <p className="mb-2 font-display text-base text-fg-primary">{t('empty.inboxTitle')}</p>
+                  {t.rich('empty.inboxHint', {
+                    plusIcon: () => <Plus className="inline size-3" />,
+                  })}
                 </>
               )}
             </div>
@@ -437,7 +450,7 @@ export function MessagesClient({
                 type="button"
                 onClick={() => setShowMobileThread(false)}
                 className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-neutral-700 text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary md:hidden"
-                aria-label="Back to conversations"
+                aria-label={t('thread.backToConversations')}
               >
                 <ChevronLeft className="size-4" />
               </button>
@@ -456,7 +469,7 @@ export function MessagesClient({
                   {thread.peer.online && (
                     <>
                       <span className="size-1.5 rounded-full bg-green-500" />
-                      <span>Online</span>
+                      <span>{t('thread.online')}</span>
                       <span>·</span>
                     </>
                   )}
@@ -466,7 +479,7 @@ export function MessagesClient({
                       <span>·</span>
                       <span className="inline-flex items-center gap-1 text-fg-secondary">
                         <BellOff className="size-3" />
-                        Muted
+                        {t('thread.muted')}
                       </span>
                     </>
                   )}
@@ -476,7 +489,7 @@ export function MessagesClient({
                 <Link
                   href={`/users/${thread.peer.id}`}
                   className="flex size-9 items-center justify-center rounded-lg border border-neutral-700 text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
-                  title="View profile"
+                  title={t('thread.viewProfile')}
                 >
                   <UserIcon className="size-4" />
                 </Link>
@@ -485,7 +498,7 @@ export function MessagesClient({
                     type="button"
                     onClick={() => setShowThreadMenu((v) => !v)}
                     className="flex size-9 items-center justify-center rounded-lg border border-neutral-700 text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
-                    title="More"
+                    title={t('thread.more')}
                   >
                     <MoreVertical className="size-4" />
                   </button>
@@ -506,10 +519,13 @@ export function MessagesClient({
               <div className="mx-auto flex max-w-[720px] flex-col gap-3">
                 {thread.messages.length === 0 ? (
                   <div className="py-12 text-center text-sm text-fg-tertiary">
-                    No messages yet. Say hi to {thread.peer.name.split(' ')[0]}.
+                    {t('thread.sayHi', { name: thread.peer.name.split(' ')[0] })}
                   </div>
                 ) : (
-                  renderThread(thread, currentUser, now)
+                  renderThread(thread, currentUser, now, locale, {
+                    today: t('time.today'),
+                    yesterday: t('time.yesterday'),
+                  })
                 )}
               </div>
             </div>
@@ -532,14 +548,14 @@ export function MessagesClient({
                         send()
                       }
                     }}
-                    placeholder="Write a message…"
+                    placeholder={t('composer.placeholder')}
                     rows={1}
                     className="max-h-[160px] min-h-[24px] flex-1 resize-none border-0 bg-transparent py-1.5 text-sm leading-relaxed text-fg-primary outline-none placeholder:text-fg-tertiary"
                   />
                   <button
                     type="submit"
                     disabled={sending || !composer.trim()}
-                    aria-label="Send"
+                    aria-label={t('composer.send')}
                     className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-amber-500 text-amber-900 transition-all duration-fast hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber disabled:cursor-not-allowed disabled:bg-bg-surface-3 disabled:text-fg-tertiary disabled:hover:translate-y-0 disabled:hover:shadow-none"
                   >
                     <Send className="size-4" strokeWidth={2.5} />
@@ -547,22 +563,17 @@ export function MessagesClient({
                 </div>
                 <div className="flex justify-between px-1 text-[11px] text-fg-tertiary">
                   <span>
-                    <kbd className="inline-block rounded border border-white/[0.08] bg-bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] text-fg-secondary">
-                      Enter
-                    </kbd>{' '}
-                    to send ·{' '}
-                    <kbd className="inline-block rounded border border-white/[0.08] bg-bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] text-fg-secondary">
-                      Shift
-                    </kbd>{' '}
-                    +{' '}
-                    <kbd className="inline-block rounded border border-white/[0.08] bg-bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] text-fg-secondary">
-                      Enter
-                    </kbd>{' '}
-                    for newline
+                    {t.rich('composer.hint', {
+                      kbd: (chunks) => (
+                        <kbd className="inline-block rounded border border-white/[0.08] bg-bg-surface-2 px-1.5 py-0.5 font-mono text-[10px] text-fg-secondary">
+                          {chunks}
+                        </kbd>
+                      ),
+                    })}
                   </span>
                   {composer.length > 3500 && (
                     <span className={composer.length > 4000 ? 'text-red-300' : 'text-amber-500'}>
-                      {composer.length} / 4000
+                      {t('composer.charCount', { count: composer.length, max: 4000 })}
                     </span>
                   )}
                 </div>
@@ -571,9 +582,11 @@ export function MessagesClient({
           </>
         ) : (
           <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 text-center text-fg-tertiary">
-            <p className="font-display text-2xl text-fg-primary">Pick a conversation.</p>
+            <p className="font-display text-2xl text-fg-primary">{t('empty.noThreadTitle')}</p>
             <p className="max-w-[360px] text-sm">
-              Or start a new one — click the <Plus className="inline size-3" /> button to find someone.
+              {t.rich('empty.noThreadHint', {
+                plusIcon: () => <Plus className="inline size-3" />,
+              })}
             </p>
           </div>
         )}
@@ -597,6 +610,8 @@ function ConversationRow({
   now: number
   onClick: () => void
 }) {
+  const t = useTranslations('messagesInbox')
+  const locale = useLocale()
   const unread = conversation.unreadCount > 0
   return (
     <button
@@ -617,7 +632,7 @@ function ConversationRow({
       <div className="flex min-w-0 flex-col gap-0.5">
         <div className="flex items-baseline justify-between gap-2">
           <span className="truncate text-sm font-semibold text-fg-primary">
-            {conversation.peer?.name ?? 'Conversation'}
+            {conversation.peer?.name ?? t('list.fallbackConversationName')}
           </span>
           <span
             className={cn(
@@ -625,7 +640,12 @@ function ConversationRow({
               unread ? 'font-semibold text-amber-500' : 'text-fg-tertiary',
             )}
           >
-            {conversation.lastMessage && now > 0 ? fmtRowTime(conversation.lastMessage.ts, now) : ''}
+            {conversation.lastMessage && now > 0
+              ? fmtRowTime(conversation.lastMessage.ts, now, locale, {
+                  today: t('time.today'),
+                  yesterday: t('time.yesterday'),
+                })
+              : ''}
           </span>
         </div>
         <div
@@ -634,14 +654,14 @@ function ConversationRow({
             unread ? 'text-fg-secondary' : 'text-fg-tertiary',
           )}
         >
-          {conversation.lastMessage?.preview ?? 'No messages yet'}
+          {conversation.lastMessage?.preview ?? t('list.noMessagesYet')}
         </div>
       </div>
       <div className="flex flex-col items-end gap-1.5 pt-1">
         {unread && (
           <span
             className="size-2 rounded-full bg-amber-500 shadow-[0_0_8px_rgba(244,165,53,0.6)]"
-            title={`${conversation.unreadCount} unread`}
+            title={t('list.unreadCount', { count: conversation.unreadCount })}
           />
         )}
         {conversation.muted && <BellOff className="size-3 text-fg-tertiary" />}
@@ -701,13 +721,19 @@ function Avatar({
    Thread rendering — day dividers + bubbles
    ================================================================ */
 
-function renderThread(thread: ThreadData, me: CurrentUser, now: number) {
+function renderThread(
+  thread: ThreadData,
+  me: CurrentUser,
+  now: number,
+  locale: string,
+  labels: DayLabels,
+) {
   const out: React.ReactNode[] = []
   let lastDay = ''
   // Show day labels even if `now` isn't initialised (use the latest message's ts).
   const refNow = now > 0 ? now : thread.messages[thread.messages.length - 1]?.ts ?? Date.now()
   for (const m of thread.messages) {
-    const day = dayLabel(m.ts, refNow)
+    const day = dayLabel(m.ts, refNow, locale, labels)
     if (day !== lastDay) {
       out.push(
         <div
@@ -735,6 +761,8 @@ function MessageBubble({
   me: CurrentUser
   peer: ConversationListItem['peer']
 }) {
+  const t = useTranslations('messagesInbox')
+  const locale = useLocale()
   const mine = message.mine
   return (
     <div className={cn('flex max-w-[80%] gap-3', mine && 'flex-row-reverse self-end')}>
@@ -756,11 +784,11 @@ function MessageBubble({
             message.deleted && 'italic opacity-60',
           )}
         >
-          {message.deleted ? '[deleted]' : message.body}
+          {message.deleted ? t('thread.deletedMessage') : message.body}
         </div>
         <span className="px-1 text-[11px] tabular-nums text-fg-tertiary">
-          {fmtMessageTime(message.ts)}
-          {message.edited && !message.deleted && ' · edited'}
+          {fmtMessageTime(message.ts, locale)}
+          {message.edited && !message.deleted && ` · ${t('thread.edited')}`}
         </span>
       </div>
     </div>
@@ -778,6 +806,7 @@ function NewMessagePopover({
   onClose: () => void
   onPick: (userId: string) => void
 }) {
+  const t = useTranslations('messagesInbox')
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<
     Array<{ id: string; name: string; avatarUrl: string | null; location: string | null }>
@@ -826,7 +855,7 @@ function NewMessagePopover({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search people…"
+            placeholder={t('newMessage.searchPlaceholder')}
             autoFocus
             className="w-full rounded-md border border-neutral-700 bg-bg-surface-2 py-1.5 pl-8 pr-2 text-sm text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
           />
@@ -834,11 +863,13 @@ function NewMessagePopover({
       </div>
       <div className="max-h-[300px] overflow-y-auto py-1">
         {query.trim() && results.length === 0 && !searching && (
-          <div className="px-3 py-4 text-center text-xs text-fg-tertiary">No matches.</div>
+          <div className="px-3 py-4 text-center text-xs text-fg-tertiary">
+            {t('newMessage.noMatches')}
+          </div>
         )}
         {!query.trim() && (
           <div className="px-3 py-4 text-center text-xs text-fg-tertiary">
-            Search by name to start a conversation.
+            {t('newMessage.hint')}
           </div>
         )}
         {results.map((u) => (
@@ -889,6 +920,7 @@ function ThreadMenu({
   onArchive: () => void
   onClose: () => void
 }) {
+  const t = useTranslations('messagesInbox')
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
@@ -909,7 +941,7 @@ function ThreadMenu({
         className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-fg-secondary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary"
       >
         {muted ? <Bell className="size-3.5" /> : <BellOff className="size-3.5" />}
-        {muted ? 'Unmute' : 'Mute notifications'}
+        {muted ? t('menu.unmute') : t('menu.mute')}
       </button>
       <button
         type="button"
@@ -917,7 +949,7 @@ function ThreadMenu({
         className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-sm text-fg-secondary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary"
       >
         <Archive className="size-3.5" />
-        {archived ? 'Unarchive' : 'Archive'}
+        {archived ? t('menu.unarchive') : t('menu.archive')}
       </button>
     </div>
   )

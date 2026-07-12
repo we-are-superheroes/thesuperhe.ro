@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
-import { ORG_TYPE_LABEL, isOrgAdminRole } from '@/lib/org-utils'
+import { isOrgAdminRole } from '@/lib/org-utils'
 import { resolveLocale } from '@/lib/locale'
 import { fmtMonthYear } from '@/lib/format'
 import {
@@ -24,6 +25,7 @@ export default async function OrganisationsPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
   const locale = await resolveLocale()
+  const t = await getTranslations('orgs')
 
   const memberships = await db.userOrganisation.findMany({
     where: { userId, leftAt: null },
@@ -55,7 +57,7 @@ export default async function OrganisationsPage() {
     slug: m.org.slug,
     name: m.org.name,
     type: m.org.type,
-    typeLabel: ORG_TYPE_LABEL[m.org.type],
+    typeLabel: t(`type.${m.org.type}`),
     status: m.org.status,
     logoUrl: m.org.logoUrl,
     isAdmin: isOrgAdminRole(m.role),
@@ -97,7 +99,7 @@ export default async function OrganisationsPage() {
     slug: o.slug,
     name: o.name,
     type: o.type,
-    typeLabel: ORG_TYPE_LABEL[o.type],
+    typeLabel: t(`type.${o.type}`),
     logoUrl: o.logoUrl,
     description: o.description?.split(/\n+/)[0] ?? null,
     members: o._count.members,

@@ -1,1 +1,55 @@
-{}
+{
+  "list": {
+    "title": "Messages",
+    "newMessage": "New message",
+    "searchPlaceholder": "Search people and messages",
+    "inbox": "Inbox",
+    "archived": "Archived",
+    "fallbackConversationName": "Conversation",
+    "noMessagesYet": "No messages yet",
+    "unreadCount": "{count, plural, one {# unread} other {# unread}}",
+    "previewYou": "You: {body}",
+    "previewDeleted": "[deleted]"
+  },
+  "empty": {
+    "noMatches": "No matches.",
+    "archivedTitle": "No archived conversations.",
+    "archivedHint": "Archive a thread from its <menuIcon></menuIcon> menu and it'll land here.",
+    "inboxTitle": "No conversations yet.",
+    "inboxHint": "Use the <plusIcon></plusIcon> button to start one.",
+    "noThreadTitle": "Pick a conversation.",
+    "noThreadHint": "Or start a new one — click the <plusIcon></plusIcon> button to find someone."
+  },
+  "thread": {
+    "backToConversations": "Back to conversations",
+    "online": "Online",
+    "muted": "Muted",
+    "viewProfile": "View profile",
+    "more": "More",
+    "sayHi": "No messages yet. Say hi to {name}.",
+    "deletedMessage": "[deleted]",
+    "edited": "edited"
+  },
+  "time": {
+    "today": "Today",
+    "yesterday": "Yesterday"
+  },
+  "composer": {
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "hint": "<kbd>Enter</kbd> to send · <kbd>Shift</kbd> + <kbd>Enter</kbd> for newline",
+    "charCount": "{count} / {max}"
+  },
+  "menu": {
+    "unmute": "Unmute",
+    "mute": "Mute notifications",
+    "archive": "Archive",
+    "unarchive": "Unarchive"
+  },
+  "newMessage": {
+    "searchPlaceholder": "Search people…",
+    "noMatches": "No matches.",
+    "hint": "Search by name to start a conversation."
+  },
+  "you": "You"
+}

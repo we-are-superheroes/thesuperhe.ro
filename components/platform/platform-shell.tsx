@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { Sidebar } from './sidebar'
 import { LeavesMark } from '@/components/ui/logo'
 
@@ -34,6 +35,8 @@ export function PlatformShell({
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const pathname = usePathname()
+  const t = useTranslations('nav')
+  const tCommon = useTranslations('common')
 
   // Auto-close the drawer when the user navigates — adjusted during render
   // (React's recommended pattern for reacting to a changed value).
@@ -71,13 +74,13 @@ export function PlatformShell({
           type="button"
           onClick={() => setDrawerOpen(true)}
           className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-white/[0.08] bg-bg-surface-2 text-fg-secondary transition-colors hover:text-fg-primary"
-          aria-label="Open menu"
+          aria-label={t('shell.openMenuAriaLabel')}
         >
           <Menu className="size-5" />
         </button>
         <Link href="/dashboard" className="flex items-center gap-2 font-display text-base tracking-tight">
           <LeavesMark className="size-7" />
-          <span>The Superhero</span>
+          <span>{tCommon('appName')}</span>
         </Link>
         {/* Right-side spacer keeps the logo visually centred. */}
         <span className="size-10 shrink-0" />
@@ -89,7 +92,7 @@ export function PlatformShell({
           type="button"
           onClick={() => setDrawerOpen(false)}
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-          aria-label="Close menu"
+          aria-label={t('shell.closeMenuAriaLabel')}
           tabIndex={-1}
         />
       )}

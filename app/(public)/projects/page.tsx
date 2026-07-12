@@ -1,4 +1,5 @@
 import { auth } from '@clerk/nextjs/server'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { visibleProjectsWhere, getUserActiveOrgs } from '@/lib/orgs'
 import { stepNeedsHelp } from '@/lib/step-status'
@@ -39,6 +40,7 @@ async function getBrowseData(userId: string | null): Promise<{
   countries: { code: string; label: string; count: number }[]
   languages: { code: string; label: string; count: number }[]
 }> {
+  const t = await getTranslations('browse')
   const [projects, projectTypes, skills] = await Promise.all([
     db.project.findMany({
       where: {
@@ -93,7 +95,11 @@ async function getBrowseData(userId: string | null): Promise<{
   // Compute days ago helper
   const daysAgo = (d: Date) => Math.floor((Date.now() - d.getTime()) / (1000 * 60 * 60 * 24))
   const postedLabel = (n: number) =>
-    n <= 0 ? 'today' : n === 1 ? '1 day ago' : n < 7 ? `${n} days ago` : n < 14 ? '1 week ago' : `${Math.floor(n / 7)} weeks ago`
+    n <= 0
+      ? t('posted.today')
+      : n < 7
+        ? t('posted.daysAgo', { n })
+        : t('posted.weeksAgo', { n: Math.floor(n / 7) })
 
   // Shape projects for the client
   const browseProjects: BrowseProject[] = projects.map((p) => {
@@ -117,10 +123,10 @@ async function getBrowseData(userId: string | null): Promise<{
       title: p.title,
       description: p.description,
       status: p.status,
-      location: p.location ?? 'Remote',
+      location: p.location ?? t('fallback.remoteLocation'),
       country: p.country,
       language: p.language,
-      type: p.projectType?.name ?? 'Other',
+      type: p.projectType?.name ?? t('fallback.otherType'),
       typeId: p.projectType?.id ?? null,
       imgKey: (p.projectType?.name && TYPE_IMG_KEY[p.projectType.name]) ?? 'rewild',
       coverImageUrl: p.coverImageUrl ?? null,

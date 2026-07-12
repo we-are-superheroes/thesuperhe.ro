@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import {
   Search,
   Bell,
@@ -104,6 +105,7 @@ export function BrowseProjectsClient({
   /** Orgs the viewer belongs to — the org filter only exists for members. */
   myOrgs: Array<{ slug: string; name: string; count: number }>
 }) {
+  const t = useTranslations('browse')
   const [query, setQuery] = useState('')
   const [skillSearch, setSkillSearch] = useState('')
   const [locationSearch, setLocationSearch] = useState('')
@@ -176,7 +178,7 @@ export function BrowseProjectsClient({
 
   // Active chips derived from current state
   const activeChips: Array<{ kind: string; key: string; label: string }> = []
-  if (query.trim()) activeChips.push({ kind: 'query', key: '', label: `"${query.trim()}"` })
+  if (query.trim()) activeChips.push({ kind: 'query', key: '', label: t('chips.query', { query: query.trim() }) })
   for (const id of selectedTypes) {
     const t = projectTypes.find((x) => x.id === id)
     if (t) activeChips.push({ kind: 'type', key: id, label: t.name })
@@ -235,7 +237,7 @@ export function BrowseProjectsClient({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search projects..."
+            placeholder={t('topbar.searchPlaceholder')}
             className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
           />
         </div>
@@ -243,7 +245,7 @@ export function BrowseProjectsClient({
           <button
             type="button"
             className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
-            title="Notifications"
+            title={t('topbar.notificationsTitle')}
           >
             <Bell className="size-[18px]" />
           </button>
@@ -252,8 +254,8 @@ export function BrowseProjectsClient({
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
           >
             <Plus className="size-3.5" strokeWidth={2.5} />
-            <span className="hidden sm:inline">Start a project</span>
-            <span className="sm:hidden">Start</span>
+            <span className="hidden sm:inline">{t('topbar.startProject')}</span>
+            <span className="sm:hidden">{t('topbar.startProjectShort')}</span>
           </Link>
         </div>
       </div>
@@ -263,11 +265,13 @@ export function BrowseProjectsClient({
         {/* Page header */}
         <section>
           <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
-            Find a project<br />
-            that <em className="italic text-amber-500">needs</em> you.
+            {t('header.titleLine1')}<br />
+            {t.rich('header.titleLine2', {
+              em: (chunks) => <em className="italic text-amber-500">{chunks}</em>,
+            })}
           </h1>
           <p className="max-w-[560px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-            Every project here is real, active, and looking for help. Filter by where you are, what you&apos;re good at, or what kind of work interests you.
+            {t('header.intro')}
           </p>
         </section>
 
@@ -279,11 +283,11 @@ export function BrowseProjectsClient({
         >
           <span className="inline-flex items-center gap-2">
             <SlidersHorizontal className="size-4" />
-            {mobileFiltersOpen ? 'Hide filters' : 'Show filters'}
+            {mobileFiltersOpen ? t('filters.hide') : t('filters.show')}
           </span>
           {activeChips.length > 0 && (
             <span className="inline-flex items-center gap-1 text-xs text-amber-500">
-              {activeChips.length} active
+              {t('filters.activeCount', { n: activeChips.length })}
             </span>
           )}
         </button>
@@ -302,19 +306,19 @@ export function BrowseProjectsClient({
             )}
           >
             <div className="flex items-baseline justify-between">
-              <h3 className="font-display text-xl font-normal">Filters</h3>
+              <h3 className="font-display text-xl font-normal">{t('filters.title')}</h3>
               <button
                 type="button"
                 onClick={clearAll}
                 className="cursor-pointer border-none bg-transparent text-xs text-amber-500 hover:underline"
               >
-                Clear all
+                {t('filters.clearAll')}
               </button>
             </div>
 
             {/* Your organisations (only shown to members of at least one) */}
             {myOrgs.length > 0 && (
-              <FilterGroup label="Your organisations">
+              <FilterGroup label={t('filters.yourOrganisations')}>
                 <CheckList
                   items={myOrgs.map((o) => ({ id: o.slug, label: o.name, count: o.count }))}
                   selected={selectedOrgs}
@@ -324,7 +328,7 @@ export function BrowseProjectsClient({
             )}
 
             {/* Type */}
-            <FilterGroup label="Type of project">
+            <FilterGroup label={t('filters.typeOfProject')}>
               <CheckList
                 items={projectTypes.map((t) => ({ id: t.id, label: t.name, count: t.count }))}
                 selected={selectedTypes}
@@ -333,11 +337,11 @@ export function BrowseProjectsClient({
             </FilterGroup>
 
             {/* Skills */}
-            <FilterGroup label="Skills needed">
+            <FilterGroup label={t('filters.skillsNeeded')}>
               <FilterSearchInput
                 value={skillSearch}
                 onChange={setSkillSearch}
-                placeholder="Search skills..."
+                placeholder={t('filters.searchSkillsPlaceholder')}
               />
               <CheckList
                 items={visibleSkills.map((s) => ({ id: s.id, label: s.name, count: s.count }))}
@@ -347,11 +351,11 @@ export function BrowseProjectsClient({
             </FilterGroup>
 
             {/* Location */}
-            <FilterGroup label="Location">
+            <FilterGroup label={t('filters.location')}>
               <FilterSearchInput
                 value={locationSearch}
                 onChange={setLocationSearch}
-                placeholder="Search locations..."
+                placeholder={t('filters.searchLocationsPlaceholder')}
               />
               <CheckList
                 items={visibleLocations.map((l) => ({ id: l.name, label: l.name, count: l.count }))}
@@ -362,11 +366,11 @@ export function BrowseProjectsClient({
 
             {/* Country (ISO) */}
             {countries.length > 0 && (
-              <FilterGroup label="Country">
+              <FilterGroup label={t('filters.country')}>
                 <FilterSearchInput
                   value={countrySearch}
                   onChange={setCountrySearch}
-                  placeholder="Search countries..."
+                  placeholder={t('filters.searchCountriesPlaceholder')}
                 />
                 <CheckList
                   items={visibleCountries.map((c) => ({
@@ -382,7 +386,7 @@ export function BrowseProjectsClient({
 
             {/* Language */}
             {languages.length > 0 && (
-              <FilterGroup label="Language">
+              <FilterGroup label={t('filters.language')}>
                 <CheckList
                   items={languages.map((l) => ({
                     id: l.code,
@@ -401,11 +405,20 @@ export function BrowseProjectsClient({
             {/* Results head */}
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div className="text-sm text-fg-secondary">
-                {showing === total ? (
-                  <>Showing <strong className="font-semibold text-fg-primary">all {total}</strong> live projects</>
-                ) : (
-                  <>Showing <strong className="font-semibold text-fg-primary">{showing}</strong> of {total} projects</>
-                )}
+                {showing === total
+                  ? t.rich('results.showingAll', {
+                      total,
+                      strong: (chunks) => (
+                        <strong className="font-semibold text-fg-primary">{chunks}</strong>
+                      ),
+                    })
+                  : t.rich('results.showingFiltered', {
+                      showing,
+                      total,
+                      strong: (chunks) => (
+                        <strong className="font-semibold text-fg-primary">{chunks}</strong>
+                      ),
+                    })}
               </div>
               <div className="flex items-center gap-3">
                 <SelectBox
@@ -413,9 +426,9 @@ export function BrowseProjectsClient({
                   onChange={(e) => setSort(e.target.value as SortKey)}
                   className="w-auto cursor-pointer bg-bg-surface py-2 pl-3 pr-8 [background-position:right_10px_center]"
                 >
-                  <option value="recent">Most recent</option>
-                  <option value="needs">Most help needed</option>
-                  <option value="progress">Closest to finished</option>
+                  <option value="recent">{t('sort.recent')}</option>
+                  <option value="needs">{t('sort.needs')}</option>
+                  <option value="progress">{t('sort.progress')}</option>
                 </SelectBox>
                 <div className="flex rounded-lg border border-neutral-700 bg-bg-surface p-[3px]">
                   <button
@@ -425,7 +438,7 @@ export function BrowseProjectsClient({
                       'flex items-center rounded-md border-none px-2.5 py-1.5 transition-colors',
                       view === 'grid' ? 'bg-bg-surface-2 text-fg-primary' : 'bg-transparent text-fg-tertiary',
                     )}
-                    title="Grid view"
+                    title={t('view.gridTitle')}
                   >
                     <LayoutGrid className="size-3.5" />
                   </button>
@@ -436,7 +449,7 @@ export function BrowseProjectsClient({
                       'flex items-center rounded-md border-none px-2.5 py-1.5 transition-colors',
                       view === 'list' ? 'bg-bg-surface-2 text-fg-primary' : 'bg-transparent text-fg-tertiary',
                     )}
-                    title="List view"
+                    title={t('view.listTitle')}
                   >
                     <List className="size-3.5" />
                   </button>
@@ -457,7 +470,7 @@ export function BrowseProjectsClient({
                       type="button"
                       onClick={() => removeChip(chip.kind, chip.key)}
                       className="flex items-center border-none bg-transparent p-0 text-amber-500 opacity-70 hover:opacity-100"
-                      aria-label="Remove filter"
+                      aria-label={t('chips.removeAriaLabel')}
                     >
                       <X className="size-3" strokeWidth={2.5} />
                     </button>
@@ -469,9 +482,9 @@ export function BrowseProjectsClient({
             {/* Cards */}
             {filtered.length === 0 ? (
               <div className="flex flex-col items-center gap-3 rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-[radial-gradient(ellipse_at_top,rgba(244,165,53,0.04),transparent_70%),var(--color-bg-surface)] px-8 py-12 text-center">
-                <h3 className="font-display text-2xl">No projects match those filters.</h3>
+                <h3 className="font-display text-2xl">{t('empty.title')}</h3>
                 <p className="max-w-[420px] text-base text-fg-secondary">
-                  Try widening the location, removing a skill, or clearing the search box.
+                  {t('empty.body')}
                 </p>
               </div>
             ) : view === 'grid' ? (
@@ -541,8 +554,9 @@ function CheckList({
   selected: Set<string>
   onToggle: (id: string) => void
 }) {
+  const t = useTranslations('browse')
   if (items.length === 0) {
-    return <div className="text-sm text-fg-tertiary">No matches.</div>
+    return <div className="text-sm text-fg-tertiary">{t('filters.noMatches')}</div>
   }
   return (
     <div className="flex max-h-[152px] shrink-0 flex-col gap-2 overflow-y-auto pr-1">
@@ -583,6 +597,7 @@ function CheckList({
 }
 
 function ProjectCard({ project: p }: { project: BrowseProject }) {
+  const t = useTranslations('browse')
   const imgClass = IMG_CLASS[p.imgKey] ?? IMG_CLASS.rewild
   return (
     <Link
@@ -608,13 +623,13 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
         {p.needs > 0 && (
           <span className="absolute right-3 top-3 flex items-center gap-[5px] rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[11px] font-semibold text-amber-500 backdrop-blur-sm">
             <span className="size-[5px] rounded-full bg-amber-500 shadow-[0_0_5px_var(--color-amber-500)]" />
-            {p.needs} need{p.needs === 1 ? 's' : ''} help
+            {t('card.needsHelp', { n: p.needs })}
           </span>
         )}
         {p.membersOnly && (
           <span className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full border border-amber-500/35 bg-blue-900/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-400 backdrop-blur-sm">
             <Lock className="size-2.5" />
-            Members only
+            {t('card.membersOnly')}
           </span>
         )}
       </div>
@@ -623,7 +638,7 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
           <MapPin className="size-3 shrink-0" />
           {p.location}
           <span className="mx-1 text-neutral-600">·</span>
-          Posted {p.posted}
+          {t('card.posted', { when: p.posted })}
           {p.org && (
             <>
               <span className="mx-1 text-neutral-600">·</span>
@@ -647,7 +662,12 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
         )}
         <div className="flex items-center justify-between gap-3 border-t border-white/[0.08] pt-3 text-xs text-fg-tertiary">
           <span>
-            <strong className="font-semibold text-fg-primary">{p.contributors}</strong> contributor{p.contributors === 1 ? '' : 's'}
+            {t.rich('card.contributors', {
+              n: p.contributors,
+              strong: (chunks) => (
+                <strong className="font-semibold text-fg-primary">{chunks}</strong>
+              ),
+            })}
           </span>
           <div className="mx-3 h-[3px] max-w-[120px] flex-1 overflow-hidden rounded-sm bg-bg-surface-2">
             <div
@@ -656,7 +676,12 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
             />
           </div>
           <span>
-            <strong className="font-semibold text-fg-primary">{p.progress}%</strong> complete
+            {t.rich('card.percentComplete', {
+              pct: p.progress,
+              strong: (chunks) => (
+                <strong className="font-semibold text-fg-primary">{chunks}</strong>
+              ),
+            })}
           </span>
         </div>
       </div>
@@ -665,6 +690,7 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
 }
 
 function ProjectListRow({ project: p }: { project: BrowseProject }) {
+  const t = useTranslations('browse')
   return (
     <Link
       href={`/projects/${p.id}`}
@@ -690,7 +716,7 @@ function ProjectListRow({ project: p }: { project: BrowseProject }) {
           {p.membersOnly && (
             <span className="ml-1 inline-flex items-center gap-1 rounded-full border border-amber-500/35 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-400">
               <Lock className="size-2.5" />
-              Members only
+              {t('card.membersOnly')}
             </span>
           )}
         </div>
@@ -701,11 +727,18 @@ function ProjectListRow({ project: p }: { project: BrowseProject }) {
         {p.needs > 0 && (
           <span className="flex items-center gap-1.5 font-semibold text-amber-500">
             <span className="size-[5px] rounded-full bg-amber-500 shadow-[0_0_5px_var(--color-amber-500)]" />
-            {p.needs} need{p.needs === 1 ? 's' : ''} help
+            {t('card.needsHelp', { n: p.needs })}
           </span>
         )}
-        <span><strong className="font-semibold text-fg-primary">{p.progress}%</strong> complete</span>
-        <span>{p.contributors} contributor{p.contributors === 1 ? '' : 's'}</span>
+        <span>
+          {t.rich('card.percentComplete', {
+            pct: p.progress,
+            strong: (chunks) => (
+              <strong className="font-semibold text-fg-primary">{chunks}</strong>
+            ),
+          })}
+        </span>
+        <span>{t('card.contributorsPlain', { n: p.contributors })}</span>
       </div>
     </Link>
   )

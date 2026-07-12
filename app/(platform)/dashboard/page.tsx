@@ -1,4 +1,5 @@
 import { auth } from '@clerk/nextjs/server'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { getSkillMatchFeed } from '@/lib/skill-matches'
 import { normaliseStepStatus, stepNeedsHelp } from '@/lib/step-status'
@@ -160,6 +161,7 @@ async function getDashboardData(userId: string) {
 
 export default async function DashboardPage() {
   const { userId } = await auth()
+  const t = await getTranslations('dashboard')
 
   const {
     user,
@@ -173,10 +175,15 @@ export default async function DashboardPage() {
     sampleSkills,
   } = await getDashboardData(userId!)
 
-  const firstName = user?.name?.split(' ')[0] ?? 'Hero'
+  const firstName = user?.name?.split(' ')[0] ?? t('greeting.fallbackName')
   const hasSkills = userSkillIds.length > 0
   const hasProjects = projectCount > 0
   const isNewUser = !hasSkills && !hasProjects
+
+  // Amber emphasis islands inside translated headings.
+  const em = (chunks: React.ReactNode) => (
+    <em className="italic text-amber-500">{chunks}</em>
+  )
 
   // Determine setup checklist completion
   const checklistDone = {
@@ -195,7 +202,7 @@ export default async function DashboardPage() {
           <button
             type="button"
             className="relative hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
-            title="Notifications"
+            title={t('topbar.notificationsTitle')}
           >
             <Bell className="size-[18px]" />
           </button>
@@ -204,8 +211,8 @@ export default async function DashboardPage() {
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
           >
             <Plus className="size-3.5" strokeWidth={2.5} />
-            <span className="hidden sm:inline">Start a project</span>
-            <span className="sm:hidden">Start</span>
+            <span className="hidden sm:inline">{t('topbar.startProject')}</span>
+            <span className="sm:hidden">{t('topbar.startProjectShort')}</span>
           </Link>
         </div>
       </div>
@@ -216,29 +223,29 @@ export default async function DashboardPage() {
         <section className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div>
             <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
-              {hasProjects ? 'Welcome back,' : 'Welcome,'}
+              {hasProjects ? t('greeting.welcomeBack') : t('greeting.welcome')}
               <br />
               <em className="italic text-amber-500">{firstName}.</em>
             </h1>
             {hasProjects ? (
               <p className="max-w-[560px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-                You have {openStepCount} step{openStepCount !== 1 ? 's' : ''} across {projectCount} project{projectCount !== 1 ? 's' : ''}.
+                {t('greeting.summary', { steps: openStepCount, projects: projectCount })}
                 {openStepCount > 0 && (
                   <strong className="font-semibold text-amber-500">
-                    {' '}Some need help right now.
+                    {' '}{t('greeting.someNeedHelp')}
                   </strong>
                 )}
               </p>
             ) : (
               <p className="max-w-[560px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-                You&apos;re all set up — now let&apos;s find you something to work on. Tell us what you&apos;re good at, and we&apos;ll match you to projects that need exactly that.
+                {t('greeting.newUser')}
               </p>
             )}
           </div>
           <div className="flex w-full flex-wrap gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface px-5 py-4 sm:gap-8 sm:px-6 sm:py-5 lg:w-auto">
-            <QuickStat value={projectCount} label="Projects" dimIfZero />
-            <QuickStat value={openStepCount} label="Open steps" dimIfZero />
-            <QuickStat value={totalHours} label="Contributed" suffix="h" dimIfZero />
+            <QuickStat value={projectCount} label={t('stats.projects')} dimIfZero />
+            <QuickStat value={openStepCount} label={t('stats.openSteps')} dimIfZero />
+            <QuickStat value={totalHours} label={t('stats.contributed')} suffix={t('stats.hoursSuffix')} dimIfZero />
           </div>
         </section>
 
@@ -246,31 +253,31 @@ export default async function DashboardPage() {
         {isNewUser && (
           <section>
             <SectionHeader
-              eyebrow="Get started"
-              title={<>Three quick things, and you&apos;re <em className="italic text-amber-500">ready</em>.</>}
+              eyebrow={t('checklist.eyebrow')}
+              title={t.rich('checklist.title', { em })}
               rightContent={
-                <span className="text-sm text-fg-tertiary">{checklistCount} of 3 done</span>
+                <span className="text-sm text-fg-tertiary">{t('checklist.progress', { count: checklistCount })}</span>
               }
             />
             <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface">
               <ChecklistRow
                 done={checklistDone.account}
-                title="Create your account"
-                description={`Welcome, ${firstName}.`}
-                ctaLabel="Done"
+                title={t('checklist.account.title')}
+                description={t('checklist.account.description', { name: firstName })}
+                ctaLabel={t('checklist.account.cta')}
               />
               <ChecklistRow
                 done={checklistDone.skills}
-                title="Add your skills"
-                description="Pick the things you're good at — and want to use. Takes ~2 minutes."
-                ctaLabel="Add skills"
+                title={t('checklist.skills.title')}
+                description={t('checklist.skills.description')}
+                ctaLabel={t('checklist.skills.cta')}
                 href="/profile"
               />
               <ChecklistRow
                 done={checklistDone.project}
-                title="Join your first project"
-                description="Browse open projects, or claim a single step to start small."
-                ctaLabel="Browse projects"
+                title={t('checklist.project.title')}
+                description={t('checklist.project.description')}
+                ctaLabel={t('checklist.project.cta')}
                 href="/projects"
                 isLast
               />
@@ -283,9 +290,9 @@ export default async function DashboardPage() {
           {hasProjects ? (
             <>
               <SectionHeader
-                eyebrow="Pinned projects"
-                title={<>The work you&apos;re <em className="italic text-amber-500">most involved</em> in.</>}
-                linkLabel="See all my projects"
+                eyebrow={t('pinned.eyebrow')}
+                title={t.rich('pinned.title', { em })}
+                linkLabel={t('pinned.seeAll')}
                 linkHref="/my-projects"
               />
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -314,7 +321,7 @@ export default async function DashboardPage() {
                         )}
                         <span className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
                           <span className="rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
-                            {c.role}
+                            {t(`pinned.role.${c.role}`)}
                           </span>
                           <ProjectStatusBadge
                             status={c.project.status}
@@ -324,20 +331,27 @@ export default async function DashboardPage() {
                         {needsHelpCount > 0 && (
                           <span className="absolute right-3 top-3 flex items-center gap-[5px] rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[11px] font-semibold text-amber-500 backdrop-blur-sm">
                             <span className="size-[5px] rounded-full bg-amber-500 shadow-[0_0_5px_var(--color-amber-500)]" />
-                            {needsHelpCount} need{needsHelpCount === 1 ? 's' : ''} help
+                            {t('pinned.needHelp', { n: needsHelpCount })}
                           </span>
                         )}
                       </div>
                       <div className="flex flex-1 flex-col gap-3 p-5">
                         <span className="text-xs tracking-tight text-fg-tertiary">
-                          {c.project.projectType?.name ?? 'Project'}{c.project.location ? ` · ${c.project.location}` : ''}
+                          {c.project.projectType?.name ?? t('pinned.typeFallback')}{c.project.location ? ` · ${c.project.location}` : ''}
                         </span>
                         <h3 className="font-display text-xl leading-tight">{c.project.title}</h3>
                         <div className="mt-auto flex flex-col gap-2">
                           <div className="flex justify-between text-xs text-fg-tertiary">
-                            <span>Progress</span>
+                            <span>{t('pinned.progressLabel')}</span>
                             <span>
-                              <strong className="font-semibold text-fg-primary">{progressPct}%</strong> · {doneCount} of {totalSteps} steps
+                              {t.rich('pinned.progressValue', {
+                                strong: (chunks) => (
+                                  <strong className="font-semibold text-fg-primary">{chunks}</strong>
+                                ),
+                                pct: progressPct,
+                                done: doneCount,
+                                total: totalSteps,
+                              })}
                             </span>
                           </div>
                           <div className="h-1 overflow-hidden rounded-sm bg-bg-surface-2">
@@ -355,25 +369,25 @@ export default async function DashboardPage() {
             </>
           ) : (
             <>
-              <SectionHeader eyebrow="Pinned projects" title="No projects yet." />
+              <SectionHeader eyebrow={t('pinned.eyebrow')} title={t('pinned.emptyHeading')} />
               <EmptyState
                 icon={FolderOpen}
-                title="Pin a project to keep it close."
-                description="Once you join a project, pin it here for quick access. You can also browse what's live right now and find one that fits."
+                title={t('pinned.emptyTitle')}
+                description={t('pinned.emptyDescription')}
                 actions={
                   <>
                     <Link
                       href="/projects"
                       className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
                     >
-                      Browse projects
+                      {t('pinned.browseProjects')}
                       <ArrowRight className="size-3.5" strokeWidth={2.5} />
                     </Link>
                     <Link
                       href="/projects/new"
                       className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
                     >
-                      Start your own project
+                      {t('pinned.startYourOwn')}
                     </Link>
                   </>
                 }
@@ -387,54 +401,61 @@ export default async function DashboardPage() {
           {mySteps.length > 0 ? (
             <>
               <SectionHeader
-                eyebrow="Your next steps"
-                title="Pick one, finish one."
-                linkLabel={`View all ${openStepCount} steps`}
+                eyebrow={t('nextSteps.eyebrow')}
+                title={t('nextSteps.title')}
+                linkLabel={t('nextSteps.viewAll', { n: openStepCount })}
                 linkHref="/my-steps"
               />
               <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface">
-                {mySteps.map((step, i) => (
-                  <div
-                    key={step.id}
-                    className={`flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-2 px-4 py-4 transition-colors duration-fast hover:bg-bg-surface-2 sm:px-6 sm:py-5 ${i < mySteps.length - 1 ? 'border-b border-white/[0.08]' : ''}`}
-                  >
-                    <StepStatusIndicator
-                      status={stepNeedsHelp(step) ? 'needs_help' : normaliseStepStatus(step.status, true)}
-                    />
-                    <div className="flex min-w-0 flex-1 flex-col gap-1">
-                      <span className="truncate text-base font-medium text-fg-primary">
-                        {step.title}
-                      </span>
-                      <span className="truncate text-xs text-fg-tertiary">
-                        {step.project.title}
+                {mySteps.map((step, i) => {
+                  const status = stepNeedsHelp(step) ? 'needs_help' : normaliseStepStatus(step.status, true)
+                  const statusKey =
+                    status === 'needs_help' ? 'needsHelp' : status === 'in_progress' ? 'inProgress' : 'notStarted'
+                  return (
+                    <div
+                      key={step.id}
+                      className={`flex cursor-pointer flex-wrap items-center gap-x-4 gap-y-2 px-4 py-4 transition-colors duration-fast hover:bg-bg-surface-2 sm:px-6 sm:py-5 ${i < mySteps.length - 1 ? 'border-b border-white/[0.08]' : ''}`}
+                    >
+                      <StepStatusIndicator
+                        status={status}
+                        ariaLabel={t(`stepStatus.${statusKey}AriaLabel`)}
+                        title={t(`stepStatus.${statusKey}Title`)}
+                      />
+                      <div className="flex min-w-0 flex-1 flex-col gap-1">
+                        <span className="truncate text-base font-medium text-fg-primary">
+                          {step.title}
+                        </span>
+                        <span className="truncate text-xs text-fg-tertiary">
+                          {step.project.title}
+                        </span>
+                      </div>
+                      {step.skills[0] && (
+                        <span className="hidden whitespace-nowrap rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-1 text-xs text-fg-secondary sm:inline">
+                          {step.skills[0].skill.name}
+                        </span>
+                      )}
+                      {step.estimatedHrs != null && (
+                        <span className="hidden items-center gap-[5px] whitespace-nowrap text-xs text-fg-tertiary sm:flex">
+                          <Clock className="size-3" />
+                          {t('estimatedHours', { hours: step.estimatedHrs })}
+                        </span>
+                      )}
+                      <span className="flex items-center gap-1 whitespace-nowrap text-sm font-medium text-amber-500">
+                        {t('nextSteps.open')}
+                        <ArrowRight className="size-3" strokeWidth={2.5} />
                       </span>
                     </div>
-                    {step.skills[0] && (
-                      <span className="hidden whitespace-nowrap rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-1 text-xs text-fg-secondary sm:inline">
-                        {step.skills[0].skill.name}
-                      </span>
-                    )}
-                    {step.estimatedHrs != null && (
-                      <span className="hidden items-center gap-[5px] whitespace-nowrap text-xs text-fg-tertiary sm:flex">
-                        <Clock className="size-3" />
-                        ~{step.estimatedHrs}h
-                      </span>
-                    )}
-                    <span className="flex items-center gap-1 whitespace-nowrap text-sm font-medium text-amber-500">
-                      Open
-                      <ArrowRight className="size-3" strokeWidth={2.5} />
-                    </span>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             </>
           ) : (
             <>
-              <SectionHeader eyebrow="Your next steps" title="Nothing on your plate yet." />
+              <SectionHeader eyebrow={t('nextSteps.eyebrow')} title={t('nextSteps.emptyHeading')} />
               <EmptyState
                 icon={CheckSquare}
-                title="Your steps will show up here."
-                description="Once you claim a step on a project, it'll appear here so you can track what's next. Even a 1-hour task counts."
+                title={t('nextSteps.emptyTitle')}
+                description={t('nextSteps.emptyDescription')}
               />
             </>
           )}
@@ -445,9 +466,9 @@ export default async function DashboardPage() {
           {hasSkills && suggestedMatches.length > 0 ? (
             <>
               <SectionHeader
-                eyebrow="Matched to your skills"
-                title={<>Projects that <em className="italic text-amber-500">need</em> you.</>}
-                linkLabel="Browse all matches"
+                eyebrow={t('matches.eyebrow')}
+                title={t.rich('matches.title', { em })}
+                linkLabel={t('matches.browseAll')}
                 linkHref="/skill-matches"
               />
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -460,8 +481,8 @@ export default async function DashboardPage() {
                     <div className="flex items-center justify-between gap-3">
                       <span className="flex flex-wrap items-center gap-1.5 text-xs tracking-tight text-fg-tertiary">
                         <ProjectStatusBadge status={m.projectStatus} />
-                        {m.type ?? 'Project'}
-                        {m.location ? ` · ${m.location}` : m.remote ? ' · Remote' : ''}
+                        {m.type ?? t('matches.typeFallback')}
+                        {m.location ? ` · ${m.location}` : m.remote ? ` · ${t('matches.remote')}` : ''}
                       </span>
                       <div className="text-right">
                         <div className="font-display text-2xl leading-none text-amber-500">
@@ -469,15 +490,15 @@ export default async function DashboardPage() {
                           <span className="text-sm text-fg-tertiary">%</span>
                         </div>
                         <div className="text-[10px] uppercase tracking-widest text-fg-tertiary">
-                          Match
+                          {t('matches.matchLabel')}
                         </div>
                       </div>
                     </div>
                     <h4 className="font-display text-lg leading-snug">{m.title}</h4>
                     {m.kind === 'step' && m.projectTitle && (
                       <p className="-mt-2 text-xs text-fg-tertiary">
-                        A step in {m.projectTitle}
-                        {m.estimatedHrs != null && <> · ~{m.estimatedHrs}h</>}
+                        {t('matches.stepIn', { project: m.projectTitle })}
+                        {m.estimatedHrs != null && <> · {t('estimatedHours', { hours: m.estimatedHrs })}</>}
                       </p>
                     )}
                     <div className="flex flex-wrap gap-1.5">
@@ -505,19 +526,19 @@ export default async function DashboardPage() {
           ) : (
             <>
               <SectionHeader
-                eyebrow="Matched to your skills"
-                title={<>Tell us what you&apos;re <em className="italic text-amber-500">good at</em>.</>}
+                eyebrow={t('matches.eyebrow')}
+                title={t.rich('matches.emptyHeading', { em })}
               />
               <EmptyState
                 icon={Star}
-                title="Add your skills to see matches."
-                description="We'll line up projects looking for exactly what you bring. It's also fine to pick skills you want to use, even if they're not your day job."
+                title={t('matches.emptyTitle')}
+                description={t('matches.emptyDescription')}
                 actions={
                   <Link
                     href="/profile"
                     className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
                   >
-                    Add my skills
+                    {t('matches.addSkills')}
                     <ArrowRight className="size-3.5" strokeWidth={2.5} />
                   </Link>
                 }
@@ -643,15 +664,23 @@ function EmptyState({
   )
 }
 
-function StepStatusIndicator({ status }: { status: string }) {
+function StepStatusIndicator({
+  status,
+  ariaLabel,
+  title,
+}: {
+  status: string
+  ariaLabel: string
+  title: string
+}) {
   // The colour is decorative; the status is announced via a label so it
   // isn't colour-only (also shows as a tooltip on hover).
   if (status === 'needs_help') {
     return (
       <div
         role="img"
-        aria-label="Status: needs help"
-        title="Needs help"
+        aria-label={ariaLabel}
+        title={title}
         className="flex size-[22px] items-center justify-center rounded-full border-[1.5px] border-amber-500 bg-amber-500/20 shadow-[0_0_8px_rgba(244,165,53,0.4)]"
       >
         <span aria-hidden className="font-display text-[13px] font-bold text-amber-500">!</span>
@@ -662,8 +691,8 @@ function StepStatusIndicator({ status }: { status: string }) {
     return (
       <div
         role="img"
-        aria-label="Status: in progress"
-        title="In progress"
+        aria-label={ariaLabel}
+        title={title}
         className="flex size-[22px] items-center justify-center rounded-full border-[1.5px] border-blue-500 bg-blue-500/15"
       >
         <span aria-hidden className="size-2 rounded-full bg-blue-300" />
@@ -673,8 +702,8 @@ function StepStatusIndicator({ status }: { status: string }) {
   return (
     <div
       role="img"
-      aria-label="Status: not started"
-      title="Not started"
+      aria-label={ariaLabel}
+      title={title}
       className="size-[22px] rounded-full border-[1.5px] border-neutral-600"
     />
   )

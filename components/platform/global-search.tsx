@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Search, FolderOpen, CheckSquare, User as UserIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -27,6 +28,7 @@ interface SearchResults {
 const EMPTY: SearchResults = { projects: [], steps: [], people: [] }
 
 export function GlobalSearch() {
+  const t = useTranslations('search')
   const [query, setQuery] = useState('')
   const [results, setResults] = useState<SearchResults>(EMPTY)
   // The query the current `results` belong to — "searching" is derived by
@@ -94,8 +96,8 @@ export function GlobalSearch() {
           setOpen(true)
         }}
         onFocus={() => setOpen(true)}
-        placeholder="Search projects, steps, or people..."
-        aria-label="Search projects, steps, or people"
+        placeholder={t('placeholder')}
+        aria-label={t('ariaLabel')}
         className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
       />
 
@@ -103,11 +105,11 @@ export function GlobalSearch() {
         <div className="absolute inset-x-0 top-full z-50 mt-2 max-h-[420px] overflow-y-auto rounded-xl border border-neutral-700 bg-bg-surface-2 p-1.5 shadow-xl">
           {total === 0 ? (
             <div className="px-3 py-4 text-sm text-fg-tertiary">
-              {searching ? 'Searching…' : `Nothing matches “${q}”.`}
+              {searching ? t('searching') : t('noMatches', { query: q })}
             </div>
           ) : (
             <>
-              <ResultGroup label="Projects">
+              <ResultGroup label={t('groups.projects')}>
                 {results.projects.map((p) => (
                   <ResultRow
                     key={p.id}
@@ -119,21 +121,21 @@ export function GlobalSearch() {
                   />
                 ))}
               </ResultGroup>
-              <ResultGroup label="Steps">
+              <ResultGroup label={t('groups.steps')}>
                 {results.steps.map((s) => (
                   <ResultRow
                     key={s.id}
                     href={`/projects/${s.projectId}`}
                     icon={<CheckSquare className="size-4" />}
                     title={s.title}
-                    meta={`in ${s.meta}`}
-                    tag={s.done ? 'Completed' : s.helpWanted ? 'Needs help' : null}
+                    meta={t('stepIn', { project: s.meta })}
+                    tag={s.done ? t('tags.completed') : s.helpWanted ? t('tags.needsHelp') : null}
                     tagTone={s.done ? 'green' : 'amber'}
                     onPick={() => setOpen(false)}
                   />
                 ))}
               </ResultGroup>
-              <ResultGroup label="People">
+              <ResultGroup label={t('groups.people')}>
                 {results.people.map((u) => (
                   <ResultRow
                     key={u.id}

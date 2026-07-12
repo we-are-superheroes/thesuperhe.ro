@@ -1,1 +1,16 @@
-{}
+{
+  "placeholder": "Search projects, steps, or people...",
+  "ariaLabel": "Search projects, steps, or people",
+  "searching": "Searching…",
+  "noMatches": "Nothing matches “{query}”.",
+  "groups": {
+    "projects": "Projects",
+    "steps": "Steps",
+    "people": "People"
+  },
+  "stepIn": "in {project}",
+  "tags": {
+    "completed": "Completed",
+    "needsHelp": "Needs help"
+  }
+}
