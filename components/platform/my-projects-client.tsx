@@ -194,7 +194,8 @@ export function MyProjectsClient({
       </div>
 
       {/* Content */}
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 overflow-y-auto p-4 sm:p-6 lg:p-10">
+      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 p-4 sm:p-6 lg:p-10">
         {/* Page header */}
         <section className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div>
@@ -336,6 +337,7 @@ export function MyProjectsClient({
             ))}
           </div>
         )}
+      </div>
       </div>
     </>
   )

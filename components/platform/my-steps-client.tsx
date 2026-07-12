@@ -179,7 +179,8 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
         </div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-[960px] flex-col gap-8 overflow-y-auto p-4 sm:p-6 lg:p-10">
+      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="mx-auto flex w-full max-w-[960px] flex-col gap-8 p-4 sm:p-6 lg:p-10">
         <section className="flex flex-col items-start gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
           <div>
             <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
@@ -262,6 +263,7 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
             ))}
           </div>
         )}
+      </div>
       </div>
     </>
   )

@@ -214,7 +214,8 @@ export function BlueprintsClient({
         </div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 overflow-y-auto p-4 sm:p-6 lg:p-10">
+      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 p-4 sm:p-6 lg:p-10">
         {/* Header */}
         <section className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -389,6 +390,7 @@ export function BlueprintsClient({
             )}
           </div>
         </div>
+      </div>
       </div>
     </>
   )

@@ -261,7 +261,8 @@ export function BrowseProjectsClient({
       </div>
 
       {/* Content */}
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 overflow-y-auto p-4 sm:p-6 lg:p-10">
+      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 p-4 sm:p-6 lg:p-10">
         {/* Page header */}
         <section>
           <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
@@ -502,6 +503,7 @@ export function BrowseProjectsClient({
             )}
           </div>
         </section>
+      </div>
       </div>
     </>
   )

@@ -218,7 +218,8 @@ export default async function DashboardPage() {
       </div>
 
       {/* Content */}
-      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10 overflow-y-auto p-4 sm:gap-12 sm:p-6 lg:p-10">
+      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-10 p-4 sm:gap-12 sm:p-6 lg:p-10">
         {/* ── Greeting ── */}
         <section className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div>
@@ -559,6 +560,7 @@ export default async function DashboardPage() {
             </>
           )}
         </section>
+      </div>
       </div>
     </>
   )

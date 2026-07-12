@@ -150,7 +150,8 @@ export default async function BlueprintViewPage({ params }: PageParams) {
   const familySize = 1 + familyVariants.length
 
   return (
-    <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-8 overflow-y-auto p-4 sm:p-6 lg:p-10">
+    <div className="min-h-0 flex-1 overflow-y-auto">
+    <div className="mx-auto flex w-full max-w-[1240px] flex-col gap-8 p-4 sm:p-6 lg:p-10">
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-fg-tertiary">
         <Link href="/blueprints" className="transition-colors hover:text-fg-primary">
@@ -428,6 +429,7 @@ export default async function BlueprintViewPage({ params }: PageParams) {
           </div>
         </aside>
       </div>
+    </div>
     </div>
   )
 }
