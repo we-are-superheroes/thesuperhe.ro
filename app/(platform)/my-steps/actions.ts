@@ -2,6 +2,7 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import type { ServerActionResult } from '@/types'
 
@@ -29,22 +30,23 @@ export async function logTimeAction(
   rawNote?: string,
   rawLoggedOn?: string,
 ): Promise<ServerActionResult<{ logId: string; newTotal: number }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   if (!Number.isFinite(rawHours)) {
-    return { success: false, error: 'Enter a valid number of hours.' }
+    return { success: false, error: t('mySteps.invalidHours') }
   }
   const hours = roundQuarter(rawHours)
   if (hours < HOURS_MIN) {
-    return { success: false, error: `Log at least ${HOURS_MIN}h.` }
+    return { success: false, error: t('mySteps.minHours', { min: HOURS_MIN }) }
   }
   if (hours > HOURS_MAX) {
-    return { success: false, error: `That's too much — log at most ${HOURS_MAX}h per entry.` }
+    return { success: false, error: t('mySteps.maxHours', { max: HOURS_MAX }) }
   }
   const note = rawNote?.trim() ?? ''
   if (note.length > NOTE_MAX) {
-    return { success: false, error: `Notes max ${NOTE_MAX} characters.` }
+    return { success: false, error: t('mySteps.noteTooLong', { max: NOTE_MAX }) }
   }
 
   let loggedOn = new Date()
@@ -61,7 +63,7 @@ export async function logTimeAction(
     select: { id: true, projectId: true, hoursContributed: true },
   })
   if (!contribution) {
-    return { success: false, error: 'Join the step before logging time on it.' }
+    return { success: false, error: t('mySteps.joinBeforeLogging') }
   }
 
   let logId = ''
@@ -87,7 +89,7 @@ export async function logTimeAction(
       })
     })
   } catch {
-    return { success: false, error: 'Could not log time.' }
+    return { success: false, error: t('mySteps.logTimeFailed') }
   }
 
   revalidatePath('/my-steps')
@@ -100,8 +102,9 @@ export async function logTimeAction(
 export async function deleteTimeLogAction(
   timeLogId: string,
 ): Promise<ServerActionResult<{ deleted: true; newTotal: number }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const log = await db.timeLog.findUnique({
     where: { id: timeLogId },
@@ -113,9 +116,9 @@ export async function deleteTimeLogAction(
       projectStep: { select: { projectId: true } },
     },
   })
-  if (!log) return { success: false, error: 'Log not found.' }
+  if (!log) return { success: false, error: t('mySteps.logNotFound') }
   if (log.userId !== userId) {
-    return { success: false, error: 'You can only delete your own log entries.' }
+    return { success: false, error: t('mySteps.deleteOwnLogsOnly') }
   }
 
   let newTotal = 0
@@ -136,7 +139,7 @@ export async function deleteTimeLogAction(
       }
     })
   } catch {
-    return { success: false, error: 'Could not delete that log entry.' }
+    return { success: false, error: t('mySteps.deleteLogFailed') }
   }
 
   revalidatePath('/my-steps')

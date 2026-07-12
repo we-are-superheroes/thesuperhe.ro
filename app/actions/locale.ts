@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers'
 import { auth } from '@clerk/nextjs/server'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { LOCALE_COOKIE, isSupportedLocale } from '@/lib/locale-shared'
 
@@ -15,7 +16,8 @@ type SetLocaleResult = { success: true } | { success: false; error: string }
  */
 export async function setLocaleAction(locale: string): Promise<SetLocaleResult> {
   if (!isSupportedLocale(locale)) {
-    return { success: false, error: 'That language is not available.' }
+    const t = await getTranslations('errors')
+    return { success: false, error: t('common.languageUnavailable') }
   }
 
   const cookieStore = await cookies()

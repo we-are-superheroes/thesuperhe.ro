@@ -2,9 +2,11 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { ensureUserExists } from '@/lib/users'
-import { uploadImage, deleteImageByUrl } from '@/lib/storage'
+import { uploadImage, deleteImageByUrl, StorageError } from '@/lib/storage'
+import { tError } from '@/lib/errors'
 import type { ServerActionResult, Proficiency } from '@/types'
 
 export interface ProfileFormSkill {
@@ -27,16 +29,17 @@ const VALID_PROFICIENCIES: Proficiency[] = ['beginner', 'intermediate', 'expert'
 export async function saveProfileAction(
   data: ProfileFormData,
 ): Promise<ServerActionResult<{ saved: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const userCheck = await ensureUserExists(userId)
-  if (!userCheck.success) return { success: false, error: userCheck.error }
+  if (!userCheck.success) return { success: false, error: t('common.profileSyncFailed') }
 
   // Validate basic fields
   const name = data.name.trim()
-  if (name.length === 0) return { success: false, error: 'Name can’t be empty.' }
-  if (name.length > 200) return { success: false, error: 'Name is too long.' }
+  if (name.length === 0) return { success: false, error: t('profile.nameEmpty') }
+  if (name.length > 200) return { success: false, error: t('profile.nameTooLong') }
 
   const bio = data.bio.trim().slice(0, 400)
   const location = data.location.trim().slice(0, 200) || null
@@ -52,10 +55,10 @@ export async function saveProfileAction(
     const realIds = new Set(realSkills.map((s) => s.id))
     for (const s of data.skills) {
       if (!realIds.has(s.skillId)) {
-        return { success: false, error: 'One of the skills does not exist.' }
+        return { success: false, error: t('profile.skillNotFound') }
       }
       if (!VALID_PROFICIENCIES.includes(s.proficiency)) {
-        return { success: false, error: 'Invalid proficiency level.' }
+        return { success: false, error: t('profile.invalidProficiency') }
       }
     }
   }
@@ -82,7 +85,7 @@ export async function saveProfileAction(
         : []),
     ])
   } catch {
-    return { success: false, error: 'Could not save profile.' }
+    return { success: false, error: t('profile.saveFailed') }
   }
 
   revalidatePath('/profile')
@@ -91,8 +94,9 @@ export async function saveProfileAction(
 }
 
 export async function clearAvatarAction(): Promise<ServerActionResult<{ cleared: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
   // Read the existing URL so we can delete the underlying object too.
   const existing = await db.user.findUnique({
     where: { id: userId },
@@ -101,7 +105,7 @@ export async function clearAvatarAction(): Promise<ServerActionResult<{ cleared:
   try {
     await db.user.update({ where: { id: userId }, data: { avatarUrl: null } })
   } catch {
-    return { success: false, error: 'Could not clear avatar.' }
+    return { success: false, error: t('profile.clearAvatarFailed') }
   }
   // Best-effort: nuke the orphaned file in storage. Non-blocking.
   if (existing?.avatarUrl) await deleteImageByUrl(existing.avatarUrl)
@@ -118,15 +122,16 @@ export async function clearAvatarAction(): Promise<ServerActionResult<{ cleared:
 export async function uploadAvatarAction(
   formData: FormData,
 ): Promise<ServerActionResult<{ url: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const userCheck = await ensureUserExists(userId)
-  if (!userCheck.success) return { success: false, error: userCheck.error }
+  if (!userCheck.success) return { success: false, error: t('common.profileSyncFailed') }
 
   const file = formData.get('file')
   if (!(file instanceof File) || file.size === 0) {
-    return { success: false, error: 'No file provided.' }
+    return { success: false, error: t('profile.noFileProvided') }
   }
 
   const existing = await db.user.findUnique({
@@ -139,10 +144,10 @@ export async function uploadAvatarAction(
     const result = await uploadImage(file, 'avatar')
     url = result.url
   } catch (e) {
-    return {
-      success: false,
-      error: e instanceof Error ? e.message : 'Could not upload image.',
+    if (e instanceof StorageError) {
+      return { success: false, error: await tError(e.descriptor) }
     }
+    return { success: false, error: t('profile.uploadImageFailed') }
   }
 
   try {
@@ -150,7 +155,7 @@ export async function uploadAvatarAction(
   } catch {
     // The file made it into storage but the DB write failed. Clean up.
     await deleteImageByUrl(url)
-    return { success: false, error: 'Could not save avatar.' }
+    return { success: false, error: t('profile.saveAvatarFailed') }
   }
 
   // Now that the new URL is committed, prune the old object.

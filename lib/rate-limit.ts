@@ -1,5 +1,7 @@
 import 'server-only'
 
+import type { ErrorDescriptor } from '@/lib/validation'
+
 /* ================================================================
    Lightweight fixed-window rate limiter for server actions.
 
@@ -56,6 +58,9 @@ export function rateLimit(key: string, max: number, windowMs: number): RateLimit
 }
 
 /** Standard friendly refusal for rate-limited server actions. */
-export function rateLimitError(result: RateLimitResult): string {
-  return `You're doing that too often — try again in ${Math.max(result.retryAfterSec, 1)}s.`
+export function rateLimitError(result: RateLimitResult): ErrorDescriptor {
+  return {
+    key: 'common.rateLimited',
+    params: { seconds: Math.max(result.retryAfterSec, 1) },
+  }
 }

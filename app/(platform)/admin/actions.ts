@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { requireAdmin } from '@/lib/auth'
 import { log } from '@/lib/log'
@@ -28,14 +29,15 @@ import type { ServerActionResult } from '@/types'
 export async function deleteProjectAction(
   projectId: string,
 ): Promise<ServerActionResult<{ deleted: true }>> {
+  const t = await getTranslations('errors')
   const adminId = await requireAdmin()
-  if (!adminId) return { success: false, error: 'Not authorised.' }
+  if (!adminId) return { success: false, error: t('admin.notAuthorised') }
 
   const project = await db.project.findUnique({
     where: { id: projectId },
     select: { id: true, title: true },
   })
-  if (!project) return { success: false, error: 'Project not found.' }
+  if (!project) return { success: false, error: t('admin.projectNotFound') }
 
   try {
     // Explicit order: contributions reference steps via a NO ACTION FK, so
@@ -47,7 +49,7 @@ export async function deleteProjectAction(
       await tx.project.delete({ where: { id: projectId } })
     })
   } catch {
-    return { success: false, error: 'Could not delete the project.' }
+    return { success: false, error: t('admin.deleteProjectFailed') }
   }
 
   log.warn('admin.project_deleted', { adminId, projectId, title: project.title })
@@ -61,14 +63,15 @@ export async function deleteProjectAction(
 export async function deleteBlueprintAction(
   blueprintId: string,
 ): Promise<ServerActionResult<{ deleted: true }>> {
+  const t = await getTranslations('errors')
   const adminId = await requireAdmin()
-  if (!adminId) return { success: false, error: 'Not authorised.' }
+  if (!adminId) return { success: false, error: t('admin.notAuthorised') }
 
   const blueprint = await db.blueprint.findUnique({
     where: { id: blueprintId },
     select: { id: true, title: true },
   })
-  if (!blueprint) return { success: false, error: 'Blueprint not found.' }
+  if (!blueprint) return { success: false, error: t('blueprints.notFound') }
 
   try {
     // Forked projects reference the blueprint via a NO ACTION FK, so detach
@@ -83,7 +86,7 @@ export async function deleteBlueprintAction(
       await tx.blueprint.delete({ where: { id: blueprintId } })
     })
   } catch {
-    return { success: false, error: 'Could not delete the blueprint.' }
+    return { success: false, error: t('admin.deleteBlueprintFailed') }
   }
 
   log.warn('admin.blueprint_deleted', { adminId, blueprintId, title: blueprint.title })

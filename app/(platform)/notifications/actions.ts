@@ -2,8 +2,11 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
+import { tError } from '@/lib/errors'
 import { db } from '@/lib/db'
 import { notify, getProjectLeadIds } from '@/lib/notifications'
+import type { ErrorDescriptor } from '@/lib/validation'
 import type { ServerActionResult } from '@/types'
 
 /* ================================================================
@@ -13,8 +16,9 @@ import type { ServerActionResult } from '@/types'
 export async function markNotificationReadAction(
   notificationId: string,
 ): Promise<ServerActionResult<{ markedRead: boolean }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   // Scoped by userId so a caller can't mark someone else's row.
   const result = await db.notification.updateMany({
@@ -31,8 +35,9 @@ export async function markNotificationReadAction(
 export async function markAllNotificationsReadAction(): Promise<
   ServerActionResult<{ markedRead: number }>
 > {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const result = await db.notification.updateMany({
     where: { userId, readAt: null },
@@ -64,7 +69,7 @@ type LoadedRequest = {
 }
 
 type LoadResult =
-  | { ok: false; error: string }
+  | { ok: false; error: ErrorDescriptor }
   | { ok: true; notification: LoadedRequest; contributionId: string }
 
 async function loadJoinRequest(notificationId: string, userId: string): Promise<LoadResult> {
@@ -81,12 +86,13 @@ async function loadJoinRequest(notificationId: string, userId: string): Promise<
       project: { select: { title: true } },
     },
   })
-  if (!n) return { ok: false, error: 'Notification not found.' }
-  if (n.userId !== userId) return { ok: false, error: 'Not your notification.' }
+  if (!n) return { ok: false, error: { key: 'notifications.notFound' } }
+  if (n.userId !== userId) return { ok: false, error: { key: 'notifications.notYours' } }
   if (n.type !== 'project_join_request')
-    return { ok: false, error: 'This notification isn’t a join request.' }
-  if (n.resolvedAt) return { ok: false, error: 'Already resolved.' }
-  if (!n.projectId || !n.actorId) return { ok: false, error: 'Join request is missing context.' }
+    return { ok: false, error: { key: 'notifications.notAJoinRequest' } }
+  if (n.resolvedAt) return { ok: false, error: { key: 'notifications.alreadyResolved' } }
+  if (!n.projectId || !n.actorId)
+    return { ok: false, error: { key: 'notifications.joinRequestMissingContext' } }
 
   // Caller must currently be a lead of the referenced project.
   const lead = await db.contribution.findFirst({
@@ -99,11 +105,12 @@ async function loadJoinRequest(notificationId: string, userId: string): Promise<
     },
     select: { id: true },
   })
-  if (!lead) return { ok: false, error: 'Only the project lead can resolve this.' }
+  if (!lead) return { ok: false, error: { key: 'notifications.onlyLeadCanResolve' } }
 
   const data = (n.data ?? {}) as JoinRequestData
   const contributionId = typeof data.contributionId === 'string' ? data.contributionId : null
-  if (!contributionId) return { ok: false, error: 'Join request is missing the contribution id.' }
+  if (!contributionId)
+    return { ok: false, error: { key: 'notifications.joinRequestMissingContributionId' } }
 
   return {
     ok: true,
@@ -121,11 +128,12 @@ async function loadJoinRequest(notificationId: string, userId: string): Promise<
 export async function acceptJoinRequestAction(
   notificationId: string,
 ): Promise<ServerActionResult<{ accepted: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const loaded = await loadJoinRequest(notificationId, userId)
-  if (!loaded.ok) return { success: false, error: loaded.error }
+  if (!loaded.ok) return { success: false, error: await tError(loaded.error) }
   const { notification: n, contributionId } = loaded
 
   // Look up the applicant's name + the lead's name for the confirmation copy.
@@ -172,7 +180,7 @@ export async function acceptJoinRequestAction(
       }
     })
   } catch {
-    return { success: false, error: 'Could not accept the join request.' }
+    return { success: false, error: t('notifications.acceptFailed') }
   }
 
   revalidatePath('/notifications')
@@ -184,11 +192,12 @@ export async function acceptJoinRequestAction(
 export async function declineJoinRequestAction(
   notificationId: string,
 ): Promise<ServerActionResult<{ declined: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const loaded = await loadJoinRequest(notificationId, userId)
-  if (!loaded.ok) return { success: false, error: loaded.error }
+  if (!loaded.ok) return { success: false, error: await tError(loaded.error) }
   const { notification: n, contributionId } = loaded
 
   const projectTitle = n.project?.title ?? 'the project'
@@ -217,7 +226,7 @@ export async function declineJoinRequestAction(
       }
     })
   } catch {
-    return { success: false, error: 'Could not decline the join request.' }
+    return { success: false, error: t('notifications.declineFailed') }
   }
 
   revalidatePath('/notifications')

@@ -2,9 +2,11 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
+import { tError } from '@/lib/errors'
 import { db } from '@/lib/db'
 import { ensureUserExists } from '@/lib/users'
-import { uploadImage, deleteImageByUrl } from '@/lib/storage'
+import { uploadImage, deleteImageByUrl, StorageError } from '@/lib/storage'
 import { notify } from '@/lib/notifications'
 import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import {
@@ -15,6 +17,7 @@ import {
   slugifyOrgName,
 } from '@/lib/org-utils'
 import type { OrgType } from '@prisma/client'
+import type { ErrorDescriptor } from '@/lib/validation'
 import type { ServerActionResult } from '@/types'
 
 /* ================================================================
@@ -27,9 +30,9 @@ import type { ServerActionResult } from '@/types'
    and the sharing toggle always work: they are the member's call.
    ================================================================ */
 
-/** Admin gate: the caller's active admin membership, or an error string. */
+/** Admin gate: the caller's active admin membership, or an error descriptor. */
 type AdminGate =
-  | { ok: false; error: string }
+  | { ok: false; error: ErrorDescriptor }
   | {
       ok: true
       org: { status: 'pending' | 'active' | 'suspended'; name: string; slug: string }
@@ -41,9 +44,17 @@ async function requireAdmin(orgId: string, userId: string): Promise<AdminGate> {
     select: { role: true, leftAt: true, org: { select: { status: true, name: true, slug: true } } },
   })
   if (!m || m.leftAt !== null || !isOrgAdminRole(m.role)) {
-    return { ok: false, error: 'Only organisation admins can do this.' }
+    return { ok: false, error: { key: 'orgs.adminsOnly' } }
   }
   return { ok: true, org: m.org }
+}
+
+/** Maps inviteProblem() return strings (lib/org-utils.ts) to error-catalogue keys. */
+const INVITE_PROBLEM_KEY: Record<string, string> = {
+  'This invite code has been cancelled.': 'orgs.inviteCancelled',
+  'This invite code has expired.': 'orgs.inviteExpired',
+  'This invite code has been used the maximum number of times.': 'orgs.inviteMaxUses',
+  'This invite was sent to a different email address.': 'orgs.inviteWrongEmail',
 }
 
 /* ── F1: gated creation ─────────────────────────────────────── */
@@ -55,30 +66,31 @@ export async function requestOrganisationAction(input: {
   intendedUse: string
   listed: boolean
 }): Promise<ServerActionResult<{ slug: string; orgId: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const rl = rateLimit(`${userId}:org-request`, 3, 60 * 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const userCheck = await ensureUserExists(userId)
-  if (!userCheck.success) return { success: false, error: userCheck.error }
+  if (!userCheck.success) return { success: false, error: t('common.profileSyncFailed') }
 
   const name = input.name.trim()
   if (name.length < 3) {
-    return { success: false, error: 'Give the organisation a name (at least 3 characters).' }
+    return { success: false, error: t('orgs.nameRequired') }
   }
   if (name.length > 80) {
-    return { success: false, error: 'Keep the name under 80 characters.' }
+    return { success: false, error: t('orgs.nameTooLong') }
   }
   if (input.type !== 'nonprofit' && input.type !== 'company') {
-    return { success: false, error: 'Pick an organisation type.' }
+    return { success: false, error: t('orgs.typeRequired') }
   }
   const intendedUse = input.intendedUse.trim()
   if (intendedUse.length < 20) {
     return {
       success: false,
-      error: 'Tell us a little more about how you plan to use it (at least 20 characters).',
+      error: t('orgs.intendedUseTooShort'),
     }
   }
   const website = input.website.trim().replace(/^https?:\/\//, '').replace(/\/+$/, '')
@@ -131,7 +143,7 @@ export async function requestOrganisationAction(input: {
 
     return { success: true, data: { slug, orgId } }
   } catch {
-    return { success: false, error: 'Could not submit the request.' }
+    return { success: false, error: t('orgs.requestFailed') }
   }
 }
 
@@ -141,16 +153,17 @@ export async function createInviteCodeAction(
   orgId: string,
   input: { maxUses: number | null; expiresInDays: number | null },
 ): Promise<ServerActionResult<{ code: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const rl = rateLimit(`${userId}:org-invite`, 10, 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const gate = await requireAdmin(orgId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
   if (gate.org.status !== 'active') {
-    return { success: false, error: 'Invites are only available once the organisation is active.' }
+    return { success: false, error: t('orgs.invitesRequireActive') }
   }
 
   const maxUses =
@@ -172,26 +185,27 @@ export async function createInviteCodeAction(
       revalidatePath(`/orgs/${gate.org.slug}`)
       return { success: true, data: { code } }
     }
-    return { success: false, error: 'Could not create an invite code. Try again.' }
+    return { success: false, error: t('orgs.inviteCodeCollision') }
   } catch {
-    return { success: false, error: 'Could not create an invite code.' }
+    return { success: false, error: t('orgs.inviteCreateFailed') }
   }
 }
 
 export async function revokeInviteAction(
   inviteId: string,
 ): Promise<ServerActionResult<{ revoked: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const invite = await db.organisationInvite.findUnique({
     where: { id: inviteId },
     select: { id: true, orgId: true, revokedAt: true, org: { select: { slug: true } } },
   })
-  if (!invite) return { success: false, error: 'Invite not found.' }
+  if (!invite) return { success: false, error: t('orgs.inviteNotFound') }
 
   const gate = await requireAdmin(invite.orgId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
 
   if (!invite.revokedAt) {
     await db.organisationInvite.update({
@@ -207,21 +221,22 @@ export async function inviteByEmailAction(
   orgId: string,
   email: string,
 ): Promise<ServerActionResult<{ code: string; delivered: boolean }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const rl = rateLimit(`${userId}:org-invite`, 10, 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const gate = await requireAdmin(orgId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
   if (gate.org.status !== 'active') {
-    return { success: false, error: 'Invites are only available once the organisation is active.' }
+    return { success: false, error: t('orgs.invitesRequireActive') }
   }
 
   const target = email.trim().toLowerCase()
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(target)) {
-    return { success: false, error: 'That does not look like an email address.' }
+    return { success: false, error: t('orgs.emailInvalid') }
   }
 
   const actor = await db.user.findUnique({ where: { id: userId }, select: { name: true } })
@@ -260,24 +275,25 @@ export async function inviteByEmailAction(
     // don't send emails yet.
     return { success: true, data: { code, delivered: !!recipient } }
   } catch {
-    return { success: false, error: 'Could not create the invite.' }
+    return { success: false, error: t('orgs.inviteEmailFailed') }
   }
 }
 
 export async function redeemInviteAction(
   rawCode: string,
 ): Promise<ServerActionResult<{ slug: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const rl = rateLimit(`${userId}:org-join`, 5, 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const userCheck = await ensureUserExists(userId)
-  if (!userCheck.success) return { success: false, error: userCheck.error }
+  if (!userCheck.success) return { success: false, error: t('common.profileSyncFailed') }
 
   const code = rawCode.trim().toUpperCase()
-  if (!code) return { success: false, error: 'Enter an invite code.' }
+  if (!code) return { success: false, error: t('orgs.inviteCodeRequired') }
 
   const invite = await db.organisationInvite.findUnique({
     where: { code },
@@ -292,21 +308,28 @@ export async function redeemInviteAction(
       org: { select: { slug: true, status: true } },
     },
   })
-  if (!invite) return { success: false, error: 'That invite code does not exist.' }
+  if (!invite) return { success: false, error: t('orgs.inviteCodeUnknown') }
   if (invite.org.status !== 'active') {
-    return { success: false, error: 'This organisation is not accepting new members right now.' }
+    return { success: false, error: t('orgs.orgNotAcceptingMembers') }
   }
 
   const me = await db.user.findUnique({ where: { id: userId }, select: { email: true } })
   const problem = inviteProblem(invite, new Date(), me?.email)
-  if (problem) return { success: false, error: problem }
+  if (problem) {
+    // inviteProblem (lib/org-utils.ts) returns English strings; map them
+    // to catalogue keys here so the refusal renders in the user's language.
+    return {
+      success: false,
+      error: await tError({ key: INVITE_PROBLEM_KEY[problem] ?? 'orgs.inviteNoLongerValid' }),
+    }
+  }
 
   const existing = await db.userOrganisation.findUnique({
     where: { userId_orgId: { userId, orgId: invite.orgId } },
     select: { leftAt: true },
   })
   if (existing && existing.leftAt === null) {
-    return { success: false, error: 'You are already a member of this organisation.' }
+    return { success: false, error: t('orgs.alreadyMember') }
   }
 
   try {
@@ -343,9 +366,9 @@ export async function redeemInviteAction(
     })
   } catch (e) {
     if (e instanceof Error && e.message === 'invite-no-longer-valid') {
-      return { success: false, error: 'This invite code is no longer valid.' }
+      return { success: false, error: t('orgs.inviteNoLongerValid') }
     }
-    return { success: false, error: 'Could not join the organisation.' }
+    return { success: false, error: t('orgs.joinFailed') }
   }
 
   revalidatePath(`/orgs/${invite.org.slug}`)
@@ -358,15 +381,16 @@ export async function redeemInviteAction(
 export async function leaveOrgAction(
   orgId: string,
 ): Promise<ServerActionResult<{ left: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const m = await db.userOrganisation.findUnique({
     where: { userId_orgId: { userId, orgId } },
     select: { role: true, leftAt: true, org: { select: { slug: true } } },
   })
   if (!m || m.leftAt !== null) {
-    return { success: false, error: 'You are not a member of this organisation.' }
+    return { success: false, error: t('orgs.notMemberOfThisOrg') }
   }
 
   // The last active admin must hand over first — otherwise the org is
@@ -383,7 +407,7 @@ export async function leaveOrgAction(
     if (otherAdmins === 0) {
       return {
         success: false,
-        error: 'You are the only admin. Make another member an admin before you leave.',
+        error: t('orgs.lastAdmin'),
       }
     }
   }
@@ -401,24 +425,25 @@ export async function removeMemberAction(
   orgId: string,
   targetUserId: string,
 ): Promise<ServerActionResult<{ removed: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
   if (targetUserId === userId) {
-    return { success: false, error: 'Use "Leave organisation" to remove yourself.' }
+    return { success: false, error: t('orgs.useLeaveForSelf') }
   }
 
   const gate = await requireAdmin(orgId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
 
   const target = await db.userOrganisation.findUnique({
     where: { userId_orgId: { userId: targetUserId, orgId } },
     select: { role: true, leftAt: true },
   })
   if (!target || target.leftAt !== null) {
-    return { success: false, error: 'That person is not an active member.' }
+    return { success: false, error: t('orgs.notActiveMember') }
   }
   if (target.role === 'owner') {
-    return { success: false, error: 'The organisation creator cannot be removed.' }
+    return { success: false, error: t('orgs.ownerCannotBeRemoved') }
   }
 
   await db.userOrganisation.update({
@@ -433,13 +458,14 @@ export async function promoteMemberAction(
   orgId: string,
   targetUserId: string,
 ): Promise<ServerActionResult<{ promoted: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const gate = await requireAdmin(orgId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
   if (gate.org.status !== 'active') {
-    return { success: false, error: 'Roles can only change once the organisation is active.' }
+    return { success: false, error: t('orgs.rolesRequireActive') }
   }
 
   const target = await db.userOrganisation.findUnique({
@@ -447,10 +473,10 @@ export async function promoteMemberAction(
     select: { role: true, leftAt: true },
   })
   if (!target || target.leftAt !== null) {
-    return { success: false, error: 'That person is not an active member.' }
+    return { success: false, error: t('orgs.notActiveMember') }
   }
   if (target.role !== 'member') {
-    return { success: false, error: 'They are already an admin.' }
+    return { success: false, error: t('orgs.alreadyAdmin') }
   }
 
   await db.userOrganisation.update({
@@ -467,15 +493,16 @@ export async function setShareContributionsAction(
   orgId: string,
   share: boolean,
 ): Promise<ServerActionResult<{ share: boolean }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const m = await db.userOrganisation.findUnique({
     where: { userId_orgId: { userId, orgId } },
     select: { leftAt: true, org: { select: { slug: true } } },
   })
   if (!m || m.leftAt !== null) {
-    return { success: false, error: 'You are not a member of this organisation.' }
+    return { success: false, error: t('orgs.notMemberOfThisOrg') }
   }
 
   await db.userOrganisation.update({
@@ -493,19 +520,20 @@ export async function updateOrgProfileAction(
   orgId: string,
   input: { description: string; website: string; listed: boolean },
 ): Promise<ServerActionResult<{ updated: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const gate = await requireAdmin(orgId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
 
   const description = input.description.trim()
   if (description.length > 2000) {
-    return { success: false, error: 'Keep the description under 2000 characters.' }
+    return { success: false, error: t('orgs.descriptionTooLong') }
   }
   const website = input.website.trim().replace(/^https?:\/\//, '').replace(/\/+$/, '')
   if (website.length > 200) {
-    return { success: false, error: 'Keep the website address under 200 characters.' }
+    return { success: false, error: t('orgs.websiteTooLong') }
   }
 
   await db.organisation.update({
@@ -535,21 +563,22 @@ export async function uploadOrgImageAction(
   image: OrgImageKind,
   formData: FormData,
 ): Promise<ServerActionResult<{ url: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const rl = rateLimit(`${userId}:org-image`, 10, 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const field = ORG_IMAGE_FIELD[image]
-  if (!field) return { success: false, error: 'Unknown image type.' }
+  if (!field) return { success: false, error: t('orgs.imageKindUnknown') }
 
   const gate = await requireAdmin(orgId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
 
   const file = formData.get('file')
   if (!(file instanceof File) || file.size === 0) {
-    return { success: false, error: 'No file provided.' }
+    return { success: false, error: t('orgs.imageFileMissing') }
   }
 
   const existing = await db.organisation.findUnique({
@@ -562,10 +591,10 @@ export async function uploadOrgImageAction(
     const result = await uploadImage(file, field.kind)
     url = result.url
   } catch (e) {
-    return {
-      success: false,
-      error: e instanceof Error ? e.message : 'Could not upload the image.',
+    if (e instanceof StorageError) {
+      return { success: false, error: await tError(e.descriptor) }
     }
+    return { success: false, error: t('orgs.imageUploadFailed') }
   }
 
   try {
@@ -576,7 +605,7 @@ export async function uploadOrgImageAction(
   } catch {
     // The file made it into storage but the DB write failed. Clean up.
     await deleteImageByUrl(url)
-    return { success: false, error: 'Could not save the image.' }
+    return { success: false, error: t('orgs.imageSaveFailed') }
   }
 
   // Now that the new URL is committed, prune the old object.
@@ -592,14 +621,15 @@ export async function clearOrgImageAction(
   orgId: string,
   image: OrgImageKind,
 ): Promise<ServerActionResult<{ cleared: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const field = ORG_IMAGE_FIELD[image]
-  if (!field) return { success: false, error: 'Unknown image type.' }
+  if (!field) return { success: false, error: t('orgs.imageKindUnknown') }
 
   const gate = await requireAdmin(orgId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
 
   const existing = await db.organisation.findUnique({
     where: { id: orgId },

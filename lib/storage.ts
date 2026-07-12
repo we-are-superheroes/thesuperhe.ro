@@ -2,6 +2,20 @@ import 'server-only'
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { randomUUID } from 'crypto'
 import { log } from '@/lib/log'
+import type { ErrorDescriptor } from '@/lib/validation'
+
+/**
+ * Upload rejections the user can act on (wrong type, too big). Carries
+ * a catalog key so the calling action can render it in the requester's
+ * language via tError(); other storage failures stay plain Errors
+ * (ops problems — the action shows its generic upload-failed copy).
+ */
+export class StorageError extends Error {
+  constructor(public readonly descriptor: ErrorDescriptor) {
+    super(descriptor.key)
+    this.name = 'StorageError'
+  }
+}
 
 /* ================================================================
    Supabase Storage helper — used by avatar + project cover uploads.
@@ -104,12 +118,12 @@ export async function uploadImage(
   kind: keyof typeof STORAGE_LIMITS,
 ): Promise<{ url: string; key: string }> {
   if (!ALLOWED_MIME.has(file.type)) {
-    throw new Error('Unsupported image type. Use PNG, JPEG, WebP or GIF.')
+    throw new StorageError({ key: 'common.imageUnsupportedType' })
   }
   const limits = STORAGE_LIMITS[kind]
   if (file.size > limits.maxBytes) {
     const mb = Math.round(limits.maxBytes / (1024 * 1024))
-    throw new Error(`File is too large. Max ${mb} MB.`)
+    throw new StorageError({ key: 'common.imageTooLarge', params: { max: mb } })
   }
 
   await ensureBucket()

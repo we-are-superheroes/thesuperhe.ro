@@ -2,6 +2,8 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
+import { tError } from '@/lib/errors'
 import { db } from '@/lib/db'
 import { isCurrentUserAdmin } from '@/lib/auth'
 import { notify } from '@/lib/notifications'
@@ -14,28 +16,29 @@ export async function postUpdateAction(
   rawBody: string,
   visibility: 'public' | 'members',
 ): Promise<ServerActionResult<{ id: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   // Every post notifies all members — throttle the fanout.
   const rl = rateLimit(`${userId}:post-update`, 5, 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const validated = validateUpdateBody(rawBody)
-  if (!validated.ok) return { success: false, error: validated.error }
+  if (!validated.ok) return { success: false, error: await tError(validated.error) }
 
   // Only the project lead can post updates.
   const lead = await db.contribution.findFirst({
     where: { userId, projectId, projectStepId: null, role: 'lead', status: 'active' },
     select: { id: true },
   })
-  if (!lead) return { success: false, error: 'Only the project lead can post updates.' }
+  if (!lead) return { success: false, error: t('updates.onlyLead') }
 
   const project = await db.project.findUnique({
     where: { id: projectId },
     select: { title: true },
   })
-  if (!project) return { success: false, error: 'Project not found.' }
+  if (!project) return { success: false, error: t('updates.projectNotFound') }
 
   const actor = await db.user.findUnique({ where: { id: userId }, select: { name: true } })
   const actorName = actor?.name ?? 'The project lead'
@@ -71,7 +74,7 @@ export async function postUpdateAction(
       return created.id
     })
   } catch {
-    return { success: false, error: 'Could not post the update.' }
+    return { success: false, error: t('updates.postFailed') }
   }
 
   revalidatePath(`/projects/${projectId}`)
@@ -84,19 +87,20 @@ export async function editUpdateAction(
   updateId: string,
   rawBody: string,
 ): Promise<ServerActionResult<{ id: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const validated = validateUpdateBody(rawBody)
-  if (!validated.ok) return { success: false, error: validated.error }
+  if (!validated.ok) return { success: false, error: await tError(validated.error) }
 
   const update = await db.projectUpdate.findUnique({
     where: { id: updateId },
     select: { id: true, authorId: true, projectId: true },
   })
-  if (!update) return { success: false, error: 'Update not found.' }
+  if (!update) return { success: false, error: t('updates.notFound') }
   if (update.authorId !== userId) {
-    return { success: false, error: 'Only the author can edit an update.' }
+    return { success: false, error: t('updates.onlyAuthorEdit') }
   }
 
   try {
@@ -105,7 +109,7 @@ export async function editUpdateAction(
       data: { body: validated.body, editedAt: new Date() },
     })
   } catch {
-    return { success: false, error: 'Could not save the edit.' }
+    return { success: false, error: t('updates.editFailed') }
   }
 
   revalidatePath(`/projects/${update.projectId}`)
@@ -115,24 +119,25 @@ export async function editUpdateAction(
 export async function deleteUpdateAction(
   updateId: string,
 ): Promise<ServerActionResult<{ deleted: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const update = await db.projectUpdate.findUnique({
     where: { id: updateId },
     select: { id: true, authorId: true, projectId: true },
   })
-  if (!update) return { success: false, error: 'Update not found.' }
+  if (!update) return { success: false, error: t('updates.notFound') }
 
   // The author can delete their own post; platform admins can moderate any.
   if (update.authorId !== userId && !(await isCurrentUserAdmin())) {
-    return { success: false, error: 'You can’t delete this update.' }
+    return { success: false, error: t('updates.cantDelete') }
   }
 
   try {
     await db.projectUpdate.delete({ where: { id: updateId } })
   } catch {
-    return { success: false, error: 'Could not delete the update.' }
+    return { success: false, error: t('updates.deleteFailed') }
   }
 
   revalidatePath(`/projects/${update.projectId}`)
