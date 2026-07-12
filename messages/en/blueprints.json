@@ -1,1 +1,87 @@
-{}
+{
+  "counts": {
+    "launches": "{count, plural, one {<strong>#</strong> launch} other {<strong>#</strong> launches}}",
+    "steps": "{count, plural, one {# step} other {# steps}}",
+    "variants": "{count, plural, one {# variant} other {# variants}}"
+  },
+  "cta": {
+    "use": "Use blueprint",
+    "createVariant": "Create variant",
+    "createVariantTitle": "Adapt this blueprint for another place or language",
+    "modify": "Modify blueprint"
+  },
+  "list": {
+    "searchPlaceholder": "Search blueprints...",
+    "saveYourOwn": "Save your own blueprint",
+    "newShort": "New",
+    "eyebrow": "Blueprint library",
+    "heading": "Start from a <em>proven</em> pattern.",
+    "intro": "Blueprints are tested project recipes — born in one place, adapted for others. Pick a model that fits your context, your country and your language; we'll set the rest up around it.",
+    "stats": {
+      "families": "Families",
+      "variants": "Variants",
+      "launches": "Launches"
+    },
+    "showing": "Showing <strong>{shown}</strong> of {total, plural, one {# blueprint} other {# blueprints}}"
+  },
+  "sort": {
+    "popular": "Most used",
+    "recent": "Recently added",
+    "variants": "Most variants",
+    "az": "A–Z"
+  },
+  "filters": {
+    "title": "Filters",
+    "show": "Show filters",
+    "hide": "Hide filters",
+    "clearAll": "Clear all",
+    "type": "Type",
+    "country": "Country",
+    "language": "Language",
+    "searchCountriesPlaceholder": "Search countries...",
+    "noMatches": "No matches."
+  },
+  "chips": {
+    "search": "search",
+    "type": "type",
+    "country": "country",
+    "language": "language",
+    "remove": "Remove filter"
+  },
+  "empty": {
+    "title": "No blueprints match.",
+    "body": "Loosen a filter, or save the first blueprint that fits this niche yourself."
+  },
+  "card": {
+    "originalRecipe": "The original recipe — adapt it for your area.",
+    "availableIn": "Available in",
+    "localeNotSet": "Locale not set"
+  },
+  "variants": {
+    "original": "original"
+  },
+  "steps": {
+    "orderOfTotal": "Step {order} of {total}",
+    "estimatedHours": "~{hours}h"
+  },
+  "detail": {
+    "breadcrumbRoot": "Blueprints",
+    "variantBadge": "Variant",
+    "createdBy": "Created by <author>{name}</author>",
+    "someone": "someone",
+    "estimatedTotal": "~{hours}h estimated",
+    "aboutEyebrow": "About this blueprint",
+    "aboutHeading": "What you'll set up.",
+    "planEyebrow": "The plan",
+    "stepsHeading": "{count, plural, one {# step} other {# steps}} to deliver this.",
+    "noSteps": "This blueprint has no steps yet.",
+    "family": "Family",
+    "detailsTitle": "Details",
+    "type": "Type",
+    "country": "Country",
+    "language": "Language",
+    "projectsForked": "Projects forked",
+    "notSet": "Not set",
+    "any": "Any"
+  }
+}

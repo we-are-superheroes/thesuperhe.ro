@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import {
   Search,
   Bell,
@@ -87,9 +88,11 @@ const AVATAR_PALETTE = [
   'bg-gradient-to-br from-[#FAD08F] to-[#F4A535]',
 ]
 
-const ROLE_LABEL: Record<string, string> = {
-  lead: 'Leading',
-  contributor: 'Contributing',
+type MyProjectsT = ReturnType<typeof useTranslations<'myProjects'>>
+
+function roleLabel(t: MyProjectsT, role: string): string {
+  if (role === 'lead' || role === 'contributor') return t(`role.${role}`)
+  return role
 }
 
 /* ================================================================
@@ -103,6 +106,7 @@ export function MyProjectsClient({
   projects: MyProject[]
   stats: { active: number; openSteps: number; totalHours: number }
 }) {
+  const t = useTranslations('myProjects')
   const [tab, setTab] = useState<Tab>('active')
   const [role, setRole] = useState<RoleFilter>('all')
   const [query, setQuery] = useState('')
@@ -166,7 +170,7 @@ export function MyProjectsClient({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search your projects…"
+            placeholder={t('topbar.searchPlaceholder')}
             className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
           />
         </div>
@@ -174,7 +178,7 @@ export function MyProjectsClient({
           <button
             type="button"
             className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
-            title="Notifications"
+            title={t('topbar.notificationsTitle')}
           >
             <Bell className="size-[18px]" />
           </button>
@@ -183,8 +187,8 @@ export function MyProjectsClient({
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
           >
             <Plus className="size-3.5" strokeWidth={2.5} />
-            <span className="hidden sm:inline">Start a project</span>
-            <span className="sm:hidden">Start</span>
+            <span className="hidden sm:inline">{t('topbar.startProject')}</span>
+            <span className="sm:hidden">{t('topbar.startProjectShort')}</span>
           </Link>
         </div>
       </div>
@@ -195,16 +199,23 @@ export function MyProjectsClient({
         <section className="flex flex-col items-start gap-6 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div>
             <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
-              Your <em className="italic text-amber-500">projects</em>.
+              {t.rich('hero.title', {
+                em: (chunks) => <em className="italic text-amber-500">{chunks}</em>,
+              })}
             </h1>
             <p className="max-w-[560px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-              Everything you’re contributing to, in one place. See what’s blocked, and continue where you stopped.
+              {t('hero.subtitle')}
             </p>
           </div>
           <div className="flex w-full flex-wrap gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface px-5 py-4 sm:gap-8 sm:px-6 sm:py-5 lg:w-auto">
-            <QuickStat value={stats.active} label="Active" dimIfZero />
-            <QuickStat value={stats.openSteps} label="Open steps" dimIfZero />
-            <QuickStat value={stats.totalHours} label="Contributed" suffix="h" dimIfZero />
+            <QuickStat value={stats.active} label={t('stats.active')} dimIfZero />
+            <QuickStat value={stats.openSteps} label={t('stats.openSteps')} dimIfZero />
+            <QuickStat
+              value={stats.totalHours}
+              label={t('stats.contributed')}
+              suffix={t('stats.hoursSuffix')}
+              dimIfZero
+            />
           </div>
         </section>
 
@@ -212,7 +223,7 @@ export function MyProjectsClient({
         <div className="-mb-px flex gap-2 border-b border-white/[0.08]">
           <TabButton
             active={tab === 'active'}
-            label="Active"
+            label={t('tabs.active')}
             count={tabCounts.active}
             onClick={() => {
               setTab('active')
@@ -221,7 +232,7 @@ export function MyProjectsClient({
           />
           <TabButton
             active={tab === 'finished'}
-            label="Finished"
+            label={t('tabs.finished')}
             count={tabCounts.finished}
             onClick={() => {
               setTab('finished')
@@ -230,7 +241,7 @@ export function MyProjectsClient({
           />
           <TabButton
             active={tab === 'archived'}
-            label="Archived"
+            label={t('tabs.archived')}
             count={tabCounts.archived}
             onClick={() => {
               setTab('archived')
@@ -242,25 +253,25 @@ export function MyProjectsClient({
         {/* Tools */}
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div className="flex flex-wrap items-center gap-3">
-            <FilterPill active={role === 'all'} label="All roles" count={roleCounts.all} onClick={() => setRole('all')} />
+            <FilterPill active={role === 'all'} label={t('roleFilter.all')} count={roleCounts.all} onClick={() => setRole('all')} />
             <FilterPill
               active={role === 'lead'}
               icon={<Star className="size-3.5" strokeWidth={2.5} />}
-              label="Leading"
+              label={t('roleFilter.leading')}
               count={roleCounts.lead}
               onClick={() => setRole('lead')}
             />
             <FilterPill
               active={role === 'contributor'}
               icon={<Users className="size-3.5" strokeWidth={2.5} />}
-              label="Contributing"
+              label={t('roleFilter.contributing')}
               count={roleCounts.contributor}
               onClick={() => setRole('contributor')}
             />
             <FilterPill
               active={role === 'needs_action'}
               icon={<AlertCircle className="size-3.5" strokeWidth={2.5} />}
-              label="Needs your action"
+              label={t('roleFilter.needsAction')}
               count={roleCounts.needs_action}
               onClick={() => setRole('needs_action')}
             />
@@ -271,10 +282,10 @@ export function MyProjectsClient({
               onChange={(e) => setSort(e.target.value as SortKey)}
               className="w-auto cursor-pointer bg-bg-surface py-2 pl-3 pr-8 [background-position:right_10px_center]"
             >
-              <option value="recent">Last activity</option>
-              <option value="due">Soonest deadline</option>
-              <option value="progress">Closest to finished</option>
-              <option value="title">Title (A–Z)</option>
+              <option value="recent">{t('sort.recent')}</option>
+              <option value="due">{t('sort.due')}</option>
+              <option value="progress">{t('sort.progress')}</option>
+              <option value="title">{t('sort.title')}</option>
             </SelectBox>
             <div className="flex rounded-lg border border-neutral-700 bg-bg-surface p-[3px]">
               <button
@@ -284,7 +295,7 @@ export function MyProjectsClient({
                   'flex items-center rounded-md border-none px-2.5 py-1.5 transition-colors',
                   view === 'grid' ? 'bg-bg-surface-2 text-fg-primary' : 'bg-transparent text-fg-tertiary',
                 )}
-                title="Grid view"
+                title={t('view.grid')}
               >
                 <LayoutGrid className="size-3.5" />
               </button>
@@ -295,7 +306,7 @@ export function MyProjectsClient({
                   'flex items-center rounded-md border-none px-2.5 py-1.5 transition-colors',
                   view === 'list' ? 'bg-bg-surface-2 text-fg-primary' : 'bg-transparent text-fg-tertiary',
                 )}
-                title="List view"
+                title={t('view.list')}
               >
                 <ListIcon className="size-3.5" />
               </button>
@@ -315,10 +326,10 @@ export function MyProjectsClient({
         ) : (
           <div className="overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface">
             <div className="hidden grid-cols-[1.4fr_1fr_0.7fr_1fr] gap-4 border-b border-white/[0.08] bg-bg-surface-2 px-6 py-3.5 text-xs font-semibold uppercase tracking-widest text-fg-tertiary lg:grid">
-              <span>Project</span>
-              <span>Your next step</span>
-              <span>Role</span>
-              <span>Progress</span>
+              <span>{t('listHeader.project')}</span>
+              <span>{t('listHeader.nextStep')}</span>
+              <span>{t('listHeader.role')}</span>
+              <span>{t('listHeader.progress')}</span>
             </div>
             {filtered.map((p) => (
               <ProjectListRow key={p.id} project={p} />
@@ -428,6 +439,7 @@ function FilterPill({
 }
 
 function RoleBadge({ role }: { role: string }) {
+  const t = useTranslations('myProjects')
   const className = (() => {
     if (role === 'lead') return 'border-amber-500/40 bg-amber-500/[0.10] text-amber-500'
     if (role === 'contributor') return 'border-blue-500/40 bg-blue-500/[0.10] text-blue-300'
@@ -442,7 +454,7 @@ function RoleBadge({ role }: { role: string }) {
       )}
     >
       <Icon className="size-2.5" strokeWidth={2.5} />
-      {ROLE_LABEL[role] ?? role}
+      {roleLabel(t, role)}
     </span>
   )
 }
@@ -512,6 +524,7 @@ function AvatarStack({ initials, total }: { initials: string[]; total: number })
 }
 
 function ProjectCard({ project: p }: { project: MyProject }) {
+  const t = useTranslations('myProjects')
   return (
     <Link
       href={`/projects/${p.id}`}
@@ -548,7 +561,7 @@ function ProjectCard({ project: p }: { project: MyProject }) {
             const Icon = p.role === 'lead' ? Star : Users
             return <Icon className="size-2.5" strokeWidth={2.5} />
           })()}
-          {ROLE_LABEL[p.role] ?? p.role}
+          {roleLabel(t, p.role)}
         </span>
       </div>
 
@@ -558,7 +571,7 @@ function ProjectCard({ project: p }: { project: MyProject }) {
           <MapPin className="size-3 shrink-0" />
           {p.location}
           <span className="mx-1 text-neutral-600">·</span>
-          Last activity {p.lastActivity}
+          {t('card.lastActivity', { when: p.lastActivity })}
         </div>
         <h3 className="font-display text-xl leading-snug">{p.title}</h3>
 
@@ -583,7 +596,7 @@ function ProjectCard({ project: p }: { project: MyProject }) {
               </div>
             </>
           ) : (
-            <span className="italic text-sm text-fg-tertiary">No open steps for you.</span>
+            <span className="italic text-sm text-fg-tertiary">{t('card.noOpenSteps')}</span>
           )}
         </div>
 
@@ -597,7 +610,9 @@ function ProjectCard({ project: p }: { project: MyProject }) {
             />
           </div>
           <span>
-            <strong className="font-semibold text-fg-primary">{p.progress}%</strong>
+            <strong className="font-semibold text-fg-primary">
+              {t('card.percent', { progress: p.progress })}
+            </strong>
           </span>
         </div>
       </div>
@@ -606,6 +621,7 @@ function ProjectCard({ project: p }: { project: MyProject }) {
 }
 
 function ProjectListRow({ project: p }: { project: MyProject }) {
+  const t = useTranslations('myProjects')
   return (
     <Link
       href={`/projects/${p.id}`}
@@ -644,7 +660,7 @@ function ProjectListRow({ project: p }: { project: MyProject }) {
             <span className="truncate">{p.nextStep.name}</span>
           </>
         ) : (
-          <span className="italic text-fg-tertiary">No open step.</span>
+          <span className="italic text-fg-tertiary">{t('listRow.noOpenStep')}</span>
         )}
       </div>
       <RoleBadge role={p.role} />
@@ -656,7 +672,7 @@ function ProjectListRow({ project: p }: { project: MyProject }) {
           />
         </div>
         <span>
-          {p.progress}% complete · {p.contributors} contributor{p.contributors === 1 ? '' : 's'}
+          {t('listRow.progressSummary', { progress: p.progress, count: p.contributors })}
         </span>
       </div>
     </Link>
@@ -672,22 +688,21 @@ function EmptyState({
   hasFilters: boolean
   onReset: () => void
 }) {
+  const t = useTranslations('myProjects')
   let title: string
   let desc: string
   let actions: React.ReactNode = null
 
   if (tab === 'active') {
-    title = hasFilters ? 'No projects match those filters.' : 'You haven’t joined a project yet.'
-    desc = hasFilters
-      ? 'Try clearing the search or switching role.'
-      : "Browse what’s live right now and find one that fits — even a one-hour step counts."
+    title = hasFilters ? t('empty.activeFilteredTitle') : t('empty.activeTitle')
+    desc = hasFilters ? t('empty.activeFilteredDescription') : t('empty.activeDescription')
     actions = hasFilters ? (
       <button
         type="button"
         onClick={onReset}
         className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
       >
-        Clear filters
+        {t('empty.clearFilters')}
       </button>
     ) : (
       <>
@@ -695,22 +710,22 @@ function EmptyState({
           href="/projects"
           className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
         >
-          Browse projects
+          {t('empty.browseProjects')}
         </Link>
         <Link
           href="/projects/new"
           className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
         >
-          Start your own
+          {t('empty.startYourOwn')}
         </Link>
       </>
     )
   } else if (tab === 'finished') {
-    title = 'Nothing finished yet.'
-    desc = "Once a project wraps, it’ll move here as a record of what you helped ship."
+    title = t('empty.finishedTitle')
+    desc = t('empty.finishedDescription')
   } else {
-    title = 'No archived projects.'
-    desc = "Projects you’ve stepped away from will show up here."
+    title = t('empty.archivedTitle')
+    desc = t('empty.archivedDescription')
   }
 
   return (

@@ -14,7 +14,7 @@ import {
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { gradientFor, initialOf } from '@/lib/avatar'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { fmtAgo } from '@/lib/format'
 import {
   postUpdateAction,
@@ -44,9 +44,18 @@ export type UpdatesFeedItem =
   | { kind: 'step_completed'; id: string; stepTitle: string; atMs: number }
   | { kind: 'members_joined'; id: string; names: string[]; atMs: number }
 
-function joinNames(names: string[]): string {
-  if (names.length <= 2) return names.join(' and ')
-  return `${names.slice(0, -1).join(', ')} and ${names[names.length - 1]}`
+function joinNames(
+  names: string[],
+  t: ReturnType<typeof useTranslations<'project'>>,
+): string {
+  if (names.length <= 1) return names.join('')
+  if (names.length === 2) {
+    return t('milestones.twoNames', { a: names[0], b: names[1] })
+  }
+  return t('milestones.moreNames', {
+    first: names.slice(0, -1).join(', '),
+    last: names[names.length - 1],
+  })
 }
 
 /* ── Overview teaser ─────────────────────────────────────────── */
@@ -60,13 +69,14 @@ export function LatestUpdateTeaser({
   body: string
   createdAtMs: number
 }) {
+  const t = useTranslations('project')
   const { setTab } = useProjectTabs()
   const locale = useLocale()
   return (
     <button
       type="button"
       onClick={() => setTab('updates')}
-      title="Open the Updates tab"
+      title={t('updates.openTabTitle')}
       className="mt-8 flex w-full items-center gap-4 rounded-2xl border border-white/[0.08] bg-bg-surface p-4 text-left transition-colors duration-fast hover:border-amber-500/40 sm:p-5"
     >
       <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/[0.14] text-amber-500">
@@ -74,7 +84,7 @@ export function LatestUpdateTeaser({
       </span>
       <span className="flex min-w-0 flex-1 flex-col gap-0.5">
         <span className="text-[11px] font-semibold uppercase tracking-widest text-fg-tertiary">
-          Latest update · {authorName}
+          {t('updates.latestUpdateBy', { name: authorName })}
         </span>
         <span className="line-clamp-2 text-sm text-fg-primary">{body}</span>
       </span>
@@ -109,6 +119,7 @@ export function ProjectUpdatesPanel({
   hiddenMembersOnlyCount: number
   items: UpdatesFeedItem[]
 }) {
+  const t = useTranslations('project')
   const posts = items.filter((i) => i.kind === 'update')
   const membersOnlyCount = posts.filter(
     (p) => p.kind === 'update' && p.visibility === 'members',
@@ -116,34 +127,31 @@ export function ProjectUpdatesPanel({
   const canSeeMembersOnly = isMember || isAdmin
 
   const heading = (() => {
-    if (posts.length === 0 && hiddenMembersOnlyCount === 0) return <>No updates yet.</>
+    if (posts.length === 0 && hiddenMembersOnlyCount === 0)
+      return <>{t('updates.noUpdatesYet')}</>
     if (canSeeMembersOnly) {
       return (
         <>
-          {posts.length} update{posts.length === 1 ? '' : 's'}.
+          {t('updates.updateCount', { count: posts.length })}
           {membersOnlyCount > 0 && (
             <>
               {' '}
               <em className="italic text-amber-500">
-                {membersOnlyCount} for members only.
+                {t('updates.forMembersOnly', { count: membersOnlyCount })}
               </em>
             </>
           )}
         </>
       )
     }
-    return (
-      <>
-        {posts.length} public update{posts.length === 1 ? '' : 's'}.
-      </>
-    )
+    return <>{t('updates.publicUpdateCount', { count: posts.length })}</>
   })()
 
   return (
     <section>
       <div className="mb-6">
         <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">
-          Updates
+          {t('tabs.updates')}
         </div>
         <h2 className="font-display text-3xl font-normal leading-tight tracking-tight">
           {heading}
@@ -158,18 +166,22 @@ export function ProjectUpdatesPanel({
             <Lock className="size-3.5" />
           </span>
           <span>
-            <b className="font-semibold text-fg-primary">{hiddenMembersOnlyCount}</b>{' '}
-            members-only update{hiddenMembersOnlyCount === 1 ? ' is' : 's are'} hidden.{' '}
+            {t.rich('updates.hiddenGate', {
+              count: hiddenMembersOnlyCount,
+              b: (chunks) => (
+                <b className="font-semibold text-fg-primary">{chunks}</b>
+              ),
+            })}{' '}
             {isSignedIn ? (
               <a href="#join" className="font-semibold text-amber-500 hover:underline">
-                Join the project
+                {t('updates.joinTheProject')}
               </a>
             ) : (
               <Link href="/sign-in" className="font-semibold text-amber-500 hover:underline">
-                Sign in and join
+                {t('updates.signInAndJoin')}
               </Link>
             )}{' '}
-            to see {hiddenMembersOnlyCount === 1 ? 'it' : 'them'}.
+            {t('updates.toSeeThem', { count: hiddenMembersOnlyCount })}
           </span>
         </div>
       )}
@@ -186,11 +198,9 @@ export function ProjectUpdatesPanel({
         </div>
       ) : (
         <div className="flex flex-col items-center gap-2 rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-bg-surface px-8 py-12 text-center">
-          <h3 className="font-display text-2xl">Nothing here yet.</h3>
+          <h3 className="font-display text-2xl">{t('updates.emptyTitle')}</h3>
           <p className="max-w-[420px] text-sm text-fg-secondary">
-            {isLead
-              ? 'Post the first update above — members get notified, and public updates show visitors that this project is active.'
-              : 'When the project lead posts updates or steps get completed, they’ll show up here.'}
+            {isLead ? t('updates.emptyLead') : t('updates.emptyViewer')}
           </p>
         </div>
       )}
@@ -209,6 +219,7 @@ function UpdateComposer({
   projectTitle: string
   memberCount: number
 }) {
+  const t = useTranslations('project')
   const [body, setBody] = useState('')
   const [visibility, setVisibility] = useState<'public' | 'members'>('public')
   const [error, setError] = useState<string | null>(null)
@@ -239,7 +250,7 @@ function UpdateComposer({
           if (e.key === 'Enter') publish()
         }}
         maxLength={5000}
-        placeholder={`Share an update on ${projectTitle}…`}
+        placeholder={t('updates.composerPlaceholder', { title: projectTitle })}
         autoComplete="off"
         className="w-full rounded-lg border border-white/[0.08] bg-bg-surface-2 px-3.5 py-2.5 text-sm text-fg-primary placeholder:text-fg-tertiary focus:border-amber-500/50 focus:outline-none"
       />
@@ -256,7 +267,7 @@ function UpdateComposer({
             )}
           >
             <Globe className="size-3" />
-            Public
+            {t('updates.public')}
           </button>
           <button
             type="button"
@@ -269,13 +280,13 @@ function UpdateComposer({
             )}
           >
             <Lock className="size-3" />
-            Members only
+            {t('updates.membersOnly')}
           </button>
         </div>
         <span className="text-xs text-fg-tertiary">
           {visibility === 'members'
-            ? `Visible only to the ${memberCount} project member${memberCount === 1 ? '' : 's'}`
-            : 'Visible to anyone browsing the project'}
+            ? t('updates.visibleToMembers', { count: memberCount })
+            : t('updates.visibleToAnyone')}
         </span>
         <button
           type="button"
@@ -284,7 +295,7 @@ function UpdateComposer({
           className="ml-auto inline-flex items-center gap-2 rounded-lg bg-amber-500 px-3.5 py-2 text-sm font-semibold text-blue-900 transition-all duration-fast hover:bg-amber-400 disabled:pointer-events-none disabled:opacity-45"
         >
           <Send className="size-3.5" />
-          {isPending ? 'Posting…' : 'Post update'}
+          {isPending ? t('updates.posting') : t('updates.postUpdate')}
         </button>
       </div>
       {error && <p className="text-sm text-red-300">{error}</p>}
@@ -301,8 +312,10 @@ function UpdateCard({
   item: Extract<UpdatesFeedItem, { kind: 'update' }>
   isAdmin: boolean
 }) {
+  const t = useTranslations('project')
+  const tCommon = useTranslations('common')
   const isPrivate = item.visibility === 'members'
-  const authorName = item.author?.name ?? 'Former member'
+  const authorName = item.author?.name ?? t('updates.formerMember')
   const canManage = item.isMine || isAdmin
   const locale = useLocale()
 
@@ -325,7 +338,7 @@ function UpdateCard({
   }
 
   const remove = () => {
-    if (!window.confirm('Delete this update? This can’t be undone.')) return
+    if (!window.confirm(t('updates.confirmDelete'))) return
     setError(null)
     startTransition(async () => {
       const result = await deleteUpdateAction(item.id)
@@ -353,24 +366,24 @@ function UpdateCard({
           <span className="flex items-center gap-2 text-sm font-semibold text-fg-primary">
             {authorName}
             <span className="rounded-full bg-amber-500/[0.14] px-2 py-px text-[10px] font-bold uppercase tracking-wider text-amber-500">
-              Lead
+              {t('updates.leadBadge')}
             </span>
           </span>
           <span className="text-xs text-fg-tertiary">
-            Posted {fmtAgo(item.createdAtMs, locale)}
-            {item.editedAtMs != null && ' · edited'}
+            {t('updates.postedAgo', { ago: fmtAgo(item.createdAtMs, locale) })}
+            {item.editedAtMs != null && <> {t('updates.edited')}</>}
           </span>
         </div>
         <div className="ml-auto flex shrink-0 items-center gap-1.5">
           {isPrivate ? (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-500/[0.14] px-2.5 py-1 text-[11px] font-semibold text-amber-500">
               <Lock className="size-3" />
-              Members only
+              {t('updates.membersOnly')}
             </span>
           ) : (
             <span className="inline-flex items-center gap-1.5 rounded-full bg-bg-surface-2 px-2.5 py-1 text-[11px] font-semibold text-fg-tertiary">
               <Globe className="size-3" />
-              Public
+              {t('updates.public')}
             </span>
           )}
           {canManage && !editing && (
@@ -402,14 +415,14 @@ function UpdateCard({
               disabled={!draft.trim() || isPending}
               className="rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-semibold text-blue-900 transition-colors hover:bg-amber-400 disabled:pointer-events-none disabled:opacity-45"
             >
-              {isPending ? 'Saving…' : 'Save'}
+              {isPending ? tCommon('state.saving') : tCommon('actions.save')}
             </button>
             <button
               type="button"
               onClick={() => setEditing(false)}
               className="rounded-lg border border-white/[0.12] px-3 py-1.5 text-xs font-medium text-fg-secondary transition-colors hover:text-fg-primary"
             >
-              Cancel
+              {tCommon('actions.cancel')}
             </button>
           </div>
         </div>
@@ -432,6 +445,8 @@ function UpdateKebab({
   onEdit: () => void
   onDelete: () => void
 }) {
+  const t = useTranslations('project')
+  const tCommon = useTranslations('common')
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -458,7 +473,7 @@ function UpdateKebab({
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="menu"
         aria-expanded={open}
-        title="Manage update"
+        title={t('updates.manageUpdate')}
         className="flex size-7 items-center justify-center rounded-lg text-fg-tertiary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary"
       >
         <MoreHorizontal className="size-4" />
@@ -478,7 +493,7 @@ function UpdateKebab({
               }}
               className="flex w-full px-3 py-2 text-left text-sm text-fg-secondary transition-colors hover:bg-bg-surface-3 hover:text-fg-primary"
             >
-              Edit
+              {tCommon('actions.edit')}
             </button>
           )}
           <button
@@ -490,7 +505,7 @@ function UpdateKebab({
             }}
             className="flex w-full px-3 py-2 text-left text-sm text-red-300 transition-colors hover:bg-bg-surface-3"
           >
-            Delete
+            {tCommon('actions.delete')}
           </button>
         </div>
       )}
@@ -505,6 +520,7 @@ function MilestoneRow({
 }: {
   item: Extract<UpdatesFeedItem, { kind: 'step_completed' | 'members_joined' }>
 }) {
+  const t = useTranslations('project')
   const locale = useLocale()
   return (
     <div className="flex items-center gap-3 px-2 text-sm text-fg-tertiary">
@@ -518,13 +534,15 @@ function MilestoneRow({
       <span className="min-w-0 truncate">
         {item.kind === 'step_completed' ? (
           <>
-            Step completed —{' '}
+            {t('milestones.stepCompleted')}{' '}
             <b className="font-semibold text-fg-secondary">{item.stepTitle}</b>
           </>
         ) : (
           <>
-            {item.names.length} {item.names.length === 1 ? 'person' : 'people'} joined —{' '}
-            <b className="font-semibold text-fg-secondary">{joinNames(item.names)}</b>
+            {t('milestones.peopleJoined', { count: item.names.length })}{' '}
+            <b className="font-semibold text-fg-secondary">
+              {joinNames(item.names, t)}
+            </b>
           </>
         )}
       </span>

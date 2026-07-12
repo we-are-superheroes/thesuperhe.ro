@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 import { auth } from '@clerk/nextjs/server'
 import {
   ArrowRight,
@@ -55,6 +56,7 @@ export async function generateMetadata({ params }: PageParams) {
 export default async function BlueprintViewPage({ params }: PageParams) {
   const { id } = await params
   const { userId } = await auth()
+  const t = await getTranslations('blueprints')
 
   const blueprint = await db.blueprint.findUnique({
     where: { id },
@@ -148,7 +150,7 @@ export default async function BlueprintViewPage({ params }: PageParams) {
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-sm text-fg-tertiary">
         <Link href="/blueprints" className="transition-colors hover:text-fg-primary">
-          Blueprints
+          {t('detail.breadcrumbRoot')}
         </Link>
         <ChevronRight className="size-3.5" />
         {blueprint.parent && (
@@ -176,7 +178,7 @@ export default async function BlueprintViewPage({ params }: PageParams) {
           {blueprint.parent && (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-400/30 bg-blue-500/[0.10] px-3 py-1 text-xs font-semibold uppercase tracking-wider text-blue-200">
               <Sparkles className="size-3" strokeWidth={2.5} />
-              Variant
+              {t('detail.variantBadge')}
             </span>
           )}
           {blueprint.country && (
@@ -199,36 +201,42 @@ export default async function BlueprintViewPage({ params }: PageParams) {
 
         <div className="flex flex-wrap items-center gap-3 text-sm text-fg-secondary">
           <span>
-            Created by{' '}
-            {blueprint.createdBy ? (
-              <Link
-                href={`/users/${blueprint.createdBy.id}`}
-                className="font-medium text-fg-primary transition-colors hover:text-amber-500"
-              >
-                {blueprint.createdBy.name}
-              </Link>
-            ) : (
-              <span className="text-fg-tertiary">someone</span>
-            )}
+            {t.rich('detail.createdBy', {
+              name: blueprint.createdBy?.name ?? t('detail.someone'),
+              author: (chunks) =>
+                blueprint.createdBy ? (
+                  <Link
+                    href={`/users/${blueprint.createdBy.id}`}
+                    className="font-medium text-fg-primary transition-colors hover:text-amber-500"
+                  >
+                    {chunks}
+                  </Link>
+                ) : (
+                  <span className="text-fg-tertiary">{chunks}</span>
+                ),
+            })}
           </span>
           <span className="size-[3px] rounded-full bg-fg-tertiary" />
           <span className="inline-flex items-center gap-1.5">
             <Zap className="size-3.5" />
-            <strong className="font-semibold text-fg-primary">
-              {blueprint.reuseCount}
-            </strong>
-            launch{blueprint.reuseCount === 1 ? '' : 'es'}
+            {t.rich('counts.launches', {
+              count: blueprint.reuseCount,
+              strong: (chunks) => (
+                <strong className="font-semibold text-fg-primary">{chunks}</strong>
+              ),
+            })}
           </span>
           <span className="size-[3px] rounded-full bg-fg-tertiary" />
           <span className="inline-flex items-center gap-1.5">
             <FolderOpen className="size-3.5" />
-            {blueprint.steps.length} step{blueprint.steps.length === 1 ? '' : 's'}
+            {t('counts.steps', { count: blueprint.steps.length })}
           </span>
           {totalEstimatedHrs > 0 && (
             <>
               <span className="size-[3px] rounded-full bg-fg-tertiary" />
               <span className="inline-flex items-center gap-1.5">
-                <Clock className="size-3.5" />~{totalEstimatedHrs}h estimated
+                <Clock className="size-3.5" />
+                {t('detail.estimatedTotal', { hours: totalEstimatedHrs })}
               </span>
             </>
           )}
@@ -240,16 +248,16 @@ export default async function BlueprintViewPage({ params }: PageParams) {
             href={`/projects/new?blueprint=${blueprint.id}`}
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
           >
-            Use blueprint
+            {t('cta.use')}
             <ArrowRight className="size-3.5" strokeWidth={2.5} />
           </Link>
           <Link
             href={`/projects/new?blueprint=${blueprint.id}&variant=1`}
             className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 bg-bg-surface px-4 py-2.5 text-sm font-medium text-fg-primary transition-colors hover:border-neutral-600 hover:bg-white/[0.04]"
-            title="Adapt this blueprint for another place or language"
+            title={t('cta.createVariantTitle')}
           >
             <GitBranch className="size-3.5" strokeWidth={2.5} />
-            Create variant
+            {t('cta.createVariant')}
           </Link>
           {isCreator && (
             <Link
@@ -257,7 +265,7 @@ export default async function BlueprintViewPage({ params }: PageParams) {
               className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 bg-bg-surface px-4 py-2.5 text-sm font-medium text-fg-primary transition-colors hover:border-neutral-600 hover:bg-white/[0.04]"
             >
               <Pencil className="size-3.5" strokeWidth={2.5} />
-              Modify blueprint
+              {t('cta.modify')}
             </Link>
           )}
           {isAdmin && (
@@ -278,10 +286,10 @@ export default async function BlueprintViewPage({ params }: PageParams) {
           {/* About */}
           <section>
             <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">
-              About this blueprint
+              {t('detail.aboutEyebrow')}
             </div>
             <h2 className="mb-3 font-display text-2xl font-normal leading-tight tracking-tight">
-              What you&apos;ll set up.
+              {t('detail.aboutHeading')}
             </h2>
             {blueprint.description
               .split(/\n+/)
@@ -297,15 +305,14 @@ export default async function BlueprintViewPage({ params }: PageParams) {
           {/* Steps */}
           <section>
             <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">
-              The plan
+              {t('detail.planEyebrow')}
             </div>
             <h2 className="mb-5 font-display text-2xl font-normal leading-tight tracking-tight">
-              {blueprint.steps.length} step
-              {blueprint.steps.length === 1 ? '' : 's'} to deliver this.
+              {t('detail.stepsHeading', { count: blueprint.steps.length })}
             </h2>
             {blueprint.steps.length === 0 ? (
               <div className="rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-bg-surface px-8 py-12 text-center text-sm text-fg-tertiary">
-                This blueprint has no steps yet.
+                {t('detail.noSteps')}
               </div>
             ) : (
               <div className="flex flex-col gap-3">
@@ -316,11 +323,15 @@ export default async function BlueprintViewPage({ params }: PageParams) {
                   >
                     <div className="mb-1.5 flex flex-wrap items-center gap-3 font-display text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
                       <span>
-                        Step {s.order} of {blueprint.steps.length}
+                        {t('steps.orderOfTotal', {
+                          order: s.order,
+                          total: blueprint.steps.length,
+                        })}
                       </span>
                       {s.estimatedHrs != null && (
                         <span className="inline-flex items-center gap-1 text-fg-tertiary">
-                          <Clock className="size-3" />~{s.estimatedHrs}h
+                          <Clock className="size-3" />
+                          {t('steps.estimatedHours', { hours: s.estimatedHrs })}
                         </span>
                       )}
                     </div>
@@ -355,9 +366,9 @@ export default async function BlueprintViewPage({ params }: PageParams) {
           {familySize > 1 && (
             <div className="rounded-2xl border border-white/[0.08] bg-bg-surface p-6">
               <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
-                Family
+                {t('detail.family')}
                 <span className="rounded-full bg-bg-surface-2 px-2 py-0.5 text-[10px] tabular-nums text-fg-secondary">
-                  {familySize} variant{familySize === 1 ? '' : 's'}
+                  {t('counts.variants', { count: familySize })}
                 </span>
               </div>
               <div className="flex flex-col gap-1.5">
@@ -368,6 +379,7 @@ export default async function BlueprintViewPage({ params }: PageParams) {
                   country={rootBlueprint.country}
                   language={rootBlueprint.language}
                   isRoot
+                  originalLabel={t('variants.original')}
                 />
                 {familyVariants.map((v) => (
                   <FamilyRow
@@ -385,28 +397,28 @@ export default async function BlueprintViewPage({ params }: PageParams) {
 
           {/* Details */}
           <div className="rounded-2xl border border-white/[0.08] bg-bg-surface p-6">
-            <div className="mb-4 font-display text-lg">Details</div>
-            <DetailRow icon={<FolderOpen className="size-3.5" />} label="Type">
-              {blueprint.projectType?.name ?? <Muted>Not set</Muted>}
+            <div className="mb-4 font-display text-lg">{t('detail.detailsTitle')}</div>
+            <DetailRow icon={<FolderOpen className="size-3.5" />} label={t('detail.type')}>
+              {blueprint.projectType?.name ?? <Muted>{t('detail.notSet')}</Muted>}
             </DetailRow>
-            <DetailRow icon={<MapPin className="size-3.5" />} label="Country">
+            <DetailRow icon={<MapPin className="size-3.5" />} label={t('detail.country')}>
               {blueprint.country ? (
                 <>
                   {countryFlag(blueprint.country) ? `${countryFlag(blueprint.country)} ` : ''}
                   {countryLabel(blueprint.country)}
                 </>
               ) : (
-                <Muted>Any</Muted>
+                <Muted>{t('detail.any')}</Muted>
               )}
             </DetailRow>
-            <DetailRow icon={<Languages className="size-3.5" />} label="Language">
+            <DetailRow icon={<Languages className="size-3.5" />} label={t('detail.language')}>
               {blueprint.language ? (
                 languageLabel(blueprint.language)
               ) : (
-                <Muted>Any</Muted>
+                <Muted>{t('detail.any')}</Muted>
               )}
             </DetailRow>
-            <DetailRow icon={<Globe className="size-3.5" />} label="Projects forked">
+            <DetailRow icon={<Globe className="size-3.5" />} label={t('detail.projectsForked')}>
               {blueprint._count.projects}
             </DetailRow>
           </div>
@@ -423,6 +435,7 @@ function FamilyRow({
   country,
   language,
   isRoot,
+  originalLabel,
 }: {
   href: string
   active: boolean
@@ -430,6 +443,7 @@ function FamilyRow({
   country: string | null
   language: string | null
   isRoot?: boolean
+  originalLabel?: string
 }) {
   const inner = (
     <>
@@ -450,7 +464,7 @@ function FamilyRow({
         )}
         {isRoot && (
           <span className="text-[9px] uppercase tracking-widest text-fg-tertiary">
-            original
+            {originalLabel}
           </span>
         )}
       </span>

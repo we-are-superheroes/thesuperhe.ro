@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Search, Plus, Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { SelectBox } from '@/components/platform/project-form-bits'
@@ -33,29 +34,28 @@ type FilterKey = 'open' | 'completed'
 type SortKey = 'recent' | 'project' | 'name'
 type GroupKey = 'none' | 'project'
 
-const STATUS_LABEL: Record<string, string> = {
-  open: 'Open',
-  in_progress: 'In progress',
-  completed: 'Completed',
-}
-
 const STATUS_PILL_CLASSES: Record<string, string> = {
   open: 'border-white/[0.12] bg-bg-surface-2 text-fg-secondary',
   in_progress: 'border-blue-400/50 bg-blue-500/[0.18] text-blue-200',
   completed: 'border-green-500/40 bg-green-500/[0.14] text-green-300',
 }
 
-function fmtHours(h: number): string {
-  if (h <= 0) return '0h'
+type MyStepsT = ReturnType<typeof useTranslations<'mySteps'>>
+
+function fmtHours(t: MyStepsT, h: number): string {
+  if (h <= 0) return t('hours.zero')
   if (h >= 1) {
     const whole = Math.floor(h)
     const min = Math.round((h - whole) * 60)
-    return min ? `${whole}h ${min}m` : `${whole}h`
+    return min
+      ? t('hours.hoursMinutes', { hours: whole, minutes: min })
+      : t('hours.hoursOnly', { hours: whole })
   }
-  return `${Math.round(h * 60)}m`
+  return t('hours.minutesOnly', { minutes: Math.round(h * 60) })
 }
 
 export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
+  const t = useTranslations('mySteps')
   const [steps, setSteps] = useState(initialSteps)
   const [filter, setFilter] = useState<FilterKey>('open')
   const [query, setQuery] = useState('')
@@ -163,7 +163,7 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search steps…"
+            placeholder={t('topbar.searchPlaceholder')}
             className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
           />
         </div>
@@ -173,8 +173,8 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
           >
             <Plus className="size-3.5" strokeWidth={2.5} />
-            <span className="hidden sm:inline">Find a step to join</span>
-            <span className="sm:hidden">Find</span>
+            <span className="hidden sm:inline">{t('topbar.findStep')}</span>
+            <span className="sm:hidden">{t('topbar.findStepShort')}</span>
           </Link>
         </div>
       </div>
@@ -183,17 +183,18 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
         <section className="flex flex-col items-start gap-6 sm:flex-row sm:items-end sm:justify-between sm:gap-8">
           <div>
             <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
-              Your <em className="italic text-amber-500">time</em>, logged.
+              {t.rich('hero.title', {
+                em: (chunks) => <em className="italic text-amber-500">{chunks}</em>,
+              })}
             </h1>
             <p className="max-w-[520px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-              Track the hours you&apos;ve put into each step you&apos;ve joined.
-              Change a step&apos;s status from the project page when you&apos;re ready.
+              {t('hero.subtitle')}
             </p>
           </div>
           <div className="flex w-full flex-wrap gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface px-5 py-4 sm:w-auto">
-            <Stat value={counts.open} label="Active" dimIfZero />
-            <Stat value={counts.completed} label="Completed" dimIfZero />
-            <Stat value={fmtHours(totalHoursMine)} label="My hours" />
+            <Stat value={counts.open} label={t('stats.active')} dimIfZero />
+            <Stat value={counts.completed} label={t('stats.completed')} dimIfZero />
+            <Stat value={fmtHours(t, totalHoursMine)} label={t('stats.myHours')} />
           </div>
         </section>
 
@@ -201,13 +202,13 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
           <div className="flex flex-wrap items-center gap-2">
             <FilterPill
               active={filter === 'open'}
-              label="Active"
+              label={t('filter.active')}
               count={counts.open}
               onClick={() => setFilter('open')}
             />
             <FilterPill
               active={filter === 'completed'}
-              label="Completed"
+              label={t('filter.completed')}
               count={counts.completed}
               onClick={() => setFilter('completed')}
             />
@@ -218,18 +219,18 @@ export function MyStepsClient({ steps: initialSteps }: { steps: MyStep[] }) {
               onChange={(e) => setSort(e.target.value as SortKey)}
               className="w-auto cursor-pointer bg-bg-surface py-2 pl-3 pr-8 [background-position:right_10px_center]"
             >
-              <option value="recent">Recently logged</option>
-              <option value="project">By project</option>
-              <option value="name">By name</option>
+              <option value="recent">{t('sort.recentlyLogged')}</option>
+              <option value="project">{t('sort.byProject')}</option>
+              <option value="name">{t('sort.byName')}</option>
             </SelectBox>
             <SelectBox
               value={groupBy}
               onChange={(e) => setGroupBy(e.target.value as GroupKey)}
-              title="Group by"
+              title={t('group.title')}
               className="w-auto cursor-pointer bg-bg-surface py-2 pl-3 pr-8 [background-position:right_10px_center]"
             >
-              <option value="none">No groups</option>
-              <option value="project">Group by project</option>
+              <option value="none">{t('group.none')}</option>
+              <option value="project">{t('group.byProject')}</option>
             </SelectBox>
           </div>
         </div>
@@ -339,6 +340,8 @@ function StepRow({
   ) => void
   onDeleted: (logId: string, newTotal: number) => void
 }) {
+  const t = useTranslations('mySteps')
+  const tSteps = useTranslations('steps')
   const canLog = step.stepStatus !== 'completed'
   return (
     <div
@@ -364,16 +367,20 @@ function StepRow({
                 STATUS_PILL_CLASSES[step.stepStatus] ?? STATUS_PILL_CLASSES.open,
               )}
             >
-              {STATUS_LABEL[step.stepStatus] ?? step.stepStatus}
+              {step.stepStatus === 'open' ||
+              step.stepStatus === 'in_progress' ||
+              step.stepStatus === 'completed'
+                ? tSteps(`status.${step.stepStatus}`)
+                : step.stepStatus}
             </span>
             {step.helpWanted && step.stepStatus !== 'completed' && (
               <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-amber-500/50 bg-amber-500/[0.14] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-400">
-                Needs help
+                {tSteps('needsHelp')}
               </span>
             )}
             {step.isCoordinator && (
               <span className="inline-flex items-center gap-1 rounded-full border border-amber-500/40 bg-amber-500/[0.10] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-amber-500">
-                Coordinator
+                {t('badge.coordinator')}
               </span>
             )}
           </div>
@@ -387,7 +394,7 @@ function StepRow({
             {step.skill && <span>· {step.skill}</span>}
             <span className="inline-flex items-center gap-1">
               <Clock className="size-3" />
-              You: {fmtHours(step.myHoursLogged)}
+              {t('row.myHours', { hours: fmtHours(t, step.myHoursLogged) })}
             </span>
           </div>
         </div>
@@ -404,17 +411,18 @@ function StepRow({
 }
 
 function EmptyState({ filter, query }: { filter: FilterKey; query: string }) {
+  const t = useTranslations('mySteps')
   let title: string
   let desc: string
   if (query.trim()) {
-    title = 'No steps match that search.'
-    desc = 'Try a different keyword or clear the search.'
+    title = t('empty.searchTitle')
+    desc = t('empty.searchDescription')
   } else if (filter === 'completed') {
-    title = 'Nothing completed yet.'
-    desc = "Mark a step completed from the project page and it'll show up here."
+    title = t('empty.completedTitle')
+    desc = t('empty.completedDescription')
   } else {
-    title = 'You haven’t joined any steps yet.'
-    desc = 'Find a project, join a step, then come back here to log time.'
+    title = t('empty.activeTitle')
+    desc = t('empty.activeDescription')
   }
   return (
     <div className="flex flex-col items-center gap-3 rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-[radial-gradient(ellipse_at_top,rgba(244,165,53,0.06),transparent_70%),var(--color-bg-surface)] px-8 py-12 text-center">

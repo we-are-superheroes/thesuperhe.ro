@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import {
   ArrowRight,
   Check,
@@ -49,6 +50,7 @@ export interface MatchCardData {
 type Kind = 'all' | 'step' | 'project'
 
 export function SkillMatchesClient({ cards }: { cards: MatchCardData[] }) {
+  const t = useTranslations('skillMatches')
   const [kind, setKind] = useState<Kind>('all')
   const [remoteOnly, setRemoteOnly] = useState(false)
   const [query, setQuery] = useState('')
@@ -68,11 +70,15 @@ export function SkillMatchesClient({ cards }: { cards: MatchCardData[] }) {
   const adjacent = visible.filter((c) => c.direct.length === 0)
 
   const pills: Array<{ key: Kind; label: string; count: number }> = [
-    { key: 'all', label: 'All', count: countable.length },
-    { key: 'step', label: 'Steps', count: countable.filter((c) => c.kind === 'step').length },
+    { key: 'all', label: t('pills.all'), count: countable.length },
+    {
+      key: 'step',
+      label: t('pills.steps'),
+      count: countable.filter((c) => c.kind === 'step').length,
+    },
     {
       key: 'project',
-      label: 'Projects',
+      label: t('pills.projects'),
       count: countable.filter((c) => c.kind === 'project').length,
     },
   ]
@@ -105,13 +111,13 @@ export function SkillMatchesClient({ cards }: { cards: MatchCardData[] }) {
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search matches…"
+              placeholder={t('tools.searchPlaceholder')}
               autoComplete="off"
               className="w-[210px] rounded-lg border border-neutral-700 bg-bg-surface py-2 pl-9 pr-3 text-sm text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
             />
           </div>
           <label className="inline-flex cursor-pointer select-none items-center gap-2 text-sm text-fg-secondary">
-            Remote only
+            {t('tools.remoteOnly')}
             <span className="relative inline-block h-[19px] w-[34px]">
               <input
                 type="checkbox"
@@ -131,10 +137,9 @@ export function SkillMatchesClient({ cards }: { cards: MatchCardData[] }) {
           <div className="mb-2 flex size-16 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-2 text-amber-500">
             <Star className="size-7" />
           </div>
-          <h3 className="font-display text-2xl">No matches with those filters.</h3>
+          <h3 className="font-display text-2xl">{t('emptyFiltered.title')}</h3>
           <p className="max-w-[460px] leading-relaxed text-fg-secondary">
-            Try turning off &ldquo;Remote only&rdquo;, clearing the search — or add more
-            skills to your profile to see more matches.
+            {t('emptyFiltered.description')}
           </p>
         </div>
       ) : (
@@ -142,8 +147,8 @@ export function SkillMatchesClient({ cards }: { cards: MatchCardData[] }) {
           {strong.length > 0 && (
             <section className="flex flex-col gap-3">
               <GroupHead
-                title="Strong matches"
-                sub={`${strong.length} — they need a skill you already have`}
+                title={t('groups.strongTitle')}
+                sub={t('groups.strongSub', { count: strong.length })}
               />
               {strong.map((c, i) => (
                 <MatchCard key={`${c.kind}-${c.id}`} card={c} index={i} />
@@ -153,8 +158,8 @@ export function SkillMatchesClient({ cards }: { cards: MatchCardData[] }) {
           {adjacent.length > 0 && (
             <section className="flex flex-col gap-3">
               <GroupHead
-                title="Adjacent to your skills"
-                sub={`${adjacent.length} — in the same skill areas, a chance to learn something new`}
+                title={t('groups.adjacentTitle')}
+                sub={t('groups.adjacentSub', { count: adjacent.length })}
               />
               {adjacent.map((c, i) => (
                 <MatchCard key={`${c.kind}-${c.id}`} card={c} index={i} />
@@ -194,6 +199,7 @@ function GroupHead({ title, sub }: { title: string; sub: string }) {
 /* ── Score ring ─────────────────────────────────────────────── */
 
 function ScoreRing({ score, strong }: { score: number; strong: boolean }) {
+  const t = useTranslations('skillMatches')
   const r = 24
   const c = 2 * Math.PI * r
   const offset = c * (1 - score / 100)
@@ -223,11 +229,11 @@ function ScoreRing({ score, strong }: { score: number; strong: boolean }) {
         </svg>
         <span className="absolute inset-0 flex items-center justify-center font-display text-base">
           {score}
-          <span className="text-[10px] text-fg-tertiary">%</span>
+          <span className="text-[10px] text-fg-tertiary">{t('ring.percentSign')}</span>
         </span>
       </div>
       <span className="text-[10px] font-semibold uppercase tracking-widest text-fg-tertiary">
-        Match
+        {t('ring.matchLabel')}
       </span>
     </div>
   )
@@ -236,6 +242,7 @@ function ScoreRing({ score, strong }: { score: number; strong: boolean }) {
 /* ── Card ───────────────────────────────────────────────────── */
 
 function MatchCard({ card, index }: { card: MatchCardData; index: number }) {
+  const t = useTranslations('skillMatches')
   const strong = card.direct.length > 0
   return (
     <Link
@@ -256,12 +263,14 @@ function MatchCard({ card, index }: { card: MatchCardData; index: number }) {
                 : 'border-blue-400/40 bg-blue-500/[0.10] text-blue-300',
             )}
           >
-            {card.kind}
+            {card.kind === 'step' ? t('card.kindStep') : t('card.kindProject')}
           </span>
           <ProjectStatusBadge status={card.projectStatus} />
           {card.type && <span className="text-xs text-fg-tertiary">{card.type}</span>}
           {card.estimatedHrs != null && (
-            <span className="text-xs text-fg-tertiary">· ~{card.estimatedHrs}h</span>
+            <span className="text-xs text-fg-tertiary">
+              {t('card.estimatedHours', { hours: card.estimatedHrs })}
+            </span>
           )}
         </div>
         <h3 className="text-lg font-semibold leading-snug">
@@ -287,7 +296,7 @@ function MatchCard({ card, index }: { card: MatchCardData; index: number }) {
       <div className="col-start-2 flex flex-row flex-wrap items-center gap-2 sm:col-start-3 sm:flex-col sm:items-end sm:text-right">
         <LocationBit card={card} />
         <span className="inline-flex items-center gap-1.5 text-sm font-medium text-amber-500 opacity-0 transition-all duration-fast group-hover:opacity-100 sm:mt-2">
-          {card.kind === 'step' ? 'Claim this step' : 'View project'}
+          {card.kind === 'step' ? t('card.claimStep') : t('card.viewProject')}
           <ArrowRight className="size-3.5" />
         </span>
       </div>
@@ -320,12 +329,16 @@ function SkillTag({ name, card }: { name: string; card: MatchCardData }) {
 }
 
 function WhyLine({ card }: { card: MatchCardData }) {
+  const t = useTranslations('skillMatches')
   const bits: React.ReactNode[] = []
   if (card.direct.length > 0) {
     bits.push(
       <span key="direct" className="inline-flex items-center gap-1.5 text-green-300">
         <Check className="size-3 shrink-0" strokeWidth={2.5} />
-        Needs {card.direct.join(' and ')} — you have {card.direct.length > 1 ? 'both' : 'it'}
+        {t('why.needsSkills', {
+          skills: card.direct.join(t('why.andJoiner')),
+          count: card.direct.length,
+        })}
       </span>,
     )
   }
@@ -333,7 +346,7 @@ function WhyLine({ card }: { card: MatchCardData }) {
     bits.push(
       <span key="related" className="inline-flex items-center gap-1.5">
         <Waves className="size-3 shrink-0" />
-        {card.related.join(', ')} is close to your skills
+        {t('why.relatedSkills', { skills: card.related.join(', ') })}
       </span>,
     )
   }
@@ -342,35 +355,35 @@ function WhyLine({ card }: { card: MatchCardData }) {
     bits.push(
       <span key="loc" className="inline-flex items-center gap-1.5 text-green-300">
         <MapPin className="size-3 shrink-0" />
-        In {ln.city}, same as you
+        {t('why.near', { city: ln.city })}
       </span>,
     )
   } else if (ln.kind === 'far') {
     bits.push(
       <span key="loc" className="inline-flex items-center gap-1.5">
         <MapPin className="size-3 shrink-0" />
-        {ln.location ?? 'Location unknown'} — travel needed
+        {t('why.far', { location: ln.location ?? t('why.locationUnknown') })}
       </span>,
     )
   } else if (ln.kind === 'remote-lang') {
     bits.push(
       <span key="loc" className="inline-flex items-center gap-1.5 text-green-300">
         <Globe className="size-3 shrink-0" />
-        Remote, works in {card.languageLabel ?? ln.language}
+        {t('why.remoteLang', { language: card.languageLabel ?? ln.language })}
       </span>,
     )
   } else if (ln.kind === 'remote-nolang') {
     bits.push(
       <span key="loc" className="inline-flex items-center gap-1.5">
         <Globe className="size-3 shrink-0" />
-        Remote, but runs in {card.languageLabel ?? ln.language}
+        {t('why.remoteNoLang', { language: card.languageLabel ?? ln.language })}
       </span>,
     )
   } else {
     bits.push(
       <span key="loc" className="inline-flex items-center gap-1.5">
         <Globe className="size-3 shrink-0" />
-        Remote contributors welcome
+        {t('why.remoteUnknown')}
       </span>,
     )
   }
@@ -388,12 +401,13 @@ function WhyLine({ card }: { card: MatchCardData }) {
 }
 
 function LocationBit({ card }: { card: MatchCardData }) {
+  const t = useTranslations('skillMatches')
   if (card.remote) {
     return (
       <span className="flex items-center gap-2">
         <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs text-fg-secondary">
           <Globe className="size-3 shrink-0 text-fg-tertiary" />
-          Remote
+          {t('rail.remote')}
         </span>
         {card.languageLabel && (
           <span
@@ -415,9 +429,11 @@ function LocationBit({ card }: { card: MatchCardData }) {
     <span className="inline-flex items-center gap-1.5 whitespace-nowrap text-xs text-fg-secondary">
       <MapPin className="size-3 shrink-0 text-fg-tertiary" />
       {near ? (
-        <span className="font-medium text-green-300">{card.location} · near you</span>
+        <span className="font-medium text-green-300">
+          {t('rail.nearYou', { location: card.location ?? '' })}
+        </span>
       ) : (
-        card.location ?? 'Location not set'
+        card.location ?? t('rail.locationNotSet')
       )}
     </span>
   )

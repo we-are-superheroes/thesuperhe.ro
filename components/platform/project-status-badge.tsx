@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 
 /* ================================================================
@@ -6,21 +7,23 @@ import { cn } from '@/lib/utils'
    page's hero keeps its own larger pill with the glyphs.
    ================================================================ */
 
-const STYLES: Record<string, { label: string; className: string }> = {
+type KnownStatus = 'defining' | 'needs_help' | 'in_progress' | 'completed'
+
+const STYLES: Record<string, { key: KnownStatus; className: string }> = {
   defining: {
-    label: 'Being defined',
+    key: 'defining',
     className: 'border-blue-400/40 bg-blue-500/[0.14] text-blue-200',
   },
   needs_help: {
-    label: 'Needs help',
+    key: 'needs_help',
     className: 'border-amber-500/50 bg-amber-500/[0.16] text-amber-400',
   },
   in_progress: {
-    label: 'In progress',
+    key: 'in_progress',
     className: 'border-green-500/40 bg-green-500/[0.14] text-green-300',
   },
   completed: {
-    label: 'Completed',
+    key: 'completed',
     className: 'border-green-500/30 bg-green-500/[0.10] text-green-300',
   },
 }
@@ -32,6 +35,7 @@ export function ProjectStatusBadge({
   status: string
   className?: string
 }) {
+  const t = useTranslations('project')
   const s = STYLES[status]
   if (!s) return null
   return (
@@ -42,7 +46,7 @@ export function ProjectStatusBadge({
         className,
       )}
     >
-      {s.label}
+      {t(`status.${s.key}`)}
     </span>
   )
 }

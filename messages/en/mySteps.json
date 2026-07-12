@@ -1,1 +1,50 @@
-{}
+{
+  "topbar": {
+    "searchPlaceholder": "Search steps…",
+    "findStep": "Find a step to join",
+    "findStepShort": "Find"
+  },
+  "hero": {
+    "title": "Your <em>time</em>, logged.",
+    "subtitle": "Track the hours you've put into each step you've joined. Change a step's status from the project page when you're ready."
+  },
+  "stats": {
+    "active": "Active",
+    "completed": "Completed",
+    "myHours": "My hours"
+  },
+  "filter": {
+    "active": "Active",
+    "completed": "Completed"
+  },
+  "sort": {
+    "recentlyLogged": "Recently logged",
+    "byProject": "By project",
+    "byName": "By name"
+  },
+  "group": {
+    "title": "Group by",
+    "none": "No groups",
+    "byProject": "Group by project"
+  },
+  "badge": {
+    "coordinator": "Coordinator"
+  },
+  "row": {
+    "myHours": "You: {hours}"
+  },
+  "hours": {
+    "zero": "0h",
+    "hoursOnly": "{hours}h",
+    "hoursMinutes": "{hours}h {minutes}m",
+    "minutesOnly": "{minutes}m"
+  },
+  "empty": {
+    "searchTitle": "No steps match that search.",
+    "searchDescription": "Try a different keyword or clear the search.",
+    "completedTitle": "Nothing completed yet.",
+    "completedDescription": "Mark a step completed from the project page and it'll show up here.",
+    "activeTitle": "You haven’t joined any steps yet.",
+    "activeDescription": "Find a project, join a step, then come back here to log time."
+  }
+}

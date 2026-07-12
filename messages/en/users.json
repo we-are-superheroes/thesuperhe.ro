@@ -1,1 +1,69 @@
-{}
+{
+  "breadcrumb": {
+    "discover": "Discover",
+    "people": "People"
+  },
+  "hero": {
+    "joined": "Joined {date}",
+    "editProfile": "Edit profile",
+    "sendMessage": "Send a message",
+    "inviteToProject": "Invite to a project",
+    "invitesComingSoon": "Project invites are coming soon"
+  },
+  "stats": {
+    "projectsLabel": "Projects",
+    "projectsSub": "{active, plural, one {# active} other {# active}} · {finished, plural, one {# finished} other {# finished}}",
+    "contributedLabel": "Contributed",
+    "hoursUnit": "h",
+    "contributedSub": "Across all projects",
+    "stepsShippedLabel": "Steps shipped",
+    "stepsShippedSub": "Completed by them",
+    "blueprintsLabel": "Blueprints",
+    "blueprintsSub": "Forked {count, plural, one {# time} other {# times}}",
+    "none": "—"
+  },
+  "about": {
+    "eyebrow": "About",
+    "title": "What {firstName} cares about.",
+    "emptySelf": "You haven’t written a bio yet. <link>Add one</link> to help leads understand what drives you.",
+    "emptyOther": "{name} hasn’t written a bio yet."
+  },
+  "skills": {
+    "eyebrow": "Skills",
+    "title": "What {firstName} brings.",
+    "emptySelf": "No skills on your profile yet. <link>Add some</link> so projects can find you.",
+    "emptyOther": "{name} hasn’t listed any skills yet.",
+    "seeking": "Open to projects needing this",
+    "notSeeking": "Has this skill, but not looking for projects that need it"
+  },
+  "proficiency": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "expert": "Expert"
+  },
+  "projects": {
+    "eyebrow": "Projects",
+    "title": "What {firstName} is doing.",
+    "joined": "Joined {date}",
+    "wrapped": "Wrapped {date}",
+    "typeOther": "Other",
+    "remote": "Remote"
+  },
+  "role": {
+    "lead": "Leading",
+    "contributor": "Contributing"
+  },
+  "tabs": {
+    "active": "Active",
+    "finished": "Finished",
+    "all": "All",
+    "emptyActive": "Nothing active right now.",
+    "emptyFinished": "Nothing finished yet.",
+    "emptyAll": "No projects yet."
+  },
+  "card": {
+    "completed": "Completed",
+    "activeStatus": "Active",
+    "progressPct": "{progress}%"
+  }
+}

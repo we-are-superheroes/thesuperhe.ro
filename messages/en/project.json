@@ -1,1 +1,136 @@
-{}
+{
+  "status": {
+    "defining": "Being defined",
+    "needs_help": "Needs help",
+    "in_progress": "In progress",
+    "completed": "Completed"
+  },
+  "someone": "Someone",
+  "topbar": {
+    "browseProjects": "Browse projects",
+    "modifyProject": "Modify project",
+    "modify": "Modify"
+  },
+  "hero": {
+    "membersOnly": "Members only",
+    "changeStatusTitle": "Change project status",
+    "change": "Change",
+    "openInGoogleMaps": "Open in Google Maps",
+    "remoteWelcome": "Remote contributors welcome",
+    "started": "Started {date}"
+  },
+  "tabs": {
+    "ariaLabel": "Project sections",
+    "overview": "Overview",
+    "updates": "Updates"
+  },
+  "about": {
+    "kicker": "About this project",
+    "noDescription": "No description yet — the project lead hasn’t written one."
+  },
+  "stepsSection": {
+    "kicker": "Steps to take",
+    "headingNeedsHelp": "{total, plural, one {# step} other {# steps}}. <em>{needing, plural, one {# needs help} other {# need help}}</em> right now.",
+    "headingProgress": "{total, plural, one {# step} other {# steps}}. <em>making progress</em> right now.",
+    "noStepsYet": "No steps yet.",
+    "emptyTitle": "The step list is empty.",
+    "emptyDescription": "Once the project lead breaks the work down into steps, they’ll show up here so you can pick one to claim."
+  },
+  "join": {
+    "signInToJoin": "Sign in to join",
+    "requestSent": "Request sent",
+    "joining": "Joining…",
+    "joinProject": "Join project",
+    "leaving": "Leaving…",
+    "joined": "Joined",
+    "membershipMenu": "Membership menu",
+    "memberNote": "You’re a member. <b>{title}</b> shows in your dashboard and you can see members-only updates.",
+    "seeOpenSteps": "See open steps",
+    "leaveProject": "Leave project",
+    "leaveConfirm": "{count, plural, one {You have # step assigned to you on this project. If you leave, it goes back to the team.} other {You have # steps assigned to you on this project. If you leave, they go back to the team.}}\n\nAre you sure you want to leave?",
+    "youreAMember": "You’re a member.",
+    "memberCardBody": "This project is in your dashboard. Claim a step to start contributing, and check the Updates tab for news.",
+    "requestSentHeading": "Request sent.",
+    "requestSentBody": "The project lead will get a notification. You’ll become a member once they accept.",
+    "wantToJoin": "Want to join?",
+    "joinCardBody": "Join the project to claim steps, see updates in your dashboard, and chat with the team.",
+    "joinThisProject": "Join this project"
+  },
+  "stats": {
+    "title": "Project numbers",
+    "contributors": "Contributors",
+    "hoursGiven": "Hours given",
+    "stepsDone": "Steps done",
+    "daysActive": "Days active",
+    "hoursUnit": "h",
+    "daysUnit": "d",
+    "noContributors": "No contributors yet — be the first.",
+    "signInToSee": "<link>Sign in</link> to see who’s working on this."
+  },
+  "details": {
+    "title": "Details",
+    "type": "Type",
+    "status": "Status",
+    "location": "Location",
+    "remoteContributions": "Remote contributions",
+    "timeCommitment": "Time commitment",
+    "created": "Created",
+    "lead": "Lead",
+    "notSet": "Not set",
+    "notSpecified": "Not specified",
+    "remoteWelcome": "Welcome",
+    "remoteNo": "Not for this project",
+    "avgHours": "~{hours}h on average",
+    "flexible": "Flexible",
+    "daysAgo": "· {count, plural, one {# day ago} other {# days ago}}",
+    "noLead": "No lead yet"
+  },
+  "updates": {
+    "openTabTitle": "Open the Updates tab",
+    "latestUpdateBy": "Latest update · {name}",
+    "noUpdatesYet": "No updates yet.",
+    "updateCount": "{count, plural, one {# update} other {# updates}}.",
+    "forMembersOnly": "{count} for members only.",
+    "publicUpdateCount": "{count, plural, one {# public update} other {# public updates}}.",
+    "hiddenGate": "<b>{count}</b> members-only {count, plural, one {update is} other {updates are}} hidden.",
+    "joinTheProject": "Join the project",
+    "signInAndJoin": "Sign in and join",
+    "toSeeThem": "{count, plural, one {to see it.} other {to see them.}}",
+    "emptyTitle": "Nothing here yet.",
+    "emptyLead": "Post the first update above — members get notified, and public updates show visitors that this project is active.",
+    "emptyViewer": "When the project lead posts updates or steps get completed, they’ll show up here.",
+    "composerPlaceholder": "Share an update on {title}…",
+    "public": "Public",
+    "membersOnly": "Members only",
+    "visibleToMembers": "Visible only to the {count, plural, one {# project member} other {# project members}}",
+    "visibleToAnyone": "Visible to anyone browsing the project",
+    "posting": "Posting…",
+    "postUpdate": "Post update",
+    "formerMember": "Former member",
+    "leadBadge": "Lead",
+    "postedAgo": "Posted {ago}",
+    "edited": "· edited",
+    "confirmDelete": "Delete this update? This can’t be undone.",
+    "manageUpdate": "Manage update"
+  },
+  "milestones": {
+    "stepCompleted": "Step completed —",
+    "peopleJoined": "{count, plural, one {# person joined —} other {# people joined —}}",
+    "twoNames": "{a} and {b}",
+    "moreNames": "{first} and {last}"
+  },
+  "share": {
+    "share": "Share",
+    "sharePage": "Share this page",
+    "linkCopied": "Link copied"
+  },
+  "adminDelete": {
+    "deleteKind": "Delete {kind, select, blueprint {blueprint} other {project}}",
+    "triggerTitle": "Delete {kind, select, blueprint {blueprint} other {project}} (admin)",
+    "confirmTitle": "Delete this {kind, select, blueprint {blueprint} other {project}}?",
+    "confirmBody": "You're about to permanently delete <b>{name}</b>. This can't be undone.",
+    "projectConsequence": "All its steps, contributions and logged time go with it.",
+    "blueprintConsequence": "Its steps are removed; projects forked from it and any variants are kept (just unlinked).",
+    "deleting": "Deleting…"
+  }
+}
