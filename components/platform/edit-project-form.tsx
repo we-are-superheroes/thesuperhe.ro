@@ -3,6 +3,7 @@
 import { useState, useTransition, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 import { ArrowRight, FileText, ChevronLeft, Upload, ImageIcon } from 'lucide-react'
 import type { ProjectStatus } from '@prisma/client'
@@ -56,44 +57,23 @@ export interface EditProjectInitial {
   }>
 }
 
-const STATUS_OPTIONS: Array<{
-  value: ProjectStatus
-  label: string
-  description: string
-}> = [
-  {
-    value: 'defining',
-    label: 'Being defined',
-    description:
-      'Still working out the plan. Not ready for contributors yet — people can follow along, but there’s nothing to do.',
-  },
-  {
-    value: 'needs_help',
-    label: 'Needs help',
-    description:
-      'You need more people. Pushes the project to the top of skill matches and the home page.',
-  },
-  {
-    value: 'in_progress',
-    label: 'In progress',
-    description:
-      'Work is happening and the team is mostly set. The normal state for most live projects.',
-  },
-  {
-    value: 'completed',
-    label: 'Completed',
-    description:
-      'The work is done. Moves to the “Finished” tab. You can reopen the project at any time.',
-  },
+/** Labels come from `project.status.<value>`; descriptions from
+ *  `project.form.statusCard.descriptions.<value>`. */
+const STATUS_VALUES: ProjectStatus[] = [
+  'defining',
+  'needs_help',
+  'in_progress',
+  'completed',
 ]
 
-const TOC_SECTIONS: Array<{ id: string; label: string }> = [
-  { id: 'sec-status', label: 'Status' },
-  { id: 'sec-basics', label: 'Basics' },
-  { id: 'sec-cover', label: 'Cover' },
-  { id: 'sec-location', label: 'Location & access' },
-  { id: 'sec-steps', label: 'Steps' },
-]
+/** Section labels come from `project.form.sections.<labelKey>`. */
+const TOC_SECTIONS = [
+  { id: 'sec-status', labelKey: 'status' },
+  { id: 'sec-basics', labelKey: 'basics' },
+  { id: 'sec-cover', labelKey: 'cover' },
+  { id: 'sec-location', labelKey: 'location' },
+  { id: 'sec-steps', labelKey: 'steps' },
+] as const
 
 /* ================================================================
    Component
@@ -106,6 +86,8 @@ export function EditProjectForm({
   initial: EditProjectInitial
   skills: SkillOption[]
 }) {
+  const t = useTranslations('project')
+  const tCommon = useTranslations('common')
   const router = useRouter()
 
   const [title, setTitle] = useState(initial.title)
@@ -261,7 +243,7 @@ export function EditProjectForm({
     })
   }
 
-  const titleForPreview = title.trim() || initial.title || 'Untitled project'
+  const titleForPreview = title.trim() || initial.title || t('form.untitledProject')
 
   return (
     <div className="flex h-full flex-1 flex-col overflow-y-auto">
@@ -272,7 +254,7 @@ export function EditProjectForm({
             href="/my-projects"
             className="transition-colors duration-fast hover:text-fg-primary"
           >
-            My projects
+            {t('form.breadcrumb.myProjects')}
           </Link>
           <span className="opacity-50">/</span>
           <Link
@@ -282,7 +264,7 @@ export function EditProjectForm({
             {initial.title}
           </Link>
           <span className="opacity-50">/</span>
-          <span className="font-medium text-fg-primary">Modify</span>
+          <span className="font-medium text-fg-primary">{t('topbar.modify')}</span>
         </div>
         <div className="flex items-center gap-3">
           <Link
@@ -290,7 +272,7 @@ export function EditProjectForm({
             className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
           >
             <ChevronLeft className="size-3.5" strokeWidth={2.5} />
-            Back to project
+            {t('form.backToProject')}
           </Link>
         </div>
       </div>
@@ -299,9 +281,9 @@ export function EditProjectForm({
         {/* Editor header */}
         <header className="mb-8 sm:mb-10">
           <span className="mb-2 inline-flex items-center gap-2 text-xs text-fg-tertiary">
-            Modifying
+            {t('form.editHeader.modifying')}
             <span className="rounded-full border border-amber-500/40 bg-amber-500/[0.12] px-2.5 py-[3px] font-medium text-amber-500">
-              Project lead
+              {t('form.editHeader.projectLead')}
             </span>
           </span>
           <h1 className="font-display text-[clamp(28px,3vw,40px)] font-normal leading-tight tracking-tight">
@@ -312,7 +294,10 @@ export function EditProjectForm({
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[180px_1fr] lg:gap-12">
           {/* In-page nav */}
           <SectionNav
-            sections={TOC_SECTIONS}
+            sections={TOC_SECTIONS.map((s) => ({
+              id: s.id,
+              label: t(`form.sections.${s.labelKey}`),
+            }))}
             activeId={activeSection}
             onActiveChange={setActiveSection}
           />
@@ -322,22 +307,20 @@ export function EditProjectForm({
             {/* Status — the hero of the modify page */}
             <Card id="sec-status">
               <CardHead
-                eyebrow="Project status"
-                title="What's happening, in one word?"
-                desc={
-                  'This appears at the top of the project page, in listings, and in everyone’s dashboard. Set it honestly — "Needs help" reaches more people than "In progress" when you really need them.'
-                }
+                eyebrow={t('form.statusCard.eyebrow')}
+                title={t('form.statusCard.title')}
+                desc={t('form.statusCard.desc')}
               />
               <div
                 role="radiogroup"
-                aria-label="Project status"
+                aria-label={t('form.statusCard.ariaLabel')}
                 className="grid grid-cols-1 gap-3 sm:grid-cols-2"
               >
-                {STATUS_OPTIONS.map((opt) => {
-                  const checked = status === opt.value
+                {STATUS_VALUES.map((value) => {
+                  const checked = status === value
                   return (
                     <label
-                      key={opt.value}
+                      key={value}
                       className={cn(
                         'relative flex cursor-pointer items-start gap-4 rounded-xl border bg-bg-base p-5 transition-all',
                         checked
@@ -348,9 +331,9 @@ export function EditProjectForm({
                       <input
                         type="radio"
                         name="project-status"
-                        value={opt.value}
+                        value={value}
                         checked={checked}
-                        onChange={() => setStatus(opt.value)}
+                        onChange={() => setStatus(value)}
                         className="sr-only"
                       />
                       <span
@@ -370,10 +353,10 @@ export function EditProjectForm({
                       </span>
                       <span className="flex min-w-0 flex-1 flex-col gap-1.5">
                         <span className="flex items-center gap-2 text-base font-semibold text-fg-primary">
-                          <StatusPillPreview status={opt.value} label={opt.label} />
+                          <StatusPillPreview status={value} label={t(`status.${value}`)} />
                         </span>
                         <span className="text-xs leading-relaxed text-fg-tertiary">
-                          {opt.description}
+                          {t(`form.statusCard.descriptions.${value}`)}
                         </span>
                       </span>
                     </label>
@@ -385,32 +368,32 @@ export function EditProjectForm({
             {/* The basics */}
             <Card id="sec-basics">
           <CardHead
-            eyebrow="The basics"
-            title="What is it?"
-            desc="Two sentences are enough. You can add more detail later."
+            eyebrow={t('form.basics.eyebrow')}
+            title={t('form.basics.title')}
+            desc={t('form.basics.desc')}
           />
           <div className="flex flex-col gap-5">
-            <Field label="Title" htmlFor="fld-title">
+            <Field label={t('form.basics.titleLabel')} htmlFor="fld-title">
               <input
                 id="fld-title"
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Pocket Forest, Hackney Wick"
+                placeholder={t('form.basics.titlePlaceholder')}
                 className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-4 py-3.5 font-display text-2xl leading-tight text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
               />
             </Field>
             <Field
-              label="Description"
+              label={t('form.basics.descriptionLabel')}
               htmlFor="fld-desc"
-              help="The first paragraph is what shows up on the project card."
+              help={t('form.basics.descriptionHelp')}
             >
               <textarea
                 id="fld-desc"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={5}
-                placeholder="What are you trying to make happen, and why does it matter?"
+                placeholder={t('form.basics.descriptionPlaceholder')}
                 className="min-h-[130px] w-full resize-y rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm leading-relaxed text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
               />
             </Field>
@@ -420,9 +403,9 @@ export function EditProjectForm({
         {/* Cover image */}
         <Card id="sec-cover">
           <CardHead
-            eyebrow="Cover image"
-            title="A picture for your project."
-            desc="Used on the project page and the cards on Browse and My projects. Optional — a colourful gradient stands in if you skip it."
+            eyebrow={t('form.cover.eyebrow')}
+            title={t('form.cover.title')}
+            desc={t('form.cover.desc')}
           />
           <input
             ref={coverFileRef}
@@ -436,7 +419,7 @@ export function EditProjectForm({
               {coverImageUrl ? (
                 <Image
                   src={coverImageUrl}
-                  alt="Project cover"
+                  alt={t('form.cover.alt')}
                   fill
                   sizes="260px"
                   className="object-cover"
@@ -457,10 +440,10 @@ export function EditProjectForm({
                 >
                   <Upload className="size-3.5" />
                   {pendingCover
-                    ? 'Uploading…'
+                    ? t('form.cover.uploading')
                     : coverImageUrl
-                      ? 'Replace'
-                      : 'Upload cover'}
+                      ? t('form.cover.replace')
+                      : t('form.cover.upload')}
                 </button>
                 {coverImageUrl && (
                   <button
@@ -469,12 +452,12 @@ export function EditProjectForm({
                     disabled={pendingCover}
                     className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-red-300 transition-colors hover:border-red-500 hover:text-red-500 disabled:opacity-60"
                   >
-                    Remove
+                    {t('form.cover.remove')}
                   </button>
                 )}
               </div>
               <span className="max-w-[320px] text-xs leading-relaxed text-fg-tertiary">
-                Wide image works best — at least 1200×600. PNG, JPG, WebP or GIF, up to 8&nbsp;MB.
+                {t('form.cover.hint')}
               </span>
             </div>
           </div>
@@ -483,42 +466,42 @@ export function EditProjectForm({
         {/* Where */}
         <Card id="sec-location">
           <CardHead
-            eyebrow="Where it happens"
-            title="Location & access."
-            desc="Helps the right people find you. You’ll only show the area, never an exact address."
+            eyebrow={t('form.location.eyebrow')}
+            title={t('form.location.title')}
+            desc={t('form.location.desc')}
           />
           <div className="flex flex-col gap-5">
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <Field label="City or area" htmlFor="fld-city">
+              <Field label={t('form.location.cityLabel')} htmlFor="fld-city">
                 <input
                   id="fld-city"
                   type="text"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
-                  placeholder="e.g. Hackney, London"
+                  placeholder={t('form.location.cityPlaceholder')}
                   className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
                 />
               </Field>
               <Field
-                label="Country (optional)"
+                label={t('form.location.countryLabel')}
                 htmlFor="fld-country"
-                help="Shown on the project card and used by the browse-page country filter."
+                help={t('form.location.countryHelp')}
               >
                 <CountrySelect id="fld-country" value={countryCode} onChange={setCountryCode} />
               </Field>
             </div>
 
             <Field
-              label="Specific address or place name (optional)"
+              label={t('form.location.addressLabel')}
               htmlFor="fld-address"
-              help="Shown to people who join. Skip this if your meet-up spot changes or you’d rather not publish it."
+              help={t('form.location.addressHelp')}
             >
               <input
                 id="fld-address"
                 type="text"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
-                placeholder="e.g. The Old Library, 2 Wallis Road, E9 5LH"
+                placeholder={t('form.location.addressPlaceholder')}
                 maxLength={500}
                 className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
               />
@@ -526,16 +509,16 @@ export function EditProjectForm({
 
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
               <Field
-                label="Working language (optional)"
+                label={t('form.location.languageLabel')}
                 htmlFor="fld-lang"
-                help="Used by the browse-page language filter."
+                help={t('form.location.languageHelp')}
               >
                 <SelectBox
                   id="fld-lang"
                   value={languageCode ?? ''}
                   onChange={(e) => setLanguageCode(e.target.value || null)}
                 >
-                  <option value="">— none —</option>
+                  <option value="">{t('form.location.noneOption')}</option>
                   {ISO_LANGUAGES.map((l) => (
                     <option key={l.code} value={l.code}>
                       {l.label}
@@ -545,10 +528,10 @@ export function EditProjectForm({
               </Field>
             </div>
 
-            <Field label="Can people contribute remotely?">
+            <Field label={t('form.remote.label')}>
               <div
                 role="radiogroup"
-                aria-label="Remote participation"
+                aria-label={t('form.remote.ariaLabel')}
                 className="grid grid-cols-1 gap-0.5 rounded-lg border border-neutral-700 bg-bg-base p-1 sm:grid-cols-3"
               >
                 {REMOTE_OPTIONS.map((opt) => {
@@ -567,7 +550,7 @@ export function EditProjectForm({
                       )}
                     >
                       <Icon className="size-3.5" strokeWidth={2} />
-                      {opt.label}
+                      {t(`form.remote.options.${opt.value}`)}
                     </button>
                   )
                 })}
@@ -575,10 +558,10 @@ export function EditProjectForm({
             </Field>
 
             {/* Membership: join policy */}
-            <Field label="Who can join?">
+            <Field label={t('form.joinPolicy.label')}>
               <div
                 role="radiogroup"
-                aria-label="Join policy"
+                aria-label={t('form.joinPolicy.ariaLabel')}
                 className="grid grid-cols-1 gap-2 sm:grid-cols-2"
               >
                 {JOIN_POLICY_OPTIONS.map((opt) => {
@@ -603,10 +586,10 @@ export function EditProjectForm({
                           checked ? 'text-amber-500' : 'text-fg-primary',
                         )}
                       >
-                        {opt.label}
+                        {t(`form.joinPolicy.options.${opt.value}.label`)}
                       </span>
                       <span className="text-xs leading-relaxed text-fg-tertiary">
-                        {opt.description}
+                        {t(`form.joinPolicy.options.${opt.value}.description`)}
                       </span>
                     </button>
                   )
@@ -619,9 +602,9 @@ export function EditProjectForm({
         {/* Steps */}
         <Card id="sec-steps">
           <CardHead
-            eyebrow="The plan"
-            title="Steps to make it real."
-            desc="Add, edit, reorder, or remove steps. If you delete a step someone has claimed, that person is removed from it — be careful."
+            eyebrow={t('form.steps.eyebrow')}
+            title={t('form.steps.title')}
+            desc={t('form.steps.editDesc')}
           />
           <div className="flex flex-col gap-3">
             {steps.map((s, i) => (
@@ -647,7 +630,7 @@ export function EditProjectForm({
             ) : savedBlueprintAt ? (
               <>
                 <span className="size-[7px] rounded-full bg-green-500 shadow-[0_0_6px_var(--color-green-500)]" />
-                Saved as blueprint — others can fork it now.
+                {t('form.saveBar.savedAsBlueprint')}
               </>
             ) : null}
           </div>
@@ -659,7 +642,7 @@ export function EditProjectForm({
               className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-60"
             >
               <FileText className="size-3.5" strokeWidth={2} />
-              {pendingBlueprint ? 'Saving…' : 'Save as blueprint'}
+              {pendingBlueprint ? tCommon('state.saving') : t('form.saveBar.saveAsBlueprint')}
             </button>
             <button
               type="button"
@@ -667,7 +650,7 @@ export function EditProjectForm({
               disabled={pendingSave || pendingBlueprint}
               className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
             >
-              {pendingSave ? 'Saving…' : 'Save changes'}
+              {pendingSave ? tCommon('state.saving') : t('form.saveBar.saveChanges')}
               {!pendingSave && <ArrowRight className="size-3.5" strokeWidth={2.5} />}
             </button>
           </div>
@@ -692,6 +675,7 @@ function SectionNav({
   activeId: string
   onActiveChange: (id: string) => void
 }) {
+  const t = useTranslations('project')
   // Scroll-spy: when a section's top crosses ~120px from the viewport top,
   // mark it as active so the nav follows the user's reading position.
   useEffect(() => {
@@ -717,11 +701,11 @@ function SectionNav({
 
   return (
     <nav
-      aria-label="Sections"
+      aria-label={t('form.sections.ariaLabel')}
       className="-mx-2 flex flex-row gap-1 overflow-x-auto rounded-xl border border-white/[0.06] bg-bg-surface px-2 py-2 lg:sticky lg:top-6 lg:mx-0 lg:flex-col lg:gap-0.5 lg:overflow-visible lg:border-0 lg:bg-transparent lg:p-0"
     >
       <span className="hidden px-3 pb-2 text-[11px] font-semibold uppercase tracking-widest text-fg-tertiary lg:block">
-        On this page
+        {t('form.sections.onThisPage')}
       </span>
       {sections.map((s) => {
         const active = activeId === s.id

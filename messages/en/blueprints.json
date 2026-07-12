@@ -83,5 +83,42 @@
     "projectsForked": "Projects forked",
     "notSet": "Not set",
     "any": "Any"
+  },
+  "edit": {
+    "breadcrumbModify": "Modify",
+    "backToBlueprint": "Back to blueprint",
+    "modifying": "Modifying",
+    "blueprintBadge": "Blueprint",
+    "untitledBlueprint": "Untitled blueprint",
+    "basics": {
+      "eyebrow": "The basics",
+      "title": "What is this blueprint?",
+      "desc": "Two sentences are enough to describe the pattern. You can add more detail later.",
+      "titleLabel": "Title",
+      "titlePlaceholder": "e.g. Repair Café",
+      "descriptionLabel": "Description",
+      "descriptionHelp": "The first paragraph is what shows up on the blueprint card.",
+      "descriptionPlaceholder": "What problem does this pattern solve, and what does running it look like?",
+      "projectTypeLabel": "Project type",
+      "noneOption": "— none —"
+    },
+    "locale": {
+      "eyebrow": "Locale",
+      "title": "Where and in what language?",
+      "desc": "Forks of this blueprint inherit these tags by default. Variants must declare at least one of country or language.",
+      "countryLabel": "Country (optional unless this is a variant)",
+      "languageLabel": "Working language (optional unless this is a variant)",
+      "familyLabel": "Family",
+      "familyHelpVariant": "This blueprint is currently a variant of the family below. Set to “Standalone” to promote it to a root.",
+      "familyHelpRoot": "Optional. If you’re adapting an existing pattern, link to the original root so the two appear together as a family.",
+      "standaloneOption": "Standalone (no parent)",
+      "hasVariantsNotice": "This blueprint already has <strong>{count, plural, one {# variant} other {# variants}}</strong> of its own, so it stays a family root."
+    },
+    "steps": {
+      "eyebrow": "The plan",
+      "title": "Steps to deliver the pattern.",
+      "desc": "Anyone who forks this blueprint will start with these steps. Edit, reorder, or remove as needed."
+    },
+    "saveChanges": "Save changes"
   }
 }
