@@ -1,23 +1,27 @@
-/* Shared layout bits for the legal pages (/privacy, /terms). */
+/* Shared layout bits for the legal pages (/privacy, /terms).
+   All strings are passed in pre-translated by the pages, which own
+   the `legal-privacy` / `legal-terms` catalogs. */
 
 export function LegalPage({
+  eyebrow,
   title,
-  updated,
+  updatedLine,
   children,
 }: {
+  eyebrow: string
   title: string
-  updated: string
+  updatedLine: string
   children: React.ReactNode
 }) {
   return (
     <div className="mx-auto w-full max-w-[760px] px-4 py-12 sm:px-8 sm:py-16">
       <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-amber-500">
-        Legal
+        {eyebrow}
       </p>
       <h1 className="font-display text-[clamp(32px,4vw,44px)] leading-tight tracking-tight">
         {title}
       </h1>
-      <p className="mt-3 text-sm text-fg-tertiary">Last updated: {updated}</p>
+      <p className="mt-3 text-sm text-fg-tertiary">{updatedLine}</p>
       {children}
     </div>
   )

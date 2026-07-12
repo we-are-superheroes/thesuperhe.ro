@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { stepNeedsHelp } from '@/lib/step-status'
 import { LeavesMark } from '@/components/ui/logo'
@@ -127,7 +128,9 @@ type ProjectSummary = Awaited<ReturnType<typeof getRecentProjects>>[number]
 
 /* ── Navbar ──────────────────────────────────────────────────── */
 
-function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
+async function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
+  const t = await getTranslations('marketing')
+
   return (
     <nav className="sticky top-0 z-50 border-b border-white/[0.07] bg-blue-900/[0.78] backdrop-blur-2xl backdrop-saturate-[1.4]">
       <div className="mx-auto flex max-w-[1420px] items-center justify-between gap-4 px-4 py-3 sm:gap-8 sm:px-8 sm:py-4">
@@ -140,13 +143,13 @@ function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
 
         <div className="hidden gap-8 text-sm text-neutral-300 lg:flex">
           <Link href="/projects" className="transition-colors duration-fast hover:text-fg-primary">
-            Browse projects
+            {t('nav.browseProjects')}
           </Link>
           <Link href="/blueprints" className="transition-colors duration-fast hover:text-fg-primary">
-            Browse blueprints
+            {t('nav.browseBlueprints')}
           </Link>
           <Link href="#how" className="transition-colors duration-fast hover:text-fg-primary">
-            How it works
+            {t('nav.howItWorks')}
           </Link>
         </div>
 
@@ -157,9 +160,9 @@ function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
                 href="/dashboard"
                 className="inline-flex items-center gap-2 rounded-md border border-white/[0.13] bg-transparent px-3 py-2 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-white/[0.04] sm:px-[18px] sm:py-2.5"
               >
-                Dashboard
+                {t('nav.dashboard')}
               </Link>
-              <SignOutButton />
+              <SignOutButton label={t('nav.signOut')} />
             </>
           ) : (
             <>
@@ -167,13 +170,13 @@ function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
                 href="/sign-in"
                 className="hidden items-center gap-2 rounded-md border border-white/[0.13] bg-transparent px-[18px] py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-white/[0.04] sm:inline-flex"
               >
-                Sign in
+                {t('nav.signIn')}
               </Link>
               <Link
                 href="/sign-up"
                 className="inline-flex items-center gap-2 rounded-md border border-amber-500 bg-amber-500 px-3 py-2 text-sm font-medium text-blue-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber sm:px-[18px] sm:py-2.5"
               >
-                Get started
+                {t('nav.getStarted')}
               </Link>
             </>
           )}
@@ -187,11 +190,11 @@ function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
 
 import { SignOutButton as ClerkSignOutButton } from '@clerk/nextjs'
 
-function SignOutButton() {
+function SignOutButton({ label }: { label: string }) {
   return (
     <ClerkSignOutButton>
       <button className="inline-flex cursor-pointer items-center gap-2 rounded-md border border-amber-500 bg-amber-500 px-3 py-2 text-sm font-medium text-blue-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber sm:px-[18px] sm:py-2.5">
-        Sign out
+        {label}
       </button>
     </ClerkSignOutButton>
   )
@@ -199,7 +202,9 @@ function SignOutButton() {
 
 /* ── Hero ────────────────────────────────────────────────────── */
 
-function Hero({ projects }: { projects: ProjectSummary[] }) {
+async function Hero({ projects }: { projects: ProjectSummary[] }) {
+  const t = await getTranslations('marketing')
+
   // Use the first two projects for the collage cards
   const collageProjects = projects.slice(0, 2)
 
@@ -233,24 +238,23 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
         <div>
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/[0.13] px-3.5 py-1.5 text-xs font-medium uppercase tracking-[0.12em] text-neutral-300 animate-[rise_800ms_ease-out_100ms_backwards]">
             <span className="size-1.5 animate-pulse rounded-full bg-amber-500 shadow-[0_0_8px_var(--color-amber-500)]" />
-            Climate &amp; sustainability — together
+            {t('hero.badge')}
           </div>
 
           <h1 className="mb-6 font-display text-[clamp(48px,6.2vw,80px)] leading-[0.98] tracking-[-0.025em] animate-[rise_800ms_ease-out_200ms_backwards]">
-            Don&apos;t act alone.
-            <br />
-            Let&apos;s be{' '}
-            <span className="relative italic text-amber-500">
-              superheroes
-              <span className="absolute inset-x-0 bottom-2 -z-10 h-2 rounded-sm bg-amber-500/[0.18]" />
-            </span>
-            <br />
-            together.
+            {t.rich('hero.title', {
+              br: () => <br />,
+              em: (chunks) => (
+                <span className="relative italic text-amber-500">
+                  {chunks}
+                  <span className="absolute inset-x-0 bottom-2 -z-10 h-2 rounded-sm bg-amber-500/[0.18]" />
+                </span>
+              ),
+            })}
           </h1>
 
           <p className="mb-10 max-w-[540px] text-xl leading-relaxed text-neutral-300 animate-[rise_800ms_ease-out_300ms_backwards]">
-            Find climate and sustainability projects that need your skills, or
-            bring your own idea and let collaborators help you make it real.
+            {t('hero.subtitle')}
           </p>
 
           <div className="mb-10 flex items-center gap-3 animate-[rise_800ms_ease-out_400ms_backwards]">
@@ -258,26 +262,26 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
               href="/projects"
               className="inline-flex items-center gap-2 rounded-md border border-amber-500 bg-amber-500 px-6 py-3.5 text-base font-medium text-blue-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
             >
-              Browse projects
+              {t('hero.browseProjects')}
               <ArrowRight className="size-4" />
             </Link>
             <Link
               href="/sign-up"
               className="inline-flex items-center gap-2 rounded-md border border-white/[0.13] bg-bg-surface-2 px-6 py-3.5 text-base font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-bg-surface-3"
             >
-              Start a project
+              {t('hero.startProject')}
             </Link>
           </div>
 
           <div className="flex items-center gap-6 text-sm text-neutral-400 animate-[rise_800ms_ease-out_500ms_backwards]">
             <span className="flex items-center gap-2">
               <Clock className="size-4 opacity-70" />
-              From 1-hour tasks to long projects
+              {t('hero.timeNote')}
             </span>
             <span className="h-3.5 w-px bg-white/[0.13]" />
             <span className="flex items-center gap-2">
               <Settings2 className="size-4 opacity-70" />
-              All skills welcome
+              {t('hero.skillsNote')}
             </span>
           </div>
         </div>
@@ -286,7 +290,7 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
         <div className="relative hidden aspect-[5/6] lg:block animate-[rise_800ms_ease-out_300ms_backwards]">
           {/* Floating annotation */}
           <span className="pointer-events-none absolute -left-[8%] -top-3 z-10 -rotate-6 font-display text-lg italic text-amber-500">
-            real projects, real impact
+            {t('hero.annotation')}
             <svg
               className="mt-1 block"
               width="40"
@@ -322,15 +326,16 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
               </div>
               <div className="flex items-center gap-3 text-xs text-neutral-400">
                 <span>
-                  {collageProjects[0].contributorCount} contributor
-                  {collageProjects[0].contributorCount !== 1 ? 's' : ''}
+                  {t('hero.contributors', {
+                    count: collageProjects[0].contributorCount,
+                  })}
                 </span>
                 <span>·</span>
                 {collageProjects[0].needsHelpCount > 0 && (
                   <span className="font-semibold text-amber-500">
-                    {collageProjects[0].needsHelpCount} step
-                    {collageProjects[0].needsHelpCount !== 1 ? 's' : ''} need
-                    help
+                    {t('hero.stepsNeedHelp', {
+                      count: collageProjects[0].needsHelpCount,
+                    })}
                   </span>
                 )}
               </div>
@@ -363,12 +368,15 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
               </div>
               <div className="flex items-center gap-3 text-xs text-neutral-400">
                 <span>
-                  {collageProjects[1].contributorCount} contributor
-                  {collageProjects[1].contributorCount !== 1 ? 's' : ''}
+                  {t('hero.contributors', {
+                    count: collageProjects[1].contributorCount,
+                  })}
                 </span>
                 <span>·</span>
                 <span>
-                  ~{collageProjects[1].timeCommitmentHrs}h commitment
+                  {t('hero.commitment', {
+                    hours: collageProjects[1].timeCommitmentHrs ?? '',
+                  })}
                 </span>
               </div>
             </div>
@@ -377,13 +385,13 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
           {/* Card 3 — amber accent, bottom right */}
           <div className="absolute bottom-0 right-[8%] z-[4] w-[50%] rotate-[4deg] rounded-2xl border border-amber-500 bg-amber-500 p-5 text-amber-900 shadow-lg">
             <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-amber-800">
-              Repair Café
+              {t('hero.showcaseKicker')}
             </div>
             <div className="mb-3 font-display text-lg italic leading-tight text-amber-900">
-              &ldquo;Bring it broken, take it fixed.&rdquo;
+              {t('hero.showcaseQuote')}
             </div>
             <div className="text-xs text-amber-800">
-              ★ Camden, monthly
+              {t('hero.showcaseMeta')}
             </div>
           </div>
         </div>
@@ -394,7 +402,9 @@ function Hero({ projects }: { projects: ProjectSummary[] }) {
 
 /* ── Entry Points ────────────────────────────────────────────── */
 
-function EntryPoints({ isSignedIn }: { isSignedIn: boolean }) {
+async function EntryPoints({ isSignedIn }: { isSignedIn: boolean }) {
+  const t = await getTranslations('marketing')
+
   return (
     <section className="border-t border-white/[0.07] py-12 sm:py-20">
       <div className="mx-auto grid max-w-[1420px] grid-cols-1 gap-4 px-4 sm:px-8 md:grid-cols-3">
@@ -411,14 +421,13 @@ function EntryPoints({ isSignedIn }: { isSignedIn: boolean }) {
             <Search className="size-[22px]" />
           </div>
           <div className="mt-3 font-display text-2xl leading-[1.1]">
-            Browse projects
+            {t('entry.browseTitle')}
           </div>
           <div className="text-sm leading-relaxed text-neutral-300">
-            Filter by skill, location, time commitment. Find one that fits and
-            join in.
+            {t('entry.browseDesc')}
           </div>
           <span className="mt-auto inline-flex items-center gap-2 text-sm font-medium text-amber-500">
-            Explore
+            {t('entry.browseCta')}
             <ArrowRight className="size-3.5 transition-transform duration-standard group-hover:translate-x-1" />
           </span>
         </Link>
@@ -432,14 +441,13 @@ function EntryPoints({ isSignedIn }: { isSignedIn: boolean }) {
             <LayoutDashboard className="size-[22px]" />
           </div>
           <div className="mt-3 font-display text-2xl leading-[1.1] text-amber-900">
-            Your dashboard
+            {t('entry.dashboardTitle')}
           </div>
           <div className="text-sm leading-relaxed text-amber-900/[0.78]">
-            Pinned projects, next steps, and what&apos;s happening on the
-            projects you&apos;ve joined.
+            {t('entry.dashboardDesc')}
           </div>
           <span className="mt-auto inline-flex items-center gap-2 text-sm font-medium text-amber-900">
-            Open dashboard
+            {t('entry.dashboardCta')}
             <ArrowRight className="size-3.5 transition-transform duration-standard group-hover:translate-x-1" />
           </span>
         </Link>
@@ -453,15 +461,13 @@ function EntryPoints({ isSignedIn }: { isSignedIn: boolean }) {
             <LogIn className="size-[22px]" />
           </div>
           <div className="mt-3 font-display text-2xl leading-[1.1]">
-            {isSignedIn ? 'Welcome back' : 'Sign in'}
+            {isSignedIn ? t('entry.signInTitleSignedIn') : t('entry.signInTitle')}
           </div>
           <div className="text-sm leading-relaxed text-neutral-300">
-            {isSignedIn
-              ? "You're signed in. Head to your dashboard to see your projects."
-              : 'Returning? Pick up where you left off. New here? Create an account in under a minute.'}
+            {isSignedIn ? t('entry.signInDescSignedIn') : t('entry.signInDesc')}
           </div>
           <span className="mt-auto inline-flex items-center gap-2 text-sm font-medium text-amber-500">
-            {isSignedIn ? 'Go to dashboard' : 'Sign in'}
+            {isSignedIn ? t('entry.signInCtaSignedIn') : t('entry.signInCta')}
             <ArrowRight className="size-3.5 transition-transform duration-standard group-hover:translate-x-1" />
           </span>
         </Link>
@@ -472,7 +478,9 @@ function EntryPoints({ isSignedIn }: { isSignedIn: boolean }) {
 
 /* ── New Projects ────────────────────────────────────────────── */
 
-function NewProjects({ projects }: { projects: ProjectSummary[] }) {
+async function NewProjects({ projects }: { projects: ProjectSummary[] }) {
+  const t = await getTranslations('marketing')
+
   return (
     <section className="border-t border-white/[0.07] py-12 sm:py-20" id="browse">
       <div className="mx-auto max-w-[1420px] px-4 sm:px-8">
@@ -481,21 +489,24 @@ function NewProjects({ projects }: { projects: ProjectSummary[] }) {
           <div>
             <div className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.12em] text-amber-500">
               <span className="h-px w-6 bg-amber-500" />
-              Fresh on the platform
+              {t('projects.kicker')}
             </div>
             <h2 className="font-display text-[clamp(36px,4vw,56px)] leading-[1.05] tracking-[-0.02em]">
-              New projects{' '}
-              <em className="not-italic text-amber-500">looking for you</em>.
+              {t.rich('projects.title', {
+                em: (chunks) => (
+                  <em className="not-italic text-amber-500">{chunks}</em>
+                ),
+              })}
             </h2>
             <p className="mt-4 max-w-[600px] text-lg leading-relaxed text-neutral-300">
-              Just launched, and in need of their first contributors. Steps usually take less than 2 hours.
+              {t('projects.subtitle')}
             </p>
           </div>
           <Link
             href="/projects"
             className="inline-flex shrink-0 items-center gap-2 border-b border-current pb-2 text-sm font-medium text-amber-500 transition-[gap] duration-standard hover:gap-3"
           >
-            See all projects
+            {t('projects.seeAll')}
             <ArrowRight className="size-3.5" />
           </Link>
         </div>
@@ -517,28 +528,30 @@ function NewProjects({ projects }: { projects: ProjectSummary[] }) {
 
 /* ── Project Card ────────────────────────────────────────────── */
 
-function ProjectCard({
+async function ProjectCard({
   project,
   gradient,
 }: {
   project: ProjectSummary
   gradient: string
 }) {
+  const t = await getTranslations('marketing')
+
   const tags: string[] = []
   if (project.projectType) tags.push(project.projectType)
-  if (project.remoteOk) tags.push('Remote OK')
+  if (project.remoteOk) tags.push(t('projects.card.remoteOk'))
   else if (project.location) tags.push(project.location.split(',')[0])
 
   const timeLabel = project.timeCommitmentHrs
-    ? `~${project.timeCommitmentHrs}h`
+    ? t('projects.card.time', { hours: project.timeCommitmentHrs })
     : null
 
   const ageLabel =
     project.daysAgo <= 1
-      ? 'New · today'
+      ? t('projects.card.ageToday')
       : project.daysAgo < 7
-        ? `New · ${project.daysAgo}d ago`
-        : `New · 1w ago`
+        ? t('projects.card.ageDaysAgo', { days: project.daysAgo })
+        : t('projects.card.ageWeekAgo')
 
   return (
     <Link
@@ -553,8 +566,9 @@ function ProjectCard({
         {project.needsHelpCount > 0 && (
           <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/[0.13] bg-blue-900/[0.85] px-2.5 py-1 text-xs font-semibold tracking-tight text-amber-500 backdrop-blur-lg">
             <span className="size-1.5 rounded-full bg-amber-500 shadow-[0_0_6px_var(--color-amber-500)]" />
-            {project.needsHelpCount} step
-            {project.needsHelpCount !== 1 ? 's' : ''} need help
+            {t('projects.card.stepsNeedHelp', {
+              count: project.needsHelpCount,
+            })}
           </span>
         )}
         <span className="absolute right-4 top-4 rounded-full bg-blue-900/[0.85] px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-fg-primary backdrop-blur-lg">
@@ -592,11 +606,11 @@ function ProjectCard({
             )}
             <span className="flex items-center gap-1">
               <Users className="size-3" />
-              {project.contributorCount} joined
+              {t('projects.card.joined', { count: project.contributorCount })}
             </span>
           </div>
           <span className="flex items-center gap-1 text-sm font-medium text-amber-500">
-            View →
+            {t('projects.card.view')}
           </span>
         </div>
       </div>
@@ -606,41 +620,33 @@ function ProjectCard({
 
 /* ── How It Works ────────────────────────────────────────────── */
 
-const STEPS = [
-  {
-    num: '01',
-    title: 'Tell us your skills',
-    desc: "Add the things you're good at, and the ones you actually want to use on a project. A burnt-out developer doesn't have to do coding.",
-  },
-  {
-    num: '02',
-    title: 'Find a fit',
-    desc: 'Browse whole projects, or just single steps. The smallest unit can be a 30-minute task, perfect for a quiet evening.',
-  },
-  {
-    num: '03',
-    title: 'Get to work',
-    desc: 'Join the team, claim a step, and ship something real with people who care about the same thing you do.',
-  },
-]
+async function HowItWorks() {
+  const t = await getTranslations('marketing')
 
-function HowItWorks() {
+  const steps = [
+    { num: '01', title: t('how.step1Title'), desc: t('how.step1Desc') },
+    { num: '02', title: t('how.step2Title'), desc: t('how.step2Desc') },
+    { num: '03', title: t('how.step3Title'), desc: t('how.step3Desc') },
+  ]
+
   return (
     <section className="border-t border-white/[0.07] py-12 sm:py-20" id="how">
       <div className="mx-auto max-w-[1420px] px-4 sm:px-8">
         <div className="mb-12">
           <div className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.12em] text-amber-500">
             <span className="h-px w-6 bg-amber-500" />
-            How it works
+            {t('how.kicker')}
           </div>
           <h2 className="max-w-[780px] font-display text-[clamp(36px,4vw,56px)] leading-[1.05] tracking-[-0.02em]">
-            Contribute as much, {' '}
-            <em className="not-italic text-amber-500">or as little</em>, as your time
-            allows.
+            {t.rich('how.title', {
+              em: (chunks) => (
+                <em className="not-italic text-amber-500">{chunks}</em>
+              ),
+            })}
           </h2>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-          {STEPS.map((step) => (
+          {steps.map((step) => (
             <div
               key={step.num}
               className="rounded-2xl border border-white/[0.07] bg-bg-surface p-8"
@@ -664,7 +670,9 @@ function HowItWorks() {
 
 /* ── Final CTA ───────────────────────────────────────────────── */
 
-function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
+async function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
+  const t = await getTranslations('marketing')
+
   return (
     <section className="mx-auto max-w-[1420px] px-4 sm:px-8">
       <div
@@ -685,31 +693,35 @@ function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
         />
         <div className="relative">
           <h2 className="mb-5 font-display text-[clamp(40px,5vw,64px)] leading-none tracking-[-0.02em]">
-            Ready to <em className="not-italic text-amber-500">act?</em>
+            {t.rich('cta.title', {
+              em: (chunks) => (
+                <em className="not-italic text-amber-500">{chunks}</em>
+              ),
+            })}
           </h2>
           <p className="mx-auto mb-10 max-w-[540px] text-lg text-neutral-300">
-            Browse what&apos;s live right now, or sign in to see your dashboard.
+            {t('cta.subtitle')}
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/projects"
               className="inline-flex items-center gap-2 rounded-md border border-amber-500 bg-amber-500 px-6 py-3.5 text-base font-medium text-blue-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
             >
-              Browse projects
+              {t('cta.browseProjects')}
               <ArrowRight className="size-4" />
             </Link>
             <Link
               href="/dashboard"
               className="inline-flex items-center gap-2 rounded-md border border-white/[0.13] bg-bg-surface-2 px-6 py-3.5 text-base font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-bg-surface-3"
             >
-              Go to dashboard
+              {t('cta.dashboard')}
             </Link>
             {!isSignedIn && (
               <Link
                 href="/sign-in"
                 className="inline-flex items-center gap-2 rounded-md border border-white/[0.13] bg-transparent px-6 py-3.5 text-base font-medium text-fg-primary transition-all duration-standard hover:border-white/25 hover:bg-white/[0.04]"
               >
-                Sign in
+                {t('cta.signIn')}
               </Link>
             )}
           </div>
@@ -723,38 +735,41 @@ function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
 
 /** Inline Swiss flag (official Pantone artwork) — an SVG rather than the
  *  🇨🇭 emoji, which Windows browsers render as the letters "CH". */
-function SwissFlag({ className }: { className?: string }) {
+function SwissFlag({ className, label }: { className?: string; label: string }) {
   return (
-    <svg viewBox="0 0 32 32" className={className} aria-label="Swiss flag" role="img">
+    <svg viewBox="0 0 32 32" className={className} aria-label={label} role="img">
       <path d="M0 0h32v32H0z" fill="#da291c" />
       <path d="M13 6h6v7h7v6h-7v7h-6v-7H6v-6h7z" fill="#fff" />
     </svg>
   )
 }
 
-function Footer() {
+async function Footer() {
+  const t = await getTranslations('marketing')
+
   return (
     <footer className="border-t border-white/[0.07] py-10 pb-8 text-sm text-neutral-400">
       <div className="mx-auto flex max-w-[1420px] flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:gap-6 sm:px-8">
-        <div>&copy; 2026 The Superhero · climate &amp; sustainability collaboration</div>
+        {/* Year passed as a string: a number would be locale-grouped ("2,026"). */}
+        <div>{t('footer.copyright', { year: '2026' })}</div>
         <div className="flex items-center gap-6">
           <Link href="/projects" className="hover:text-fg-primary">
-            Projects
+            {t('footer.projects')}
           </Link>
           <Link href="/blueprints" className="hover:text-fg-primary">
-            Blueprints
+            {t('footer.blueprints')}
           </Link>
           <Link href="/privacy" className="hover:text-fg-primary">
-            Privacy
+            {t('footer.privacy')}
           </Link>
           <Link href="/terms" className="hover:text-fg-primary">
-            Terms
+            {t('footer.terms')}
           </Link>
           <LocaleSwitcher />
         </div>
         <div className="flex items-center gap-2">
-          Created in Switzerland
-          <SwissFlag className="size-4" />
+          {t('footer.createdIn')}
+          <SwissFlag className="size-4" label={t('footer.swissFlagAlt')} />
         </div>
       </div>
     </footer>

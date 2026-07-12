@@ -1,1 +1,41 @@
-{}
+{
+  "root": {
+    "title": "The Superhero — Projects to save the world",
+    "description": "Connect your skills with climate and sustainability projects that need you. Every contribution counts."
+  },
+  "browse": {
+    "title": "Browse projects — The Superhero",
+    "description": "Find climate and sustainability projects that need your skills — filter by type, country, language and time commitment."
+  },
+  "blueprints": {
+    "title": "Blueprints — The Superhero",
+    "description": "Proven, reusable project plans — repair cafés, pocket forests, solar co-ops and more. Fork one and adapt it to your community."
+  },
+  "blueprint": {
+    "title": "{name} — blueprint — The Superhero",
+    "notFound": "Blueprint not found — The Superhero"
+  },
+  "project": {
+    "title": "{name} — The Superhero",
+    "notFound": "Project not found — The Superhero",
+    "membersOnly": "Members-only project — The Superhero"
+  },
+  "org": {
+    "title": "{name} — The Superhero",
+    "fallback": "Organisation — The Superhero"
+  },
+  "organisations": {
+    "title": "Organisations — The Superhero"
+  },
+  "orgRequest": {
+    "title": "Request an organisation — The Superhero"
+  },
+  "privacy": {
+    "title": "Privacy policy — The Superhero",
+    "description": "What data The Superhero collects, why, where it lives, and the rights you have over it."
+  },
+  "terms": {
+    "title": "Terms of service — The Superhero",
+    "description": "The rules for using The Superhero: your account, your content, acceptable use, and what we are (and aren’t) responsible for."
+  }
+}

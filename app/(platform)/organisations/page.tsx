@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
 import { getTranslations } from 'next-intl/server'
@@ -17,8 +18,9 @@ import {
    themselves live at /orgs/[slug].
    ================================================================ */
 
-export const metadata = {
-  title: 'Organisations — The Superhero',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('meta')
+  return { title: t('organisations.title') }
 }
 
 export default async function OrganisationsPage() {

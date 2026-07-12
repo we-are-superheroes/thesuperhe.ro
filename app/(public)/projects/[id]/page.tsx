@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
@@ -59,26 +60,29 @@ interface ProjectViewParams {
   params: Promise<{ id: string }>
 }
 
-export async function generateMetadata({ params }: ProjectViewParams) {
+export async function generateMetadata({ params }: ProjectViewParams): Promise<Metadata> {
   const { id } = await params
-  const project = await db.project.findUnique({
-    where: { id },
-    select: {
-      title: true,
-      description: true,
-      coverImageUrl: true,
-      location: true,
-      visibility: true,
-    },
-  })
-  if (!project) return { title: 'Project not found — The Superhero' }
+  const [t, project] = await Promise.all([
+    getTranslations('meta'),
+    db.project.findUnique({
+      where: { id },
+      select: {
+        title: true,
+        description: true,
+        coverImageUrl: true,
+        location: true,
+        visibility: true,
+      },
+    }),
+  ])
+  if (!project) return { title: t('project.notFound') }
   // Members-only projects don't leak their title into tags/crawlers.
   if (project.visibility !== 'public') {
-    return { title: 'Members-only project — The Superhero' }
+    return { title: t('project.membersOnly') }
   }
   const description = project.description.split(/\n+/)[0].slice(0, 160)
   return {
-    title: `${project.title} — The Superhero`,
+    title: t('project.title', { name: project.title }),
     description,
     openGraph: {
       title: project.title,

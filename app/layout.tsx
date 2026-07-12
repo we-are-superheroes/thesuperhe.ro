@@ -4,6 +4,7 @@ import { ClerkProvider } from '@clerk/nextjs'
 import { dark } from '@clerk/themes'
 import { deDE, esES, frFR, itIT, ptPT, ruRU, ukUA } from '@clerk/localizations'
 import { Analytics } from '@vercel/analytics/next'
+import { getTranslations } from 'next-intl/server'
 import { resolveLocale, type Locale } from '@/lib/locale'
 import './globals.css'
 
@@ -37,10 +38,12 @@ const jetbrainsMono = JetBrains_Mono({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  title: 'The Superhero — Projects to save the world',
-  description:
-    'Connect your skills with climate and sustainability projects that need you. Every contribution counts.',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('meta')
+  return {
+    title: t('root.title'),
+    description: t('root.description'),
+  }
 }
 
 export const viewport: Viewport = {

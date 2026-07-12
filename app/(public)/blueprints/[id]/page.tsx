@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
@@ -38,16 +39,19 @@ interface PageParams {
   params: Promise<{ id: string }>
 }
 
-export async function generateMetadata({ params }: PageParams) {
+export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
   const { id } = await params
-  const blueprint = await db.blueprint.findUnique({
-    where: { id },
-    select: { title: true, description: true },
-  })
-  if (!blueprint) return { title: 'Blueprint not found — The Superhero' }
+  const [t, blueprint] = await Promise.all([
+    getTranslations('meta'),
+    db.blueprint.findUnique({
+      where: { id },
+      select: { title: true, description: true },
+    }),
+  ])
+  if (!blueprint) return { title: t('blueprint.notFound') }
   const description = blueprint.description.split(/\n+/)[0].slice(0, 160)
   return {
-    title: `${blueprint.title} — blueprint — The Superhero`,
+    title: t('blueprint.title', { name: blueprint.title }),
     description,
     openGraph: { title: blueprint.title, description },
   }

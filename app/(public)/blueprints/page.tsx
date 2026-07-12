@@ -1,3 +1,5 @@
+import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import {
   BlueprintsClient,
@@ -33,10 +35,12 @@ type RawBlueprint = {
   _count: { steps: number; projects: number }
 }
 
-export const metadata = {
-  title: 'Blueprints — The Superhero',
-  description:
-    'Proven, reusable project plans — repair cafés, pocket forests, solar co-ops and more. Fork one and adapt it to your community.',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('meta')
+  return {
+    title: t('blueprints.title'),
+    description: t('blueprints.description'),
+  }
 }
 
 export default async function BlueprintsCatalogPage() {

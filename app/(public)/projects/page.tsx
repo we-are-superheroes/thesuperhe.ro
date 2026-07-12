@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { auth } from '@clerk/nextjs/server'
 import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
@@ -198,10 +199,12 @@ async function getBrowseData(userId: string | null): Promise<{
   }
 }
 
-export const metadata = {
-  title: 'Browse projects — The Superhero',
-  description:
-    'Find climate and sustainability projects that need your skills — filter by type, country, language and time commitment.',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('meta')
+  return {
+    title: t('browse.title'),
+    description: t('browse.description'),
+  }
 }
 
 export default async function BrowseProjectsPage() {

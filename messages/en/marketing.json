@@ -1,1 +1,83 @@
-{}
+{
+  "nav": {
+    "browseProjects": "Browse projects",
+    "browseBlueprints": "Browse blueprints",
+    "howItWorks": "How it works",
+    "dashboard": "Dashboard",
+    "signIn": "Sign in",
+    "getStarted": "Get started",
+    "signOut": "Sign out"
+  },
+  "hero": {
+    "badge": "Climate & sustainability — together",
+    "title": "Don't act alone.<br></br>Let's be <em>superheroes</em><br></br>together.",
+    "subtitle": "Find climate and sustainability projects that need your skills, or bring your own idea and let collaborators help you make it real.",
+    "browseProjects": "Browse projects",
+    "startProject": "Start a project",
+    "timeNote": "From 1-hour tasks to long projects",
+    "skillsNote": "All skills welcome",
+    "annotation": "real projects, real impact",
+    "contributors": "{count, plural, one {# contributor} other {# contributors}}",
+    "stepsNeedHelp": "{count, plural, one {# step needs help} other {# steps need help}}",
+    "commitment": "~{hours}h commitment",
+    "showcaseKicker": "Repair Café",
+    "showcaseQuote": "“Bring it broken, take it fixed.”",
+    "showcaseMeta": "★ Camden, monthly"
+  },
+  "entry": {
+    "browseTitle": "Browse projects",
+    "browseDesc": "Filter by skill, location, time commitment. Find one that fits and join in.",
+    "browseCta": "Explore",
+    "dashboardTitle": "Your dashboard",
+    "dashboardDesc": "Pinned projects, next steps, and what's happening on the projects you've joined.",
+    "dashboardCta": "Open dashboard",
+    "signInTitle": "Sign in",
+    "signInTitleSignedIn": "Welcome back",
+    "signInDesc": "Returning? Pick up where you left off. New here? Create an account in under a minute.",
+    "signInDescSignedIn": "You're signed in. Head to your dashboard to see your projects.",
+    "signInCta": "Sign in",
+    "signInCtaSignedIn": "Go to dashboard"
+  },
+  "projects": {
+    "kicker": "Fresh on the platform",
+    "title": "New projects <em>looking for you</em>.",
+    "subtitle": "Just launched, and in need of their first contributors. Steps usually take less than 2 hours.",
+    "seeAll": "See all projects",
+    "card": {
+      "remoteOk": "Remote OK",
+      "stepsNeedHelp": "{count, plural, one {# step needs help} other {# steps need help}}",
+      "ageToday": "New · today",
+      "ageDaysAgo": "New · {days}d ago",
+      "ageWeekAgo": "New · 1w ago",
+      "time": "~{hours}h",
+      "joined": "{count} joined",
+      "view": "View →"
+    }
+  },
+  "how": {
+    "kicker": "How it works",
+    "title": "Contribute as much, <em>or as little</em>, as your time allows.",
+    "step1Title": "Tell us your skills",
+    "step1Desc": "Add the things you're good at, and the ones you actually want to use on a project. A burnt-out developer doesn't have to do coding.",
+    "step2Title": "Find a fit",
+    "step2Desc": "Browse whole projects, or just single steps. The smallest unit can be a 30-minute task, perfect for a quiet evening.",
+    "step3Title": "Get to work",
+    "step3Desc": "Join the team, claim a step, and ship something real with people who care about the same thing you do."
+  },
+  "cta": {
+    "title": "Ready to <em>act?</em>",
+    "subtitle": "Browse what's live right now, or sign in to see your dashboard.",
+    "browseProjects": "Browse projects",
+    "dashboard": "Go to dashboard",
+    "signIn": "Sign in"
+  },
+  "footer": {
+    "copyright": "© {year} The Superhero · climate & sustainability collaboration",
+    "projects": "Projects",
+    "blueprints": "Blueprints",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "createdIn": "Created in Switzerland",
+    "swissFlagAlt": "Swiss flag"
+  }
+}

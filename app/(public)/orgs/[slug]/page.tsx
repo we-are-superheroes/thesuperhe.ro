@@ -97,13 +97,16 @@ function toCard(
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params
-  const org = await db.organisation.findUnique({
-    where: { slug },
-    select: { name: true, description: true, status: true },
-  })
-  if (!org || org.status !== 'active') return { title: 'Organisation — The Superhero' }
+  const [t, org] = await Promise.all([
+    getTranslations('meta'),
+    db.organisation.findUnique({
+      where: { slug },
+      select: { name: true, description: true, status: true },
+    }),
+  ])
+  if (!org || org.status !== 'active') return { title: t('org.fallback') }
   return {
-    title: `${org.name} — The Superhero`,
+    title: t('org.title', { name: org.name }),
     description: org.description?.slice(0, 160) ?? undefined,
   }
 }

@@ -1,1 +1,62 @@
-{}
+{
+  "chrome": {
+    "eyebrow": "Legal",
+    "title": "Privacy policy",
+    "lastUpdated": "Last updated: {date}"
+  },
+  "sections": {
+    "whoWeAre": {
+      "title": "Who we are",
+      "p1": "The Superhero (thesuperhe.ro) is a platform that connects people with climate and sustainability projects. It is operated from Switzerland. For anything related to your data, contact us at <link>{email}</link>. We are the data controller for the personal data described below, and we handle it under the Swiss Federal Act on Data Protection (FADP) and, where it applies, the EU General Data Protection Regulation (GDPR).",
+      "englishPrevails": "This page is available in several languages for convenience — if a translation ever disagrees with the English version, the English version applies."
+    },
+    "whatWeCollect": {
+      "title": "What we collect",
+      "p1": "<strong>Account data.</strong> When you sign up, our authentication provider (Clerk) collects your name, email address and, if you use a social login, your avatar. We keep a copy of these in our own database so the platform can show who you are.",
+      "p2": "<strong>Profile data you choose to add.</strong> A bio, a location, a timezone, a profile photo, and the skills you say you have — including whether you’re looking to use them. All of this is optional.",
+      "p3": "<strong>Content you create.</strong> Projects, blueprints, project steps, updates, messages to other members, the steps you join and the hours you log. Some of this is public by design (see below).",
+      "p4": "<strong>Technical data.</strong> Our hosting provider (Vercel) keeps short-lived server logs (IP address, request path, timestamps) for operating and securing the service. We run no advertising or analytics trackers."
+    },
+    "whatWeUseItFor": {
+      "title": "What we use it for",
+      "p1": "To run the platform: showing your profile to other members, matching your skills with steps that need them, sending you in-app notifications, and letting you message other members. The legal basis is the performance of our contract with you (providing the service you signed up for) and our legitimate interest in keeping the platform secure and functional. We don’t sell your data, and we don’t use it for advertising."
+    },
+    "whatIsPublic": {
+      "title": "What is public",
+      "p1": "This is a collaboration platform, so some things are visible to anyone on the internet: projects and their steps, blueprints and their authorship, project updates marked “public”, and your name on content you have publicly contributed. Members-only updates are visible only to a project’s members. Messages are visible only to you and the person you’re writing with. Your email address is never shown to other users.",
+      "p2": "Uploaded images (profile photos, project covers) are stored in a publicly accessible bucket — anyone with the link can view them, so don’t upload images you wouldn’t want public."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "p1": "We use only cookies that are strictly necessary to run the service: the session cookies set by Clerk to keep you signed in, and a <code>superhero-locale</code> cookie that remembers which language you chose for the site. Your theme preference is stored in your browser’s local storage and never leaves your device. There are no advertising, analytics or third-party tracking cookies, which is why you don’t see a cookie banner."
+    },
+    "processors": {
+      "title": "Where your data lives",
+      "intro": "Our service providers (processors) are:",
+      "items": {
+        "supabase": "<strong>Supabase</strong> — database and image storage, hosted on AWS in the EU (Ireland, eu-west-1).",
+        "clerk": "<strong>Clerk</strong> — authentication, based in the United States. Transfers are covered by the EU Standard Contractual Clauses.",
+        "vercel": "<strong>Vercel</strong> — application hosting and server logs."
+      },
+      "outro": "Each of these processes data only on our instructions and under a data processing agreement."
+    },
+    "retention": {
+      "title": "How long we keep it",
+      "p1": "For as long as you have an account. If you delete your account, your profile, skills and contributions are deleted with it. Content that other people depend on — messages you sent, public updates you posted — is kept but detached from your identity and shown as coming from a deleted or former member. Server logs are retained by our hosting provider for a short period and then discarded."
+    },
+    "yourRights": {
+      "title": "Your rights",
+      "p1": "Under the FADP and GDPR you can ask us for access to the data we hold about you, have it corrected or deleted, receive a copy in a portable format, or object to or restrict how we process it. Write to <link>{email}</link> and we’ll respond within 30 days. You can also delete your account yourself from your profile settings at any time.",
+      "p2": "If you believe we’re mishandling your data, you have the right to complain to a supervisory authority — in Switzerland the Federal Data Protection and Information Commissioner (FDPIC), or your local data protection authority in the EU/EEA."
+    },
+    "policyChanges": {
+      "title": "Changes to this policy",
+      "p1": "If we change how we handle your data — for example, if we start sending email notifications — we’ll update this page and adjust the date at the top. For significant changes we’ll tell you in the app."
+    }
+  },
+  "footer": {
+    "questions": "Questions?",
+    "termsLink": "Terms of service",
+    "homeLink": "Back to the homepage"
+  }
+}

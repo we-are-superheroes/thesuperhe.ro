@@ -1,8 +1,10 @@
+import type { Metadata } from 'next'
 import { getTranslations } from 'next-intl/server'
 import { OrgRequestForm } from '@/components/platform/org-request-form'
 
-export const metadata = {
-  title: 'Request an organisation — The Superhero',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('meta')
+  return { title: t('orgRequest.title') }
 }
 
 export default async function OrgRequestPage() {
