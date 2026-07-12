@@ -16,6 +16,11 @@ import type myProjects from './messages/en/myProjects.json'
 import type skillMatches from './messages/en/skillMatches.json'
 import type messagesInbox from './messages/en/messagesInbox.json'
 import type admin from './messages/en/admin.json'
+import type meta from './messages/en/meta.json'
+import type marketing from './messages/en/marketing.json'
+import type auth from './messages/en/auth.json'
+import type legalPrivacy from './messages/en/legal-privacy.json'
+import type legalTerms from './messages/en/legal-terms.json'
 import type { Locale } from './lib/locale-shared'
 
 /**
@@ -46,6 +51,11 @@ declare module 'next-intl' {
       skillMatches: typeof skillMatches
       messagesInbox: typeof messagesInbox
       admin: typeof admin
+      meta: typeof meta
+      marketing: typeof marketing
+      auth: typeof auth
+      'legal-privacy': typeof legalPrivacy
+      'legal-terms': typeof legalTerms
     }
   }
 }

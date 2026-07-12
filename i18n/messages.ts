@@ -32,6 +32,11 @@ export const NAMESPACES = [
   'skillMatches',
   'messagesInbox',
   'admin',
+  'meta',
+  'marketing',
+  'auth',
+  'legal-privacy',
+  'legal-terms',
 ] as const
 
 export type Namespace = (typeof NAMESPACES)[number]
@@ -65,7 +70,7 @@ export const GROUP_NAMESPACES = {
     'admin',
   ],
   public: ['common', 'nav', 'errors', 'browse', 'project', 'steps', 'blueprints', 'orgs', 'users', 'search'],
-  marketing: ['common', 'nav'],
+  marketing: ['common', 'nav', 'marketing'],
   auth: ['common', 'auth'],
   // Legal pages are fully server-rendered; the shared chrome (navbar
   // with the language switcher) is the only client consumer.
