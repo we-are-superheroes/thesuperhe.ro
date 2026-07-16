@@ -3,6 +3,7 @@ import { db } from '@/lib/db'
 import { countUnreadConversations } from '@/lib/messages'
 import { PlatformShell } from '@/components/platform/platform-shell'
 import { PublicNavbar } from '@/components/public/navbar'
+import { GroupIntlProvider } from '@/i18n/provider'
 
 /**
  * Layout for routes that are readable by anyone but useful to signed-in
@@ -20,10 +21,12 @@ export default async function PublicLayout({
 
   if (!userId) {
     return (
-      <div className="flex min-h-screen flex-col">
-        <PublicNavbar />
-        <main className="flex flex-1 flex-col">{children}</main>
-      </div>
+      <GroupIntlProvider group="public">
+        <div className="flex min-h-screen flex-col">
+          <PublicNavbar />
+          <main className="flex flex-1 flex-col">{children}</main>
+        </div>
+      </GroupIntlProvider>
     )
   }
 
@@ -76,16 +79,18 @@ export default async function PublicLayout({
     user?.contributions?.reduce((sum, c) => sum + c.hoursContributed, 0) ?? 0
 
   return (
-    <PlatformShell
-      userName={name}
-      userInitials={initials}
-      projectCount={projectCount}
-      stepCount={stepCount}
-      hoursContributed={hoursContributed}
-      notificationsBadge={unreadNotifications}
-      messagesBadge={messagesBadge}
-    >
-      {children}
-    </PlatformShell>
+    <GroupIntlProvider group="public">
+      <PlatformShell
+        userName={name}
+        userInitials={initials}
+        projectCount={projectCount}
+        stepCount={stepCount}
+        hoursContributed={hoursContributed}
+        notificationsBadge={unreadNotifications}
+        messagesBadge={messagesBadge}
+      >
+        {children}
+      </PlatformShell>
+    </GroupIntlProvider>
   )
 }

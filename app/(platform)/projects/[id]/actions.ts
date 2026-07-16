@@ -2,6 +2,8 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
+import { tError } from '@/lib/errors'
 import { db } from '@/lib/db'
 import { ensureUserExists } from '@/lib/users'
 import { canViewProject } from '@/lib/orgs'
@@ -13,25 +15,26 @@ import type { ServerActionResult } from '@/types'
 export async function joinProjectAction(
   projectId: string,
 ): Promise<ServerActionResult<{ joined: true; pending: boolean }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   // Join/leave loops spam the leads with notifications — throttle.
   const rl = rateLimit(`${userId}:join-project`, 5, 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const userCheck = await ensureUserExists(userId)
-  if (!userCheck.success) return { success: false, error: userCheck.error }
+  if (!userCheck.success) return { success: false, error: t('common.profileSyncFailed') }
 
   const project = await db.project.findUnique({
     where: { id: projectId },
     select: { id: true, title: true, joinPolicy: true, visibility: true, orgId: true },
   })
-  if (!project) return { success: false, error: 'Project not found.' }
+  if (!project) return { success: false, error: t('projectJoin.projectNotFound') }
   // Members-only projects can only be joined from inside the owning org.
   // Same response as a missing project — don't confirm it exists.
   if (!(await canViewProject(project, userId))) {
-    return { success: false, error: 'Project not found.' }
+    return { success: false, error: t('projectJoin.projectNotFound') }
   }
   const approvalRequired = project.joinPolicy === 'approval_required'
 
@@ -42,7 +45,7 @@ export async function joinProjectAction(
     select: { id: true, status: true },
   })
   if (existing && (existing.status === 'active' || existing.status === 'pending')) {
-    return { success: false, error: 'You’re already a member of this project.' }
+    return { success: false, error: t('projectJoin.alreadyMember') }
   }
 
   // Look up the actor's name for the notification copy.
@@ -86,7 +89,10 @@ export async function joinProjectAction(
           recipients: leadIds,
           actorId: userId,
           projectId,
-          title: `${actorName} wants to join ${project.title}.`,
+          message: {
+            key: 'projectJoinRequest',
+            params: { actorName, projectTitle: project.title },
+          },
           data: { contributionId },
         })
       } else {
@@ -95,12 +101,12 @@ export async function joinProjectAction(
           recipients: leadIds,
           actorId: userId,
           projectId,
-          title: `${actorName} joined ${project.title}.`,
+          message: { key: 'projectJoin', params: { actorName, projectTitle: project.title } },
         })
       }
     })
   } catch {
-    return { success: false, error: 'Could not join project.' }
+    return { success: false, error: t('projectJoin.joinFailed') }
   }
 
   revalidatePath(`/projects/${projectId}`)
@@ -114,14 +120,15 @@ export async function joinStepAction(
   projectId: string,
   projectStepId: string,
 ): Promise<ServerActionResult<{ joined: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const rl = rateLimit(`${userId}:step-membership`, 10, 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const userCheck = await ensureUserExists(userId)
-  if (!userCheck.success) return { success: false, error: userCheck.error }
+  if (!userCheck.success) return { success: false, error: t('common.profileSyncFailed') }
 
   // Must be an active project-level member to claim steps. A pending join
   // request doesn't grant claim rights yet.
@@ -135,7 +142,7 @@ export async function joinStepAction(
     select: { id: true },
   })
   if (!membership) {
-    return { success: false, error: 'Join the project before claiming a step.' }
+    return { success: false, error: t('projectJoin.joinBeforeClaimingStep') }
   }
 
   const step = await db.projectStep.findUnique({
@@ -150,7 +157,7 @@ export async function joinStepAction(
     },
   })
   if (!step || step.projectId !== projectId) {
-    return { success: false, error: 'Step not found in this project.' }
+    return { success: false, error: t('projectJoin.stepNotFound') }
   }
 
   // Already an active joiner? No-op — joining is idempotent.
@@ -201,11 +208,14 @@ export async function joinStepAction(
         actorId: userId,
         projectId,
         stepId: projectStepId,
-        title: `${actorName} joined “${step.title}” in ${step.project.title}.`,
+        message: {
+          key: 'stepClaimed',
+          params: { actorName, stepTitle: step.title, projectTitle: step.project.title },
+        },
       })
     })
   } catch {
-    return { success: false, error: 'Could not join step.' }
+    return { success: false, error: t('projectJoin.joinStepFailed') }
   }
 
   revalidatePath(`/projects/${projectId}`)
@@ -219,11 +229,12 @@ export async function leaveStepAction(
   projectId: string,
   projectStepId: string,
 ): Promise<ServerActionResult<{ left: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const rl = rateLimit(`${userId}:step-membership`, 10, 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const step = await db.projectStep.findUnique({
     where: { id: projectStepId },
@@ -237,7 +248,7 @@ export async function leaveStepAction(
     },
   })
   if (!step || step.projectId !== projectId) {
-    return { success: false, error: 'Step not found in this project.' }
+    return { success: false, error: t('projectJoin.stepNotFound') }
   }
 
   const mine = await db.contribution.findFirst({
@@ -245,7 +256,7 @@ export async function leaveStepAction(
     select: { id: true },
   })
   if (!mine) {
-    return { success: false, error: 'You’re not on this step.' }
+    return { success: false, error: t('projectJoin.notOnStep') }
   }
 
   const actor = await db.user.findUnique({ where: { id: userId }, select: { name: true } })
@@ -294,11 +305,14 @@ export async function leaveStepAction(
         actorId: userId,
         projectId,
         stepId: projectStepId,
-        title: `${actorName} left “${step.title}” in ${step.project.title}.`,
+        message: {
+          key: 'stepUnclaimed',
+          params: { actorName, stepTitle: step.title, projectTitle: step.project.title },
+        },
       })
     })
   } catch {
-    return { success: false, error: 'Could not leave step.' }
+    return { success: false, error: t('projectJoin.leaveStepFailed') }
   }
 
   revalidatePath(`/projects/${projectId}`)
@@ -312,18 +326,19 @@ export async function leaveStepAction(
 export async function leaveProjectAction(
   projectId: string,
 ): Promise<ServerActionResult<{ left: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const rl = rateLimit(`${userId}:join-project`, 5, 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const existing = await db.contribution.findFirst({
     where: { userId, projectId, projectStepId: null },
     select: { id: true, status: true },
   })
   if (!existing || (existing.status !== 'active' && existing.status !== 'pending')) {
-    return { success: false, error: 'You’re not in this project.' }
+    return { success: false, error: t('projectJoin.notInProject') }
   }
 
   // Find any steps this user joined or coordinates so we can release them
@@ -401,11 +416,11 @@ export async function leaveProjectAction(
         recipients: leadIds,
         actorId: userId,
         projectId,
-        title: `${actorName} left ${projectTitle}.`,
+        message: { key: 'projectLeave', params: { actorName, projectTitle } },
       })
     })
   } catch {
-    return { success: false, error: 'Could not leave project.' }
+    return { success: false, error: t('projectJoin.leaveProjectFailed') }
   }
 
   revalidatePath(`/projects/${projectId}`)

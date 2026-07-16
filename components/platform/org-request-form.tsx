@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { Check } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import {
   requestOrganisationAction,
@@ -16,22 +17,11 @@ import {
    live. No self-serve path exists on purpose.
    ================================================================ */
 
-const TYPES = [
-  {
-    value: 'nonprofit' as const,
-    label: 'Non-profit or community group',
-    description:
-      'Associations, cooperatives, schools, community groups. Free — the test is whether the organisation exists to make a profit for its owners.',
-  },
-  {
-    value: 'company' as const,
-    label: 'Company',
-    description:
-      'Businesses that want employees contributing on work time, with contribution reporting. Paid — we will contact you about pricing.',
-  },
-]
+const TYPES = ['nonprofit', 'company'] as const
 
 export function OrgRequestForm() {
+  const t = useTranslations('orgs')
+  const tc = useTranslations('common')
   const [name, setName] = useState('')
   const [type, setType] = useState<'nonprofit' | 'company'>('nonprofit')
   const [website, setWebsite] = useState('')
@@ -47,29 +37,41 @@ export function OrgRequestForm() {
   const submit = () => {
     setError(null)
     startTransition(async () => {
-      const result = await requestOrganisationAction({
-        name,
-        type,
-        website,
-        intendedUse,
-        listed,
-      })
+      let result: Awaited<ReturnType<typeof requestOrganisationAction>>
+      try {
+        result = await requestOrganisationAction({
+          name,
+          type,
+          website,
+          intendedUse,
+          listed,
+        })
+      } catch {
+        setError(t('request.genericError'))
+        return
+      }
       if (!result.success) {
         setError(result.error)
         return
       }
       // The requester is the org's creator, so they may upload its images
-      // straight away. A failed upload doesn't fail the request.
+      // straight away. A failed upload must never sink the request — the
+      // organisation already exists, so always reach the done screen and
+      // report image problems as warnings.
       const warnings: string[] = []
       for (const [image, file] of [
         ['logo', logoFile],
         ['banner', bannerFile],
       ] as const) {
         if (!file) continue
-        const fd = new FormData()
-        fd.set('file', file)
-        const up = await uploadOrgImageAction(result.data.orgId, image, fd)
-        if (!up.success) warnings.push(`The ${image} was not saved: ${up.error}`)
+        try {
+          const fd = new FormData()
+          fd.set('file', file)
+          const up = await uploadOrgImageAction(result.data.orgId, image, fd)
+          if (!up.success) warnings.push(t('request.imageNotSaved', { image, error: up.error }))
+        } catch {
+          warnings.push(t('request.imageUploadFailed', { image }))
+        }
       }
       setImageWarning(warnings.length > 0 ? warnings.join(' ') : null)
       setDone(result.data.slug)
@@ -82,14 +84,15 @@ export function OrgRequestForm() {
         <div className="flex size-14 items-center justify-center rounded-full border border-emerald-500/40 bg-emerald-500/[0.1] text-emerald-300">
           <Check className="size-6" />
         </div>
-        <h2 className="font-display text-2xl font-normal">Request sent.</h2>
+        <h2 className="font-display text-2xl font-normal">{t('request.doneTitle')}</h2>
         <p className="max-w-[460px] text-sm leading-relaxed text-fg-secondary">
-          We review every organisation by hand — usually within a few days. Until then, only you
-          can see{' '}
-          <Link href={`/orgs/${done}`} className="text-amber-500 hover:underline">
-            your organisation page
-          </Link>
-          . We will contact you by email if we have questions.
+          {t.rich('request.doneBody', {
+            link: (chunks) => (
+              <Link href={`/orgs/${done}`} className="text-amber-500 hover:underline">
+                {chunks}
+              </Link>
+            ),
+          })}
         </p>
         {imageWarning && <p className="max-w-[460px] text-sm text-amber-400">{imageWarning}</p>}
       </div>
@@ -99,28 +102,28 @@ export function OrgRequestForm() {
   return (
     <div className="flex flex-col gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface p-6 sm:p-8">
       <label className="flex flex-col gap-1.5 text-sm text-fg-secondary">
-        Organisation name
+        {t('request.nameLabel')}
         <input
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="e.g. Hackney Rewilders"
+          placeholder={t('request.namePlaceholder')}
           className="rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 text-base text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
         />
       </label>
 
       <div className="flex flex-col gap-1.5 text-sm text-fg-secondary">
-        What kind of organisation is it?
-        <div role="radiogroup" aria-label="Organisation type" className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          {TYPES.map((opt) => {
-            const checked = type === opt.value
+        {t('request.typeQuestion')}
+        <div role="radiogroup" aria-label={t('request.typeAria')} className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          {TYPES.map((value) => {
+            const checked = type === value
             return (
               <button
-                key={opt.value}
+                key={value}
                 type="button"
                 role="radio"
                 aria-checked={checked}
-                onClick={() => setType(opt.value)}
+                onClick={() => setType(value)}
                 className={cn(
                   'flex flex-col items-start gap-1 rounded-lg border bg-bg-base p-4 text-left transition-colors',
                   checked
@@ -129,55 +132,51 @@ export function OrgRequestForm() {
                 )}
               >
                 <span className={cn('text-sm font-medium', checked ? 'text-amber-500' : 'text-fg-primary')}>
-                  {opt.label}
+                  {t(`request.${value}Label`)}
                 </span>
-                <span className="text-xs leading-relaxed text-fg-tertiary">{opt.description}</span>
+                <span className="text-xs leading-relaxed text-fg-tertiary">
+                  {t(`request.${value}Description`)}
+                </span>
               </button>
             )
           })}
         </div>
-        <span className="mt-1 text-xs text-fg-tertiary">
-          We confirm the type during review — the legal form matters less than whether the
-          organisation exists to make a profit.
-        </span>
+        <span className="mt-1 text-xs text-fg-tertiary">{t('request.typeHint')}</span>
       </div>
 
       <label className="flex flex-col gap-1.5 text-sm text-fg-secondary">
-        Website (optional)
+        {t('request.websiteLabel')}
         <input
           type="text"
           value={website}
           onChange={(e) => setWebsite(e.target.value)}
-          placeholder="example.org"
+          placeholder={t('request.websitePlaceholder')}
           className="rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 text-sm text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
         />
       </label>
 
       <label className="flex flex-col gap-1.5 text-sm text-fg-secondary">
-        How do you plan to use it?
+        {t('request.useLabel')}
         <textarea
           value={intendedUse}
           onChange={(e) => setIntendedUse(e.target.value)}
           rows={4}
-          placeholder="A sentence or two: who you are, and what your organisation would do here."
+          placeholder={t('request.usePlaceholder')}
           className="rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 text-sm text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
         />
-        <span className="mt-1 text-xs text-fg-tertiary">
-          This becomes the first draft of your organisation&rsquo;s About text — you can change it
-          any time.
-        </span>
+        <span className="mt-1 text-xs text-fg-tertiary">{t('request.useHint')}</span>
       </label>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <FilePick
-          label="Logo (optional)"
-          hint="Square works best."
+          label={t('request.logoLabel')}
+          hint={t('request.logoHint')}
           file={logoFile}
           onFile={setLogoFile}
         />
         <FilePick
-          label="Banner (optional)"
-          hint="Wide image, about 1600×400."
+          label={t('request.bannerLabel')}
+          hint={t('request.bannerHint')}
           file={bannerFile}
           onFile={setBannerFile}
         />
@@ -191,10 +190,9 @@ export function OrgRequestForm() {
           className="mt-0.5 size-4 accent-amber-500"
         />
         <span className="flex flex-col gap-0.5 text-sm">
-          <span className="font-medium text-fg-primary">List in the directory once approved</span>
+          <span className="font-medium text-fg-primary">{t('request.listedLabel')}</span>
           <span className="text-xs leading-relaxed text-fg-tertiary">
-            Listed organisations appear on the Organisations page for everyone. You can change
-            this any time.
+            {t('request.listedHint')}
           </span>
         </span>
       </label>
@@ -207,7 +205,7 @@ export function OrgRequestForm() {
         disabled={pending || !name.trim() || !intendedUse.trim()}
         className="cursor-pointer self-start rounded-lg bg-gradient-to-br from-amber-500 to-amber-400 px-5 py-2.5 text-sm font-semibold text-amber-950 transition-transform hover:-translate-y-px disabled:opacity-60"
       >
-        {pending ? 'Sending…' : 'Send request'}
+        {pending ? tc('state.sending') : t('request.send')}
       </button>
     </div>
   )
@@ -225,20 +223,21 @@ function FilePick({
   file: File | null
   onFile: (f: File | null) => void
 }) {
+  const t = useTranslations('orgs')
   const inputRef = useRef<HTMLInputElement>(null)
   return (
     <div className="flex flex-col gap-1.5 text-sm text-fg-secondary">
       {label}
       <div className="flex items-center gap-3 rounded-lg border border-neutral-700 bg-bg-base px-3.5 py-3">
         <span className="min-w-0 flex-1 truncate text-xs text-fg-tertiary">
-          {file ? file.name : 'No file chosen'}
+          {file ? file.name : t('request.file.noFile')}
         </span>
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
           className="cursor-pointer rounded-full border border-neutral-700 px-3 py-1 text-xs text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary"
         >
-          {file ? 'Replace' : 'Choose file'}
+          {file ? t('request.file.replace') : t('request.file.choose')}
         </button>
         {file && (
           <button
@@ -246,7 +245,7 @@ function FilePick({
             onClick={() => onFile(null)}
             className="cursor-pointer rounded-full border border-neutral-700 px-3 py-1 text-xs text-fg-tertiary transition-colors hover:border-red-400/50 hover:text-red-400"
           >
-            Clear
+            {t('request.file.clear')}
           </button>
         )}
         <input

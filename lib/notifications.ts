@@ -1,5 +1,11 @@
 import 'server-only'
 import type { Prisma, NotificationType } from '@prisma/client'
+import {
+  renderNotificationTitleEn,
+  renderNotificationBodyEn,
+  type NotificationMessage,
+  type NotificationBodyMessage,
+} from '@/lib/notification-messages'
 
 /* ================================================================
    notify() — the single entry point that server actions call to
@@ -12,8 +18,12 @@ import type { Prisma, NotificationType } from '@prisma/client'
        recipients: [leadId],
        actorId: userId,
        projectId,
-       title: `${actorName} joined ${projectTitle}.`,
+       message: { key: 'projectJoin', params: { actorName, projectTitle } },
      })
+
+   The stored `title`/`body` are rendered English (snapshot fallback);
+   the message key + params are stored in `data.i18n` so the
+   notifications page can re-render the row in the reader's language.
 
    Recipients are computed by the caller (typically the project's
    active leads, or leads + active contributors). This helper:
@@ -39,9 +49,11 @@ export interface NotifyParams {
   projectId?: string
   stepId?: string
   blueprintId?: string
-  /** Pre-rendered title copy — snapshotted, not re-fetched at read time. */
-  title: string
-  /** Optional supporting copy (excerpt, detail). */
+  /** Title message key + params — rendered to English for the stored snapshot. */
+  message: NotificationMessage
+  /** Optional supporting copy (catalogued key + params). */
+  bodyMessage?: NotificationBodyMessage
+  /** Free-text supporting copy (user-authored excerpts) — not translated. */
   body?: string
   /** Type-specific payload kept small (skill name, milestone amount, etc.). */
   data?: Record<string, unknown>
@@ -60,6 +72,26 @@ export async function notify(
   }
   if (dedup.size === 0) return
 
+  // English snapshot for the stored columns; key + params in data.i18n so
+  // the reader's locale can re-render the copy at read time.
+  const title = renderNotificationTitleEn(params.message)
+  const body = params.bodyMessage
+    ? renderNotificationBodyEn(params.bodyMessage)
+    : (params.body ?? null)
+  const data = {
+    ...params.data,
+    i18n: {
+      key: params.message.key,
+      ...(params.message.params ? { params: params.message.params } : {}),
+      ...(params.bodyMessage
+        ? {
+            bodyKey: params.bodyMessage.key,
+            ...(params.bodyMessage.params ? { bodyParams: params.bodyMessage.params } : {}),
+          }
+        : {}),
+    },
+  }
+
   const rows = Array.from(dedup).map((userId) => ({
     userId,
     type: params.type,
@@ -67,9 +99,9 @@ export async function notify(
     projectId: params.projectId ?? null,
     stepId: params.stepId ?? null,
     blueprintId: params.blueprintId ?? null,
-    title: params.title,
-    body: params.body ?? null,
-    data: (params.data as Prisma.InputJsonValue | undefined) ?? undefined,
+    title,
+    body,
+    data: data as Prisma.InputJsonValue,
   }))
 
   await (tx as Prisma.TransactionClient).notification.createMany({ data: rows })
@@ -177,13 +209,18 @@ export async function notifyMessageReceived(
       where: { id: existing.id },
       data: {
         createdAt: new Date(),
-        title:
-          nextCount === 1
-            ? `${params.senderName} sent you a message.`
-            : `${nextCount} new messages from ${params.senderName}.`,
+        // The ICU plural covers both the singular and the N-messages copy.
+        title: renderNotificationTitleEn({
+          key: 'messageReceived',
+          params: { senderName: params.senderName, count: nextCount },
+        }),
         data: {
           conversationId: params.conversationId,
           count: nextCount,
+          i18n: {
+            key: 'messageReceived',
+            params: { senderName: params.senderName, count: nextCount },
+          },
         },
       },
     })
@@ -196,8 +233,18 @@ export async function notifyMessageReceived(
       userId: params.recipientId,
       type: 'message_received',
       actorId: params.senderId,
-      title: `${params.senderName} sent you a message.`,
-      data: { conversationId: params.conversationId, count: 1 },
+      title: renderNotificationTitleEn({
+        key: 'messageReceived',
+        params: { senderName: params.senderName, count: 1 },
+      }),
+      data: {
+        conversationId: params.conversationId,
+        count: 1,
+        i18n: {
+          key: 'messageReceived',
+          params: { senderName: params.senderName, count: 1 },
+        },
+      },
     },
   })
 }

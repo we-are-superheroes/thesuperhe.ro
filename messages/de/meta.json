@@ -1,0 +1,41 @@
+{
+  "root": {
+    "title": "The Superhero — Projekte, die die Welt retten",
+    "description": "Verbinde deine Fähigkeiten mit Klima- und Nachhaltigkeitsprojekten, die dich brauchen. Jeder Beitrag zählt."
+  },
+  "browse": {
+    "title": "Projekte durchstöbern — The Superhero",
+    "description": "Finde Klima- und Nachhaltigkeitsprojekte, die deine Fähigkeiten brauchen — filterbar nach Typ, Land, Sprache und Zeitaufwand."
+  },
+  "blueprints": {
+    "title": "Blaupausen — The Superhero",
+    "description": "Bewährte, wiederverwendbare Projektpläne — Repair Cafés, Mini-Wälder, Solar-Genossenschaften und mehr. Übernimm einen und pass ihn an deine Gemeinschaft an."
+  },
+  "blueprint": {
+    "title": "{name} — Blaupause — The Superhero",
+    "notFound": "Blaupause nicht gefunden — The Superhero"
+  },
+  "project": {
+    "title": "{name} — The Superhero",
+    "notFound": "Projekt nicht gefunden — The Superhero",
+    "membersOnly": "Projekt nur für Mitglieder — The Superhero"
+  },
+  "org": {
+    "title": "{name} — The Superhero",
+    "fallback": "Organisation — The Superhero"
+  },
+  "organisations": {
+    "title": "Organisationen — The Superhero"
+  },
+  "orgRequest": {
+    "title": "Organisation anfragen — The Superhero"
+  },
+  "privacy": {
+    "title": "Datenschutzerklärung — The Superhero",
+    "description": "Welche Daten The Superhero erhebt, warum, wo sie liegen und welche Rechte du daran hast."
+  },
+  "terms": {
+    "title": "Nutzungsbedingungen — The Superhero",
+    "description": "Die Regeln für die Nutzung von The Superhero: dein Konto, deine Inhalte, zulässige Nutzung und wofür wir verantwortlich sind (und wofür nicht)."
+  }
+}

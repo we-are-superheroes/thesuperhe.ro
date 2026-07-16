@@ -1,0 +1,65 @@
+{
+  "status": {
+    "open": "Open",
+    "in_progress": "In progress",
+    "completed": "Completed"
+  },
+  "needsHelp": "Needs help",
+  "filter": {
+    "all": "All"
+  },
+  "list": {
+    "empty": "No steps in this state.",
+    "showAll": "Show all {count, plural, one {# step} other {# steps}}"
+  },
+  "card": {
+    "orderOfTotal": "Step {order} of {total}",
+    "estimatedHours": "~{hours}h",
+    "noSkills": "No skills required"
+  },
+  "joiners": {
+    "coordinatorName": "{name} (coordinator)",
+    "youCoordinate": "You coordinate",
+    "nameCoordinates": "{name} coordinates",
+    "changeCoordinator": "Change coordinator",
+    "menuTitle": "Step coordinator",
+    "noCoordinator": "No coordinator"
+  },
+  "action": {
+    "done": "Done",
+    "signInToJoin": "Sign in to join",
+    "joinProjectFirst": "Join the project to join this step",
+    "askForHelp": "Ask for help",
+    "withdrawHelpRequest": "Withdraw help request",
+    "markComplete": "Mark complete",
+    "reopen": "Reopen",
+    "youreOnThis": "You're on this",
+    "leaveStep": "Leave step",
+    "leaving": "Leaving…",
+    "joinThisStep": "Join this step",
+    "joinToo": "Join too",
+    "joining": "Joining…"
+  },
+  "timeLog": {
+    "hoursOnly": "{hours}h",
+    "hoursMinutes": "{hours}h {minutes}m",
+    "minutesOnly": "{minutes}m",
+    "noTimeYet": "No time logged yet",
+    "totalLogged": "<strong>{hours}</strong> logged",
+    "byName": "by {name}",
+    "contributorCount": "{count, plural, one {# contributor} other {# contributors}}",
+    "logTime": "Log time",
+    "beFirst": "Be the first to log time on this step.",
+    "nothingLogged": "Nothing logged yet.",
+    "earlierEntries": "+ {count, plural, one {# earlier entry} other {# earlier entries}}",
+    "hoursPlaceholder": "0.5",
+    "hourSymbol": "h",
+    "dateTitle": "When did you do the work?",
+    "notePlaceholder": "What did you do? (optional)",
+    "log": "Log",
+    "quickAddMinutes": "+{minutes} min",
+    "quickAddHours": "+{hours}h",
+    "someone": "Someone",
+    "deleteEntry": "Delete entry"
+  }
+}

@@ -2,6 +2,8 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
+import { tError } from '@/lib/errors'
 import { db } from '@/lib/db'
 import { ensureUserExists } from '@/lib/users'
 import { findOrCreateConversation } from '@/lib/messages'
@@ -22,28 +24,29 @@ export async function sendMessageAction(
   recipientUserId: string,
   body: string,
 ): Promise<ServerActionResult<{ conversationId: string; messageId: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const rl = rateLimit(`${userId}:send-message`, 30, 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   if (recipientUserId === userId) {
-    return { success: false, error: 'You can’t message yourself.' }
+    return { success: false, error: t('messages.cannotMessageSelf') }
   }
 
   const userCheck = await ensureUserExists(userId)
-  if (!userCheck.success) return { success: false, error: userCheck.error }
+  if (!userCheck.success) return { success: false, error: t('common.profileSyncFailed') }
 
   const trimmed = body.trim()
-  if (!trimmed) return { success: false, error: 'Message can’t be empty.' }
-  if (trimmed.length > BODY_MAX) return { success: false, error: `Max ${BODY_MAX} characters.` }
+  if (!trimmed) return { success: false, error: t('messages.bodyEmpty') }
+  if (trimmed.length > BODY_MAX) return { success: false, error: t('messages.bodyTooLong', { max: BODY_MAX }) }
 
   const recipient = await db.user.findUnique({
     where: { id: recipientUserId },
     select: { id: true },
   })
-  if (!recipient) return { success: false, error: 'Recipient not found.' }
+  if (!recipient) return { success: false, error: t('messages.recipientNotFound') }
 
   const sender = await db.user.findUnique({
     where: { id: userId },
@@ -92,7 +95,7 @@ export async function sendMessageAction(
       })
     })
   } catch {
-    return { success: false, error: 'Could not send message.' }
+    return { success: false, error: t('messages.sendFailed') }
   }
 
   revalidatePath('/messages')
@@ -107,8 +110,9 @@ export async function sendMessageAction(
 export async function markConversationReadAction(
   conversationId: string,
 ): Promise<ServerActionResult<{ readAt: number }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const at = new Date()
   const result = await db.conversationParticipant.updateMany({
@@ -116,7 +120,7 @@ export async function markConversationReadAction(
     data: { lastReadAt: at },
   })
   if (result.count === 0) {
-    return { success: false, error: 'You’re not in this conversation.' }
+    return { success: false, error: t('messages.notInConversation') }
   }
 
   revalidatePath('/messages')
@@ -128,8 +132,9 @@ export async function muteConversationAction(
   conversationId: string,
   muted: boolean,
 ): Promise<ServerActionResult<{ muted: boolean }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
   await db.conversationParticipant.updateMany({
     where: { conversationId, userId },
     data: { mutedAt: muted ? new Date() : null },
@@ -142,8 +147,9 @@ export async function archiveConversationAction(
   conversationId: string,
   archived: boolean,
 ): Promise<ServerActionResult<{ archived: boolean }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
   await db.conversationParticipant.updateMany({
     where: { conversationId, userId },
     data: { archivedAt: archived ? new Date() : null },
@@ -155,16 +161,17 @@ export async function archiveConversationAction(
 export async function deleteMessageAction(
   messageId: string,
 ): Promise<ServerActionResult<{ deleted: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const message = await db.message.findUnique({
     where: { id: messageId },
     select: { id: true, senderId: true, conversationId: true, deletedAt: true },
   })
-  if (!message) return { success: false, error: 'Message not found.' }
+  if (!message) return { success: false, error: t('messages.messageNotFound') }
   if (message.senderId !== userId) {
-    return { success: false, error: 'You can only delete your own messages.' }
+    return { success: false, error: t('messages.deleteOwnOnly') }
   }
   if (message.deletedAt) return { success: true, data: { deleted: true } }
 
@@ -189,8 +196,9 @@ export async function searchUsersAction(
     { id: string; name: string; avatarUrl: string | null; location: string | null }[]
   >
 > {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const q = query.trim()
   if (q.length < 1) return { success: true, data: [] }

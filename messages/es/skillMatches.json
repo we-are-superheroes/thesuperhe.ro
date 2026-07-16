@@ -1,0 +1,63 @@
+{
+  "hero": {
+    "title": "A la medida de <em>tus habilidades</em>.",
+    "subtitle": "Pasos y proyectos elegidos según lo que se te da bien — y dónde estás. El trabajo a distancia se empareja según los idiomas que hablas."
+  },
+  "basis": {
+    "ariaLabel": "En qué se basan estas coincidencias",
+    "matchingOn": "Emparejando por",
+    "noSkills": "Aún no hay habilidades en tu perfil",
+    "editProfile": "Editar perfil"
+  },
+  "emptyProfile": {
+    "title": "Dinos qué se te da bien.",
+    "description": "Las coincidencias se construyen a partir de las habilidades de tu perfil. Añade algunas — cualquier habilidad cuenta, no solo las técnicas — y las coincidencias aparecerán aquí.",
+    "cta": "Añadir habilidades a tu perfil"
+  },
+  "pills": {
+    "all": "Todo",
+    "steps": "Pasos",
+    "projects": "Proyectos"
+  },
+  "tools": {
+    "searchPlaceholder": "Buscar coincidencias…",
+    "remoteOnly": "Solo a distancia"
+  },
+  "emptyFiltered": {
+    "title": "No hay coincidencias con esos filtros.",
+    "description": "Prueba a desactivar “Solo a distancia”, vaciar la búsqueda — o añade más habilidades a tu perfil para ver más coincidencias."
+  },
+  "groups": {
+    "strongTitle": "Coincidencias fuertes",
+    "strongSub": "{count} — necesitan una habilidad que ya tienes",
+    "adjacentTitle": "Cercanas a tus habilidades",
+    "adjacentSub": "{count} — en las mismas áreas, una oportunidad de aprender algo nuevo"
+  },
+  "ring": {
+    "percentSign": "%",
+    "matchLabel": "Coincidencia"
+  },
+  "card": {
+    "kindStep": "paso",
+    "kindProject": "proyecto",
+    "estimatedHours": "· ~{hours}h",
+    "claimStep": "Encargarme de este paso",
+    "viewProject": "Ver proyecto"
+  },
+  "why": {
+    "needsSkills": "Necesita {skills} — {count, plural, one {la tienes} other {tienes ambas}}",
+    "andJoiner": " y ",
+    "relatedSkills": "{skills} está cerca de tus habilidades",
+    "near": "En {city}, igual que tú",
+    "far": "{location} — hay que viajar",
+    "locationUnknown": "Ubicación desconocida",
+    "remoteLang": "A distancia, funciona en {language}",
+    "remoteNoLang": "A distancia, pero funciona en {language}",
+    "remoteUnknown": "Se aceptan colaboradores a distancia"
+  },
+  "rail": {
+    "remote": "A distancia",
+    "nearYou": "{location} · cerca de ti",
+    "locationNotSet": "Ubicación sin definir"
+  }
+}

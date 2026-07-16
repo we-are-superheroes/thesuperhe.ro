@@ -1,7 +1,8 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
-import { ORG_TYPE_LABEL, isOrgAdminRole } from '@/lib/org-utils'
+import { isOrgAdminRole } from '@/lib/org-utils'
 import { ProfileEditForm, type ProfileFormInitial, type SkillOption } from '@/components/platform/profile-edit-form'
 import { ProfileOrgsSection, type ProfileOrgRow } from '@/components/platform/profile-orgs-section'
 
@@ -55,13 +56,19 @@ export default async function ProfilePage() {
     },
   })
 
+  const tOrgs = await getTranslations('orgs')
   const orgRows: ProfileOrgRow[] = memberships.map((m) => ({
     orgId: m.org.id,
     slug: m.org.slug,
     name: m.org.name,
-    typeLabel: ORG_TYPE_LABEL[m.org.type],
+    typeLabel: tOrgs(`type.${m.org.type}`),
     status: m.org.status,
-    roleLabel: m.role === 'owner' ? 'Creator' : m.role === 'admin' ? 'Admin' : 'Member',
+    roleLabel:
+      m.role === 'owner'
+        ? tOrgs('role.creator')
+        : m.role === 'admin'
+          ? tOrgs('role.admin')
+          : tOrgs('role.member'),
     isAdmin: isOrgAdminRole(m.role),
     shareContributions: m.shareContributions,
   }))

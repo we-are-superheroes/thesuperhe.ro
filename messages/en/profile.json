@@ -1,0 +1,81 @@
+{
+  "breadcrumb": {
+    "dashboard": "Dashboard",
+    "editProfile": "Edit profile"
+  },
+  "topbar": {
+    "unsavedChanges": "Unsaved changes",
+    "savedJustNow": "Saved just now",
+    "saveChanges": "Save changes"
+  },
+  "header": {
+    "title": "Your <em>profile</em>.",
+    "intro": "This is what project leads see when you offer to help. Be honest — the more accurate your profile, the better the matches."
+  },
+  "toc": {
+    "ariaLabel": "Profile sections",
+    "onThisPage": "On this page",
+    "aboutYou": "About you",
+    "skills": "Skills",
+    "whereWhen": "Where & when",
+    "organisations": "Organisations",
+    "appearance": "Appearance"
+  },
+  "identity": {
+    "eyebrow": "About you",
+    "title": "Tell your story.",
+    "desc": "A short bio and picture help project leads understand what drives you. What change do you want to be part of?"
+  },
+  "avatar": {
+    "label": "Profile picture",
+    "uploading": "Uploading…",
+    "replace": "Replace",
+    "uploadNew": "Upload new",
+    "remove": "Remove",
+    "hint": "Square, at least 256×256. PNG, JPG, WebP or GIF, up to 4 MB."
+  },
+  "fields": {
+    "fullName": "Full name",
+    "bio": "Bio",
+    "bioCounter": "{count} / {max}",
+    "bioHelp": "Two or three sentences. What you care about, what you're working on, what you'd love to do more of.",
+    "city": "City",
+    "cityPlaceholder": "e.g. Lausanne, Switzerland",
+    "timezone": "Timezone"
+  },
+  "proficiency": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "expert": "Expert"
+  },
+  "skills": {
+    "eyebrow": "Skills",
+    "title": "What you bring.",
+    "desc": "Pick what you’re good at — and tell us whether you actually <em>want</em> projects that need it. It’s fine to be expert at something you’re done with.",
+    "colSkill": "Skill",
+    "colLevel": "Level",
+    "colMatchMe": "Match me",
+    "empty": "No skills yet — add some below or pick from the suggestions.",
+    "searchPlaceholder": "Add a skill — search by name or category…",
+    "allAdded": "You’ve added every skill in our catalogue.",
+    "add": "Add",
+    "noMatch": "No skills in our catalogue match <query>“{term}”</query>.",
+    "suggestions": "Suggestions:"
+  },
+  "skillRow": {
+    "matchMeMobile": "Match me to projects",
+    "seekingOn": "Looking for projects",
+    "seekingOff": "Not looking right now",
+    "remove": "Remove skill"
+  },
+  "where": {
+    "eyebrow": "Where & when",
+    "title": "Location & timezone.",
+    "desc": "Used to surface local projects and to coordinate calls. We never show your exact address — just your city."
+  },
+  "appearance": {
+    "eyebrow": "Appearance",
+    "title": "Theme.",
+    "desc": "Choose how The Superhero looks for you. Your choice is saved to this browser and applies across every page — it isn't tied to the Save button."
+  }
+}

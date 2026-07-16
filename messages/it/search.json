@@ -1,0 +1,16 @@
+{
+  "placeholder": "Cerca progetti, passaggi o persone...",
+  "ariaLabel": "Cerca progetti, passaggi o persone",
+  "searching": "Ricerca in corso…",
+  "noMatches": "Nessun risultato per “{query}”.",
+  "groups": {
+    "projects": "Progetti",
+    "steps": "Passaggi",
+    "people": "Persone"
+  },
+  "stepIn": "in {project}",
+  "tags": {
+    "completed": "Completato",
+    "needsHelp": "Serve aiuto"
+  }
+}

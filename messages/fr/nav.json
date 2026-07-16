@@ -1,0 +1,70 @@
+{
+  "sidebar": {
+    "primaryNavAriaLabel": "Navigation principale",
+    "closeMenuAriaLabel": "Fermer le menu",
+    "expandTitle": "Déplier la barre latérale",
+    "collapseTitle": "Replier la barre latérale",
+    "resizeAriaLabel": "Redimensionner la barre latérale",
+    "groups": {
+      "overview": "Vue d’ensemble",
+      "discover": "Découvrir",
+      "account": "Compte"
+    },
+    "items": {
+      "dashboard": "Mon tableau de bord",
+      "myProjects": "Mes projets",
+      "mySteps": "Mes étapes",
+      "messages": "Messages",
+      "notifications": "Notifications",
+      "browseProjects": "Explorer les projets",
+      "skillMatches": "Compétences recherchées",
+      "blueprints": "Modèles",
+      "organisations": "Organisations",
+      "profile": "Profil"
+    },
+    "accountMenuAriaLabel": "Menu du compte",
+    "signOut": "Se déconnecter",
+    "accountFallback": "Compte",
+    "userFallbackName": "Héros",
+    "metaContributions": "{count, plural, one {# projet} other {# projets}} · {hours}h",
+    "metaNewHere": "Nouveau ici · 0h",
+    "footer": {
+      "home": "Accueil",
+      "privacy": "Confidentialité",
+      "terms": "Conditions"
+    }
+  },
+  "shell": {
+    "openMenuAriaLabel": "Ouvrir le menu",
+    "closeMenuAriaLabel": "Fermer le menu"
+  },
+  "publicNav": {
+    "browseProjects": "Explorer les projets",
+    "browseBlueprints": "Explorer les modèles",
+    "howItWorks": "Comment ça marche",
+    "signIn": "Se connecter",
+    "getStarted": "Commencer"
+  },
+  "themePicker": {
+    "themes": {
+      "dark": {
+        "name": "Minuit",
+        "badge": "Par défaut",
+        "desc": "L’original : bleu profond et ambre."
+      },
+      "daylight": {
+        "name": "Plein jour",
+        "desc": "Blanc net et gris-bleu, frais et clair."
+      },
+      "paper": {
+        "name": "Papier",
+        "desc": "Ivoire chaleureux, ambre en avant."
+      },
+      "contrast": {
+        "name": "Contraste élevé",
+        "badge": "A11Y",
+        "desc": "Lisibilité maximale — texte WCAG AAA et focus bien visible."
+      }
+    }
+  }
+}

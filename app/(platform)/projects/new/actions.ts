@@ -2,6 +2,8 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
+import { tError } from '@/lib/errors'
 import { db } from '@/lib/db'
 import { ensureUserExists } from '@/lib/users'
 import { notify } from '@/lib/notifications'
@@ -47,18 +49,19 @@ export interface CreateProjectInput {
 export async function launchProjectAction(
   data: CreateProjectInput,
 ): Promise<ServerActionResult<{ projectId: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   // Each launch can fan out skill-match notifications — keep it human-paced.
   const rl = rateLimit(`${userId}:launch-project`, 5, 60 * 60_000)
-  if (!rl.ok) return { success: false, error: rateLimitError(rl) }
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
 
   const userCheck = await ensureUserExists(userId)
-  if (!userCheck.success) return { success: false, error: userCheck.error }
+  if (!userCheck.success) return { success: false, error: t('common.profileSyncFailed') }
 
   const validationError = validateProjectFields(data, 'create')
-  if (validationError) return { success: false, error: validationError }
+  if (validationError) return { success: false, error: await tError(validationError) }
 
   // Validate the locale codes (or fall back to the blueprint's later).
   let countryCode: string | null = null
@@ -66,11 +69,8 @@ export async function launchProjectAction(
   try {
     countryCode = data.countryCode ? normaliseCountry(data.countryCode) : null
     languageCode = data.languageCode ? normaliseLanguage(data.languageCode) : null
-  } catch (e) {
-    return {
-      success: false,
-      error: e instanceof Error ? e.message : 'Locale code not recognised.',
-    }
+  } catch {
+    return { success: false, error: t('common.localeCodeInvalid') }
   }
 
   // Org ownership: the creator must be an active member of an active org
@@ -84,13 +84,10 @@ export async function launchProjectAction(
       select: { leftAt: true, org: { select: { status: true, slug: true } } },
     })
     if (!membership || membership.leftAt !== null) {
-      return { success: false, error: 'You are not a member of that organisation.' }
+      return { success: false, error: t('orgs.notAMember') }
     }
     if (membership.org.status !== 'active') {
-      return {
-        success: false,
-        error: 'That organisation is not active yet, so it cannot own projects.',
-      }
+      return { success: false, error: t('orgs.orgNotActiveOwner') }
     }
     orgId = data.orgId
     orgSlug = membership.org.slug
@@ -105,7 +102,7 @@ export async function launchProjectAction(
       where: { id: data.blueprintId },
       select: { id: true, language: true, country: true },
     })
-    if (!bp) return { success: false, error: 'Blueprint not found.' }
+    if (!bp) return { success: false, error: t('blueprints.notFound') }
     blueprintId = bp.id
     if (!languageCode && bp.language) languageCode = bp.language
     if (!countryCode && bp.country) countryCode = bp.country
@@ -124,7 +121,7 @@ export async function launchProjectAction(
     for (const s of data.steps) {
       for (const sid of s.skillIds) {
         if (!realIds.has(sid)) {
-          return { success: false, error: 'Unknown skill on one of the steps.' }
+          return { success: false, error: t('projectForm.unknownStepSkill') }
         }
       }
     }
@@ -220,7 +217,10 @@ export async function launchProjectAction(
           actorId: userId,
           projectId: created.id,
           blueprintId,
-          title: `${actorName} forked your “${bp.title}” blueprint as “${created.title}”.`,
+          message: {
+            key: 'blueprintForked',
+            params: { actorName, blueprintTitle: bp.title, projectTitle: created.title },
+          },
         })
       }
 
@@ -255,7 +255,7 @@ export async function launchProjectAction(
               recipients: [rid],
               actorId: userId,
               projectId: created.id,
-              title: `New project “${created.title}” needs ${skillName}.`,
+              message: { key: 'skillMatch', params: { projectTitle: created.title, skillName } },
               data: { skill: skillName },
             })
           }
@@ -272,21 +272,22 @@ export async function launchProjectAction(
     if (orgSlug) revalidatePath(`/orgs/${orgSlug}`)
     return { success: true, data: { projectId: project.id } }
   } catch {
-    return { success: false, error: 'Could not launch the project.' }
+    return { success: false, error: t('projectForm.launchFailed') }
   }
 }
 
 export async function saveBlueprintAction(
   data: CreateProjectInput,
 ): Promise<ServerActionResult<{ blueprintId: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const userCheck = await ensureUserExists(userId)
-  if (!userCheck.success) return { success: false, error: userCheck.error }
+  if (!userCheck.success) return { success: false, error: t('common.profileSyncFailed') }
 
   const validationError = validateProjectFields(data, 'create')
-  if (validationError) return { success: false, error: validationError }
+  if (validationError) return { success: false, error: await tError(validationError) }
 
   // Validate the locale codes.
   let countryCode: string | null = null
@@ -294,11 +295,8 @@ export async function saveBlueprintAction(
   try {
     countryCode = data.countryCode ? normaliseCountry(data.countryCode) : null
     languageCode = data.languageCode ? normaliseLanguage(data.languageCode) : null
-  } catch (e) {
-    return {
-      success: false,
-      error: e instanceof Error ? e.message : 'Locale code not recognised.',
-    }
+  } catch {
+    return { success: false, error: t('common.localeCodeInvalid') }
   }
 
   // Resolve the optional parent. Strict 1-level: a child cannot itself
@@ -309,21 +307,13 @@ export async function saveBlueprintAction(
       where: { id: data.parentBlueprintId },
       select: { id: true, parentBlueprintId: true },
     })
-    if (!parent) return { success: false, error: 'Parent blueprint not found.' }
+    if (!parent) return { success: false, error: t('blueprints.parentNotFound') }
     if (parent.parentBlueprintId) {
-      return {
-        success: false,
-        error:
-          'You can only adapt root blueprints — that one is already a variant.',
-      }
+      return { success: false, error: t('blueprints.parentIsVariant') }
     }
     parentBlueprintId = parent.id
     if (!languageCode && !countryCode) {
-      return {
-        success: false,
-        error:
-          'A variant needs a language or a country so people can tell it apart.',
-      }
+      return { success: false, error: t('blueprints.variantNeedsLocale') }
     }
   }
 
@@ -340,7 +330,7 @@ export async function saveBlueprintAction(
     for (const s of data.steps) {
       for (const sid of s.skillIds) {
         if (!realIds.has(sid)) {
-          return { success: false, error: 'Unknown skill on one of the steps.' }
+          return { success: false, error: t('projectForm.unknownStepSkill') }
         }
       }
     }
@@ -382,7 +372,6 @@ export async function saveBlueprintAction(
             description: s.description || null,
             order: i + 1,
             estimatedHrs: s.estimatedHrs,
-            statusDefault: 'open',
           },
         })
         if (s.skillIds.length > 0) {
@@ -400,6 +389,6 @@ export async function saveBlueprintAction(
 
     return { success: true, data: { blueprintId: bp.id } }
   } catch {
-    return { success: false, error: 'Could not save the blueprint.' }
+    return { success: false, error: t('blueprints.saveFailed') }
   }
 }

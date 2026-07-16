@@ -1,0 +1,92 @@
+{
+  "topbar": {
+    "notificationsTitle": "Notificações",
+    "startProject": "Começar um projeto",
+    "startProjectShort": "Começar"
+  },
+  "greeting": {
+    "welcomeBack": "Bem-vindo de volta,",
+    "welcome": "Bem-vindo,",
+    "fallbackName": "Herói",
+    "summary": "Você tem {steps, plural, one {# etapa} other {# etapas}} em {projects, plural, one {# projeto} other {# projetos}}.",
+    "someNeedHelp": "Algumas precisam de ajuda agora.",
+    "newUser": "Está tudo pronto — agora vamos encontrar algo para você fazer. Diga-nos o que você sabe fazer bem, e vamos ligar você a projetos que precisam exatamente disso."
+  },
+  "stats": {
+    "projects": "Projetos",
+    "openSteps": "Etapas abertas",
+    "contributed": "Contribuído",
+    "hoursSuffix": "h"
+  },
+  "checklist": {
+    "eyebrow": "Para começar",
+    "title": "Três coisas rápidas, e você está <em>pronto</em>.",
+    "progress": "{count} de 3 feitas",
+    "account": {
+      "title": "Crie a sua conta",
+      "description": "Bem-vindo, {name}.",
+      "cta": "Feito"
+    },
+    "skills": {
+      "title": "Adicione as suas habilidades",
+      "description": "Escolha as coisas que você sabe fazer bem — e quer usar. Leva uns 2 minutos.",
+      "cta": "Adicionar habilidades"
+    },
+    "project": {
+      "title": "Entre no seu primeiro projeto",
+      "description": "Explore projetos abertos, ou assuma uma única etapa para começar pequeno.",
+      "cta": "Explorar projetos"
+    }
+  },
+  "pinned": {
+    "eyebrow": "Projetos fixados",
+    "title": "O trabalho em que você está <em>mais envolvido</em>.",
+    "seeAll": "Ver todos os meus projetos",
+    "role": {
+      "lead": "Responsável",
+      "contributor": "Colaborador",
+      "advisor": "Conselheiro",
+      "observer": "Observador"
+    },
+    "needHelp": "{n, plural, one {# precisa de ajuda} other {# precisam de ajuda}}",
+    "typeFallback": "Projeto",
+    "progressLabel": "Progresso",
+    "progressValue": "<strong>{pct}%</strong> · {done} de {total, plural, one {# etapa} other {# etapas}}",
+    "emptyHeading": "Ainda sem projetos.",
+    "emptyTitle": "Fixe um projeto para mantê-lo por perto.",
+    "emptyDescription": "Quando você entrar num projeto, fixe-o aqui para chegar a ele rapidamente. Você também pode explorar o que está ativo agora e encontrar um que combine com você.",
+    "browseProjects": "Explorar projetos",
+    "startYourOwn": "Comece o seu próprio projeto"
+  },
+  "nextSteps": {
+    "eyebrow": "Suas próximas etapas",
+    "title": "Escolha uma, termine uma.",
+    "viewAll": "Ver {n, plural, one {# etapa} other {todas as # etapas}}",
+    "open": "Abrir",
+    "emptyHeading": "Nada nas suas mãos por enquanto.",
+    "emptyTitle": "As suas etapas vão aparecer aqui.",
+    "emptyDescription": "Quando você assumir uma etapa num projeto, ela aparece aqui para você acompanhar o que vem a seguir. Até uma tarefa de 1 hora conta."
+  },
+  "stepStatus": {
+    "needsHelpAriaLabel": "Estado: precisa de ajuda",
+    "needsHelpTitle": "Precisa de ajuda",
+    "inProgressAriaLabel": "Estado: em andamento",
+    "inProgressTitle": "Em andamento",
+    "notStartedAriaLabel": "Estado: não iniciada",
+    "notStartedTitle": "Não iniciada"
+  },
+  "matches": {
+    "eyebrow": "Combinações com as suas habilidades",
+    "title": "Projetos que <em>precisam</em> de você.",
+    "browseAll": "Ver todas as combinações",
+    "typeFallback": "Projeto",
+    "remote": "Remoto",
+    "matchLabel": "Compatível",
+    "stepIn": "Uma etapa em {project}",
+    "emptyHeading": "Diga-nos o que você <em>sabe fazer bem</em>.",
+    "emptyTitle": "Adicione as suas habilidades para ver combinações.",
+    "emptyDescription": "Vamos alinhar projetos que procuram exatamente o que você traz. Também vale escolher habilidades que você quer usar, mesmo que não sejam o seu trabalho do dia a dia.",
+    "addSkills": "Adicionar as minhas habilidades"
+  },
+  "estimatedHours": "~{hours}h"
+}

@@ -2,7 +2,10 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
 import type { StepStatus } from '@prisma/client'
+import { tError } from '@/lib/errors'
+import type { ErrorDescriptor } from '@/lib/validation'
 import { db } from '@/lib/db'
 import {
   notify,
@@ -27,7 +30,7 @@ async function requireStepInvolvement(
   stepId: string,
   userId: string,
 ): Promise<
-  | { ok: false; error: string }
+  | { ok: false; error: ErrorDescriptor }
   | {
       ok: true
       step: {
@@ -51,7 +54,7 @@ async function requireStepInvolvement(
     },
   })
   if (!step || step.projectId !== projectId) {
-    return { ok: false, error: 'Step not found.' }
+    return { ok: false, error: { key: 'steps.stepNotFound' } }
   }
 
   const myRows = await db.contribution.findMany({
@@ -63,10 +66,12 @@ async function requireStepInvolvement(
   if (!isLead && !onStep) {
     return {
       ok: false,
-      error:
-        myRows.length === 0
-          ? 'Join the project to work on its steps.'
-          : 'Join this step before changing it.',
+      error: {
+        key:
+          myRows.length === 0
+            ? 'steps.joinProjectFirst'
+            : 'steps.joinStepFirst',
+      },
     }
   }
 
@@ -100,11 +105,12 @@ export async function completeStepAction(
   projectId: string,
   stepId: string,
 ): Promise<ServerActionResult<{ status: StepStatus }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const gate = await requireStepInvolvement(projectId, stepId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
   if (gate.step.status === 'completed') {
     return { success: true, data: { status: 'completed' } }
   }
@@ -124,11 +130,14 @@ export async function completeStepAction(
         actorId: userId,
         projectId,
         stepId,
-        title: `${actorName} finished “${gate.step.title}” in ${gate.step.projectTitle}.`,
+        message: {
+          key: 'stepCompleted',
+          params: { actorName, stepTitle: gate.step.title, projectTitle: gate.step.projectTitle },
+        },
       })
     })
   } catch {
-    return { success: false, error: 'Could not complete the step.' }
+    return { success: false, error: t('steps.completeFailed') }
   }
 
   revalidateStepSurfaces(projectId)
@@ -140,11 +149,12 @@ export async function reopenStepAction(
   projectId: string,
   stepId: string,
 ): Promise<ServerActionResult<{ status: StepStatus }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const gate = await requireStepInvolvement(projectId, stepId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
   if (gate.step.status !== 'completed') {
     return { success: true, data: { status: gate.step.status } }
   }
@@ -164,7 +174,7 @@ export async function reopenStepAction(
     revalidateStepSurfaces(projectId)
     return { success: true, data: { status: next } }
   } catch {
-    return { success: false, error: 'Could not reopen the step.' }
+    return { success: false, error: t('steps.reopenFailed') }
   }
 }
 
@@ -174,13 +184,14 @@ export async function setStepHelpWantedAction(
   stepId: string,
   helpWanted: boolean,
 ): Promise<ServerActionResult<{ helpWanted: boolean }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const gate = await requireStepInvolvement(projectId, stepId, userId)
-  if (!gate.ok) return { success: false, error: gate.error }
+  if (!gate.ok) return { success: false, error: await tError(gate.error) }
   if (gate.step.status === 'completed' && helpWanted) {
-    return { success: false, error: 'This step is already completed.' }
+    return { success: false, error: t('steps.alreadyCompleted') }
   }
   if (gate.step.helpWanted === helpWanted) {
     return { success: true, data: { helpWanted } }
@@ -202,12 +213,15 @@ export async function setStepHelpWantedAction(
           actorId: userId,
           projectId,
           stepId,
-          title: `${actorName} asked for help on “${gate.step.title}” in ${gate.step.projectTitle}.`,
+          message: {
+            key: 'stepNeedsHelp',
+            params: { actorName, stepTitle: gate.step.title, projectTitle: gate.step.projectTitle },
+          },
         })
       }
     })
   } catch {
-    return { success: false, error: 'Could not update the step.' }
+    return { success: false, error: t('steps.updateFailed') }
   }
 
   revalidateStepSurfaces(projectId)
@@ -225,8 +239,9 @@ export async function setStepCoordinatorAction(
   stepId: string,
   nextCoordinatorId: string | null,
 ): Promise<ServerActionResult<{ coordinatorId: string | null }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   // Authz: project lead only.
   const lead = await db.contribution.findFirst({
@@ -240,7 +255,7 @@ export async function setStepCoordinatorAction(
     select: { id: true },
   })
   if (!lead) {
-    return { success: false, error: 'Only the project lead can change coordinators.' }
+    return { success: false, error: t('steps.onlyLeadSetsCoordinator') }
   }
 
   const step = await db.projectStep.findUnique({
@@ -248,7 +263,7 @@ export async function setStepCoordinatorAction(
     select: { id: true, projectId: true },
   })
   if (!step || step.projectId !== projectId) {
-    return { success: false, error: 'Step not found.' }
+    return { success: false, error: t('steps.stepNotFound') }
   }
 
   // If a non-null coordinator is requested, they must currently be on the
@@ -266,7 +281,7 @@ export async function setStepCoordinatorAction(
     if (!onStep) {
       return {
         success: false,
-        error: 'That user isn’t currently on this step.',
+        error: t('steps.coordinatorNotOnStep'),
       }
     }
   }

@@ -1,0 +1,124 @@
+{
+  "counts": {
+    "launches": "{count, plural, one {<strong>#</strong> lancement} other {<strong>#</strong> lancements}}",
+    "steps": "{count, plural, one {# étape} other {# étapes}}",
+    "variants": "{count, plural, one {# variante} other {# variantes}}"
+  },
+  "cta": {
+    "use": "Utiliser le modèle",
+    "createVariant": "Créer une variante",
+    "createVariantTitle": "Adapter ce modèle pour un autre lieu ou une autre langue",
+    "modify": "Modifier le modèle"
+  },
+  "list": {
+    "searchPlaceholder": "Rechercher des modèles...",
+    "saveYourOwn": "Enregistrer ton propre modèle",
+    "newShort": "Nouveau",
+    "eyebrow": "Bibliothèque de modèles",
+    "heading": "Pars d’un schéma <em>qui a fait ses preuves</em>.",
+    "intro": "Les modèles sont des recettes de projet testées — nées quelque part, adaptées ailleurs. Choisis un modèle qui colle à ton contexte, ton pays et ta langue ; on met en place le reste autour.",
+    "stats": {
+      "families": "Familles",
+      "variants": "Variantes",
+      "launches": "Lancements"
+    },
+    "showing": "Affichage de <strong>{shown}</strong> sur {total, plural, one {# modèle} other {# modèles}}"
+  },
+  "sort": {
+    "popular": "Les plus utilisés",
+    "recent": "Ajoutés récemment",
+    "variants": "Le plus de variantes",
+    "az": "A–Z"
+  },
+  "filters": {
+    "title": "Filtres",
+    "show": "Afficher les filtres",
+    "hide": "Masquer les filtres",
+    "clearAll": "Tout effacer",
+    "type": "Type",
+    "country": "Pays",
+    "language": "Langue",
+    "searchCountriesPlaceholder": "Rechercher des pays...",
+    "noMatches": "Aucun résultat."
+  },
+  "chips": {
+    "search": "recherche",
+    "type": "type",
+    "country": "pays",
+    "language": "langue",
+    "remove": "Retirer le filtre"
+  },
+  "empty": {
+    "title": "Aucun modèle ne correspond.",
+    "body": "Assouplis un filtre, ou enregistre toi-même le premier modèle qui remplit ce créneau."
+  },
+  "card": {
+    "originalRecipe": "La recette originale — adapte-la pour chez toi.",
+    "availableIn": "Disponible en",
+    "localeNotSet": "Langue/pays non renseignés"
+  },
+  "variants": {
+    "original": "original"
+  },
+  "steps": {
+    "orderOfTotal": "Étape {order} sur {total}",
+    "estimatedHours": "~{hours}h"
+  },
+  "detail": {
+    "breadcrumbRoot": "Modèles",
+    "variantBadge": "Variante",
+    "createdBy": "Créé par <author>{name}</author>",
+    "someone": "quelqu’un",
+    "estimatedTotal": "~{hours}h estimées",
+    "aboutEyebrow": "À propos de ce modèle",
+    "aboutHeading": "Ce que tu vas mettre en place.",
+    "planEyebrow": "Le plan",
+    "stepsHeading": "{count, plural, one {# étape} other {# étapes}} pour y arriver.",
+    "noSteps": "Ce modèle n’a pas encore d’étapes.",
+    "family": "Famille",
+    "detailsTitle": "Détails",
+    "type": "Type",
+    "country": "Pays",
+    "language": "Langue",
+    "projectsForked": "Projets créés à partir du modèle",
+    "notSet": "Non renseigné",
+    "any": "Tous"
+  },
+  "edit": {
+    "breadcrumbModify": "Modifier",
+    "backToBlueprint": "Retour au modèle",
+    "modifying": "Modification",
+    "blueprintBadge": "Modèle",
+    "untitledBlueprint": "Modèle sans titre",
+    "basics": {
+      "eyebrow": "L’essentiel",
+      "title": "Qu’est-ce que ce modèle ?",
+      "desc": "Deux phrases suffisent pour décrire le schéma. Tu pourras détailler plus tard.",
+      "titleLabel": "Titre",
+      "titlePlaceholder": "p. ex. Repair Café",
+      "descriptionLabel": "Description",
+      "descriptionHelp": "Le premier paragraphe est ce qui apparaît sur la carte du modèle.",
+      "descriptionPlaceholder": "Quel problème ce schéma résout-il, et à quoi ressemble sa mise en œuvre ?",
+      "projectTypeLabel": "Type de projet",
+      "noneOption": "— aucun —"
+    },
+    "locale": {
+      "eyebrow": "Langue et pays",
+      "title": "Où et dans quelle langue ?",
+      "desc": "Les projets créés à partir de ce modèle héritent de ces étiquettes par défaut. Une variante doit déclarer au moins un pays ou une langue.",
+      "countryLabel": "Pays (facultatif sauf pour une variante)",
+      "languageLabel": "Langue de travail (facultatif sauf pour une variante)",
+      "familyLabel": "Famille",
+      "familyHelpVariant": "Ce modèle est actuellement une variante de la famille ci-dessous. Choisis « Indépendant » pour en faire une racine.",
+      "familyHelpRoot": "Facultatif. Si tu adaptes un schéma existant, relie-le à la racine originale pour que les deux apparaissent ensemble comme une famille.",
+      "standaloneOption": "Indépendant (sans parent)",
+      "hasVariantsNotice": "Ce modèle a déjà <strong>{count, plural, one {# variante} other {# variantes}}</strong> à lui, il reste donc une racine de famille."
+    },
+    "steps": {
+      "eyebrow": "Le plan",
+      "title": "Les étapes pour réaliser le schéma.",
+      "desc": "Quiconque adapte ce modèle démarrera avec ces étapes. Modifie, réordonne ou supprime selon les besoins."
+    },
+    "saveChanges": "Enregistrer les changements"
+  }
+}

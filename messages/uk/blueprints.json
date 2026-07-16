@@ -1,0 +1,124 @@
+{
+  "counts": {
+    "launches": "{count, plural, one {<strong>#</strong> запуск} few {<strong>#</strong> запуски} many {<strong>#</strong> запусків} other {<strong>#</strong> запуску}}",
+    "steps": "{count, plural, one {# крок} few {# кроки} many {# кроків} other {# кроку}}",
+    "variants": "{count, plural, one {# варіант} few {# варіанти} many {# варіантів} other {# варіанту}}"
+  },
+  "cta": {
+    "use": "Використати шаблон",
+    "createVariant": "Створити варіант",
+    "createVariantTitle": "Адаптувати цей шаблон для іншого місця чи мови",
+    "modify": "Змінити шаблон"
+  },
+  "list": {
+    "searchPlaceholder": "Шукати шаблони...",
+    "saveYourOwn": "Зберегти власний шаблон",
+    "newShort": "Новий",
+    "eyebrow": "Бібліотека шаблонів",
+    "heading": "Почніть із <em>перевіреного</em> зразка.",
+    "intro": "Шаблони — це випробувані рецепти проєктів: народжені в одному місці, адаптовані для інших. Оберіть той, що пасує вашому контексту, країні й мові — решту ми налаштуємо довкола нього.",
+    "stats": {
+      "families": "Родини",
+      "variants": "Варіанти",
+      "launches": "Запуски"
+    },
+    "showing": "Показано <strong>{shown}</strong> з {total, plural, one {# шаблону} few {# шаблонів} many {# шаблонів} other {# шаблону}}"
+  },
+  "sort": {
+    "popular": "Найуживаніші",
+    "recent": "Нещодавно додані",
+    "variants": "Найбільше варіантів",
+    "az": "А–Я"
+  },
+  "filters": {
+    "title": "Фільтри",
+    "show": "Показати фільтри",
+    "hide": "Сховати фільтри",
+    "clearAll": "Очистити все",
+    "type": "Тип",
+    "country": "Країна",
+    "language": "Мова",
+    "searchCountriesPlaceholder": "Шукати країни...",
+    "noMatches": "Нічого не знайдено."
+  },
+  "chips": {
+    "search": "пошук",
+    "type": "тип",
+    "country": "країна",
+    "language": "мова",
+    "remove": "Прибрати фільтр"
+  },
+  "empty": {
+    "title": "Жоден шаблон не підходить.",
+    "body": "Послабте фільтр — або самі збережіть перший шаблон для цієї ніші."
+  },
+  "card": {
+    "originalRecipe": "Первісний рецепт — адаптуйте його для свого регіону.",
+    "availableIn": "Доступний",
+    "localeNotSet": "Локаль не вказано"
+  },
+  "variants": {
+    "original": "оригінал"
+  },
+  "steps": {
+    "orderOfTotal": "Крок {order} з {total}",
+    "estimatedHours": "~{hours} год"
+  },
+  "detail": {
+    "breadcrumbRoot": "Шаблони",
+    "variantBadge": "Варіант",
+    "createdBy": "Створено: <author>{name}</author>",
+    "someone": "хтось",
+    "estimatedTotal": "оцінка ~{hours} год",
+    "aboutEyebrow": "Про цей шаблон",
+    "aboutHeading": "Що ви налаштуєте.",
+    "planEyebrow": "План",
+    "stepsHeading": "{count, plural, one {# крок} few {# кроки} many {# кроків} other {# кроку}}, щоб це зробити.",
+    "noSteps": "У цього шаблону ще немає кроків.",
+    "family": "Родина",
+    "detailsTitle": "Деталі",
+    "type": "Тип",
+    "country": "Країна",
+    "language": "Мова",
+    "projectsForked": "Адаптованих проєктів",
+    "notSet": "Не вказано",
+    "any": "Будь-яка"
+  },
+  "edit": {
+    "breadcrumbModify": "Змінити",
+    "backToBlueprint": "Назад до шаблону",
+    "modifying": "Редагування",
+    "blueprintBadge": "Шаблон",
+    "untitledBlueprint": "Шаблон без назви",
+    "basics": {
+      "eyebrow": "Основи",
+      "title": "Що це за шаблон?",
+      "desc": "Двох речень достатньо, щоб описати зразок. Деталі можна додати пізніше.",
+      "titleLabel": "Назва",
+      "titlePlaceholder": "напр. Repair Café",
+      "descriptionLabel": "Опис",
+      "descriptionHelp": "Перший абзац — це те, що з’являється на картці шаблону.",
+      "descriptionPlaceholder": "Яку проблему розв’язує цей зразок і як виглядає його втілення?",
+      "projectTypeLabel": "Тип проєкту",
+      "noneOption": "— немає —"
+    },
+    "locale": {
+      "eyebrow": "Локаль",
+      "title": "Де і якою мовою?",
+      "desc": "Проєкти, адаптовані з цього шаблону, типово успадковують ці позначки. Варіант має вказати принаймні країну або мову.",
+      "countryLabel": "Країна (необов’язково, якщо це не варіант)",
+      "languageLabel": "Робоча мова (необов’язково, якщо це не варіант)",
+      "familyLabel": "Родина",
+      "familyHelpVariant": "Цей шаблон зараз є варіантом родини нижче. Оберіть «Самостійний», щоб зробити його кореневим.",
+      "familyHelpRoot": "Необов’язково. Якщо ви адаптуєте наявний зразок, вкажіть первісний корінь — тоді обидва відображатимуться разом як родина.",
+      "standaloneOption": "Самостійний (без батька)",
+      "hasVariantsNotice": "Цей шаблон уже має <strong>{count, plural, one {# власний варіант} few {# власні варіанти} many {# власних варіантів} other {# власного варіанту}}</strong>, тому лишається коренем родини."
+    },
+    "steps": {
+      "eyebrow": "План",
+      "title": "Кроки, щоб утілити зразок.",
+      "desc": "Кожен, хто адаптує цей шаблон, почне з цих кроків. Редагуйте, переставляйте чи прибирайте за потреби."
+    },
+    "saveChanges": "Зберегти зміни"
+  }
+}

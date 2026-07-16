@@ -2,8 +2,11 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
+import { tError } from '@/lib/errors'
 import { db } from '@/lib/db'
 import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
+import type { ErrorDescriptor } from '@/lib/validation'
 import type { ServerActionResult } from '@/types'
 
 /* ================================================================
@@ -36,11 +39,11 @@ async function requireCreator(
   userId: string,
   blueprintId: string,
 ): Promise<
-  ServerActionResult<{
-    blueprintId: string
-    isVariant: boolean
-    childCount: number
-  }>
+  | {
+      success: true
+      data: { blueprintId: string; isVariant: boolean; childCount: number }
+    }
+  | { success: false; error: ErrorDescriptor }
 > {
   const bp = await db.blueprint.findUnique({
     where: { id: blueprintId },
@@ -51,9 +54,9 @@ async function requireCreator(
       _count: { select: { variants: true } },
     },
   })
-  if (!bp) return { success: false, error: 'Blueprint not found.' }
+  if (!bp) return { success: false, error: { key: 'blueprints.notFound' } }
   if (bp.createdById !== userId) {
-    return { success: false, error: 'Only the blueprint creator can edit it.' }
+    return { success: false, error: { key: 'blueprints.onlyCreator' } }
   }
   return {
     success: true,
@@ -65,12 +68,12 @@ async function requireCreator(
   }
 }
 
-function validate(data: UpdateBlueprintInput): string | null {
+function validate(data: UpdateBlueprintInput): ErrorDescriptor | null {
   const title = data.title.trim()
-  if (!title) return 'Title can’t be empty.'
-  if (title.length > 200) return 'Title is too long.'
+  if (!title) return { key: 'projectForm.titleRequired' }
+  if (title.length > 200) return { key: 'projectForm.titleTooLong' }
   const desc = data.description.trim()
-  if (!desc) return 'Description can’t be empty.'
+  if (!desc) return { key: 'projectForm.descriptionRequired' }
   return null
 }
 
@@ -78,15 +81,16 @@ export async function updateBlueprintAction(
   blueprintId: string,
   data: UpdateBlueprintInput,
 ): Promise<ServerActionResult<{ blueprintId: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const authz = await requireCreator(userId, blueprintId)
-  if (!authz.success) return { success: false, error: authz.error }
+  if (!authz.success) return { success: false, error: await tError(authz.error) }
   const { isVariant, childCount } = authz.data
 
   const validationError = validate(data)
-  if (validationError) return { success: false, error: validationError }
+  if (validationError) return { success: false, error: await tError(validationError) }
 
   // Locale codes.
   let countryCode: string | null = null
@@ -94,11 +98,8 @@ export async function updateBlueprintAction(
   try {
     countryCode = data.countryCode ? normaliseCountry(data.countryCode) : null
     languageCode = data.languageCode ? normaliseLanguage(data.languageCode) : null
-  } catch (e) {
-    return {
-      success: false,
-      error: e instanceof Error ? e.message : 'Locale code not recognised.',
-    }
+  } catch {
+    return { success: false, error: t('common.localeCodeInvalid') }
   }
 
   // Parent rules:
@@ -111,42 +112,26 @@ export async function updateBlueprintAction(
   let parentBlueprintId: string | null = null
   if (data.parentBlueprintId) {
     if (data.parentBlueprintId === blueprintId) {
-      return { success: false, error: 'A blueprint can’t be its own parent.' }
+      return { success: false, error: t('blueprints.ownParent') }
     }
     if (childCount > 0) {
-      return {
-        success: false,
-        error:
-          'This blueprint already has variants of its own, so it can’t become a variant itself.',
-      }
+      return { success: false, error: t('blueprints.hasVariantsAlready') }
     }
     const parent = await db.blueprint.findUnique({
       where: { id: data.parentBlueprintId },
       select: { id: true, parentBlueprintId: true },
     })
-    if (!parent) return { success: false, error: 'Parent blueprint not found.' }
+    if (!parent) return { success: false, error: t('blueprints.parentNotFound') }
     if (parent.parentBlueprintId) {
-      return {
-        success: false,
-        error:
-          'You can only adapt root blueprints — that one is already a variant.',
-      }
+      return { success: false, error: t('blueprints.parentIsVariant') }
     }
     parentBlueprintId = parent.id
     if (!languageCode && !countryCode) {
-      return {
-        success: false,
-        error:
-          'A variant needs a language or a country so people can tell it apart.',
-      }
+      return { success: false, error: t('blueprints.variantNeedsLocale') }
     }
   } else if (isVariant && !languageCode && !countryCode) {
     // Already a variant and the user is keeping it that way — same rule.
-    return {
-      success: false,
-      error:
-        'A variant needs a language or a country so people can tell it apart.',
-    }
+    return { success: false, error: t('blueprints.variantNeedsLocale') }
   }
 
   // Verify all requested skills exist + sanitise steps.
@@ -162,7 +147,7 @@ export async function updateBlueprintAction(
     for (const s of data.steps) {
       for (const sid of s.skillIds) {
         if (!realIds.has(sid)) {
-          return { success: false, error: 'Unknown skill on one of the steps.' }
+          return { success: false, error: t('projectForm.unknownStepSkill') }
         }
       }
     }
@@ -193,10 +178,7 @@ export async function updateBlueprintAction(
     const foundIds = new Set(found.map((s) => s.id))
     for (const id of submittedIds) {
       if (!foundIds.has(id)) {
-        return {
-          success: false,
-          error: 'One of the steps doesn’t belong to this blueprint.',
-        }
+        return { success: false, error: t('blueprints.stepNotOwned') }
       }
     }
   }
@@ -252,7 +234,6 @@ export async function updateBlueprintAction(
               description: s.description || null,
               order,
               estimatedHrs: s.estimatedHrs,
-              statusDefault: 'open',
             },
             select: { id: true },
           })
@@ -272,7 +253,7 @@ export async function updateBlueprintAction(
       }
     })
   } catch {
-    return { success: false, error: 'Could not save the blueprint.' }
+    return { success: false, error: t('blueprints.saveFailed') }
   }
 
   revalidatePath('/blueprints')

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo, useRef, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import { Plus, X, ChevronDown, Globe, MapPin, Pencil, Settings as SettingsIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { COUNTRIES, countryFlag, countryLabel } from '@/lib/locales'
@@ -25,32 +26,21 @@ export interface SkillOption {
   category: string
 }
 
+/** Labels live in the `project` catalog under `form.remote.options.<value>`. */
 export const REMOTE_OPTIONS: Array<{
   value: 'yes' | 'some' | 'no'
-  label: string
   icon: typeof Globe
 }> = [
-  { value: 'yes', label: 'Yes, remote-friendly', icon: Globe },
-  { value: 'some', label: 'Some steps only', icon: SettingsIcon },
-  { value: 'no', label: 'No, in-person only', icon: MapPin },
+  { value: 'yes', icon: Globe },
+  { value: 'some', icon: SettingsIcon },
+  { value: 'no', icon: MapPin },
 ]
 
+/** Labels + descriptions live in the `project` catalog under
+ *  `form.joinPolicy.options.<value>`. */
 export const JOIN_POLICY_OPTIONS: Array<{
   value: 'open' | 'approval_required'
-  label: string
-  description: string
-}> = [
-  {
-    value: 'open',
-    label: 'Open to the world',
-    description: 'Anyone can join instantly and start contributing.',
-  },
-  {
-    value: 'approval_required',
-    label: 'Approval needed',
-    description: 'Joins land in your inbox as a request to accept or decline.',
-  },
-]
+}> = [{ value: 'open' }, { value: 'approval_required' }]
 
 /* ================================================================
    Card / CardHead / Field helpers
@@ -145,13 +135,14 @@ export function CountrySelect({
   id,
   value,
   onChange,
-  placeholder = 'Not set',
+  placeholder,
 }: {
   id?: string
   value: string | null
   onChange: (code: string | null) => void
   placeholder?: string
 }) {
+  const t = useTranslations('project')
   const [open, setOpen] = useState(false)
   const [query, setQuery] = useState('')
   const ref = useRef<HTMLDivElement>(null)
@@ -202,7 +193,7 @@ export function CountrySelect({
             <span className="truncate">{countryLabel(value) ?? value}</span>
           </span>
         ) : (
-          <span className="text-fg-tertiary">{placeholder}</span>
+          <span className="text-fg-tertiary">{placeholder ?? t('form.bits.countryPlaceholder')}</span>
         )}
         <ChevronDown
           className={cn('ml-auto size-3.5 shrink-0 text-fg-tertiary transition-transform', open && 'rotate-180')}
@@ -215,7 +206,7 @@ export function CountrySelect({
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search countries…"
+              placeholder={t('form.bits.searchCountriesPlaceholder')}
               autoFocus
               className="w-full rounded-md border border-neutral-700 bg-bg-surface-2 px-2.5 py-1.5 text-xs text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
             />
@@ -228,7 +219,7 @@ export function CountrySelect({
               onClick={() => pick(null)}
               className="flex w-full items-center px-3 py-2 text-left text-xs text-fg-tertiary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary"
             >
-              — Not set —
+              {t('form.bits.countryNotSetOption')}
             </button>
             {matches.map((c) => (
               <button
@@ -248,7 +239,9 @@ export function CountrySelect({
               </button>
             ))}
             {matches.length === 0 && (
-              <div className="px-3 py-3 text-center text-xs text-fg-tertiary">No matches.</div>
+              <div className="px-3 py-3 text-center text-xs text-fg-tertiary">
+                {t('form.bits.noMatches')}
+              </div>
             )}
           </div>
         </div>
@@ -276,6 +269,7 @@ export function StepRow({
   onRemove: () => void
   canRemove: boolean
 }) {
+  const t = useTranslations('project')
   const [skillOpen, setSkillOpen] = useState(false)
   const [skillQuery, setSkillQuery] = useState('')
   const skillRef = useRef<HTMLDivElement>(null)
@@ -351,7 +345,7 @@ export function StepRow({
             type="text"
             value={step.title}
             onChange={(e) => onChange({ title: e.target.value })}
-            placeholder="Step title — click to modify"
+            placeholder={t('form.bits.stepTitlePlaceholder')}
             className="w-full border-none bg-transparent py-1 pr-7 font-sans text-base font-medium text-fg-primary outline-none placeholder:text-fg-tertiary"
           />
           <Pencil className="pointer-events-none absolute right-1.5 top-1/2 size-3.5 -translate-y-1/2 text-fg-tertiary opacity-0 transition-opacity duration-fast group-hover:opacity-100 group-focus-within:opacity-0" />
@@ -361,7 +355,7 @@ export function StepRow({
           value={step.description}
           onChange={(e) => onChange({ description: e.target.value })}
           rows={1}
-          placeholder="Optional details — click to add"
+          placeholder={t('form.bits.stepDescriptionPlaceholder')}
           className="min-h-[22px] w-full resize-none border-none bg-transparent p-0 font-sans text-sm leading-relaxed text-fg-secondary outline-none placeholder:text-fg-tertiary"
         />
 
@@ -377,7 +371,7 @@ export function StepRow({
               <button
                 type="button"
                 onClick={() => toggleSkill(s.id)}
-                title="Remove skill"
+                title={t('form.bits.removeSkill')}
                 className="-mr-0.5 flex size-4 items-center justify-center rounded-full text-amber-500/80 transition-colors hover:bg-amber-500/[0.15] hover:text-amber-500"
               >
                 <X className="size-2.5" strokeWidth={2.5} />
@@ -393,7 +387,9 @@ export function StepRow({
               className="inline-flex items-center gap-1 rounded-full border border-dashed border-neutral-700 bg-transparent px-2.5 py-1 text-xs text-fg-tertiary transition-colors hover:border-amber-500 hover:border-solid hover:text-amber-500 focus:border-amber-500 focus:outline-none"
             >
               <Plus className="size-3" strokeWidth={2.5} />
-              {selectedSkills.length === 0 ? 'Add skill' : 'Add another'}
+              {selectedSkills.length === 0
+                ? t('form.bits.addSkill')
+                : t('form.bits.addAnotherSkill')}
               <ChevronDown
                 className={cn('size-3 transition-transform', skillOpen && 'rotate-180')}
               />
@@ -405,7 +401,7 @@ export function StepRow({
                     type="text"
                     value={skillQuery}
                     onChange={(e) => setSkillQuery(e.target.value)}
-                    placeholder="Search skills…"
+                    placeholder={t('form.bits.searchSkillsPlaceholder')}
                     autoFocus
                     className="w-full rounded-md border border-neutral-700 bg-bg-surface-2 px-2.5 py-1.5 text-xs text-fg-primary outline-none placeholder:text-fg-tertiary focus:border-amber-500"
                   />
@@ -428,8 +424,8 @@ export function StepRow({
                   {matches.length === 0 && (
                     <div className="px-3 py-3 text-center text-xs text-fg-tertiary">
                       {step.skillIds.length === skills.length
-                        ? 'All skills added.'
-                        : 'No matches.'}
+                        ? t('form.bits.allSkillsAdded')
+                        : t('form.bits.noMatches')}
                     </div>
                   )}
                 </div>
@@ -439,7 +435,7 @@ export function StepRow({
 
           {/* Estimated hours */}
           <div className="ml-auto flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-bg-surface-2 pl-3 pr-2 text-xs text-fg-tertiary">
-            <span>Est.</span>
+            <span>{t('form.bits.estimateAbbrev')}</span>
             <input
               type="number"
               min={0}
@@ -448,10 +444,10 @@ export function StepRow({
               value={step.estimatedHrs ?? ''}
               onChange={(e) => updateHours(e.target.value)}
               placeholder="—"
-              aria-label="Estimated hours"
+              aria-label={t('form.bits.estimatedHours')}
               className="w-12 border-none bg-transparent py-1 text-right text-xs tabular-nums text-fg-primary outline-none placeholder:text-fg-tertiary [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
             />
-            <span>h</span>
+            <span>{t('form.bits.hoursUnit')}</span>
           </div>
         </div>
       </div>
@@ -460,7 +456,7 @@ export function StepRow({
         type="button"
         onClick={onRemove}
         disabled={!canRemove}
-        title="Remove step"
+        title={t('form.bits.removeStep')}
         className="col-start-3 row-start-1 mt-1 flex size-7 cursor-pointer items-center justify-center rounded-md border-none bg-transparent text-fg-tertiary transition-colors hover:bg-red-500/[0.12] hover:text-red-300 disabled:cursor-not-allowed disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-fg-tertiary"
       >
         <X className="size-3.5" />
@@ -470,6 +466,7 @@ export function StepRow({
 }
 
 export function AddStepButton({ onClick }: { onClick: () => void }) {
+  const t = useTranslations('project')
   return (
     <button
       type="button"
@@ -477,7 +474,7 @@ export function AddStepButton({ onClick }: { onClick: () => void }) {
       className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-xl border-[1.5px] border-dashed border-neutral-700 bg-transparent px-4 py-4 text-sm font-medium text-fg-tertiary transition-all duration-fast hover:border-amber-500 hover:text-amber-500"
     >
       <Plus className="size-3.5" strokeWidth={2.5} />
-      Add a step
+      {t('form.bits.addAStep')}
     </button>
   )
 }

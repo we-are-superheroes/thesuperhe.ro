@@ -1,0 +1,207 @@
+{
+  "type": {
+    "nonprofit": "Gemeinnützig",
+    "company": "Unternehmen"
+  },
+  "role": {
+    "creator": "Gründer(in)",
+    "admin": "Admin",
+    "member": "Mitglied"
+  },
+  "statusBadge": {
+    "pending": "Wartet auf Freigabe",
+    "suspended": "Gesperrt"
+  },
+  "back": {
+    "toProjects": "Zurück zu den Projekten",
+    "toProject": "Zurück zum Projekt",
+    "toOrganisations": "Zurück zu den Organisationen"
+  },
+  "header": {
+    "since": "Auf The Superhero seit {date}",
+    "haveInviteCode": "Hast du einen Einladungscode?",
+    "editOrganisation": "Organisation bearbeiten"
+  },
+  "status": {
+    "pending": "<strong>Wartet auf Freigabe.</strong> Wir prüfen jede Organisationsanfrage von Hand. Bis zur Freigabe siehst nur du diese Seite, und Einladungen sind abgeschaltet.",
+    "suspended": "<strong>Diese Organisation ist gesperrt.</strong> Die Seite ist für Nicht-Mitglieder verborgen, und Mitgliedschaftsänderungen sind abgeschaltet. Wende dich an support@thesuperhe.ro, wenn du das für einen Fehler hältst."
+  },
+  "stats": {
+    "ariaLabel": "Wirkung",
+    "hours": "{hours} Std.",
+    "employees": "Mitarbeitende machen mit",
+    "members": "Mitglieder",
+    "contributed": "bisher beigetragen",
+    "hoursFine": "Stunden aus den eigenen Projekten dieser Organisation, plus Stunden aus öffentlichen Projekten, die ihre Mitglieder teilen wollten.",
+    "publicProjects": "öffentliche Projekte"
+  },
+  "about": {
+    "title": "Über uns"
+  },
+  "edit": {
+    "logoLabel": "Logo",
+    "logoHint": "Quadratisch passt am besten — erscheint auf der Seite und auf Projektkarten.",
+    "bannerLabel": "Banner",
+    "bannerHint": "Breites Bild für den Kopf dieser Seite (etwa 1600×400).",
+    "aboutLabel": "Über uns",
+    "websiteLabel": "Website",
+    "websitePlaceholder": "beispiel.org",
+    "listedLabel": "Im Verzeichnis anzeigen",
+    "listedHint": "Gelistete Organisationen erscheinen für alle auf der Organisationen-Seite. Ungelistete sind weiterhin per Link oder Einladung erreichbar.",
+    "image": {
+      "noneYet": "Noch keins",
+      "uploading": "Wird hochgeladen…",
+      "replace": "Ersetzen",
+      "upload": "Hochladen",
+      "remove": "Entfernen"
+    }
+  },
+  "projects": {
+    "title": "Projekte der Organisation",
+    "typeFallback": "Projekt",
+    "liveCount": "{count} laufen",
+    "newProject": "+ Neues Organisationsprojekt",
+    "filter": {
+      "all": "Alle",
+      "public": "Öffentlich",
+      "members": "Nur für Mitglieder"
+    },
+    "membersOnly": "Nur für Mitglieder",
+    "contributors": "{count, plural, one {<strong>#</strong> Mitwirkende(r)} other {<strong>#</strong> Mitwirkende}}",
+    "needsHelp": "{count, plural, one {# braucht Hilfe} other {# brauchen Hilfe}}",
+    "empty": {
+      "membersFilter": "Noch keine Projekte nur für Mitglieder. Jedes Mitglied kann eins starten.",
+      "publicFilter": "Noch keine öffentlichen Projekte.",
+      "member": "Noch keine Projekte. Jedes Mitglied kann eins starten."
+    }
+  },
+  "teaser": {
+    "title": "Mitglieder sehen mehr.",
+    "body": "Die Mitgliederliste, Projekte nur für Mitglieder und das Beitrags-Dashboard sind für Mitglieder von {org} sichtbar. Mitglied wird man auf Einladung.",
+    "invitePlaceholder": "Einladungscode",
+    "joining": "Beitritt läuft…",
+    "join": "Beitreten",
+    "signInAccept": "Melde dich an, um die Einladung anzunehmen",
+    "signInUse": "Melde dich an, um einen Einladungscode zu nutzen"
+  },
+  "dash": {
+    "title": "Beiträge",
+    "lock": "Nur für Mitglieder",
+    "allTime": "Gesamt",
+    "empty": "Noch keine Stunden erfasst. Stunden erscheinen hier, sobald Mitglieder Zeit auf Projektschritten erfassen.",
+    "attributedHours": "zugerechnete Stunden",
+    "method": "Berechnet aus dem Zeitpunkt der erfassten Stunden, den Mitgliedschaftsdaten jeder Person und ihrer Teilen-Einstellung.",
+    "orgLegend": "Organisationsprojekte — <b>{hours} Std.</b> (zählen immer)",
+    "sharedLegend": "Geteilte öffentliche Beiträge — <b>{hours} Std.</b> (Mitglieder, die zugestimmt haben)",
+    "footnote": "Enthält Stunden ehemaliger Mitglieder aus ihrer Mitgliedszeit — sie erscheinen in Exporten als „Ehemaliges Mitglied“ und nie in der Mitgliederliste. Mitglieder entscheiden in den <link>Profileinstellungen</link>, ob sie ihre Stunden aus öffentlichen Projekten teilen.",
+    "downloadCsv": "CSV herunterladen — alle zugerechneten Stunden",
+    "visMembersOnly": "Nur für Mitglieder",
+    "visOrgPublic": "Öffentlich · gehört der Organisation",
+    "sharedRowName": "Geteilte öffentliche Beiträge",
+    "sharedRowVis": "Andere Projekte · Mitglieder, die ihre Stunden teilen"
+  },
+  "members": {
+    "title": "Mitglieder",
+    "lock": "Nur für Mitglieder",
+    "activeCount": "{count} aktiv",
+    "you": "(du)",
+    "makeAdmin": "Zum Admin machen",
+    "remove": "Entfernen",
+    "removeConfirm": "{name} aus {org} entfernen? Die bisherigen Stunden bleiben in den Gesamtwerten der Organisation.",
+    "metaJoined": "Beigetreten {date}",
+    "metaJoinedHours": "Beigetreten {date} · {hours} Std."
+  },
+  "invites": {
+    "title": "Einladungen",
+    "lock": "Nur für Admins",
+    "codesHeading": "Einladungscodes",
+    "none": "Noch keine Einladungscodes.",
+    "copied": "Kopiert",
+    "copyLink": "Einladungslink kopieren",
+    "copyFailed": "Kopieren hat nicht geklappt — kopiere den Code stattdessen von Hand.",
+    "cancelCode": "Code stornieren",
+    "generate": "Neuen Code erzeugen",
+    "emailHeading": "Per E-Mail einladen",
+    "emailBody": "Sendet eine In-App-Einladung an ein bestehendes Konto. Ist die Person noch nicht auf The Superhero, bekommst du einen Code zum Weitergeben.",
+    "emailPlaceholder": "name@beispiel.org",
+    "emailAria": "E-Mail-Adresse für die Einladung",
+    "send": "Einladung senden",
+    "sent": "Einladung gesendet — sie erscheint in den Benachrichtigungen der Person.",
+    "shareCode": "Noch kein Konto mit dieser E-Mail-Adresse. Teile diesen Code mit der Person: {code}",
+    "meta": {
+      "cancelled": "Storniert {date}",
+      "forEmail": "Für {email}",
+      "openCode": "Offener Code",
+      "usesOfMax": "{used} von {max} Nutzungen",
+      "uses": "{count, plural, one {# Nutzung} other {# Nutzungen}}",
+      "validUntil": "gültig bis {date}"
+    }
+  },
+  "list": {
+    "searchPlaceholder": "Deine Organisationen durchsuchen…",
+    "request": "Organisation anfragen",
+    "requestShort": "Anfragen",
+    "title": "Deine <em>Organisationen</em>.",
+    "intro": "Die Gruppen, zu denen du auf The Superhero gehörst — jede mit eigener Seite, Projekten nur für Mitglieder und gemeinsamen Beitragswerten.",
+    "emptyTitle": "Noch keine Organisationen.",
+    "emptyBody": "Tritt einer aus dem Verzeichnis unten bei oder mit einem Einladungslink ihrer Admins — oder bring deine eigene Gruppe mit dem Anfrage-Button oben auf die Plattform. Wir geben jede Organisation von Hand frei.",
+    "noMatch": "Keine deiner Organisationen passt zu „{query}“.",
+    "rowMeta": "{members, plural, one {# Mitglied} other {# Mitglieder}} · {projects, plural, one {# Projekt} other {# Projekte}} · beigetreten {joined}",
+    "footer": "Lege in deinen <link>Profileinstellungen</link> fest, was jede Organisation von deinen Stunden sieht."
+  },
+  "directory": {
+    "heading": "Verzeichnis",
+    "listedCount": "{count} gelistet",
+    "empty": "Noch keine Organisation hat sich listen lassen.",
+    "noMatch": "Nichts im Verzeichnis passt zu „{query}“.",
+    "meta": "{members, plural, one {# Mitglied} other {# Mitglieder}} · {projects, plural, one {# öffentliches Projekt} other {# öffentliche Projekte}}"
+  },
+  "requestPage": {
+    "title": "Bring deine <em>Organisation</em> mit.",
+    "intro": "Eine Organisationsseite gibt deiner Gruppe ein öffentliches Gesicht, private Projekte nur für Mitglieder und eine gemeinsame Übersicht der Stunden, die eure Leute beitragen. Wir geben jede Anfrage von Hand frei, um Nachahmer fernzuhalten."
+  },
+  "request": {
+    "nameLabel": "Name der Organisation",
+    "namePlaceholder": "z. B. Hackney Rewilders",
+    "typeQuestion": "Was für eine Organisation ist es?",
+    "typeAria": "Organisationstyp",
+    "nonprofitLabel": "Gemeinnützige Organisation oder Gemeinschaftsgruppe",
+    "nonprofitDescription": "Vereine, Genossenschaften, Schulen, Gemeinschaftsgruppen. Kostenlos — entscheidend ist, ob die Organisation Gewinn für ihre Eigentümer erwirtschaften soll.",
+    "companyLabel": "Unternehmen",
+    "companyDescription": "Firmen, deren Mitarbeitende während der Arbeitszeit beitragen sollen, mit Beitragsberichten. Kostenpflichtig — wir melden uns wegen der Preise bei dir.",
+    "typeHint": "Den Typ bestätigen wir bei der Prüfung — die Rechtsform zählt weniger als die Frage, ob die Organisation auf Gewinn ausgerichtet ist.",
+    "websiteLabel": "Website (optional)",
+    "websitePlaceholder": "beispiel.org",
+    "useLabel": "Wie willst du sie nutzen?",
+    "usePlaceholder": "Ein, zwei Sätze: wer ihr seid und was eure Organisation hier tun würde.",
+    "useHint": "Daraus wird der erste Entwurf des Über-uns-Textes eurer Organisation — du kannst ihn jederzeit ändern.",
+    "logoLabel": "Logo (optional)",
+    "logoHint": "Quadratisch passt am besten.",
+    "bannerLabel": "Banner (optional)",
+    "bannerHint": "Breites Bild, etwa 1600×400.",
+    "listedLabel": "Nach der Freigabe im Verzeichnis anzeigen",
+    "listedHint": "Gelistete Organisationen erscheinen für alle auf der Organisationen-Seite. Du kannst das jederzeit ändern.",
+    "send": "Anfrage senden",
+    "genericError": "Beim Senden der Anfrage ist etwas schiefgelaufen. Versuch es noch einmal.",
+    "imageNotSaved": "{image, select, logo {Das Logo wurde nicht gespeichert: {error}} other {Das Banner wurde nicht gespeichert: {error}}}",
+    "imageUploadFailed": "{image, select, logo {Das Logo konnte nicht hochgeladen werden — du kannst es später über „Organisation bearbeiten“ hinzufügen.} other {Das Banner konnte nicht hochgeladen werden — du kannst es später über „Organisation bearbeiten“ hinzufügen.}}",
+    "doneTitle": "Anfrage gesendet.",
+    "doneBody": "Wir prüfen jede Organisation von Hand — meist innerhalb weniger Tage. Bis dahin siehst nur du <link>deine Organisationsseite</link>. Bei Fragen melden wir uns per E-Mail.",
+    "file": {
+      "noFile": "Keine Datei gewählt",
+      "replace": "Ersetzen",
+      "choose": "Datei wählen",
+      "clear": "Entfernen"
+    }
+  },
+  "profileOrgs": {
+    "kicker": "Organisationen",
+    "title": "Deine Organisationen.",
+    "intro": "Für jede Organisation entscheidest du, ob sie deine Stunden aus <strong>anderen öffentlichen Projekten</strong> in ihre Gesamtwerte und Berichte einrechnen darf. Stunden aus den eigenen Projekten einer Organisation zählen immer. Was du außerhalb dieser Projekte tust, wird ohne diese Einstellung nie geteilt.",
+    "empty": "Du bist noch in keiner Organisation. Tritt einer mit einem Einladungscode auf ihrer Seite bei.",
+    "share": "Meine Stunden aus öffentlichen Projekten teilen",
+    "leave": "Verlassen",
+    "leaveConfirm": "{org} verlassen? Deine bisherigen Stunden bleiben in den Gesamtwerten der Organisation, aber du erscheinst nicht mehr in der Mitgliederliste.",
+    "footer": "Willst du deine eigene Gruppe auf The Superhero bringen? <link>Frag eine Organisation an</link> — wir geben jede von Hand frei."
+  }
+}

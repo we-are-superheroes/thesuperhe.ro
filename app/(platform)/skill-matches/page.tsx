@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
+import { getTranslations } from 'next-intl/server'
 import { MapPin, Globe, Pencil, Star } from 'lucide-react'
 import { getSkillMatchFeed } from '@/lib/skill-matches'
 import { languageLabel } from '@/lib/locales'
@@ -17,7 +18,10 @@ export default async function SkillMatchesPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
 
-  const { cards, seekingSkills, languages, location } = await getSkillMatchFeed(userId)
+  const [t, { cards, seekingSkills, languages, location }] = await Promise.all([
+    getTranslations('skillMatches'),
+    getSkillMatchFeed(userId),
+  ])
 
   return (
     <div className="flex-1 overflow-y-auto">
@@ -25,21 +29,22 @@ export default async function SkillMatchesPage() {
         {/* Page head */}
         <header>
           <h1 className="mb-3 font-display text-[clamp(36px,4vw,52px)] font-normal leading-none tracking-tight">
-            Matched to <em className="italic text-amber-500">your skills</em>.
+            {t.rich('hero.title', {
+              em: (chunks) => <em className="italic text-amber-500">{chunks}</em>,
+            })}
           </h1>
           <p className="max-w-[600px] text-lg leading-relaxed text-fg-secondary">
-            Steps and projects picked for what you&rsquo;re good at — and where you are.
-            Remote work is matched on the languages you speak instead.
+            {t('hero.subtitle')}
           </p>
         </header>
 
         {/* Matching-basis strip */}
         <section
-          aria-label="What these matches are based on"
+          aria-label={t('basis.ariaLabel')}
           className="flex flex-wrap items-center gap-3 rounded-2xl border border-white/[0.08] bg-bg-surface px-5 py-4"
         >
           <span className="mr-1 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
-            Matching on
+            {t('basis.matchingOn')}
           </span>
           {seekingSkills.length > 0 ? (
             seekingSkills.map((s) => (
@@ -51,7 +56,7 @@ export default async function SkillMatchesPage() {
               </span>
             ))
           ) : (
-            <span className="text-sm text-fg-tertiary">No skills on your profile yet</span>
+            <span className="text-sm text-fg-tertiary">{t('basis.noSkills')}</span>
           )}
           {location && (
             <span className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.08] bg-bg-surface-2 px-3 py-1 text-sm text-fg-secondary">
@@ -70,7 +75,7 @@ export default async function SkillMatchesPage() {
             className="ml-auto inline-flex items-center gap-1.5 whitespace-nowrap text-sm text-fg-tertiary transition-colors hover:text-amber-500"
           >
             <Pencil className="size-3.5" />
-            Edit profile
+            {t('basis.editProfile')}
           </Link>
         </section>
 
@@ -79,16 +84,15 @@ export default async function SkillMatchesPage() {
             <div className="mb-2 flex size-16 items-center justify-center rounded-full border border-neutral-700 bg-bg-surface-2 text-amber-500">
               <Star className="size-7" />
             </div>
-            <h3 className="font-display text-2xl">Tell us what you&rsquo;re good at.</h3>
+            <h3 className="font-display text-2xl">{t('emptyProfile.title')}</h3>
             <p className="max-w-[460px] leading-relaxed text-fg-secondary">
-              Matches are built from the skills on your profile. Add a few — any
-              skill counts, not just technical ones — and matches will appear here.
+              {t('emptyProfile.description')}
             </p>
             <Link
               href="/profile"
               className="mt-2 inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
             >
-              Add skills to your profile
+              {t('emptyProfile.cta')}
             </Link>
           </div>
         ) : (

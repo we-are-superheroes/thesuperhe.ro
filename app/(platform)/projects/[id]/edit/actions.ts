@@ -2,13 +2,17 @@
 
 import { auth } from '@clerk/nextjs/server'
 import { revalidatePath } from 'next/cache'
+import { getTranslations } from 'next-intl/server'
 import type { ProjectStatus } from '@prisma/client'
+import { tError } from '@/lib/errors'
 import { db } from '@/lib/db'
-import { uploadImage, deleteImageByUrl } from '@/lib/storage'
+import { uploadImage, deleteImageByUrl, StorageError } from '@/lib/storage'
 import { notify, getActiveProjectMemberIds } from '@/lib/notifications'
+import type { NotificationMessage } from '@/lib/notification-messages'
 import { buildLocation } from '@/lib/location'
 import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
 import { validateProjectFields, validateProjectStatus } from '@/lib/validation'
+import type { ErrorDescriptor } from '@/lib/validation'
 import { isOrgAdminOfProject } from '@/lib/orgs'
 import type { ServerActionResult } from '@/types'
 
@@ -32,9 +36,10 @@ async function requireLead(
     select: { id: true },
   })
   if (!lead && !(await isOrgAdminOfProject(projectId, userId))) {
+    const t = await getTranslations('errors')
     return {
       success: false,
-      error: 'Only the project lead or an organisation admin can edit this project.',
+      error: t('projectEdit.onlyLeadOrAdmin'),
     }
   }
   return { success: true, data: { projectId } }
@@ -66,7 +71,7 @@ export interface UpdateProjectInput {
   steps: UpdateProjectStepInput[]
 }
 
-function validate(data: UpdateProjectInput): string | null {
+function validate(data: UpdateProjectInput): ErrorDescriptor | null {
   return validateProjectFields(data, 'update') ?? validateProjectStatus(data.status)
 }
 
@@ -85,11 +90,12 @@ export async function updateProjectAction(
   projectId: string,
   data: UpdateProjectInput,
 ): Promise<ServerActionResult<{ projectId: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const validationError = validate(data)
-  if (validationError) return { success: false, error: validationError }
+  if (validationError) return { success: false, error: await tError(validationError) }
 
   // Validate locale codes (used by browse filters).
   let countryCode: string | null = null
@@ -97,11 +103,8 @@ export async function updateProjectAction(
   try {
     countryCode = data.countryCode ? normaliseCountry(data.countryCode) : null
     languageCode = data.languageCode ? normaliseLanguage(data.languageCode) : null
-  } catch (e) {
-    return {
-      success: false,
-      error: e instanceof Error ? e.message : 'Locale code not recognised.',
-    }
+  } catch {
+    return { success: false, error: t('common.localeCodeInvalid') }
   }
 
   // Authz: caller must be the project's lead or an owning-org admin.
@@ -121,7 +124,7 @@ export async function updateProjectAction(
     for (const s of data.steps) {
       for (const sid of s.skillIds) {
         if (!realIds.has(sid)) {
-          return { success: false, error: 'Unknown skill on one of the steps.' }
+          return { success: false, error: t('projectForm.unknownStepSkill') }
         }
       }
     }
@@ -153,7 +156,7 @@ export async function updateProjectAction(
     const foundIds = new Set(found.map((s) => s.id))
     for (const id of submittedIds) {
       if (!foundIds.has(id)) {
-        return { success: false, error: 'One of the steps doesn’t belong to this project.' }
+        return { success: false, error: t('projectEdit.stepNotInProject') }
       }
     }
   }
@@ -255,20 +258,20 @@ export async function updateProjectAction(
       const recipients = await getActiveProjectMemberIds(tx, projectId)
       const newTitle = data.title.trim()
       const oldTitle = projectBefore?.title
-      const titleCopy =
+      const message: NotificationMessage =
         oldTitle && oldTitle !== newTitle
-          ? `${actorName} renamed “${oldTitle}” to “${newTitle}”.`
-          : `${actorName} updated ${newTitle}.`
+          ? { key: 'projectRenamed', params: { actorName, oldTitle, newTitle } }
+          : { key: 'projectUpdated', params: { actorName, projectTitle: newTitle } }
       await notify(tx, {
         type: 'project_updated',
         recipients,
         actorId: userId,
         projectId,
-        title: titleCopy,
+        message,
       })
     })
   } catch {
-    return { success: false, error: 'Could not save changes.' }
+    return { success: false, error: t('projectEdit.saveFailed') }
   }
 
   revalidatePath(`/projects/${projectId}`)
@@ -288,15 +291,16 @@ export async function uploadProjectCoverAction(
   projectId: string,
   formData: FormData,
 ): Promise<ServerActionResult<{ url: string }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const lead = await requireLead(userId, projectId)
   if (!lead.success) return { success: false, error: lead.error }
 
   const file = formData.get('file')
   if (!(file instanceof File) || file.size === 0) {
-    return { success: false, error: 'No file provided.' }
+    return { success: false, error: t('projectEdit.noFileProvided') }
   }
 
   const existing = await db.project.findUnique({
@@ -309,10 +313,10 @@ export async function uploadProjectCoverAction(
     const result = await uploadImage(file, 'cover')
     url = result.url
   } catch (e) {
-    return {
-      success: false,
-      error: e instanceof Error ? e.message : 'Could not upload image.',
+    if (e instanceof StorageError) {
+      return { success: false, error: await tError(e.descriptor) }
     }
+    return { success: false, error: t('projectEdit.uploadFailed') }
   }
 
   try {
@@ -322,7 +326,7 @@ export async function uploadProjectCoverAction(
     })
   } catch {
     await deleteImageByUrl(url)
-    return { success: false, error: 'Could not save cover.' }
+    return { success: false, error: t('projectEdit.coverSaveFailed') }
   }
 
   if (existing?.coverImageUrl && existing.coverImageUrl !== url) {
@@ -343,8 +347,9 @@ export async function uploadProjectCoverAction(
 export async function clearProjectCoverAction(
   projectId: string,
 ): Promise<ServerActionResult<{ cleared: true }>> {
+  const t = await getTranslations('errors')
   const { userId } = await auth()
-  if (!userId) return { success: false, error: 'You need to sign in first.' }
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
 
   const lead = await requireLead(userId, projectId)
   if (!lead.success) return { success: false, error: lead.error }
@@ -360,7 +365,7 @@ export async function clearProjectCoverAction(
       data: { coverImageUrl: null },
     })
   } catch {
-    return { success: false, error: 'Could not clear cover.' }
+    return { success: false, error: t('projectEdit.coverClearFailed') }
   }
 
   if (existing?.coverImageUrl) await deleteImageByUrl(existing.coverImageUrl)

@@ -1,0 +1,83 @@
+{
+  "nav": {
+    "browseProjects": "Explorer les projets",
+    "browseBlueprints": "Explorer les modèles",
+    "howItWorks": "Comment ça marche",
+    "dashboard": "Tableau de bord",
+    "signIn": "Se connecter",
+    "getStarted": "Commencer",
+    "signOut": "Se déconnecter"
+  },
+  "hero": {
+    "badge": "Climat & durabilité — ensemble",
+    "title": "N’agis pas seul.<br></br>Soyons des <em>super-héros</em><br></br>ensemble.",
+    "subtitle": "Trouve des projets climat et durabilité qui ont besoin de tes compétences, ou amène ta propre idée et laisse des collaborateurs t’aider à la concrétiser.",
+    "browseProjects": "Explorer les projets",
+    "startProject": "Lancer un projet",
+    "timeNote": "De la tâche d’une heure au projet au long cours",
+    "skillsNote": "Toutes les compétences sont bienvenues",
+    "annotation": "de vrais projets, un vrai impact",
+    "contributors": "{count, plural, one {# contributeur} other {# contributeurs}}",
+    "stepsNeedHelp": "{count, plural, one {# étape a besoin d’aide} other {# étapes ont besoin d’aide}}",
+    "commitment": "~{hours}h à prévoir",
+    "showcaseKicker": "Repair Café",
+    "showcaseQuote": "« Apporte-le cassé, repars avec du réparé. »",
+    "showcaseMeta": "★ Camden, tous les mois"
+  },
+  "entry": {
+    "browseTitle": "Explorer les projets",
+    "browseDesc": "Filtre par compétence, lieu, temps à prévoir. Trouve celui qui te va et lance-toi.",
+    "browseCta": "Explorer",
+    "dashboardTitle": "Ton tableau de bord",
+    "dashboardDesc": "Projets épinglés, prochaines étapes, et ce qui se passe sur les projets que tu as rejoints.",
+    "dashboardCta": "Ouvrir le tableau de bord",
+    "signInTitle": "Se connecter",
+    "signInTitleSignedIn": "Content de te revoir",
+    "signInDesc": "De retour ? Reprends là où tu t’étais arrêté. Nouveau ici ? Crée un compte en moins d’une minute.",
+    "signInDescSignedIn": "Tu es connecté. File sur ton tableau de bord pour voir tes projets.",
+    "signInCta": "Se connecter",
+    "signInCtaSignedIn": "Aller au tableau de bord"
+  },
+  "projects": {
+    "kicker": "Tout frais sur la plateforme",
+    "title": "De nouveaux projets <em>te cherchent</em>.",
+    "subtitle": "Tout juste lancés, en quête de leurs premiers contributeurs. Les étapes prennent en général moins de 2 heures.",
+    "seeAll": "Voir tous les projets",
+    "card": {
+      "remoteOk": "À distance OK",
+      "stepsNeedHelp": "{count, plural, one {# étape a besoin d’aide} other {# étapes ont besoin d’aide}}",
+      "ageToday": "Nouveau · aujourd’hui",
+      "ageDaysAgo": "Nouveau · il y a {days}j",
+      "ageWeekAgo": "Nouveau · il y a 1 sem.",
+      "time": "~{hours}h",
+      "joined": "{count} ont rejoint",
+      "view": "Voir →"
+    }
+  },
+  "how": {
+    "kicker": "Comment ça marche",
+    "title": "Contribue autant, <em>ou aussi peu</em>, que ton temps le permet.",
+    "step1Title": "Dis-nous tes compétences",
+    "step1Desc": "Ajoute ce que tu sais faire, et ce que tu as vraiment envie d’utiliser sur un projet. Un développeur épuisé n’est pas obligé de coder.",
+    "step2Title": "Trouve ce qui te va",
+    "step2Desc": "Explore des projets entiers, ou juste des étapes isolées. La plus petite unité peut être une tâche de 30 minutes, parfaite pour une soirée tranquille.",
+    "step3Title": "Au travail",
+    "step3Desc": "Rejoins l’équipe, prends une étape, et livre quelque chose de concret avec des gens qui tiennent à la même chose que toi."
+  },
+  "cta": {
+    "title": "Prêt à <em>agir ?</em>",
+    "subtitle": "Explore ce qui est en cours en ce moment, ou connecte-toi pour voir ton tableau de bord.",
+    "browseProjects": "Explorer les projets",
+    "dashboard": "Aller au tableau de bord",
+    "signIn": "Se connecter"
+  },
+  "footer": {
+    "copyright": "© {year} The Superhero · collaboration climat & durabilité",
+    "projects": "Projets",
+    "blueprints": "Modèles",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "createdIn": "Créé en Suisse",
+    "swissFlagAlt": "Drapeau suisse"
+  }
+}

@@ -14,6 +14,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Local scratch areas (design bundles, editor backups) — never lint.
     ".tmp-designs/**",
+    // Claude Code worktrees for spun-off background tasks — each has
+    // its own checkout (and .next output) that must not be linted here.
+    ".claude/worktrees/**",
     "design-extract/**",
     "nppBackup/**",
     "existing_prisma/**",

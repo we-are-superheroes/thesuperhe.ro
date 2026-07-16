@@ -1,0 +1,69 @@
+{
+  "breadcrumb": {
+    "discover": "Entdecken",
+    "people": "Personen"
+  },
+  "hero": {
+    "joined": "Beigetreten {date}",
+    "editProfile": "Profil bearbeiten",
+    "sendMessage": "Nachricht senden",
+    "inviteToProject": "Zu einem Projekt einladen",
+    "invitesComingSoon": "Projekt-Einladungen kommen bald"
+  },
+  "stats": {
+    "projectsLabel": "Projekte",
+    "projectsSub": "{active, plural, one {# aktiv} other {# aktiv}} · {finished, plural, one {# abgeschlossen} other {# abgeschlossen}}",
+    "contributedLabel": "Beigetragen",
+    "hoursUnit": " Std.",
+    "contributedSub": "Über alle Projekte",
+    "stepsShippedLabel": "Erledigte Schritte",
+    "stepsShippedSub": "Von dieser Person abgeschlossen",
+    "blueprintsLabel": "Blaupausen",
+    "blueprintsSub": "{count, plural, one {# Mal übernommen} other {# Mal übernommen}}",
+    "none": "—"
+  },
+  "about": {
+    "eyebrow": "Über",
+    "title": "Was {firstName} wichtig ist.",
+    "emptySelf": "Du hast noch keine Bio geschrieben. <link>Füge eine hinzu</link>, damit Projektleitungen verstehen, was dich antreibt.",
+    "emptyOther": "{name} hat noch keine Bio geschrieben."
+  },
+  "skills": {
+    "eyebrow": "Fähigkeiten",
+    "title": "Was {firstName} mitbringt.",
+    "emptySelf": "Noch keine Fähigkeiten in deinem Profil. <link>Füge welche hinzu</link>, damit Projekte dich finden können.",
+    "emptyOther": "{name} hat noch keine Fähigkeiten angegeben.",
+    "seeking": "Offen für Projekte, die das brauchen",
+    "notSeeking": "Hat diese Fähigkeit, sucht aber keine Projekte, die sie brauchen"
+  },
+  "proficiency": {
+    "beginner": "Anfänger(in)",
+    "intermediate": "Fortgeschritten",
+    "expert": "Experte/Expertin"
+  },
+  "projects": {
+    "eyebrow": "Projekte",
+    "title": "Woran {firstName} arbeitet.",
+    "joined": "Beigetreten {date}",
+    "wrapped": "Abgeschlossen {date}",
+    "typeOther": "Sonstiges",
+    "remote": "Remote"
+  },
+  "role": {
+    "lead": "Leitung",
+    "contributor": "Mitwirkung"
+  },
+  "tabs": {
+    "active": "Aktiv",
+    "finished": "Abgeschlossen",
+    "all": "Alle",
+    "emptyActive": "Gerade nichts Aktives.",
+    "emptyFinished": "Noch nichts abgeschlossen.",
+    "emptyAll": "Noch keine Projekte."
+  },
+  "card": {
+    "completed": "Abgeschlossen",
+    "activeStatus": "Aktiv",
+    "progressPct": "{progress}%"
+  }
+}

@@ -1,7 +1,11 @@
+import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
-import { ORG_TYPE_LABEL, isOrgAdminRole } from '@/lib/org-utils'
+import { isOrgAdminRole } from '@/lib/org-utils'
+import { resolveLocale } from '@/lib/locale'
+import { fmtMonthYear } from '@/lib/format'
 import {
   OrganisationsClient,
   type OrganisationRow,
@@ -14,13 +18,16 @@ import {
    themselves live at /orgs/[slug].
    ================================================================ */
 
-export const metadata = {
-  title: 'Organisations — The Superhero',
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations('meta')
+  return { title: t('organisations.title') }
 }
 
 export default async function OrganisationsPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
+  const locale = await resolveLocale()
+  const t = await getTranslations('orgs')
 
   const memberships = await db.userOrganisation.findMany({
     where: { userId, leftAt: null },
@@ -52,14 +59,14 @@ export default async function OrganisationsPage() {
     slug: m.org.slug,
     name: m.org.name,
     type: m.org.type,
-    typeLabel: ORG_TYPE_LABEL[m.org.type],
+    typeLabel: t(`type.${m.org.type}`),
     status: m.org.status,
     logoUrl: m.org.logoUrl,
     isAdmin: isOrgAdminRole(m.role),
     isCreator: m.role === 'owner',
     members: m.org._count.members,
     projects: m.org._count.projects,
-    joinedLabel: m.joinedAt.toLocaleString('en-GB', { month: 'short', year: 'numeric' }),
+    joinedLabel: fmtMonthYear(m.joinedAt, locale),
   }))
 
   // The directory: active organisations that opted in, minus the user's own
@@ -94,7 +101,7 @@ export default async function OrganisationsPage() {
     slug: o.slug,
     name: o.name,
     type: o.type,
-    typeLabel: ORG_TYPE_LABEL[o.type],
+    typeLabel: t(`type.${o.type}`),
     logoUrl: o.logoUrl,
     description: o.description?.split(/\n+/)[0] ?? null,
     members: o._count.members,

@@ -1,0 +1,70 @@
+{
+  "sidebar": {
+    "primaryNavAriaLabel": "Primary navigation",
+    "closeMenuAriaLabel": "Close menu",
+    "expandTitle": "Expand the sidebar",
+    "collapseTitle": "Collapse the sidebar",
+    "resizeAriaLabel": "Resize the sidebar",
+    "groups": {
+      "overview": "Overview",
+      "discover": "Discover",
+      "account": "Account"
+    },
+    "items": {
+      "dashboard": "My dashboard",
+      "myProjects": "My projects",
+      "mySteps": "My steps",
+      "messages": "Messages",
+      "notifications": "Notifications",
+      "browseProjects": "Browse projects",
+      "skillMatches": "Skill matches",
+      "blueprints": "Blueprints",
+      "organisations": "Organisations",
+      "profile": "Profile"
+    },
+    "accountMenuAriaLabel": "Account menu",
+    "signOut": "Sign out",
+    "accountFallback": "Account",
+    "userFallbackName": "Hero",
+    "metaContributions": "{count, plural, one {# project} other {# projects}} · {hours}h",
+    "metaNewHere": "New here · 0h",
+    "footer": {
+      "home": "Home",
+      "privacy": "Privacy",
+      "terms": "Terms"
+    }
+  },
+  "shell": {
+    "openMenuAriaLabel": "Open menu",
+    "closeMenuAriaLabel": "Close menu"
+  },
+  "publicNav": {
+    "browseProjects": "Browse projects",
+    "browseBlueprints": "Browse blueprints",
+    "howItWorks": "How it works",
+    "signIn": "Sign in",
+    "getStarted": "Get started"
+  },
+  "themePicker": {
+    "themes": {
+      "dark": {
+        "name": "Midnight",
+        "badge": "Default",
+        "desc": "The original deep blue & amber."
+      },
+      "daylight": {
+        "name": "Daylight",
+        "desc": "Cool, crisp white & blue-grey."
+      },
+      "paper": {
+        "name": "Paper",
+        "desc": "Warm ivory, amber up front."
+      },
+      "contrast": {
+        "name": "High Contrast",
+        "badge": "A11Y",
+        "desc": "Maximum legibility — WCAG AAA text & strong focus."
+      }
+    }
+  }
+}

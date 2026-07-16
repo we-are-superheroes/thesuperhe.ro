@@ -1,0 +1,69 @@
+{
+  "breadcrumb": {
+    "discover": "Знайти",
+    "people": "Люди"
+  },
+  "hero": {
+    "joined": "Приєднання: {date}",
+    "editProfile": "Редагувати профіль",
+    "sendMessage": "Надіслати повідомлення",
+    "inviteToProject": "Запросити до проєкту",
+    "invitesComingSoon": "Запрошення до проєктів скоро з’являться"
+  },
+  "stats": {
+    "projectsLabel": "Проєкти",
+    "projectsSub": "{active, plural, one {# активний} few {# активні} many {# активних} other {# активного}} · {finished, plural, one {# завершений} few {# завершені} many {# завершених} other {# завершеного}}",
+    "contributedLabel": "Внесок",
+    "hoursUnit": " год",
+    "contributedSub": "Загалом в усіх проєктах",
+    "stepsShippedLabel": "Кроки виконано",
+    "stepsShippedSub": "Завершені цією людиною",
+    "blueprintsLabel": "Шаблони",
+    "blueprintsSub": "Адаптовано {count, plural, one {# раз} few {# рази} many {# разів} other {# разу}}",
+    "none": "—"
+  },
+  "about": {
+    "eyebrow": "Про людину",
+    "title": "Що небайдуже {firstName}.",
+    "emptySelf": "Ви ще не написали біо. <link>Додайте його</link>, щоб керівники проєктів розуміли, що вами рухає.",
+    "emptyOther": "{name} ще не написав(-ла) біо."
+  },
+  "skills": {
+    "eyebrow": "Навички",
+    "title": "Що може дати {firstName}.",
+    "emptySelf": "У вашому профілі ще немає навичок. <link>Додайте кілька</link>, щоб проєкти могли вас знайти.",
+    "emptyOther": "{name} ще не вказав(-ла) навичок.",
+    "seeking": "Відкрито до проєктів, яким це потрібно",
+    "notSeeking": "Має цю навичку, але не шукає проєктів, яким вона потрібна"
+  },
+  "proficiency": {
+    "beginner": "Початківець",
+    "intermediate": "Середній рівень",
+    "expert": "Експерт"
+  },
+  "projects": {
+    "eyebrow": "Проєкти",
+    "title": "Чим займається {firstName}.",
+    "joined": "Приєднання: {date}",
+    "wrapped": "Завершено {date}",
+    "typeOther": "Інше",
+    "remote": "Дистанційно"
+  },
+  "role": {
+    "lead": "Керує",
+    "contributor": "Бере участь"
+  },
+  "tabs": {
+    "active": "Активні",
+    "finished": "Завершені",
+    "all": "Усі",
+    "emptyActive": "Зараз нічого активного.",
+    "emptyFinished": "Поки нічого не завершено.",
+    "emptyAll": "Проєктів поки немає."
+  },
+  "card": {
+    "completed": "Завершено",
+    "activeStatus": "Активний",
+    "progressPct": "{progress}%"
+  }
+}

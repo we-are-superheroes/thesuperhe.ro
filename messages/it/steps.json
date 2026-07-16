@@ -1,0 +1,65 @@
+{
+  "status": {
+    "open": "Aperto",
+    "in_progress": "In corso",
+    "completed": "Completato"
+  },
+  "needsHelp": "Serve aiuto",
+  "filter": {
+    "all": "Tutti"
+  },
+  "list": {
+    "empty": "Nessun passaggio in questo stato.",
+    "showAll": "Mostra {count, plural, one {# passaggio} other {tutti i # passaggi}}"
+  },
+  "card": {
+    "orderOfTotal": "Passaggio {order} di {total}",
+    "estimatedHours": "~{hours}h",
+    "noSkills": "Nessuna competenza richiesta"
+  },
+  "joiners": {
+    "coordinatorName": "{name} (coordina)",
+    "youCoordinate": "Coordini tu",
+    "nameCoordinates": "Coordina {name}",
+    "changeCoordinator": "Cambia chi coordina",
+    "menuTitle": "Chi coordina il passaggio",
+    "noCoordinator": "Nessuno coordina"
+  },
+  "action": {
+    "done": "Fatto",
+    "signInToJoin": "Accedi per unirti",
+    "joinProjectFirst": "Unisciti al progetto per unirti a questo passaggio",
+    "askForHelp": "Chiedere aiuto",
+    "withdrawHelpRequest": "Ritira la richiesta di aiuto",
+    "markComplete": "Segna come completato",
+    "reopen": "Riapri",
+    "youreOnThis": "Ci stai lavorando",
+    "leaveStep": "Lascia il passaggio",
+    "leaving": "Uscita in corso…",
+    "joinThisStep": "Unisciti a questo passaggio",
+    "joinToo": "Unisciti anche tu",
+    "joining": "Adesione in corso…"
+  },
+  "timeLog": {
+    "hoursOnly": "{hours}h",
+    "hoursMinutes": "{hours}h {minutes}m",
+    "minutesOnly": "{minutes}m",
+    "noTimeYet": "Nessuna ora registrata finora",
+    "totalLogged": "<strong>{hours}</strong> registrate",
+    "byName": "di {name}",
+    "contributorCount": "{count, plural, one {# collaboratore} other {# collaboratori}}",
+    "logTime": "Registra tempo",
+    "beFirst": "Sii la prima persona a registrare tempo su questo passaggio.",
+    "nothingLogged": "Ancora niente di registrato.",
+    "earlierEntries": "+ {count, plural, one {# voce precedente} other {# voci precedenti}}",
+    "hoursPlaceholder": "0.5",
+    "hourSymbol": "h",
+    "dateTitle": "Quando hai fatto il lavoro?",
+    "notePlaceholder": "Cosa hai fatto? (facoltativo)",
+    "log": "Registra",
+    "quickAddMinutes": "+{minutes} min",
+    "quickAddHours": "+{hours}h",
+    "someone": "Qualcuno",
+    "deleteEntry": "Elimina voce"
+  }
+}

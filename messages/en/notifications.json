@@ -1,0 +1,66 @@
+{
+  "titles": {
+    "projectJoinWelcome": "{leadName} welcomed you to {projectTitle}.",
+    "projectJoin": "{actorName} joined {projectTitle}.",
+    "projectJoinRequest": "{actorName} wants to join {projectTitle}.",
+    "projectJoinDeclined": "Your request to join {projectTitle} wasn't accepted this time.",
+    "projectLeave": "{actorName} left {projectTitle}.",
+    "projectUpdated": "{actorName} updated {projectTitle}.",
+    "projectRenamed": "{actorName} renamed “{oldTitle}” to “{newTitle}”.",
+    "updatePosted": "{actorName} posted an update in {projectTitle}.",
+    "stepClaimed": "{actorName} joined “{stepTitle}” in {projectTitle}.",
+    "stepUnclaimed": "{actorName} left “{stepTitle}” in {projectTitle}.",
+    "stepCompleted": "{actorName} finished “{stepTitle}” in {projectTitle}.",
+    "stepNeedsHelp": "{actorName} asked for help on “{stepTitle}” in {projectTitle}.",
+    "blueprintForked": "{actorName} forked your “{blueprintTitle}” blueprint as “{projectTitle}”.",
+    "skillMatch": "New project “{projectTitle}” needs {skillName}.",
+    "inviteReceived": "{actorName} invited you to join {orgName}.",
+    "messageReceived": "{count, plural, one {{senderName} sent you a message.} other {# new messages from {senderName}.}}"
+  },
+  "bodies": {
+    "projectJoinDeclined": "Thanks for offering to help — the team cannot take this one forward right now. Plenty of other projects need your skills.",
+    "inviteReceived": "Use invite code {code} on the organisation page."
+  },
+  "ui": {
+    "header": {
+      "title": "Your <em>notifications</em>.",
+      "subtitle": "The things that need your eyes — and a few you’ll be glad to hear about.",
+      "markAllRead": "Mark all read"
+    },
+    "tabs": {
+      "all": "All",
+      "unread": "Unread",
+      "action": "Needs action",
+      "mention": "Mentions"
+    },
+    "groups": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "week": "Earlier this week",
+      "earlier": "Earlier"
+    },
+    "empty": {
+      "unreadTitle": "Nothing unread. You're all caught up.",
+      "unreadSubtitle": "New activity will appear here as it happens.",
+      "mentionTitle": "No mentions yet.",
+      "mentionSubtitle": "Mentions from project boards and threads will land here.",
+      "actionTitle": "Nothing waiting on you.",
+      "actionSubtitle": "Join requests and invites will appear here when they need a decision.",
+      "allTitle": "Nothing here.",
+      "allSubtitle": "When you join projects and claim steps, updates from your team show up here."
+    },
+    "joinRequest": {
+      "accept": "Welcome them",
+      "decline": "Not a fit"
+    },
+    "resolution": {
+      "accepted": "Welcomed to the project.",
+      "declined": "Politely declined."
+    },
+    "links": {
+      "openConversation": "Open conversation",
+      "openOrgPage": "Open the organisation page",
+      "openProject": "Open {name}"
+    }
+  }
+}

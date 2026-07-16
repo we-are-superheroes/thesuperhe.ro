@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from 'react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 
 export type ProjectTab = 'overview' | 'updates'
@@ -123,11 +124,12 @@ export function ProjectTabBar({
   updatesCount: number
   topOffsetClass: string
 }) {
+  const t = useTranslations('project')
   const { tab, setTab, barRef } = useProjectTabs()
 
   const items: Array<{ key: ProjectTab; label: string; count?: number }> = [
-    { key: 'overview', label: 'Overview' },
-    { key: 'updates', label: 'Updates', count: updatesCount },
+    { key: 'overview', label: t('tabs.overview') },
+    { key: 'updates', label: t('tabs.updates'), count: updatesCount },
   ]
 
   return (
@@ -137,7 +139,7 @@ export function ProjectTabBar({
         'sticky z-10 border-b border-white/[0.08] bg-bg-glass backdrop-blur-xl',
         topOffsetClass,
       )}
-      aria-label="Project sections"
+      aria-label={t('tabs.ariaLabel')}
     >
       <div
         className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-4 sm:px-6 lg:px-10"

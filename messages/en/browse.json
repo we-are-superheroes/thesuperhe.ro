@@ -1,0 +1,68 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Search projects...",
+    "notificationsTitle": "Notifications",
+    "startProject": "Start a project",
+    "startProjectShort": "Start"
+  },
+  "header": {
+    "titleLine1": "Find a project",
+    "titleLine2": "that <em>needs</em> you.",
+    "intro": "Every project here is real, active, and looking for help. Filter by where you are, what you're good at, or what kind of work interests you."
+  },
+  "filters": {
+    "show": "Show filters",
+    "hide": "Hide filters",
+    "activeCount": "{n, plural, one {# active} other {# active}}",
+    "title": "Filters",
+    "clearAll": "Clear all",
+    "yourOrganisations": "Your organisations",
+    "typeOfProject": "Type of project",
+    "skillsNeeded": "Skills needed",
+    "location": "Location",
+    "country": "Country",
+    "language": "Language",
+    "searchSkillsPlaceholder": "Search skills...",
+    "searchLocationsPlaceholder": "Search locations...",
+    "searchCountriesPlaceholder": "Search countries...",
+    "noMatches": "No matches."
+  },
+  "results": {
+    "showingAll": "Showing <strong>all {total}</strong> {total, plural, one {live project} other {live projects}}",
+    "showingFiltered": "Showing <strong>{showing}</strong> of {total, plural, one {# project} other {# projects}}"
+  },
+  "sort": {
+    "recent": "Most recent",
+    "needs": "Most help needed",
+    "progress": "Closest to finished"
+  },
+  "view": {
+    "gridTitle": "Grid view",
+    "listTitle": "List view"
+  },
+  "chips": {
+    "query": "\"{query}\"",
+    "removeAriaLabel": "Remove filter"
+  },
+  "empty": {
+    "title": "No projects match those filters.",
+    "body": "Try widening the location, removing a skill, or clearing the search box."
+  },
+  "card": {
+    "needsHelp": "{n, plural, one {# needs help} other {# need help}}",
+    "membersOnly": "Members only",
+    "posted": "Posted {when}",
+    "contributors": "{n, plural, one {<strong>#</strong> contributor} other {<strong>#</strong> contributors}}",
+    "contributorsPlain": "{n, plural, one {# contributor} other {# contributors}}",
+    "percentComplete": "<strong>{pct}%</strong> complete"
+  },
+  "posted": {
+    "today": "today",
+    "daysAgo": "{n, plural, one {# day ago} other {# days ago}}",
+    "weeksAgo": "{n, plural, one {# week ago} other {# weeks ago}}"
+  },
+  "fallback": {
+    "remoteLocation": "Remote",
+    "otherType": "Other"
+  }
+}

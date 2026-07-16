@@ -2,6 +2,7 @@
 
 import { useState, useTransition, useMemo, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { Search, Plus, X, Upload } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { initialsOf } from '@/lib/avatar'
@@ -42,11 +43,7 @@ export interface ProfileFormInitial {
   skills: FormSkill[]
 }
 
-const LEVELS: Array<{ value: Proficiency; label: string }> = [
-  { value: 'beginner', label: 'Beginner' },
-  { value: 'intermediate', label: 'Intermediate' },
-  { value: 'expert', label: 'Expert' },
-]
+const LEVELS: Proficiency[] = ['beginner', 'intermediate', 'expert']
 
 const SUGGESTION_NAMES = [
   'Photography',
@@ -76,6 +73,8 @@ export function ProfileEditForm({
   /** Server-rendered organisations section (memberships + sharing toggles). */
   orgsSlot?: React.ReactNode
 }) {
+  const t = useTranslations('profile')
+  const tCommon = useTranslations('common')
   const [name, setName] = useState(initial.name)
   const [bio, setBio] = useState(initial.bio)
   const [location, setLocation] = useState(initial.location)
@@ -260,23 +259,23 @@ export function ProfileEditForm({
             href="/dashboard"
             className="hidden transition-colors duration-fast hover:text-fg-primary sm:inline"
           >
-            Dashboard
+            {t('breadcrumb.dashboard')}
           </Link>
           <span className="hidden opacity-50 sm:inline">/</span>
-          <span className="font-medium text-fg-primary">Edit profile</span>
+          <span className="font-medium text-fg-primary">{t('breadcrumb.editProfile')}</span>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {error && <span className="text-xs text-red-300">{error}</span>}
           {!error && isDirty && (
             <span className="hidden items-center gap-1.5 text-xs text-fg-tertiary sm:flex">
               <span className="size-[7px] animate-pulse rounded-full bg-amber-500 shadow-[0_0_8px_var(--color-amber-500)]" />
-              Unsaved changes
+              {t('topbar.unsavedChanges')}
             </span>
           )}
           {!error && savedAt && !isDirty && (
             <span className="hidden items-center gap-1.5 text-xs text-fg-tertiary sm:flex">
               <span className="size-[7px] rounded-full bg-green-500 shadow-[0_0_6px_var(--color-green-500)]" />
-              Saved just now
+              {t('topbar.savedJustNow')}
             </span>
           )}
           <button
@@ -284,7 +283,7 @@ export function ProfileEditForm({
             disabled={pending || !isDirty}
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
           >
-            {pending ? 'Saving…' : 'Save changes'}
+            {pending ? tCommon('state.saving') : t('topbar.saveChanges')}
           </button>
         </div>
       </div>
@@ -295,10 +294,12 @@ export function ProfileEditForm({
         <header className="mb-4 flex items-end justify-between gap-8 lg:col-span-2">
           <div>
             <h1 className="mb-3 font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
-              Your <em className="italic text-amber-500">profile</em>.
+              {t.rich('header.title', {
+                em: (chunks) => <em className="italic text-amber-500">{chunks}</em>,
+              })}
             </h1>
             <p className="max-w-[540px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-              This is what project leads see when you offer to help. Be honest — the more accurate your profile, the better the matches.
+              {t('header.intro')}
             </p>
           </div>
         </header>
@@ -306,16 +307,16 @@ export function ProfileEditForm({
         {/* TOC */}
         <nav
           className="flex flex-row flex-wrap gap-0.5 lg:sticky lg:top-[110px] lg:flex-col"
-          aria-label="Profile sections"
+          aria-label={t('toc.ariaLabel')}
         >
           <span className="hidden w-full px-3 text-xs font-semibold uppercase tracking-widest text-fg-tertiary lg:mb-2 lg:inline">
-            On this page
+            {t('toc.onThisPage')}
           </span>
-          <TocLink href="#sec-identity">About you</TocLink>
-          <TocLink href="#sec-skills">Skills</TocLink>
-          <TocLink href="#sec-where">Where & when</TocLink>
-          <TocLink href="#sec-orgs">Organisations</TocLink>
-          <TocLink href="#sec-appearance">Appearance</TocLink>
+          <TocLink href="#sec-identity">{t('toc.aboutYou')}</TocLink>
+          <TocLink href="#sec-skills">{t('toc.skills')}</TocLink>
+          <TocLink href="#sec-where">{t('toc.whereWhen')}</TocLink>
+          <TocLink href="#sec-orgs">{t('toc.organisations')}</TocLink>
+          <TocLink href="#sec-appearance">{t('toc.appearance')}</TocLink>
         </nav>
 
         {/* Sections */}
@@ -323,13 +324,13 @@ export function ProfileEditForm({
           {/* About you */}
           <Card id="sec-identity">
             <CardHead
-              eyebrow="About you"
-              title="Tell your story."
-              desc="A short bio and picture help project leads understand what drives you. What change do you want to be part of?"
+              eyebrow={t('identity.eyebrow')}
+              title={t('identity.title')}
+              desc={t('identity.desc')}
             />
             <div className="flex flex-col gap-5">
               {/* Avatar */}
-              <Field label="Profile picture">
+              <Field label={t('avatar.label')}>
                 <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:gap-6">
                   <div
                     className="relative flex size-28 shrink-0 items-center justify-center overflow-hidden rounded-full border-[3px] border-bg-surface bg-gradient-to-br from-[#4a8b6e] to-[#3DAF7C] font-display text-[44px] text-blue-900 shadow-md after:absolute after:inset-0 after:rounded-full after:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.15)]"
@@ -357,7 +358,11 @@ export function ProfileEditForm({
                         className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-fg-primary transition-colors hover:border-neutral-600 disabled:cursor-wait disabled:opacity-60"
                       >
                         <Upload className="size-3.5" />
-                        {pending ? 'Uploading…' : avatarUrl ? 'Replace' : 'Upload new'}
+                        {pending
+                          ? t('avatar.uploading')
+                          : avatarUrl
+                            ? t('avatar.replace')
+                            : t('avatar.uploadNew')}
                       </button>
                       {avatarUrl && (
                         <button
@@ -366,18 +371,18 @@ export function ProfileEditForm({
                           disabled={pending}
                           className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-red-300 transition-colors hover:border-red-500 hover:text-red-500 disabled:opacity-60"
                         >
-                          Remove
+                          {t('avatar.remove')}
                         </button>
                       )}
                     </div>
                     <span className="max-w-[280px] text-xs leading-relaxed text-fg-tertiary">
-                      Square, at least 256×256. PNG, JPG, WebP or GIF, up to 4&nbsp;MB.
+                      {t('avatar.hint')}
                     </span>
                   </div>
                 </div>
               </Field>
 
-              <Field label="Full name" htmlFor="fld-name">
+              <Field label={t('fields.fullName')} htmlFor="fld-name">
                 <input
                   id="fld-name"
                   type="text"
@@ -388,7 +393,7 @@ export function ProfileEditForm({
               </Field>
 
               <Field
-                label="Bio"
+                label={t('fields.bio')}
                 htmlFor="fld-bio"
                 hint={
                   <span
@@ -397,10 +402,10 @@ export function ProfileEditForm({
                       bio.length > BIO_MAX * 0.9 ? 'text-amber-500' : '',
                     )}
                   >
-                    {bio.length} / {BIO_MAX}
+                    {t('fields.bioCounter', { count: bio.length, max: BIO_MAX })}
                   </span>
                 }
-                help="Two or three sentences. What you care about, what you're working on, what you'd love to do more of."
+                help={t('fields.bioHelp')}
               >
                 <textarea
                   id="fld-bio"
@@ -408,7 +413,7 @@ export function ProfileEditForm({
                   onChange={(e) => setBio(e.target.value.slice(0, BIO_MAX))}
                   maxLength={BIO_MAX}
                   rows={5}
-                  placeholder="Two or three sentences. What you care about, what you're working on, what you'd love to do more of."
+                  placeholder={t('fields.bioHelp')}
                   className="min-h-24 w-full resize-y rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm leading-relaxed text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
                 />
               </Field>
@@ -418,30 +423,27 @@ export function ProfileEditForm({
           {/* Skills */}
           <Card id="sec-skills">
             <CardHead
-              eyebrow="Skills"
-              title="What you bring."
-              descNode={
-                <>
-                  Pick what you’re good at — and tell us whether you actually{' '}
-                  <em className="italic text-amber-500">want</em> projects that need it. It’s fine to be expert at something you’re done with.
-                </>
-              }
+              eyebrow={t('skills.eyebrow')}
+              title={t('skills.title')}
+              descNode={t.rich('skills.desc', {
+                em: (chunks) => <em className="italic text-amber-500">{chunks}</em>,
+              })}
             />
 
             {/* Skills table */}
             <div className="rounded-xl border border-white/[0.08] bg-bg-base">
               {skills.length > 0 && (
                 <div className="hidden grid-cols-[1fr_320px_130px_32px] gap-4 rounded-t-xl border-b border-white/[0.08] bg-bg-surface-2 px-5 py-3.5 text-xs font-semibold uppercase tracking-widest text-fg-tertiary lg:grid">
-                  <span>Skill</span>
-                  <span>Level</span>
-                  <span className="text-center">Match me</span>
+                  <span>{t('skills.colSkill')}</span>
+                  <span>{t('skills.colLevel')}</span>
+                  <span className="text-center">{t('skills.colMatchMe')}</span>
                   <span />
                 </div>
               )}
               <div>
                 {skills.length === 0 ? (
                   <div className="px-5 py-8 text-center text-sm text-fg-tertiary">
-                    No skills yet — add some below or pick from the suggestions.
+                    {t('skills.empty')}
                   </div>
                 ) : (
                   skills.map((s) => (
@@ -477,8 +479,8 @@ export function ProfileEditForm({
                       }}
                       placeholder={
                         availableSkills.length === 0
-                          ? 'You’ve added every skill in our catalogue.'
-                          : 'Add a skill — search by name or category…'
+                          ? t('skills.allAdded')
+                          : t('skills.searchPlaceholder')
                       }
                       disabled={availableSkills.length === 0}
                       className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2 pl-9 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors placeholder:text-fg-tertiary focus:border-amber-500 disabled:cursor-not-allowed"
@@ -502,7 +504,7 @@ export function ProfileEditForm({
                     disabled={!selectedAddSkill && searchMatches.length === 0}
                     className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-amber-900 transition-all duration-fast hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
                   >
-                    Add
+                    {t('skills.add')}
                   </button>
                 </div>
 
@@ -511,8 +513,12 @@ export function ProfileEditForm({
                   <div className="absolute inset-x-5 top-full z-30 mt-1 max-h-[360px] overflow-y-auto rounded-xl border border-white/[0.08] bg-bg-surface shadow-xl">
                     {searchMatches.length === 0 ? (
                       <div className="px-5 py-6 text-center text-sm text-fg-tertiary">
-                        No skills in our catalogue match{' '}
-                        <span className="text-fg-secondary">“{skillAddInput.trim()}”</span>.
+                        {t.rich('skills.noMatch', {
+                          query: (chunks) => (
+                            <span className="text-fg-secondary">{chunks}</span>
+                          ),
+                          term: skillAddInput.trim(),
+                        })}
                       </div>
                     ) : (
                       <div className="flex flex-col py-1">
@@ -551,7 +557,7 @@ export function ProfileEditForm({
             {/* Suggested chips */}
             {suggestions.length > 0 && (
               <div className="mt-5 flex flex-wrap items-center gap-2">
-                <span className="mr-2 text-xs text-fg-tertiary">Suggestions:</span>
+                <span className="mr-2 text-xs text-fg-tertiary">{t('skills.suggestions')}</span>
                 {suggestions.map((s) => (
                   <button
                     key={s.id}
@@ -570,23 +576,23 @@ export function ProfileEditForm({
           {/* Where & when */}
           <Card id="sec-where">
             <CardHead
-              eyebrow="Where & when"
-              title="Location & timezone."
-              desc="Used to surface local projects and to coordinate calls. We never show your exact address — just your city."
+              eyebrow={t('where.eyebrow')}
+              title={t('where.title')}
+              desc={t('where.desc')}
             />
             <div className="flex flex-col gap-5">
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <Field label="City" htmlFor="fld-city">
+                <Field label={t('fields.city')} htmlFor="fld-city">
                   <input
                     id="fld-city"
                     type="text"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder="e.g. Lausanne, Switzerland"
+                    placeholder={t('fields.cityPlaceholder')}
                     className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
                   />
                 </Field>
-                <Field label="Timezone" htmlFor="fld-timezone">
+                <Field label={t('fields.timezone')} htmlFor="fld-timezone">
                   <SelectBox
                     id="fld-timezone"
                     value={timezone}
@@ -608,9 +614,9 @@ export function ProfileEditForm({
 
           <Card id="sec-appearance">
             <CardHead
-              eyebrow="Appearance"
-              title="Theme."
-              desc="Choose how The Superhero looks for you. Your choice is saved to this browser and applies across every page — it isn't tied to the Save button."
+              eyebrow={t('appearance.eyebrow')}
+              title={t('appearance.title')}
+              desc={t('appearance.desc')}
             />
             <ThemePicker />
           </Card>
@@ -714,6 +720,7 @@ function SkillRow({
   onSeeking: (v: boolean) => void
   onRemove: () => void
 }) {
+  const t = useTranslations('profile')
   return (
     <div className="flex flex-col gap-3 border-b border-white/[0.08] px-4 py-4 transition-colors duration-fast last:border-b-0 hover:bg-bg-surface-2 sm:px-5 lg:grid lg:grid-cols-[1fr_320px_130px_32px] lg:items-center lg:gap-4">
       <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-fg-primary">
@@ -725,27 +732,27 @@ function SkillRow({
 
       {/* Level segmented control */}
       <div className="grid grid-cols-3 gap-0.5 rounded-lg border border-neutral-700 bg-bg-surface p-[3px]">
-        {LEVELS.map((l) => {
-          const checked = skill.proficiency === l.value
+        {LEVELS.map((level) => {
+          const checked = skill.proficiency === level
           const checkedClass = (() => {
             if (!checked) return ''
-            if (l.value === 'beginner')
+            if (level === 'beginner')
               return 'bg-blue-500/[0.18] text-blue-300 shadow-[inset_0_0_0_1px_rgba(74,127,212,0.4)]'
-            if (l.value === 'intermediate')
+            if (level === 'intermediate')
               return 'bg-blue-500/[0.28] text-blue-200 shadow-[inset_0_0_0_1px_rgba(74,127,212,0.55)]'
             return 'bg-amber-500/[0.18] text-amber-500 shadow-[inset_0_0_0_1px_rgba(244,165,53,0.5)]'
           })()
           return (
             <button
-              key={l.value}
+              key={level}
               type="button"
-              onClick={() => onLevel(l.value)}
+              onClick={() => onLevel(level)}
               className={cn(
                 'cursor-pointer rounded-md px-1 py-2 text-xs font-medium transition-all duration-fast',
                 checked ? checkedClass : 'text-fg-tertiary hover:text-fg-secondary',
               )}
             >
-              {l.label}
+              {t(`proficiency.${level}`)}
             </button>
           )
         })}
@@ -753,7 +760,7 @@ function SkillRow({
 
       {/* Seeking toggle (with label on mobile) */}
       <div className="flex items-center justify-between gap-3 lg:justify-center">
-        <span className="text-xs text-fg-tertiary lg:hidden">Match me to projects</span>
+        <span className="text-xs text-fg-tertiary lg:hidden">{t('skillRow.matchMeMobile')}</span>
         <button
           type="button"
           role="switch"
@@ -765,7 +772,7 @@ function SkillRow({
               ? 'border-amber-500 bg-amber-500/[0.18]'
               : 'border-neutral-700 bg-bg-surface-3',
           )}
-          title={skill.isSeeking ? 'Looking for projects' : 'Not looking right now'}
+          title={skill.isSeeking ? t('skillRow.seekingOn') : t('skillRow.seekingOff')}
         >
           <span
             className={cn(
@@ -783,10 +790,10 @@ function SkillRow({
         type="button"
         onClick={onRemove}
         className="flex h-9 w-full cursor-pointer items-center justify-center gap-1.5 rounded-md border border-white/[0.08] bg-transparent text-xs text-fg-tertiary transition-colors hover:border-red-500/40 hover:bg-red-500/[0.12] hover:text-red-300 lg:size-7 lg:border-none lg:text-base"
-        title="Remove skill"
+        title={t('skillRow.remove')}
       >
         <X className="size-3.5" />
-        <span className="lg:hidden">Remove skill</span>
+        <span className="lg:hidden">{t('skillRow.remove')}</span>
       </button>
     </div>
   )

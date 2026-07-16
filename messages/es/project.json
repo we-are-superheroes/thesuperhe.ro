@@ -1,0 +1,304 @@
+{
+  "status": {
+    "defining": "En definición",
+    "needs_help": "Necesita ayuda",
+    "in_progress": "En marcha",
+    "completed": "Completado"
+  },
+  "someone": "Alguien",
+  "topbar": {
+    "browseProjects": "Explorar proyectos",
+    "modifyProject": "Modificar proyecto",
+    "modify": "Modificar"
+  },
+  "hero": {
+    "membersOnly": "Solo miembros",
+    "changeStatusTitle": "Cambiar el estado del proyecto",
+    "change": "Cambiar",
+    "openInGoogleMaps": "Abrir en Google Maps",
+    "remoteWelcome": "Se aceptan colaboradores a distancia",
+    "started": "Empezó el {date}"
+  },
+  "tabs": {
+    "ariaLabel": "Secciones del proyecto",
+    "overview": "Resumen",
+    "updates": "Actualizaciones"
+  },
+  "about": {
+    "kicker": "Sobre este proyecto",
+    "noDescription": "Aún no hay descripción — el responsable del proyecto no ha escrito una."
+  },
+  "stepsSection": {
+    "kicker": "Pasos a dar",
+    "headingNeedsHelp": "{total, plural, one {# paso} other {# pasos}}. <em>{needing, plural, one {# necesita ayuda} other {# necesitan ayuda}}</em> ahora mismo.",
+    "headingProgress": "{total, plural, one {# paso} other {# pasos}}. <em>avanzando</em> ahora mismo.",
+    "noStepsYet": "Aún no hay pasos.",
+    "emptyTitle": "La lista de pasos está vacía.",
+    "emptyDescription": "Cuando el responsable del proyecto divida el trabajo en pasos, aparecerán aquí para que elijas uno del que encargarte."
+  },
+  "join": {
+    "signInToJoin": "Inicia sesión para unirte",
+    "requestSent": "Solicitud enviada",
+    "joining": "Uniéndote…",
+    "joinProject": "Unirme al proyecto",
+    "leaving": "Saliendo…",
+    "joined": "Miembro",
+    "membershipMenu": "Menú de membresía",
+    "memberNote": "Eres miembro. <b>{title}</b> aparece en tu panel y puedes ver las actualizaciones solo para miembros.",
+    "seeOpenSteps": "Ver pasos abiertos",
+    "leaveProject": "Salir del proyecto",
+    "leaveConfirm": "{count, plural, one {Tienes # paso asignado en este proyecto. Si sales, vuelve al equipo.} other {Tienes # pasos asignados en este proyecto. Si sales, vuelven al equipo.}}\n\n¿Seguro que quieres salir?",
+    "youreAMember": "Eres miembro.",
+    "memberCardBody": "Este proyecto está en tu panel. Encárgate de un paso para empezar a contribuir, y mira la pestaña Actualizaciones para las novedades.",
+    "requestSentHeading": "Solicitud enviada.",
+    "requestSentBody": "El responsable del proyecto recibirá una notificación. Serás miembro cuando la acepte.",
+    "wantToJoin": "¿Quieres unirte?",
+    "joinCardBody": "Únete al proyecto para encargarte de pasos, ver actualizaciones en tu panel y hablar con el equipo.",
+    "joinThisProject": "Unirme a este proyecto"
+  },
+  "stats": {
+    "title": "El proyecto en números",
+    "contributors": "Colaboradores",
+    "hoursGiven": "Horas aportadas",
+    "stepsDone": "Pasos hechos",
+    "daysActive": "Días activo",
+    "hoursUnit": "h",
+    "daysUnit": "d",
+    "noContributors": "Aún no hay colaboradores — sé la primera persona.",
+    "signInToSee": "<link>Inicia sesión</link> para ver quién trabaja en esto."
+  },
+  "details": {
+    "title": "Detalles",
+    "type": "Tipo",
+    "status": "Estado",
+    "location": "Ubicación",
+    "remoteContributions": "Contribuciones a distancia",
+    "timeCommitment": "Dedicación de tiempo",
+    "created": "Creado",
+    "lead": "Responsable",
+    "notSet": "Sin definir",
+    "notSpecified": "Sin especificar",
+    "remoteWelcome": "Bienvenidas",
+    "remoteNo": "No en este proyecto",
+    "avgHours": "~{hours}h de media",
+    "flexible": "Flexible",
+    "daysAgo": "· {count, plural, one {hace # día} other {hace # días}}",
+    "noLead": "Aún sin responsable"
+  },
+  "updates": {
+    "openTabTitle": "Abrir la pestaña Actualizaciones",
+    "latestUpdateBy": "Última actualización · {name}",
+    "noUpdatesYet": "Aún no hay actualizaciones.",
+    "updateCount": "{count, plural, one {# actualización} other {# actualizaciones}}.",
+    "forMembersOnly": "{count} solo para miembros.",
+    "publicUpdateCount": "{count, plural, one {# actualización pública} other {# actualizaciones públicas}}.",
+    "hiddenGate": "{count, plural, one {Hay <b>{count}</b> actualización solo para miembros oculta.} other {Hay <b>{count}</b> actualizaciones solo para miembros ocultas.}}",
+    "joinTheProject": "Únete al proyecto",
+    "signInAndJoin": "Inicia sesión y únete",
+    "toSeeThem": "{count, plural, one {para verla.} other {para verlas.}}",
+    "emptyTitle": "Aún no hay nada aquí.",
+    "emptyLead": "Publica la primera actualización arriba — los miembros reciben una notificación, y las actualizaciones públicas muestran a los visitantes que este proyecto está activo.",
+    "emptyViewer": "Cuando el responsable del proyecto publique actualizaciones o se completen pasos, aparecerán aquí.",
+    "composerPlaceholder": "Comparte una actualización sobre {title}…",
+    "public": "Pública",
+    "membersOnly": "Solo miembros",
+    "visibleToMembers": "Visible solo para {count, plural, one {el # miembro del proyecto} other {los # miembros del proyecto}}",
+    "visibleToAnyone": "Visible para cualquiera que mire el proyecto",
+    "posting": "Publicando…",
+    "postUpdate": "Publicar actualización",
+    "formerMember": "Antiguo miembro",
+    "leadBadge": "Responsable",
+    "postedAgo": "Publicado {ago}",
+    "edited": "· editado",
+    "confirmDelete": "¿Eliminar esta actualización? No se puede deshacer.",
+    "manageUpdate": "Gestionar actualización"
+  },
+  "milestones": {
+    "stepCompleted": "Paso completado —",
+    "peopleJoined": "{count, plural, one {# persona se unió —} other {# personas se unieron —}}",
+    "twoNames": "{a} y {b}",
+    "moreNames": "{first} y {last}"
+  },
+  "share": {
+    "share": "Compartir",
+    "sharePage": "Compartir esta página",
+    "linkCopied": "Enlace copiado"
+  },
+  "form": {
+    "bits": {
+      "countryPlaceholder": "Sin definir",
+      "searchCountriesPlaceholder": "Buscar países…",
+      "countryNotSetOption": "— Sin definir —",
+      "noMatches": "Sin coincidencias.",
+      "stepTitlePlaceholder": "Título del paso — haz clic para modificar",
+      "stepDescriptionPlaceholder": "Detalles opcionales — haz clic para añadir",
+      "removeSkill": "Quitar habilidad",
+      "addSkill": "Añadir habilidad",
+      "addAnotherSkill": "Añadir otra",
+      "searchSkillsPlaceholder": "Buscar habilidades…",
+      "allSkillsAdded": "Todas las habilidades añadidas.",
+      "estimateAbbrev": "Est.",
+      "estimatedHours": "Horas estimadas",
+      "hoursUnit": "h",
+      "removeStep": "Quitar paso",
+      "addAStep": "Añadir un paso"
+    },
+    "breadcrumb": {
+      "myProjects": "Mis proyectos",
+      "newProject": "Nuevo proyecto",
+      "newProjectFromBlueprint": "Nuevo proyecto (desde plantilla)",
+      "startAProject": "Iniciar un proyecto"
+    },
+    "changeStartingPoint": "Cambiar punto de partida",
+    "backToProject": "Volver al proyecto",
+    "untitledProject": "Proyecto sin título",
+    "titleFromBlueprint": "{title} — tu zona",
+    "chooser": {
+      "heading": "Inicia un <em>proyecto</em>.",
+      "intro": "Puedes empezar con un plan vacío, o adaptar una plantilla — un plan probado de alguien que ya ha hecho esto antes.",
+      "scratchTitle": "Empezar desde cero.",
+      "scratchDescription": "Un plan vacío. Ideal cuando tu proyecto es inusual, muy local, o ya has definido los pasos tú mismo.",
+      "scratchCta": "Empezar un proyecto nuevo",
+      "blueprintTitle": "Usar una plantilla.",
+      "blueprintDescription": "Copia con libertad. Planes ya montados para repair cafés, bosques de bolsillo, grupos de apoyo mutuo y más — explora la biblioteca, adapta uno y ajústalo a tu comunidad.",
+      "blueprintCta": "Explorar plantillas"
+    },
+    "origin": {
+      "creatingVariantOf": "Creando una variante de",
+      "forkedFrom": "Adaptado de",
+      "startingFromScratch": "Empezando desde cero",
+      "blueprintBadge": "Plantilla {title}",
+      "change": "cambiar"
+    },
+    "editHeader": {
+      "modifying": "Modificando",
+      "projectLead": "Responsable del proyecto"
+    },
+    "sections": {
+      "ariaLabel": "Secciones",
+      "onThisPage": "En esta página",
+      "status": "Estado",
+      "basics": "Lo básico",
+      "cover": "Portada",
+      "location": "Ubicación y acceso",
+      "steps": "Pasos"
+    },
+    "statusCard": {
+      "eyebrow": "Estado del proyecto",
+      "title": "¿Qué está pasando, en una palabra?",
+      "desc": "Esto aparece en la parte superior de la página del proyecto, en los listados y en el panel de todo el mundo. Ponlo con honestidad — \"Necesita ayuda\" llega a más gente que \"En marcha\" cuando de verdad la necesitas.",
+      "ariaLabel": "Estado del proyecto",
+      "descriptions": {
+        "defining": "Todavía dando forma al plan. Aún no está listo para colaboradores — la gente puede seguirlo, pero no hay nada que hacer.",
+        "needs_help": "Necesitas más gente. Empuja el proyecto a lo más alto de las coincidencias de habilidades y de la página de inicio.",
+        "in_progress": "El trabajo avanza y el equipo está casi completo. El estado normal de la mayoría de proyectos activos.",
+        "completed": "El trabajo está hecho. Pasa a la pestaña “Terminados”. Puedes reabrir el proyecto en cualquier momento."
+      }
+    },
+    "basics": {
+      "eyebrow": "Lo básico",
+      "title": "¿Qué es?",
+      "desc": "Dos frases bastan. Puedes añadir más detalle después.",
+      "titleLabel": "Título",
+      "titlePlaceholder": "p. ej. Bosque de bolsillo, Hackney Wick",
+      "descriptionLabel": "Descripción",
+      "descriptionHelp": "El primer párrafo es lo que aparece en la tarjeta del proyecto.",
+      "descriptionPlaceholder": "¿Qué quieres hacer realidad y por qué importa?"
+    },
+    "cover": {
+      "eyebrow": "Imagen de portada",
+      "title": "Una imagen para tu proyecto.",
+      "desc": "Se usa en la página del proyecto y en las tarjetas de Explorar y Mis proyectos. Opcional — si la omites, un degradado de colores ocupa su lugar.",
+      "alt": "Portada del proyecto",
+      "uploading": "Subiendo…",
+      "replace": "Reemplazar",
+      "upload": "Subir portada",
+      "remove": "Quitar",
+      "hint": "Mejor una imagen ancha — de al menos 1200×600. PNG, JPG, WebP o GIF, hasta 8 MB."
+    },
+    "location": {
+      "eyebrow": "Dónde sucede",
+      "title": "Ubicación y acceso.",
+      "desc": "Ayuda a que te encuentre la gente adecuada. Solo se mostrará la zona, nunca una dirección exacta.",
+      "cityLabel": "Ciudad o zona",
+      "cityPlaceholder": "p. ej. Hackney, Londres",
+      "countryLabel": "País (opcional)",
+      "countryHelp": "Se muestra en la tarjeta del proyecto y lo usa el filtro de país de la página de exploración.",
+      "addressLabel": "Dirección concreta o nombre del lugar (opcional)",
+      "addressHelp": "Se muestra a quienes se unen. Omítelo si tu punto de encuentro cambia o prefieres no publicarlo.",
+      "addressPlaceholder": "p. ej. The Old Library, 2 Wallis Road, E9 5LH",
+      "languageLabel": "Idioma de trabajo (opcional)",
+      "languageHelp": "Lo usa el filtro de idioma de la página de exploración.",
+      "noneOption": "— ninguno —"
+    },
+    "remote": {
+      "label": "¿Se puede contribuir a distancia?",
+      "ariaLabel": "Participación a distancia",
+      "options": {
+        "yes": "Sí, apto para trabajo a distancia",
+        "some": "Solo algunos pasos",
+        "no": "No, solo en persona"
+      },
+      "someHint": "Si eliges “solo algunos pasos”, luego podrás marcar cada paso como apto a distancia."
+    },
+    "joinPolicy": {
+      "label": "¿Quién puede unirse?",
+      "ariaLabel": "Política de incorporación",
+      "options": {
+        "open": {
+          "label": "Abierto a todo el mundo",
+          "description": "Cualquiera puede unirse al instante y empezar a contribuir."
+        },
+        "approval_required": {
+          "label": "Con aprobación",
+          "description": "Las incorporaciones llegan a tu bandeja como una solicitud para aceptar o rechazar."
+        }
+      }
+    },
+    "org": {
+      "label": "Organización",
+      "personalOption": "Proyecto personal — sin organización",
+      "note": "Los proyectos de organización muestran el nombre de la organización y cuentan para sus totales de contribución.",
+      "visibilityLabel": "¿Quién puede verlo?",
+      "visibilityAriaLabel": "Visibilidad del proyecto",
+      "options": {
+        "public": {
+          "label": "Público",
+          "description": "Cualquiera puede encontrarlo y unirse — con el nombre de la organización visible."
+        },
+        "org_members": {
+          "label": "Solo miembros",
+          "description": "Solo los miembros de la organización pueden verlo o unirse."
+        }
+      }
+    },
+    "steps": {
+      "eyebrow": "El plan",
+      "title": "Pasos para hacerlo realidad.",
+      "createDesc": "Divide el trabajo en piezas pequeñas que alguien podría hacer en una tarde. Siempre puedes añadir más después — pero una lista inicial de 3 a 8 ayuda a la gente a ver cómo echar una mano.",
+      "editDesc": "Añade, edita, reordena o elimina pasos. Si eliminas un paso del que alguien se ha encargado, esa persona queda fuera de él — ten cuidado."
+    },
+    "saveBar": {
+      "savedVariant": "Guardado como variante de plantilla — ahora aparece bajo la familia.",
+      "savedNew": "Guardado como plantilla — otros ya pueden adaptarla.",
+      "savedAsBlueprint": "Guardado como plantilla — otros ya pueden adaptarla.",
+      "draftInBrowser": "El borrador está en tu navegador",
+      "launching": "Lanzando…",
+      "launchProject": "Lanzar proyecto",
+      "saveAsBlueprint": "Guardar como plantilla",
+      "saveAsBlueprintVariant": "Guardar como variante de plantilla",
+      "saveAsNewBlueprint": "Guardar como plantilla nueva",
+      "moreSaveOptions": "Más opciones de guardado",
+      "saveChanges": "Guardar cambios"
+    }
+  },
+  "adminDelete": {
+    "deleteKind": "Eliminar {kind, select, blueprint {plantilla} other {proyecto}}",
+    "triggerTitle": "Eliminar {kind, select, blueprint {plantilla} other {proyecto}} (admin)",
+    "confirmTitle": "¿Eliminar {kind, select, blueprint {esta plantilla} other {este proyecto}}?",
+    "confirmBody": "Estás a punto de eliminar <b>{name}</b> para siempre. No se puede deshacer.",
+    "projectConsequence": "Todos sus pasos, contribuciones y tiempo registrado se van con él.",
+    "blueprintConsequence": "Sus pasos se eliminan; los proyectos adaptados de ella y sus variantes se conservan (solo se desvinculan).",
+    "deleting": "Eliminando…"
+  }
+}

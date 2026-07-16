@@ -1,0 +1,55 @@
+{
+  "list": {
+    "title": "Messaggi",
+    "newMessage": "Nuovo messaggio",
+    "searchPlaceholder": "Cerca persone e messaggi",
+    "inbox": "In arrivo",
+    "archived": "Archiviate",
+    "fallbackConversationName": "Conversazione",
+    "noMessagesYet": "Ancora nessun messaggio",
+    "unreadCount": "{count, plural, one {# non letto} other {# non letti}}",
+    "previewYou": "Tu: {body}",
+    "previewDeleted": "[eliminato]"
+  },
+  "empty": {
+    "noMatches": "Nessun risultato.",
+    "archivedTitle": "Nessuna conversazione archiviata.",
+    "archivedHint": "Archivia una conversazione dal suo menu <menuIcon></menuIcon> e finirà qui.",
+    "inboxTitle": "Ancora nessuna conversazione.",
+    "inboxHint": "Usa il pulsante <plusIcon></plusIcon> per iniziarne una.",
+    "noThreadTitle": "Scegli una conversazione.",
+    "noThreadHint": "Oppure avviane una nuova — clicca il pulsante <plusIcon></plusIcon> per trovare qualcuno."
+  },
+  "thread": {
+    "backToConversations": "Torna alle conversazioni",
+    "online": "Online",
+    "muted": "Silenziata",
+    "viewProfile": "Vedi il profilo",
+    "more": "Altro",
+    "sayHi": "Ancora nessun messaggio. Saluta {name}.",
+    "deletedMessage": "[eliminato]",
+    "edited": "modificato"
+  },
+  "time": {
+    "today": "Oggi",
+    "yesterday": "Ieri"
+  },
+  "composer": {
+    "placeholder": "Scrivi un messaggio…",
+    "send": "Invia",
+    "hint": "<kbd>Invio</kbd> per inviare · <kbd>Maiusc</kbd> + <kbd>Invio</kbd> per andare a capo",
+    "charCount": "{count} / {max}"
+  },
+  "menu": {
+    "unmute": "Riattiva le notifiche",
+    "mute": "Silenzia le notifiche",
+    "archive": "Archivia",
+    "unarchive": "Ripristina"
+  },
+  "newMessage": {
+    "searchPlaceholder": "Cerca persone…",
+    "noMatches": "Nessun risultato.",
+    "hint": "Cerca per nome per iniziare una conversazione."
+  },
+  "you": "Tu"
+}

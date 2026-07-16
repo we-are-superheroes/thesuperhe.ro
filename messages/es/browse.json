@@ -1,0 +1,68 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Buscar proyectos...",
+    "notificationsTitle": "Notificaciones",
+    "startProject": "Iniciar un proyecto",
+    "startProjectShort": "Iniciar"
+  },
+  "header": {
+    "titleLine1": "Encuentra un proyecto",
+    "titleLine2": "que te <em>necesita</em>.",
+    "intro": "Cada proyecto aquí es real, está activo y busca ayuda. Filtra por dónde estás, lo que se te da bien o el tipo de trabajo que te interesa."
+  },
+  "filters": {
+    "show": "Mostrar filtros",
+    "hide": "Ocultar filtros",
+    "activeCount": "{n, plural, one {# activo} other {# activos}}",
+    "title": "Filtros",
+    "clearAll": "Quitar todos",
+    "yourOrganisations": "Tus organizaciones",
+    "typeOfProject": "Tipo de proyecto",
+    "skillsNeeded": "Habilidades necesarias",
+    "location": "Ubicación",
+    "country": "País",
+    "language": "Idioma",
+    "searchSkillsPlaceholder": "Buscar habilidades...",
+    "searchLocationsPlaceholder": "Buscar ubicaciones...",
+    "searchCountriesPlaceholder": "Buscar países...",
+    "noMatches": "Sin coincidencias."
+  },
+  "results": {
+    "showingAll": "Mostrando <strong>los {total}</strong> {total, plural, one {proyecto activo} other {proyectos activos}}",
+    "showingFiltered": "Mostrando <strong>{showing}</strong> de {total, plural, one {# proyecto} other {# proyectos}}"
+  },
+  "sort": {
+    "recent": "Más recientes",
+    "needs": "Más necesitados de ayuda",
+    "progress": "Más cerca de terminar"
+  },
+  "view": {
+    "gridTitle": "Vista de cuadrícula",
+    "listTitle": "Vista de lista"
+  },
+  "chips": {
+    "query": "\"{query}\"",
+    "removeAriaLabel": "Quitar filtro"
+  },
+  "empty": {
+    "title": "Ningún proyecto coincide con esos filtros.",
+    "body": "Prueba a ampliar la ubicación, quitar una habilidad o vaciar el cuadro de búsqueda."
+  },
+  "card": {
+    "needsHelp": "{n, plural, one {# necesita ayuda} other {# necesitan ayuda}}",
+    "membersOnly": "Solo miembros",
+    "posted": "Publicado {when}",
+    "contributors": "{n, plural, one {<strong>#</strong> colaborador} other {<strong>#</strong> colaboradores}}",
+    "contributorsPlain": "{n, plural, one {# colaborador} other {# colaboradores}}",
+    "percentComplete": "<strong>{pct}%</strong> completado"
+  },
+  "posted": {
+    "today": "hoy",
+    "daysAgo": "{n, plural, one {hace # día} other {hace # días}}",
+    "weeksAgo": "{n, plural, one {hace # semana} other {hace # semanas}}"
+  },
+  "fallback": {
+    "remoteLocation": "A distancia",
+    "otherType": "Otro"
+  }
+}

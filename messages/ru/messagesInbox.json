@@ -1,0 +1,55 @@
+{
+  "list": {
+    "title": "Сообщения",
+    "newMessage": "Новое сообщение",
+    "searchPlaceholder": "Поиск людей и сообщений",
+    "inbox": "Входящие",
+    "archived": "Архив",
+    "fallbackConversationName": "Переписка",
+    "noMessagesYet": "Пока нет сообщений",
+    "unreadCount": "{count, plural, one {# непрочитанное} few {# непрочитанных} many {# непрочитанных} other {# непрочитанного}}",
+    "previewYou": "Вы: {body}",
+    "previewDeleted": "[удалено]"
+  },
+  "empty": {
+    "noMatches": "Ничего не найдено.",
+    "archivedTitle": "В архиве пусто.",
+    "archivedHint": "Отправьте переписку в архив через её меню <menuIcon></menuIcon> — и она окажется здесь.",
+    "inboxTitle": "Пока нет переписок.",
+    "inboxHint": "Нажмите кнопку <plusIcon></plusIcon>, чтобы начать.",
+    "noThreadTitle": "Выберите переписку.",
+    "noThreadHint": "Или начните новую — нажмите кнопку <plusIcon></plusIcon>, чтобы найти собеседника."
+  },
+  "thread": {
+    "backToConversations": "Назад к перепискам",
+    "online": "В сети",
+    "muted": "Без звука",
+    "viewProfile": "Открыть профиль",
+    "more": "Ещё",
+    "sayHi": "Пока нет сообщений. Поздоровайтесь с {name}.",
+    "deletedMessage": "[удалено]",
+    "edited": "изменено"
+  },
+  "time": {
+    "today": "Сегодня",
+    "yesterday": "Вчера"
+  },
+  "composer": {
+    "placeholder": "Напишите сообщение…",
+    "send": "Отправить",
+    "hint": "<kbd>Enter</kbd> — отправить · <kbd>Shift</kbd> + <kbd>Enter</kbd> — новая строка",
+    "charCount": "{count} / {max}"
+  },
+  "menu": {
+    "unmute": "Включить уведомления",
+    "mute": "Отключить уведомления",
+    "archive": "В архив",
+    "unarchive": "Вернуть из архива"
+  },
+  "newMessage": {
+    "searchPlaceholder": "Поиск людей…",
+    "noMatches": "Ничего не найдено.",
+    "hint": "Найдите человека по имени, чтобы начать переписку."
+  },
+  "you": "Вы"
+}

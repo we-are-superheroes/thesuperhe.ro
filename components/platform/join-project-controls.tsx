@@ -2,6 +2,7 @@
 
 import { useTransition, useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { ArrowRight, Check, ChevronDown, Clock, LogIn, LogOut, CheckSquare } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { joinProjectAction, leaveProjectAction } from '@/app/(platform)/projects/[id]/actions'
@@ -40,6 +41,7 @@ export function JoinProjectTopButton({
   /** Steps currently assigned to the viewer — used in the leave confirm. */
   myAssignedStepCount: number
 }) {
+  const t = useTranslations('project')
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [localPending, setLocalPending] = useState(isPendingApproval)
@@ -51,7 +53,7 @@ export function JoinProjectTopButton({
         className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
       >
         <LogIn className="size-3.5" strokeWidth={2.5} />
-        Sign in to join
+        {t('join.signInToJoin')}
       </Link>
     )
   }
@@ -70,7 +72,7 @@ export function JoinProjectTopButton({
     return (
       <span className="inline-flex items-center gap-2 rounded-lg border border-amber-500/35 bg-amber-500/[0.12] px-4 py-2.5 text-sm font-medium text-amber-500">
         <Clock className="size-3.5" />
-        Request sent
+        {t('join.requestSent')}
       </span>
     )
   }
@@ -91,7 +93,7 @@ export function JoinProjectTopButton({
         }}
         className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
       >
-        {pending ? 'Joining…' : 'Join project'}
+        {pending ? t('join.joining') : t('join.joinProject')}
       </button>
     </div>
   )
@@ -110,6 +112,7 @@ function JoinedDropdown({
   projectTitle: string
   myAssignedStepCount: number
 }) {
+  const t = useTranslations('project')
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
@@ -136,7 +139,7 @@ function JoinedDropdown({
     setError(null)
     if (myAssignedStepCount > 0) {
       const ok = window.confirm(
-        `You have ${myAssignedStepCount} step${myAssignedStepCount === 1 ? '' : 's'} assigned to you on this project. If you leave, ${myAssignedStepCount === 1 ? 'it goes' : 'they go'} back to the team.\n\nAre you sure you want to leave?`,
+        t('join.leaveConfirm', { count: myAssignedStepCount }),
       )
       if (!ok) return
     }
@@ -159,7 +162,7 @@ function JoinedDropdown({
           className="inline-flex items-center gap-2 rounded-lg border border-green-500/35 bg-green-500/[0.16] px-4 py-2.5 text-sm font-medium text-green-300 transition-colors hover:border-green-500/55"
         >
           <Check className="size-3.5" strokeWidth={2.5} />
-          {pending ? 'Leaving…' : 'Joined'}
+          {pending ? t('join.leaving') : t('join.joined')}
           <ChevronDown
             className={cn('size-3.5 transition-transform duration-fast', open && 'rotate-180')}
             strokeWidth={2.5}
@@ -169,12 +172,16 @@ function JoinedDropdown({
       {open && (
         <div
           role="menu"
-          aria-label="Membership menu"
+          aria-label={t('join.membershipMenu')}
           className="absolute right-0 top-full z-20 mt-2 w-72 overflow-hidden rounded-xl border border-white/[0.08] bg-bg-surface shadow-xl"
         >
           <div className="border-b border-white/[0.08] px-4 py-3 text-xs leading-relaxed text-fg-tertiary">
-            You’re a member. <b className="font-semibold text-fg-secondary">{projectTitle}</b>{' '}
-            shows in your dashboard and you can see members-only updates.
+            {t.rich('join.memberNote', {
+              title: projectTitle,
+              b: (chunks) => (
+                <b className="font-semibold text-fg-secondary">{chunks}</b>
+              ),
+            })}
           </div>
           <button
             type="button"
@@ -186,7 +193,7 @@ function JoinedDropdown({
             className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm text-fg-secondary transition-colors hover:bg-bg-surface-2 hover:text-fg-primary"
           >
             <CheckSquare className="size-4 shrink-0" />
-            See open steps
+            {t('join.seeOpenSteps')}
           </button>
           <button
             type="button"
@@ -196,7 +203,7 @@ function JoinedDropdown({
             className="flex w-full items-center gap-3 px-4 py-2.5 text-left text-sm text-red-300 transition-colors hover:bg-bg-surface-2 disabled:opacity-60"
           >
             <LogOut className="size-4 shrink-0" />
-            Leave project
+            {t('join.leaveProject')}
           </button>
         </div>
       )}
@@ -219,6 +226,7 @@ export function JoinProjectCard({
   isMember: boolean
   isPendingApproval?: boolean
 }) {
+  const t = useTranslations('project')
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
   const [localPending, setLocalPending] = useState(isPendingApproval)
@@ -233,35 +241,34 @@ export function JoinProjectCard({
         <>
           <h3 className="mb-2 flex items-center gap-2 font-display text-2xl leading-tight">
             <Check className="size-5 text-green-300" strokeWidth={2.5} />
-            You’re a member.
+            {t('join.youreAMember')}
           </h3>
           <p className="mb-4 text-sm leading-relaxed text-fg-secondary">
-            This project is in your dashboard. Claim a step to start contributing, and check
-            the Updates tab for news.
+            {t('join.memberCardBody')}
           </p>
           <button
             type="button"
             onClick={() => showSteps(setTab)}
             className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
           >
-            See open steps
+            {t('join.seeOpenSteps')}
           </button>
         </>
       ) : localPending ? (
         <>
           <h3 className="mb-2 flex items-center gap-2 font-display text-2xl leading-tight">
             <Clock className="size-5 text-amber-500" />
-            Request sent.
+            {t('join.requestSentHeading')}
           </h3>
           <p className="text-sm leading-relaxed text-fg-secondary">
-            The project lead will get a notification. You’ll become a member once they accept.
+            {t('join.requestSentBody')}
           </p>
         </>
       ) : (
         <>
-          <h3 className="mb-2 font-display text-2xl leading-tight">Want to join?</h3>
+          <h3 className="mb-2 font-display text-2xl leading-tight">{t('join.wantToJoin')}</h3>
           <p className="mb-4 text-sm leading-relaxed text-fg-secondary">
-            Join the project to claim steps, see updates in your dashboard, and chat with the team.
+            {t('join.joinCardBody')}
           </p>
           {error && <p className="mb-3 text-xs text-red-300">{error}</p>}
           {isSignedIn ? (
@@ -278,7 +285,7 @@ export function JoinProjectCard({
               }}
               className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
             >
-              {pending ? 'Joining…' : 'Join this project'}
+              {pending ? t('join.joining') : t('join.joinThisProject')}
               {!pending && <ArrowRight className="size-3.5" strokeWidth={2.5} />}
             </button>
           ) : (
@@ -286,7 +293,7 @@ export function JoinProjectCard({
               href="/sign-in"
               className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
             >
-              Sign in to join
+              {t('join.signInToJoin')}
               <ArrowRight className="size-3.5" strokeWidth={2.5} />
             </Link>
           )}

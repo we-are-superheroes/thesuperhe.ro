@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import {
   leaveOrgAction,
@@ -28,6 +29,7 @@ export interface ProfileOrgRow {
 }
 
 export function ProfileOrgsSection({ orgs }: { orgs: ProfileOrgRow[] }) {
+  const t = useTranslations('orgs')
   const router = useRouter()
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
@@ -49,12 +51,7 @@ export function ProfileOrgsSection({ orgs }: { orgs: ProfileOrgRow[] }) {
   }
 
   const leave = (org: ProfileOrgRow) => {
-    if (
-      !window.confirm(
-        `Leave ${org.name}? Your past hours stay in the organisation's totals, but you will no longer appear in the member list.`,
-      )
-    )
-      return
+    if (!window.confirm(t('profileOrgs.leaveConfirm', { org: org.name }))) return
     setError(null)
     startTransition(async () => {
       const result = await leaveOrgAction(org.orgId)
@@ -70,23 +67,22 @@ export function ProfileOrgsSection({ orgs }: { orgs: ProfileOrgRow[] }) {
     >
       <div>
         <div className="mb-1 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
-          Organisations
+          {t('profileOrgs.kicker')}
         </div>
         <h2 className="mb-2 font-display text-2xl font-normal tracking-tight">
-          Your organisations.
+          {t('profileOrgs.title')}
         </h2>
         <p className="max-w-[560px] text-sm leading-relaxed text-fg-secondary">
-          For each organisation, you choose whether it can count your hours on{' '}
-          <strong className="font-semibold text-fg-primary">other public projects</strong> in its
-          totals and reports. Hours on an organisation&rsquo;s own projects always count. What you
-          do outside these projects is never shared without this setting.
+          {t.rich('profileOrgs.intro', {
+            strong: (chunks) => (
+              <strong className="font-semibold text-fg-primary">{chunks}</strong>
+            ),
+          })}
         </p>
       </div>
 
       {orgs.length === 0 ? (
-        <p className="text-sm text-fg-tertiary">
-          You are not in any organisation yet. Join one with an invite code on its page.
-        </p>
+        <p className="text-sm text-fg-tertiary">{t('profileOrgs.empty')}</p>
       ) : (
         <div className="flex flex-col gap-3">
           {orgs.map((o) => (
@@ -109,15 +105,15 @@ export function ProfileOrgsSection({ orgs }: { orgs: ProfileOrgRow[] }) {
                   )}
                 </span>
                 {o.status === 'pending' && (
-                  <span className="text-xs text-fg-tertiary">Waiting for approval</span>
+                  <span className="text-xs text-fg-tertiary">{t('statusBadge.pending')}</span>
                 )}
                 {o.status === 'suspended' && (
-                  <span className="text-xs text-fg-tertiary">Suspended</span>
+                  <span className="text-xs text-fg-tertiary">{t('statusBadge.suspended')}</span>
                 )}
               </div>
 
               <label className="flex cursor-pointer select-none items-center gap-2.5 text-xs text-fg-secondary">
-                Share my public-project hours
+                {t('profileOrgs.share')}
                 <button
                   type="button"
                   role="switch"
@@ -146,7 +142,7 @@ export function ProfileOrgsSection({ orgs }: { orgs: ProfileOrgRow[] }) {
                 onClick={() => leave(o)}
                 className="cursor-pointer self-start rounded-full border border-neutral-700 px-3 py-1.5 text-xs text-fg-tertiary transition-colors hover:border-red-400/50 hover:text-red-400 disabled:opacity-60 sm:self-auto"
               >
-                Leave
+                {t('profileOrgs.leave')}
               </button>
             </div>
           ))}
@@ -156,11 +152,13 @@ export function ProfileOrgsSection({ orgs }: { orgs: ProfileOrgRow[] }) {
       {error && <p className="text-sm text-red-400">{error}</p>}
 
       <p className="text-xs leading-relaxed text-fg-tertiary">
-        Want to bring your own group onto The Superhero?{' '}
-        <Link href="/orgs/request" className="text-amber-500 hover:underline">
-          Request an organisation
-        </Link>{' '}
-        — we approve each one by hand.
+        {t.rich('profileOrgs.footer', {
+          link: (chunks) => (
+            <Link href="/orgs/request" className="text-amber-500 hover:underline">
+              {chunks}
+            </Link>
+          ),
+        })}
       </p>
     </section>
   )

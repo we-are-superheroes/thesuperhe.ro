@@ -1,10 +1,10 @@
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 import { LegalPage, LegalSection as Section } from '@/components/ui/legal-page'
 
-export const metadata = {
-  title: 'Privacy policy — The Superhero',
-  description:
-    'What data The Superhero collects, why, where it lives, and the rights you have over it.',
+export async function generateMetadata() {
+  const t = await getTranslations('meta')
+  return { title: t('privacy.title'), description: t('privacy.description') }
 }
 
 /* ================================================================
@@ -12,156 +12,92 @@ export const metadata = {
    today (Clerk auth, Supabase in the EU, Vercel hosting, essential
    cookies only, no analytics). Keep it in sync when that changes —
    especially if analytics or email sending are added.
+
+   English is the authoritative text (the policy says so): copy
+   lives in messages/<locale>/legal-privacy.json, en is the source.
    ================================================================ */
 
-const LAST_UPDATED = '3 July 2026'
+const LAST_UPDATED = '12 July 2026'
+const SUPPORT_EMAIL = 'support@thesuperhe.ro'
 
-export default function PrivacyPage() {
+export default async function PrivacyPage() {
+  const t = await getTranslations('legal-privacy')
+
+  const supportLink = (chunks: React.ReactNode) => (
+    <a href={`mailto:${SUPPORT_EMAIL}`} className="text-amber-500 hover:underline">
+      {chunks}
+    </a>
+  )
+  const strong = (chunks: React.ReactNode) => (
+    <strong className="text-fg-primary">{chunks}</strong>
+  )
+
   return (
-    <LegalPage title="Privacy policy" updated={LAST_UPDATED}>
+    <LegalPage
+      eyebrow={t('chrome.eyebrow')}
+      title={t('chrome.title')}
+      updatedLine={t('chrome.lastUpdated', { date: LAST_UPDATED })}
+    >
 
-      <Section title="Who we are">
+      <Section title={t('sections.whoWeAre.title')}>
+        <p>{t.rich('sections.whoWeAre.p1', { email: SUPPORT_EMAIL, link: supportLink })}</p>
+        <p>{t('sections.whoWeAre.englishPrevails')}</p>
+      </Section>
+
+      <Section title={t('sections.whatWeCollect.title')}>
+        <p>{t.rich('sections.whatWeCollect.p1', { strong })}</p>
+        <p>{t.rich('sections.whatWeCollect.p2', { strong })}</p>
+        <p>{t.rich('sections.whatWeCollect.p3', { strong })}</p>
+        <p>{t.rich('sections.whatWeCollect.p4', { strong })}</p>
+      </Section>
+
+      <Section title={t('sections.whatWeUseItFor.title')}>
+        <p>{t('sections.whatWeUseItFor.p1')}</p>
+      </Section>
+
+      <Section title={t('sections.whatIsPublic.title')}>
+        <p>{t('sections.whatIsPublic.p1')}</p>
+        <p>{t('sections.whatIsPublic.p2')}</p>
+      </Section>
+
+      <Section title={t('sections.cookies.title')}>
         <p>
-          The Superhero (thesuperhe.ro) is a platform that connects people with climate and
-          sustainability projects. It is operated from Switzerland. For anything related to
-          your data, contact us at{' '}
-          <a href="mailto:support@thesuperhe.ro" className="text-amber-500 hover:underline">
-            support@thesuperhe.ro
-          </a>
-          . We are the data controller for the personal data described below, and we handle
-          it under the Swiss Federal Act on Data Protection (FADP) and, where it applies,
-          the EU General Data Protection Regulation (GDPR).
+          {t.rich('sections.cookies.p1', {
+            code: (chunks) => <code className="text-fg-primary">{chunks}</code>,
+          })}
         </p>
       </Section>
 
-      <Section title="What we collect">
-        <p>
-          <strong className="text-fg-primary">Account data.</strong> When you sign up, our
-          authentication provider (Clerk) collects your name, email address and, if you use
-          a social login, your avatar. We keep a copy of these in our own database so the
-          platform can show who you are.
-        </p>
-        <p>
-          <strong className="text-fg-primary">Profile data you choose to add.</strong> A bio,
-          a location, a timezone, a profile photo, and the skills you say you have —
-          including whether you&rsquo;re looking to use them. All of this is optional.
-        </p>
-        <p>
-          <strong className="text-fg-primary">Content you create.</strong> Projects,
-          blueprints, project steps, updates, messages to other members, the steps you join
-          and the hours you log. Some of this is public by design (see below).
-        </p>
-        <p>
-          <strong className="text-fg-primary">Technical data.</strong> Our hosting provider
-          (Vercel) keeps short-lived server logs (IP address, request path, timestamps) for
-          operating and securing the service. We run no advertising or analytics trackers.
-        </p>
-      </Section>
-
-      <Section title="What we use it for">
-        <p>
-          To run the platform: showing your profile to other members, matching your skills
-          with steps that need them, sending you in-app notifications, and letting you
-          message other members. The legal basis is the performance of our contract with
-          you (providing the service you signed up for) and our legitimate interest in
-          keeping the platform secure and functional. We don&rsquo;t sell your data, and we
-          don&rsquo;t use it for advertising.
-        </p>
-      </Section>
-
-      <Section title="What is public">
-        <p>
-          This is a collaboration platform, so some things are visible to anyone on the
-          internet: projects and their steps, blueprints and their authorship, project
-          updates marked &ldquo;public&rdquo;, and your name on content you have publicly
-          contributed. Members-only updates are visible only to a project&rsquo;s members.
-          Messages are visible only to you and the person you&rsquo;re writing with. Your
-          email address is never shown to other users.
-        </p>
-        <p>
-          Uploaded images (profile photos, project covers) are stored in a publicly
-          accessible bucket — anyone with the link can view them, so don&rsquo;t upload
-          images you wouldn&rsquo;t want public.
-        </p>
-      </Section>
-
-      <Section title="Cookies">
-        <p>
-          We use only cookies that are strictly necessary to run the service: the session
-          cookies set by Clerk to keep you signed in. Your theme preference is stored in
-          your browser&rsquo;s local storage and never leaves your device. There are no
-          advertising, analytics or third-party tracking cookies, which is why you
-          don&rsquo;t see a cookie banner.
-        </p>
-      </Section>
-
-      <Section title="Where your data lives">
-        <p>Our service providers (processors) are:</p>
+      <Section title={t('sections.processors.title')}>
+        <p>{t('sections.processors.intro')}</p>
         <ul className="ml-5 list-disc space-y-2">
-          <li>
-            <strong className="text-fg-primary">Supabase</strong> — database and image
-            storage, hosted on AWS in the EU (Ireland, eu-west-1).
-          </li>
-          <li>
-            <strong className="text-fg-primary">Clerk</strong> — authentication, based in
-            the United States. Transfers are covered by the EU Standard Contractual
-            Clauses.
-          </li>
-          <li>
-            <strong className="text-fg-primary">Vercel</strong> — application hosting and
-            server logs.
-          </li>
+          <li>{t.rich('sections.processors.items.supabase', { strong })}</li>
+          <li>{t.rich('sections.processors.items.clerk', { strong })}</li>
+          <li>{t.rich('sections.processors.items.vercel', { strong })}</li>
         </ul>
-        <p>
-          Each of these processes data only on our instructions and under a data processing
-          agreement.
-        </p>
+        <p>{t('sections.processors.outro')}</p>
       </Section>
 
-      <Section title="How long we keep it">
-        <p>
-          For as long as you have an account. If you delete your account, your profile,
-          skills and contributions are deleted with it. Content that other people depend on
-          — messages you sent, public updates you posted — is kept but detached from your
-          identity and shown as coming from a deleted or former member. Server logs are
-          retained by our hosting provider for a short period and then discarded.
-        </p>
+      <Section title={t('sections.retention.title')}>
+        <p>{t('sections.retention.p1')}</p>
       </Section>
 
-      <Section title="Your rights">
-        <p>
-          Under the FADP and GDPR you can ask us for access to the data we hold about you,
-          have it corrected or deleted, receive a copy in a portable format, or object to
-          or restrict how we process it. Write to{' '}
-          <a href="mailto:support@thesuperhe.ro" className="text-amber-500 hover:underline">
-            support@thesuperhe.ro
-          </a>{' '}
-          and we&rsquo;ll respond within 30 days. You can also delete your account yourself
-          from your profile settings at any time.
-        </p>
-        <p>
-          If you believe we&rsquo;re mishandling your data, you have the right to complain
-          to a supervisory authority — in Switzerland the Federal Data Protection and
-          Information Commissioner (FDPIC), or your local data protection authority in the
-          EU/EEA.
-        </p>
+      <Section title={t('sections.yourRights.title')}>
+        <p>{t.rich('sections.yourRights.p1', { email: SUPPORT_EMAIL, link: supportLink })}</p>
+        <p>{t('sections.yourRights.p2')}</p>
       </Section>
 
-      <Section title="Changes to this policy">
-        <p>
-          If we change how we handle your data — for example, if we start sending email
-          notifications — we&rsquo;ll update this page and adjust the date at the top. For
-          significant changes we&rsquo;ll tell you in the app.
-        </p>
+      <Section title={t('sections.policyChanges.title')}>
+        <p>{t('sections.policyChanges.p1')}</p>
       </Section>
 
       <p className="mt-12 text-sm text-fg-tertiary">
-        Questions?{' '}
-        <a href="mailto:support@thesuperhe.ro" className="text-amber-500 hover:underline">
-          support@thesuperhe.ro
+        {t('footer.questions')}{' '}
+        <a href={`mailto:${SUPPORT_EMAIL}`} className="text-amber-500 hover:underline">
+          {SUPPORT_EMAIL}
         </a>{' '}
-· <Link href="/terms" className="text-amber-500 hover:underline">Terms of service</Link>{' '}
-        · <Link href="/" className="text-amber-500 hover:underline">Back to the homepage</Link>
+        · <Link href="/terms" className="text-amber-500 hover:underline">{t('footer.termsLink')}</Link>{' '}
+        · <Link href="/" className="text-amber-500 hover:underline">{t('footer.homeLink')}</Link>
       </p>
     </LegalPage>
   )

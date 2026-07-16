@@ -1,5 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { normaliseStepStatus, impliedHelpWanted } from '@/lib/step-status'
 import { MyStepsClient, type MyStep } from '@/components/platform/my-steps-client'
@@ -28,6 +29,10 @@ function initialsOf(name: string): string {
 export default async function MyStepsPage() {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
+
+  // Reuse the shared time-log vocabulary — same fallback the
+  // StepTimeLog component itself renders.
+  const tSteps = await getTranslations('steps')
 
   // Steps I've joined.
   const contributions = await db.contribution.findMany({
@@ -94,7 +99,7 @@ export default async function MyStepsPage() {
       const s = c.projectStep!
       const stat = statsByStep.get(s.id) ?? { total: 0, count: 0 }
       const recentLogs = s.timeLogs.map((tl) => {
-        const name = tl.user?.name ?? 'Someone'
+        const name = tl.user?.name ?? tSteps('timeLog.someone')
         return {
           id: tl.id,
           hours: tl.hours,

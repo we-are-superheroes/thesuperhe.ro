@@ -1,0 +1,66 @@
+{
+  "titles": {
+    "projectJoinWelcome": "{leadName} te dio la bienvenida a {projectTitle}.",
+    "projectJoin": "{actorName} se unió a {projectTitle}.",
+    "projectJoinRequest": "{actorName} quiere unirse a {projectTitle}.",
+    "projectJoinDeclined": "Tu solicitud para unirte a {projectTitle} no fue aceptada esta vez.",
+    "projectLeave": "{actorName} salió de {projectTitle}.",
+    "projectUpdated": "{actorName} actualizó {projectTitle}.",
+    "projectRenamed": "{actorName} renombró “{oldTitle}” a “{newTitle}”.",
+    "updatePosted": "{actorName} publicó una actualización en {projectTitle}.",
+    "stepClaimed": "{actorName} se unió a “{stepTitle}” en {projectTitle}.",
+    "stepUnclaimed": "{actorName} salió de “{stepTitle}” en {projectTitle}.",
+    "stepCompleted": "{actorName} terminó “{stepTitle}” en {projectTitle}.",
+    "stepNeedsHelp": "{actorName} pidió ayuda en “{stepTitle}” en {projectTitle}.",
+    "blueprintForked": "{actorName} adaptó tu plantilla “{blueprintTitle}” como “{projectTitle}”.",
+    "skillMatch": "El nuevo proyecto “{projectTitle}” necesita {skillName}.",
+    "inviteReceived": "{actorName} te invitó a unirte a {orgName}.",
+    "messageReceived": "{count, plural, one {{senderName} te envió un mensaje.} other {# mensajes nuevos de {senderName}.}}"
+  },
+  "bodies": {
+    "projectJoinDeclined": "Gracias por ofrecer tu ayuda — el equipo no puede seguir adelante con esta ahora mismo. Hay muchos otros proyectos que necesitan tus habilidades.",
+    "inviteReceived": "Usa el código de invitación {code} en la página de la organización."
+  },
+  "ui": {
+    "header": {
+      "title": "Tus <em>notificaciones</em>.",
+      "subtitle": "Lo que necesita tu atención — y algunas cosas que te alegrará saber.",
+      "markAllRead": "Marcar todo como leído"
+    },
+    "tabs": {
+      "all": "Todas",
+      "unread": "Sin leer",
+      "action": "Requieren acción",
+      "mention": "Menciones"
+    },
+    "groups": {
+      "today": "Hoy",
+      "yesterday": "Ayer",
+      "week": "Esta semana",
+      "earlier": "Anteriores"
+    },
+    "empty": {
+      "unreadTitle": "Nada sin leer. Estás al día.",
+      "unreadSubtitle": "La nueva actividad aparecerá aquí según ocurra.",
+      "mentionTitle": "Aún no hay menciones.",
+      "mentionSubtitle": "Las menciones de tableros e hilos de proyectos llegarán aquí.",
+      "actionTitle": "Nada espera por ti.",
+      "actionSubtitle": "Las solicitudes de incorporación y las invitaciones aparecerán aquí cuando necesiten una decisión.",
+      "allTitle": "Nada por aquí.",
+      "allSubtitle": "Cuando te unas a proyectos y te encargues de pasos, las novedades de tu equipo aparecerán aquí."
+    },
+    "joinRequest": {
+      "accept": "Darle la bienvenida",
+      "decline": "No encaja"
+    },
+    "resolution": {
+      "accepted": "Bienvenida dada al proyecto.",
+      "declined": "Rechazada con amabilidad."
+    },
+    "links": {
+      "openConversation": "Abrir conversación",
+      "openOrgPage": "Abrir la página de la organización",
+      "openProject": "Abrir {name}"
+    }
+  }
+}

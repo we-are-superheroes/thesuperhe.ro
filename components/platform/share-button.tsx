@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { Share2, Check } from 'lucide-react'
 
 /**
@@ -8,6 +9,7 @@ import { Share2, Check } from 'lucide-react'
  * browser supports it, clipboard copy (with a "Copied" flash) everywhere else.
  */
 export function ShareButton({ title }: { title: string }) {
+  const t = useTranslations('project')
   const [copied, setCopied] = useState(false)
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -41,8 +43,8 @@ export function ShareButton({ title }: { title: string }) {
     <button
       type="button"
       onClick={share}
-      title={copied ? 'Link copied' : 'Share'}
-      aria-label={copied ? 'Link copied' : 'Share this page'}
+      title={copied ? t('share.linkCopied') : t('share.share')}
+      aria-label={copied ? t('share.linkCopied') : t('share.sharePage')}
       className="hidden size-[38px] items-center justify-center rounded-lg border border-neutral-700 bg-bg-surface text-fg-secondary transition-colors hover:border-neutral-600 hover:text-fg-primary sm:flex"
     >
       {copied ? (

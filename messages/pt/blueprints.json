@@ -1,0 +1,124 @@
+{
+  "counts": {
+    "launches": "{count, plural, one {<strong>#</strong> lançamento} other {<strong>#</strong> lançamentos}}",
+    "steps": "{count, plural, one {# etapa} other {# etapas}}",
+    "variants": "{count, plural, one {# variante} other {# variantes}}"
+  },
+  "cta": {
+    "use": "Usar modelo",
+    "createVariant": "Criar variante",
+    "createVariantTitle": "Adaptar este modelo para outro lugar ou idioma",
+    "modify": "Modificar modelo"
+  },
+  "list": {
+    "searchPlaceholder": "Pesquisar modelos...",
+    "saveYourOwn": "Guardar o seu próprio modelo",
+    "newShort": "Novo",
+    "eyebrow": "Biblioteca de modelos",
+    "heading": "Comece a partir de um padrão <em>comprovado</em>.",
+    "intro": "Modelos são receitas de projeto testadas — nascidas num lugar, adaptadas para outros. Escolha um modelo que sirva ao seu contexto, ao seu país e ao seu idioma; nós montamos o resto em volta dele.",
+    "stats": {
+      "families": "Famílias",
+      "variants": "Variantes",
+      "launches": "Lançamentos"
+    },
+    "showing": "Mostrando <strong>{shown}</strong> de {total, plural, one {# modelo} other {# modelos}}"
+  },
+  "sort": {
+    "popular": "Mais usados",
+    "recent": "Adicionados há pouco",
+    "variants": "Mais variantes",
+    "az": "A–Z"
+  },
+  "filters": {
+    "title": "Filtros",
+    "show": "Mostrar filtros",
+    "hide": "Ocultar filtros",
+    "clearAll": "Limpar tudo",
+    "type": "Tipo",
+    "country": "País",
+    "language": "Idioma",
+    "searchCountriesPlaceholder": "Pesquisar países...",
+    "noMatches": "Nenhum resultado."
+  },
+  "chips": {
+    "search": "pesquisa",
+    "type": "tipo",
+    "country": "país",
+    "language": "idioma",
+    "remove": "Remover filtro"
+  },
+  "empty": {
+    "title": "Nenhum modelo corresponde.",
+    "body": "Alivie um filtro — ou guarde você mesmo o primeiro modelo deste nicho."
+  },
+  "card": {
+    "originalRecipe": "A receita original — adapte-a para a sua área.",
+    "availableIn": "Disponível em",
+    "localeNotSet": "Localidade não definida"
+  },
+  "variants": {
+    "original": "original"
+  },
+  "steps": {
+    "orderOfTotal": "Etapa {order} de {total}",
+    "estimatedHours": "~{hours}h"
+  },
+  "detail": {
+    "breadcrumbRoot": "Modelos",
+    "variantBadge": "Variante",
+    "createdBy": "Criado por <author>{name}</author>",
+    "someone": "alguém",
+    "estimatedTotal": "~{hours}h estimadas",
+    "aboutEyebrow": "Sobre este modelo",
+    "aboutHeading": "O que você vai montar.",
+    "planEyebrow": "O plano",
+    "stepsHeading": "{count, plural, one {# etapa} other {# etapas}} para entregar isto.",
+    "noSteps": "Este modelo ainda não tem etapas.",
+    "family": "Família",
+    "detailsTitle": "Detalhes",
+    "type": "Tipo",
+    "country": "País",
+    "language": "Idioma",
+    "projectsForked": "Projetos adaptados",
+    "notSet": "Não definido",
+    "any": "Qualquer"
+  },
+  "edit": {
+    "breadcrumbModify": "Modificar",
+    "backToBlueprint": "Voltar ao modelo",
+    "modifying": "Modificando",
+    "blueprintBadge": "Modelo",
+    "untitledBlueprint": "Modelo sem título",
+    "basics": {
+      "eyebrow": "O essencial",
+      "title": "O que é este modelo?",
+      "desc": "Duas frases chegam para descrever o padrão. Você pode acrescentar mais detalhes depois.",
+      "titleLabel": "Título",
+      "titlePlaceholder": "ex.: Repair Café",
+      "descriptionLabel": "Descrição",
+      "descriptionHelp": "O primeiro parágrafo é o que aparece no cartão do modelo.",
+      "descriptionPlaceholder": "Que problema este padrão resolve, e como é pô-lo em prática?",
+      "projectTypeLabel": "Tipo de projeto",
+      "noneOption": "— nenhum —"
+    },
+    "locale": {
+      "eyebrow": "Localidade",
+      "title": "Onde e em que idioma?",
+      "desc": "Os projetos criados a partir deste modelo herdam estas etiquetas por padrão. Uma variante precisa declarar pelo menos o país ou o idioma.",
+      "countryLabel": "País (opcional, exceto para variantes)",
+      "languageLabel": "Idioma de trabalho (opcional, exceto para variantes)",
+      "familyLabel": "Família",
+      "familyHelpVariant": "Este modelo é hoje uma variante da família abaixo. Escolha “Independente” para promovê-lo a raiz.",
+      "familyHelpRoot": "Opcional. Se você está adaptando um padrão existente, ligue-o à raiz original para os dois aparecerem juntos como uma família.",
+      "standaloneOption": "Independente (sem original)",
+      "hasVariantsNotice": "Este modelo já tem <strong>{count, plural, one {# variante} other {# variantes}}</strong> próprias, por isso continua a ser a raiz da família."
+    },
+    "steps": {
+      "eyebrow": "O plano",
+      "title": "Etapas para entregar o padrão.",
+      "desc": "Quem adaptar este modelo vai começar com estas etapas. Edite, reordene ou remova conforme necessário."
+    },
+    "saveChanges": "Guardar alterações"
+  }
+}

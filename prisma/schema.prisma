@@ -52,26 +52,24 @@ enum ProjectStatus {
   completed
 }
 
+// Maintained by the system: joining/leaving a step moves it between open and
+// in_progress; completed is set by completeStepAction. "Needs help" is the
+// orthogonal ProjectStep.helpWanted flag, not a status.
 enum StepStatus {
   open
-  defining
   in_progress
-  needs_help
   completed
 }
 
 enum ContributionStatus {
   pending
   active
-  completed
   withdrawn
 }
 
 enum ContributionRole {
   lead
   contributor
-  advisor
-  observer
 }
 
 enum UpdateVisibility {
@@ -107,6 +105,10 @@ model User {
   bio        String?
   location   String?
   timezone   String?
+  // Preferred UI language (ISO 639-1). Null = no explicit choice; the
+  // request falls back to cookie → Accept-Language → en. Set only by
+  // setLocaleAction — the Clerk webhook never touches it (like `role`).
+  locale     String?
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
@@ -296,7 +298,6 @@ model BlueprintStep {
   description   String?
   order         Int
   estimatedHrs  Int?       @map("estimated_hrs")
-  statusDefault StepStatus @default(open) @map("status_default")
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
 

@@ -1,0 +1,70 @@
+{
+  "chrome": {
+    "eyebrow": "Rechtliches",
+    "title": "Nutzungsbedingungen",
+    "lastUpdated": "Zuletzt aktualisiert: {date}"
+  },
+  "sections": {
+    "shortVersion": {
+      "title": "Die Kurzfassung",
+      "p1": "The Superhero verbindet Menschen mit Klima- und Nachhaltigkeitsprojekten. Du behältst die Rechte an dem, was du veröffentlichst, du bist verantwortlich für das, was du veröffentlichst und offline tust, geht anständig miteinander um — und wir können Inhalte oder Konten entfernen, die gegen diese Regeln verstoßen. Die lange Fassung folgt.",
+      "englishPrevails": "Diese Bedingungen sind der Einfachheit halber in mehreren Sprachen verfügbar — weicht eine Übersetzung von der englischen Fassung ab, gilt die englische Fassung."
+    },
+    "agreement": {
+      "title": "1. Wer wir sind und wozu du dich verpflichtest",
+      "p1": "The Superhero (thesuperhe.ro) wird von der Schweiz aus betrieben. Mit dem Erstellen eines Kontos oder der Nutzung der Plattform stimmst du diesen Bedingungen und unserer <link>Datenschutzerklärung</link> zu. Wenn du damit nicht einverstanden bist, nutze die Plattform nicht."
+    },
+    "account": {
+      "title": "2. Dein Konto",
+      "p1": "Du musst mindestens 16 Jahre alt sein, um The Superhero zu nutzen. Verwende deine echte Identität, halte deine Zugangsdaten geheim und teile oder verkaufe dein Konto nicht. Du bist verantwortlich für das, was darunter geschieht. Du kannst dein Konto jederzeit in deinen Profileinstellungen löschen."
+    },
+    "platform": {
+      "title": "3. Was die Plattform ist (und was nicht)",
+      "p1": "Wir stellen die Infrastruktur bereit: Projektseiten, Blaupausen, Schritte, Updates, Nachrichten und den Abgleich von Fähigkeiten. Die Projekte selbst werden von ihren Projektleitungen erstellt und geführt, nicht von uns. Wir prüfen weder Projekte noch ihre Organisatorinnen und Organisatoren, wir garantieren nicht, dass ein Projekt stattfindet oder gelingt, und der Beitritt zu einem Projekt begründet eine Vereinbarung zwischen dir und der Gemeinschaft dieses Projekts — nicht mit uns.",
+      "p2": "Viele Projekte umfassen Aktivitäten in der realen Welt — Pflanzen, Reparieren, das Organisieren von Veranstaltungen. Beurteile sie mit demselben Urteilsvermögen wie jede andere Freiwilligentätigkeit: Deine Sicherheit, Versicherungen, Genehmigungen und rechtlichen Pflichten für Offline-Aktivitäten sind Sache zwischen dir und dem Projekt, dem du beitrittst, und bleiben deine eigene Verantwortung."
+    },
+    "content": {
+      "title": "4. Deine Inhalte",
+      "p1": "Was du hier erstellst, gehört dir — Projektbeschreibungen, Blaupausen, Schritte, Updates und Nachrichten. Damit die Plattform funktionieren kann, räumst du uns eine nicht-exklusive, weltweite Lizenz ein, deine Inhalte innerhalb des Dienstes zu hosten, anzuzeigen und zu verbreiten. Inhalte, die du als öffentlich markierst, sind für alle im Internet sichtbar.",
+      "p2": "Blaupausen sind ein Sonderfall: Ihr ganzer Zweck ist die Wiederverwendung. Mit der Veröffentlichung einer Blaupause erlaubst du anderen Mitgliedern, sie auf der Plattform zu übernehmen, anzupassen und zu übersetzen, wobei das Original als Familienwurzel genannt wird.",
+      "p3": "Veröffentliche nur, wozu du berechtigt bist. Wenn Inhalte, die du hochlädst, die Rechte anderer verletzen, liegt das bei dir — und wir entfernen sie, sobald wir davon erfahren."
+    },
+    "acceptableUse": {
+      "title": "5. Zulässige Nutzung",
+      "intro": "Nutze die Plattform nicht, um:",
+      "items": {
+        "unlawful": "Inhalte zu veröffentlichen, die rechtswidrig, verleumderisch, belästigend, hasserfüllt oder irreführend sind;",
+        "impersonate": "dich als jemand anderes auszugeben oder ein Projekt oder eine Zugehörigkeit falsch darzustellen;",
+        "spam": "Mitglieder mit Nachrichten, Updates oder Beitrittsanfragen zuzuspammen;",
+        "advertise": "für sachfremde kommerzielle Dienste zu werben;",
+        "scrape": "die Plattform auszulesen (Scraping), ihre Sicherheit zu testen oder ihren Betrieb zu stören (Ratenbegrenzungen gibt es aus gutem Grund);",
+        "collect": "personenbezogene Daten anderer Mitglieder über das hinaus zu sammeln, was die Zusammenarbeit erfordert."
+      }
+    },
+    "moderation": {
+      "title": "6. Moderation",
+      "p1": "Wir können Inhalte, Schritte, Projekte oder Blaupausen entfernen und Konten sperren oder kündigen, wenn gegen diese Bedingungen verstoßen wird oder das Gesetz es verlangt. Wir setzen diese Befugnis zurückhaltend und mit Augenmaß ein — die Plattform existiert, um Projekte möglich zu machen, nicht um sie zu überwachen. Projektleitungen moderieren zusätzlich ihre eigenen Projekte (Mitglieder aufnehmen, Schritte und Updates verwalten)."
+    },
+    "availability": {
+      "title": "7. Verfügbarkeit und Änderungen",
+      "p1": "Die Plattform wird „wie besehen“ und kostenlos bereitgestellt. Wir bemühen uns, sie verfügbar und fehlerfrei zu halten, gewährleisten aber keinen unterbrechungs- oder fehlerfreien Betrieb und können Funktionen ändern, aussetzen oder einstellen. Sollten wir die Plattform je ganz einstellen, geben wir angemessen Bescheid, damit du exportieren kannst, was dir wichtig ist."
+    },
+    "liability": {
+      "title": "8. Haftung",
+      "p1": "Soweit gesetzlich zulässig, haften wir nicht für indirekte Schäden, verlorene Daten, entgangenen Gewinn, die Inhalte anderer Mitglieder oder Ereignisse im Rahmen der realen Aktivitäten von Projekten. Nichts in diesen Bedingungen schließt die Haftung für Vorsatz oder grobe Fahrlässigkeit aus, oder eine sonstige Haftung, die nach Schweizer Recht nicht ausgeschlossen werden kann."
+    },
+    "termsChanges": {
+      "title": "9. Änderungen dieser Bedingungen",
+      "p1": "Wir können diese Bedingungen aktualisieren, wenn sich die Plattform weiterentwickelt. Das Datum oben zeigt dir, wann. Über wesentliche Änderungen informieren wir dich in der App; wenn du die Plattform danach weiter nutzt, akzeptierst du die neue Fassung."
+    },
+    "law": {
+      "title": "10. Anwendbares Recht",
+      "p1": "Diese Bedingungen unterliegen Schweizer Recht. Zuständig sind die Gerichte am Sitz des Betreibers in der Schweiz, vorbehaltlich zwingender Verbraucherschutz-Gerichtsstände, die für dich gelten."
+    }
+  },
+  "footer": {
+    "questions": "Fragen?",
+    "privacyLink": "Datenschutzerklärung",
+    "homeLink": "Zurück zur Startseite"
+  }
+}

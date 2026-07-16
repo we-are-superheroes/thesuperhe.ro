@@ -2,7 +2,9 @@
 
 import { useState, useMemo, useEffect, useTransition } from 'react'
 import Link from 'next/link'
+import { useLocale, useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { fmtAgo } from '@/lib/format'
 import {
   Bell,
   Check,
@@ -71,25 +73,46 @@ const ACTIONABLE_TYPES = new Set<NotificationType>(['project_join_request', 'inv
    Helpers
    ================================================================ */
 
-function fmtTime(ts: number, now: number): string {
-  const diff = now - ts
-  const mins = Math.floor(diff / 60_000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
-  const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
-  const days = Math.floor(hrs / 24)
-  if (days === 1) return 'yesterday'
-  if (days < 7) return `${days}d ago`
-  return `${Math.floor(days / 7)}w ago`
+type GroupKey = 'today' | 'yesterday' | 'week' | 'earlier'
+
+function groupOf(ts: number, now: number): GroupKey {
+  const days = Math.floor((now - ts) / (24 * 60 * 60 * 1000))
+  if (days < 1) return 'today'
+  if (days < 2) return 'yesterday'
+  if (days < 7) return 'week'
+  return 'earlier'
 }
 
-function groupOf(ts: number, now: number): string {
-  const days = Math.floor((now - ts) / (24 * 60 * 60 * 1000))
-  if (days < 1) return 'Today'
-  if (days < 2) return 'Yesterday'
-  if (days < 7) return 'Earlier this week'
-  return 'Earlier'
+type NotificationsT = ReturnType<typeof useTranslations<'notifications'>>
+
+/**
+ * Resolve a notification's title or body in the reader's language.
+ * Rows written since the i18n migration carry `data.i18n` (message key +
+ * params); older rows only have the stored English snapshot. Any malformed
+ * or unknown payload falls back to that snapshot — a bad row must never
+ * crash the page.
+ */
+function i18nText(
+  t: NotificationsT,
+  data: Record<string, unknown> | null,
+  group: 'titles' | 'bodies',
+  fallback: string | null,
+): string | null {
+  const i18n = data?.i18n
+  if (!i18n || typeof i18n !== 'object') return fallback
+  const payload = i18n as { key?: unknown; params?: unknown; bodyKey?: unknown; bodyParams?: unknown }
+  const key = group === 'titles' ? payload.key : payload.bodyKey
+  const params = group === 'titles' ? payload.params : payload.bodyParams
+  if (typeof key !== 'string') return fallback
+  // Rows carry arbitrary strings while t() expects the typed key union —
+  // this cast is contained here, guarded by the t.has() membership check.
+  const messageKey = `${group}.${key}` as Parameters<NotificationsT>[0]
+  try {
+    if (!t.has(messageKey)) return fallback
+    return t(messageKey, (params ?? {}) as Record<string, string | number>)
+  } catch {
+    return fallback
+  }
 }
 
 /* ================================================================
@@ -97,6 +120,7 @@ function groupOf(ts: number, now: number): string {
    ================================================================ */
 
 export function NotificationsClient({ initialItems }: { initialItems: NotificationItem[] }) {
+  const t = useTranslations('notifications')
   const [items, setItems] = useState(initialItems)
   const [tab, setTab] = useState<Tab>('all')
   const [now, setNow] = useState(0)
@@ -185,10 +209,12 @@ export function NotificationsClient({ initialItems }: { initialItems: Notificati
         <header className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <h1 className="mb-3 font-display text-[clamp(36px,6vw,64px)] font-normal leading-none tracking-tight">
-              Your <em className="italic text-amber-500">notifications</em>.
+              {t.rich('ui.header.title', {
+                em: (chunks) => <em className="italic text-amber-500">{chunks}</em>,
+              })}
             </h1>
             <p className="max-w-[540px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-              The things that need your eyes — and a few you’ll be glad to hear about.
+              {t('ui.header.subtitle')}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -199,29 +225,29 @@ export function NotificationsClient({ initialItems }: { initialItems: Notificati
               className="inline-flex items-center gap-1.5 rounded-md border-none bg-transparent px-3 py-2 text-sm text-fg-secondary transition-colors hover:text-amber-500 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:text-fg-secondary"
             >
               <Check className="size-3.5" strokeWidth={2.5} />
-              Mark all read
+              {t('ui.header.markAllRead')}
             </button>
           </div>
         </header>
 
         {/* Tabs */}
         <div className="flex flex-wrap gap-1 border-b border-white/[0.08]">
-          <TabButton active={tab === 'all'} label="All" count={counts.all} onClick={() => setTab('all')} />
+          <TabButton active={tab === 'all'} label={t('ui.tabs.all')} count={counts.all} onClick={() => setTab('all')} />
           <TabButton
             active={tab === 'unread'}
-            label="Unread"
+            label={t('ui.tabs.unread')}
             count={counts.unread}
             onClick={() => setTab('unread')}
           />
           <TabButton
             active={tab === 'action'}
-            label="Needs action"
+            label={t('ui.tabs.action')}
             count={counts.action}
             onClick={() => setTab('action')}
           />
           <TabButton
             active={tab === 'mention'}
-            label="Mentions"
+            label={t('ui.tabs.mention')}
             count={counts.mention}
             onClick={() => setTab('mention')}
           />
@@ -300,7 +326,8 @@ function Feed({
   onAccept: (id: string) => void
   onDecline: (id: string) => void
 }) {
-  const buckets: Array<{ label: string; items: NotificationItem[] }> = []
+  const t = useTranslations('notifications')
+  const buckets: Array<{ label: GroupKey; items: NotificationItem[] }> = []
   for (const it of items) {
     const refNow = now > 0 ? now : (items[0]?.ts ?? 0) + 1
     const label = groupOf(it.ts, refNow)
@@ -314,7 +341,7 @@ function Feed({
       {buckets.map((b) => (
         <div key={b.label} className="flex flex-col gap-2">
           <div className="flex items-center gap-3 py-3 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
-            <span>{b.label}</span>
+            <span>{t(`ui.groups.${b.label}`)}</span>
             <span className="h-px flex-1 bg-white/[0.08]" />
           </div>
           <div className="flex flex-col gap-2">
@@ -396,10 +423,17 @@ function NotificationRow({
   onAccept: (id: string) => void
   onDecline: (id: string) => void
 }) {
+  const locale = useLocale()
+  const t = useTranslations('notifications')
   const Icon = ICON_FOR[item.type]
   const unread = item.readAt === null
   const actionable = ACTIONABLE_TYPES.has(item.type) && item.resolvedAt === null
   const resolution = (item.data as { resolution?: string } | null)?.resolution
+
+  // Reader-language copy where the row carries an i18n payload; the stored
+  // English snapshot otherwise (legacy rows, unknown keys).
+  const title = i18nText(t, item.data, 'titles', item.title) ?? item.title
+  const body = i18nText(t, item.data, 'bodies', item.body)
 
   const handleRowClick = () => {
     if (unread) onMarkRead(item.id)
@@ -435,11 +469,11 @@ function NotificationRow({
       </div>
 
       <div className="flex min-w-0 flex-col gap-2">
-        <RowTitle item={item} />
-        {item.body && (
+        <RowTitle item={item} title={title} />
+        {body && (
           <blockquote className="rounded-r-md border-l-2 border-neutral-700 bg-bg-base px-4 py-3 text-sm italic leading-relaxed text-fg-secondary">
             <span className="text-fg-tertiary">“</span>
-            {item.body}
+            {body}
             <span className="text-fg-tertiary">”</span>
           </blockquote>
         )}
@@ -456,7 +490,7 @@ function NotificationRow({
               className="inline-flex items-center gap-1.5 rounded-md border border-green-500/40 bg-green-500/[0.12] px-3 py-1.5 text-xs font-medium text-green-300 transition-colors hover:bg-green-500/[0.18]"
             >
               <Check className="size-3" strokeWidth={2.5} />
-              Welcome them
+              {t('ui.joinRequest.accept')}
             </button>
             <button
               type="button"
@@ -467,7 +501,7 @@ function NotificationRow({
               className="inline-flex items-center gap-1.5 rounded-md border border-red-500/30 bg-bg-base px-3 py-1.5 text-xs font-medium text-red-300 transition-colors hover:border-red-500 hover:bg-red-500/[0.12]"
             >
               <X className="size-3" strokeWidth={2.5} />
-              Not a fit
+              {t('ui.joinRequest.decline')}
             </button>
           </div>
         )}
@@ -483,12 +517,12 @@ function NotificationRow({
             {resolution === 'accepted' ? (
               <>
                 <Check className="size-3" strokeWidth={2.5} />
-                Welcomed to the project.
+                {t('ui.resolution.accepted')}
               </>
             ) : (
               <>
                 <X className="size-3" strokeWidth={2.5} />
-                Politely declined.
+                {t('ui.resolution.declined')}
               </>
             )}
           </div>
@@ -505,7 +539,7 @@ function NotificationRow({
                 onClick={(e) => e.stopPropagation()}
                 className="inline-flex w-fit items-center gap-1 text-xs font-medium text-amber-500 hover:underline"
               >
-                Open conversation
+                {t('ui.links.openConversation')}
                 <ArrowRight className="size-3" strokeWidth={2.5} />
               </Link>
             )
@@ -524,7 +558,7 @@ function NotificationRow({
                 onClick={(e) => e.stopPropagation()}
                 className="inline-flex w-fit items-center gap-1 text-xs font-medium text-amber-500 hover:underline"
               >
-                Open the organisation page
+                {t('ui.links.openOrgPage')}
                 <ArrowRight className="size-3" strokeWidth={2.5} />
               </Link>
             )
@@ -538,7 +572,7 @@ function NotificationRow({
             className="inline-flex w-fit items-center gap-1 text-xs font-medium text-amber-500 hover:underline"
           >
             <span className="size-[7px] rounded-full" style={{ background: item.project.tint }} />
-            Open {item.project.name}
+            {t('ui.links.openProject', { name: item.project.name })}
             <ArrowRight className="size-3" strokeWidth={2.5} />
           </Link>
         )}
@@ -546,16 +580,17 @@ function NotificationRow({
 
       <div className="flex flex-col items-end gap-2 whitespace-nowrap">
         <span className="text-xs tabular-nums text-fg-tertiary">
-          {now > 0 ? fmtTime(item.ts, now) : ' '}
+          {now > 0 ? fmtAgo(item.ts, locale, now) : ' '}
         </span>
       </div>
     </article>
   )
 }
 
-function RowTitle({ item }: { item: NotificationItem }) {
-  // The title was rendered at write time as plain text. If we have an actor,
-  // bolt their avatar pill in front of the line and link it to their profile.
+function RowTitle({ item, title }: { item: NotificationItem; title: string }) {
+  // The title arrives pre-resolved (reader language when the row carries an
+  // i18n payload, stored English otherwise). If we have an actor, bolt their
+  // avatar pill in front of the line and link it to their profile.
   if (item.actor) {
     return (
       <div className="flex flex-wrap items-center gap-2 text-sm text-fg-secondary">
@@ -571,11 +606,11 @@ function RowTitle({ item }: { item: NotificationItem }) {
             {item.actor.initials}
           </span>
         </Link>
-        <span>{item.title}</span>
+        <span>{title}</span>
       </div>
     )
   }
-  return <div className="text-sm text-fg-primary">{item.title}</div>
+  return <div className="text-sm text-fg-primary">{title}</div>
 }
 
 /* ================================================================
@@ -583,21 +618,21 @@ function RowTitle({ item }: { item: NotificationItem }) {
    ================================================================ */
 
 function EmptyState({ tab }: { tab: Tab }) {
+  const t = useTranslations('notifications')
   let message: string
   let subtitle: string
   if (tab === 'unread') {
-    message = "Nothing unread. You're all caught up."
-    subtitle = 'New activity will appear here as it happens.'
+    message = t('ui.empty.unreadTitle')
+    subtitle = t('ui.empty.unreadSubtitle')
   } else if (tab === 'mention') {
-    message = 'No mentions yet.'
-    subtitle = 'Mentions from project boards and threads will land here.'
+    message = t('ui.empty.mentionTitle')
+    subtitle = t('ui.empty.mentionSubtitle')
   } else if (tab === 'action') {
-    message = 'Nothing waiting on you.'
-    subtitle = 'Join requests and invites will appear here when they need a decision.'
+    message = t('ui.empty.actionTitle')
+    subtitle = t('ui.empty.actionSubtitle')
   } else {
-    message = 'Nothing here.'
-    subtitle =
-      'When you join projects and claim steps, updates from your team show up here.'
+    message = t('ui.empty.allTitle')
+    subtitle = t('ui.empty.allSubtitle')
   }
 
   return (

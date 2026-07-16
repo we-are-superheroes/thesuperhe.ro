@@ -1,0 +1,70 @@
+{
+  "chrome": {
+    "eyebrow": "Legal",
+    "title": "Termos de serviço",
+    "lastUpdated": "Última atualização: {date}"
+  },
+  "sections": {
+    "shortVersion": {
+      "title": "A versão curta",
+      "p1": "O The Superhero liga pessoas a projetos de clima e sustentabilidade. Você mantém a propriedade do que publica, é responsável pelo que publica e pelo que faz fora da plataforma, deve tratar os outros com respeito, e nós podemos remover conteúdo ou contas que violem estas regras. A versão longa segue abaixo.",
+      "englishPrevails": "Estes termos estão disponíveis em vários idiomas por conveniência — se alguma tradução divergir da versão em inglês, prevalece a versão em inglês."
+    },
+    "agreement": {
+      "title": "1. Quem somos e com o que você está a concordar",
+      "p1": "The Superhero (thesuperhe.ro) é operado a partir da Suíça. Ao criar uma conta ou usar a plataforma, você concorda com estes termos e com a nossa <link>política de privacidade</link>. Se você não concordar com eles, não use a plataforma."
+    },
+    "account": {
+      "title": "2. A sua conta",
+      "p1": "Você precisa ter pelo menos 16 anos para usar o The Superhero. Use a sua identidade real, guarde as suas credenciais de acesso só para você e não partilhe nem venda a sua conta. Você é responsável pelo que acontece nela. Você pode apagar a sua conta a qualquer momento nas configurações do perfil."
+    },
+    "platform": {
+      "title": "3. O que a plataforma é (e não é)",
+      "p1": "Nós fornecemos a infraestrutura: páginas de projeto, modelos, etapas, atualizações, mensagens e correspondência de habilidades. Os projetos em si são criados e conduzidos pelos seus responsáveis, não por nós. Não verificamos os projetos nem os seus organizadores, não garantimos que um projeto aconteça ou tenha sucesso, e entrar num projeto cria um acordo entre você e a comunidade desse projeto — não connosco.",
+      "p2": "Muitos projetos envolvem atividades no mundo real — plantar, reparar, organizar eventos. Avalie-os com o mesmo juízo que você aplicaria a qualquer atividade voluntária: a sua segurança, seguros, licenças e obrigações legais nas atividades fora da plataforma são assunto entre você e o projeto em que entra, e permanecem da sua responsabilidade."
+    },
+    "content": {
+      "title": "4. O seu conteúdo",
+      "p1": "Você é dono do que cria aqui — descrições de projeto, modelos, etapas, atualizações e mensagens. Para que a plataforma possa funcionar, você concede-nos uma licença não exclusiva e mundial para alojar, exibir e distribuir o seu conteúdo dentro do serviço. O conteúdo que você marca como público é visível para qualquer pessoa na internet.",
+      "p2": "Os modelos são especiais: todo o seu propósito é a reutilização. Ao publicar um modelo, você permite que outros membros o adaptem e traduzam na plataforma, com o original creditado como raiz da família.",
+      "p3": "Publique apenas o que você tem o direito de publicar. Se o conteúdo que você envia violar os direitos de outra pessoa, a responsabilidade é sua — e nós o removeremos assim que tomarmos conhecimento."
+    },
+    "acceptableUse": {
+      "title": "5. Uso aceitável",
+      "intro": "Não use a plataforma para:",
+      "items": {
+        "unlawful": "publicar conteúdo ilegal, difamatório, de assédio, de ódio ou enganoso;",
+        "impersonate": "fazer-se passar por alguém ou deturpar um projeto ou afiliação;",
+        "spam": "enviar spam a membros por mensagens, atualizações ou pedidos de entrada;",
+        "advertise": "anunciar serviços comerciais sem relação com a plataforma;",
+        "scrape": "extrair dados da plataforma, sondar a sua segurança ou interferir no seu funcionamento (os limites de uso existem por uma razão);",
+        "collect": "recolher dados pessoais de outros membros para além do que a colaboração exige."
+      }
+    },
+    "moderation": {
+      "title": "6. Moderação",
+      "p1": "Podemos remover conteúdo, etapas, projetos ou modelos, e suspender ou encerrar contas, quando estes termos forem violados ou quando a lei o exigir. Usaremos esse poder com moderação e com juízo — a plataforma existe para fazer os projetos acontecer, não para policiá-los. Os responsáveis pelos projetos moderam adicionalmente os seus próprios projetos (aceitando membros, gerindo etapas e atualizações)."
+    },
+    "availability": {
+      "title": "7. Disponibilidade e alterações",
+      "p1": "A plataforma é fornecida “tal como está” e de forma gratuita. Trabalhamos para a manter disponível e correta, mas não garantimos um funcionamento ininterrupto ou livre de erros, e podemos alterar, suspender ou descontinuar funcionalidades. Se algum dia descontinuarmos a plataforma por completo, daremos um aviso razoável para que você possa exportar o que é importante para você."
+    },
+    "liability": {
+      "title": "8. Responsabilidade",
+      "p1": "Na medida permitida pela lei, não somos responsáveis por danos indiretos, perda de dados, lucros cessantes, pelo conteúdo publicado por outros membros, nem por nada do que aconteça nas atividades dos projetos no mundo real. Nada nestes termos exclui a responsabilidade por dolo ou negligência grave, nem qualquer outra responsabilidade que não possa ser excluída ao abrigo da lei suíça."
+    },
+    "termsChanges": {
+      "title": "9. Alterações a estes termos",
+      "p1": "Podemos atualizar estes termos à medida que a plataforma evolui. A data no topo indica quando. Para alterações relevantes, avisaremos você dentro da aplicação, e continuar a usar a plataforma depois disso significa que você aceita a nova versão."
+    },
+    "law": {
+      "title": "10. Lei aplicável",
+      "p1": "Estes termos regem-se pela lei suíça. Os tribunais da sede do operador na Suíça têm jurisdição, sem prejuízo de quaisquer foros imperativos de proteção do consumidor que se apliquem a você."
+    }
+  },
+  "footer": {
+    "questions": "Perguntas?",
+    "privacyLink": "Política de privacidade",
+    "homeLink": "Voltar à página inicial"
+  }
+}

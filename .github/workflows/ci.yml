@@ -34,6 +34,9 @@ jobs:
       - name: Lint
         run: npx eslint . --max-warnings 0
 
+      - name: Translation freshness
+        run: npm run translate:check
+
       - name: Test
         run: npm test --if-present
 

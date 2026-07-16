@@ -1,0 +1,70 @@
+{
+  "sidebar": {
+    "primaryNavAriaLabel": "Основная навигация",
+    "closeMenuAriaLabel": "Закрыть меню",
+    "expandTitle": "Развернуть боковую панель",
+    "collapseTitle": "Свернуть боковую панель",
+    "resizeAriaLabel": "Изменить ширину боковой панели",
+    "groups": {
+      "overview": "Обзор",
+      "discover": "Поиск",
+      "account": "Аккаунт"
+    },
+    "items": {
+      "dashboard": "Моя панель",
+      "myProjects": "Мои проекты",
+      "mySteps": "Мои шаги",
+      "messages": "Сообщения",
+      "notifications": "Уведомления",
+      "browseProjects": "Смотреть проекты",
+      "skillMatches": "Подходящие навыки",
+      "blueprints": "Шаблоны",
+      "organisations": "Организации",
+      "profile": "Профиль"
+    },
+    "accountMenuAriaLabel": "Меню аккаунта",
+    "signOut": "Выйти",
+    "accountFallback": "Аккаунт",
+    "userFallbackName": "Герой",
+    "metaContributions": "{count, plural, one {# проект} few {# проекта} many {# проектов} other {# проекта}} · {hours} ч",
+    "metaNewHere": "Новичок · 0 ч",
+    "footer": {
+      "home": "Главная",
+      "privacy": "Конфиденциальность",
+      "terms": "Условия"
+    }
+  },
+  "shell": {
+    "openMenuAriaLabel": "Открыть меню",
+    "closeMenuAriaLabel": "Закрыть меню"
+  },
+  "publicNav": {
+    "browseProjects": "Смотреть проекты",
+    "browseBlueprints": "Смотреть шаблоны",
+    "howItWorks": "Как это работает",
+    "signIn": "Войти",
+    "getStarted": "Начать"
+  },
+  "themePicker": {
+    "themes": {
+      "dark": {
+        "name": "Полночь",
+        "badge": "По умолчанию",
+        "desc": "Исходная тема: глубокий синий и янтарный."
+      },
+      "daylight": {
+        "name": "Дневной свет",
+        "desc": "Прохладный, чистый белый и серо-голубой."
+      },
+      "paper": {
+        "name": "Бумага",
+        "desc": "Тёплая слоновая кость, янтарные акценты."
+      },
+      "contrast": {
+        "name": "Высокий контраст",
+        "badge": "A11Y",
+        "desc": "Максимальная читаемость — текст по WCAG AAA и заметный фокус."
+      }
+    }
+  }
+}

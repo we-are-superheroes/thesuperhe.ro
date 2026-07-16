@@ -32,8 +32,14 @@ describe('rateLimit', () => {
     expect(rateLimit(key, 3, 60_000).ok).toBe(true)
   })
 
-  it('produces friendly error copy', () => {
-    expect(rateLimitError({ ok: false, retryAfterSec: 12 })).toContain('12s')
-    expect(rateLimitError({ ok: false, retryAfterSec: 0 })).toContain('1s')
+  it('produces a rateLimited descriptor with a floor of 1 second', () => {
+    expect(rateLimitError({ ok: false, retryAfterSec: 12 })).toEqual({
+      key: 'common.rateLimited',
+      params: { seconds: 12 },
+    })
+    expect(rateLimitError({ ok: false, retryAfterSec: 0 })).toEqual({
+      key: 'common.rateLimited',
+      params: { seconds: 1 },
+    })
   })
 })

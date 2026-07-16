@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useTransition, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { ArrowRight, ChevronDown, Check, LogIn, Pencil } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { joinStepAction, leaveStepAction } from '@/app/(platform)/projects/[id]/actions'
@@ -30,12 +31,6 @@ import {
    ================================================================ */
 
 export type StepStatusKey = LiveStepStatus
-
-const STATUS_LABEL: Record<StepStatusKey, string> = {
-  open: 'Open',
-  in_progress: 'In progress',
-  completed: 'Completed',
-}
 
 type FilterKey = 'all' | 'needs_help' | StepStatusKey
 
@@ -84,6 +79,7 @@ export function ProjectStepsList({
   isMember: boolean
   isLead: boolean
 }) {
+  const t = useTranslations('steps')
   const [filter, setFilter] = useState<FilterKey>('all')
   const [showAll, setShowAll] = useState(false)
   // Optimistic local overrides for status + help flag, ahead of the
@@ -143,31 +139,31 @@ export function ProjectStepsList({
       <div className="mb-5 flex flex-wrap gap-3">
         <FilterChip
           active={filter === 'all'}
-          label="All"
+          label={t('filter.all')}
           count={liveCounts.all}
           onClick={() => setFilter('all')}
         />
         <FilterChip
           active={filter === 'needs_help'}
-          label="Needs help"
+          label={t('needsHelp')}
           count={liveCounts.needs_help}
           onClick={() => setFilter('needs_help')}
         />
         <FilterChip
           active={filter === 'in_progress'}
-          label="In progress"
+          label={t('status.in_progress')}
           count={liveCounts.in_progress}
           onClick={() => setFilter('in_progress')}
         />
         <FilterChip
           active={filter === 'open'}
-          label="Open"
+          label={t('status.open')}
           count={liveCounts.open}
           onClick={() => setFilter('open')}
         />
         <FilterChip
           active={filter === 'completed'}
-          label="Completed"
+          label={t('status.completed')}
           count={liveCounts.completed}
           onClick={() => setFilter('completed')}
         />
@@ -177,7 +173,7 @@ export function ProjectStepsList({
       <div className="flex flex-col gap-3">
         {visible.length === 0 ? (
           <div className="rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-bg-surface px-8 py-12 text-center text-sm text-fg-tertiary">
-            No steps in this state.
+            {t('list.empty')}
           </div>
         ) : (
           visible.map((step) => (
@@ -202,7 +198,7 @@ export function ProjectStepsList({
             onClick={() => setShowAll(true)}
             className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-dashed border-neutral-700 bg-bg-surface px-5 py-5 text-sm text-fg-tertiary transition-colors hover:border-neutral-600 hover:text-fg-primary"
           >
-            Show all {filtered.length} step{filtered.length === 1 ? '' : 's'}
+            {t('list.showAll', { count: filtered.length })}
             <ChevronDown className="size-3.5" strokeWidth={2.5} />
           </button>
         )}
@@ -275,6 +271,7 @@ function StepCard({
   onStatusChange: (next: StepStatusKey) => void
   onHelpChange: (next: boolean) => void
 }) {
+  const t = useTranslations('steps')
   const [pending, startTransition] = useTransition()
   const [error, setError] = useState<string | null>(null)
 
@@ -311,8 +308,10 @@ function StepCard({
       <div className="flex items-center gap-4">
         <div className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="font-display text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
-            Step {step.order} of {step.totalSteps}
-            {step.estimatedHrs != null && <> · ~{step.estimatedHrs}h</>}
+            {t('card.orderOfTotal', { order: step.order, total: step.totalSteps })}
+            {step.estimatedHrs != null && (
+              <> · {t('card.estimatedHours', { hours: step.estimatedHrs })}</>
+            )}
           </span>
           <span
             className={cn(
@@ -327,7 +326,7 @@ function StepCard({
           {isNeedsHelp && (
             <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-amber-500/50 bg-amber-500/[0.14] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-amber-400 shadow-glow-amber">
               <HelpGlyph />
-              Needs help
+              {t('needsHelp')}
             </span>
           )}
           <span
@@ -337,7 +336,7 @@ function StepCard({
             )}
           >
             <StatusGlyph status={status} />
-            {STATUS_LABEL[status]}
+            {t(`status.${status}`)}
           </span>
         </div>
       </div>
@@ -362,7 +361,7 @@ function StepCard({
               ))
             ) : (
               <span className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-1 text-xs text-fg-secondary">
-                No skills required
+                {t('card.noSkills')}
               </span>
             )}
           </div>
@@ -430,6 +429,7 @@ function JoinersStack({
   joiners: StepJoiner[]
   isLead: boolean
 }) {
+  const t = useTranslations('steps')
   // Local copy so the lead's coordinator change can be reflected
   // optimistically. The server round-trips on the next router.refresh();
   // re-sync is adjusted during render when the prop identity changes.
@@ -464,7 +464,7 @@ function JoinersStack({
   const coordinator = localJoiners.find((j) => j.isCoordinator)
 
   const titleParts = localJoiners.map((j) =>
-    j.isCoordinator ? `${j.name} (coordinator)` : j.name,
+    j.isCoordinator ? t('joiners.coordinatorName', { name: j.name }) : j.name,
   )
 
   const pickCoordinator = (nextId: string | null) => {
@@ -508,7 +508,9 @@ function JoinersStack({
       </div>
       {coordinator && (
         <span className="text-xs text-fg-tertiary">
-          {coordinator.isMe ? 'You coordinate' : `${firstName(coordinator.name)} coordinates`}
+          {coordinator.isMe
+            ? t('joiners.youCoordinate')
+            : t('joiners.nameCoordinates', { name: firstName(coordinator.name) })}
         </span>
       )}
     </>
@@ -532,7 +534,7 @@ function JoinersStack({
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
-        title="Change coordinator"
+        title={t('joiners.changeCoordinator')}
         className={cn(
           'flex items-center gap-2 rounded-full px-1.5 py-0.5 transition-colors',
           'hover:bg-white/[0.04]',
@@ -550,7 +552,7 @@ function JoinersStack({
           className="absolute right-0 top-full z-40 mt-2 flex w-[240px] flex-col gap-0.5 rounded-xl border border-neutral-700 bg-bg-surface-2 p-1.5 shadow-lg"
         >
           <div className="px-2 pb-1 pt-1 text-[10px] font-semibold uppercase tracking-widest text-fg-tertiary">
-            Step coordinator
+            {t('joiners.menuTitle')}
           </div>
           {localJoiners.map((j) => (
             <button
@@ -592,7 +594,7 @@ function JoinersStack({
               !coordinator && 'bg-amber-500/[0.06]',
             )}
           >
-            No coordinator
+            {t('joiners.noCoordinator')}
             {!coordinator && (
               <Check className="ml-auto size-3.5 text-amber-500" strokeWidth={2.5} />
             )}
@@ -694,6 +696,7 @@ function StepAction({
   onStatusChange: (next: StepStatusKey) => void
   onHelpChange: (next: boolean) => void
 }) {
+  const t = useTranslations('steps')
   const [ctrlPending, startCtrl] = useTransition()
   const [ctrlError, setCtrlError] = useState<string | null>(null)
   const busy = pending || ctrlPending
@@ -747,14 +750,15 @@ function StepAction({
 
   // Signed out: a completed step needs no call to action.
   if (!isSignedIn) {
-    if (isDone) return <span className="text-sm text-fg-tertiary">Done</span>
+    if (isDone)
+      return <span className="text-sm text-fg-tertiary">{t('action.done')}</span>
     return (
       <Link
         href="/sign-in"
         className="inline-flex items-center gap-1 text-sm font-medium text-fg-tertiary hover:text-fg-primary"
       >
         <LogIn className="size-3.5" />
-        Sign in to join
+        {t('action.signInToJoin')}
       </Link>
     )
   }
@@ -762,7 +766,7 @@ function StepAction({
   if (!isMember) {
     return (
       <span className="text-sm text-fg-tertiary">
-        {isDone ? 'Done' : 'Join the project to join this step'}
+        {isDone ? t('action.done') : t('action.joinProjectFirst')}
       </span>
     )
   }
@@ -783,13 +787,13 @@ function StepAction({
             helpWanted && 'border-amber-500/50 text-amber-400 hover:border-amber-500 hover:text-amber-300',
           )}
         >
-          {helpWanted ? 'Withdraw help request' : 'Ask for help'}
+          {helpWanted ? t('action.withdrawHelpRequest') : t('action.askForHelp')}
         </button>
       )}
       {canManage &&
         (isDone ? (
           <button type="button" disabled={busy} onClick={reopen} className={ctrlButtonClass}>
-            Reopen
+            {t('action.reopen')}
           </button>
         ) : (
           <button
@@ -798,7 +802,7 @@ function StepAction({
             onClick={complete}
             className={cn(ctrlButtonClass, 'border-green-500/40 text-green-300 hover:border-green-500 hover:text-green-200')}
           >
-            Mark complete
+            {t('action.markComplete')}
           </button>
         ))}
 
@@ -806,7 +810,7 @@ function StepAction({
         <>
           <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-300">
             <Check className="size-3.5" strokeWidth={2.5} />
-            You&apos;re on this
+            {t('action.youreOnThis')}
           </span>
           <button
             type="button"
@@ -814,11 +818,13 @@ function StepAction({
             onClick={onLeave}
             className="cursor-pointer text-sm text-fg-tertiary underline-offset-2 transition-colors hover:text-fg-secondary hover:underline disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {pending ? 'Leaving…' : 'Leave step'}
+            {pending ? t('action.leaving') : t('action.leaveStep')}
           </button>
         </>
       ) : isDone ? (
-        !canManage && <span className="text-sm text-fg-tertiary">Done</span>
+        !canManage && (
+          <span className="text-sm text-fg-tertiary">{t('action.done')}</span>
+        )
       ) : (
         <button
           type="button"
@@ -827,10 +833,10 @@ function StepAction({
           className="inline-flex cursor-pointer items-center gap-1 text-sm font-medium text-amber-500 transition-colors hover:text-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {pending
-            ? 'Joining…'
+            ? t('action.joining')
             : step.joiners.length === 0
-              ? 'Join this step'
-              : 'Join too'}
+              ? t('action.joinThisStep')
+              : t('action.joinToo')}
           {!pending && <ArrowRight className="size-3.5" strokeWidth={2.5} />}
         </button>
       )}

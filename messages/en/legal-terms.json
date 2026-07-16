@@ -1,0 +1,70 @@
+{
+  "chrome": {
+    "eyebrow": "Legal",
+    "title": "Terms of service",
+    "lastUpdated": "Last updated: {date}"
+  },
+  "sections": {
+    "shortVersion": {
+      "title": "The short version",
+      "p1": "The Superhero connects people with climate and sustainability projects. You keep ownership of what you post, you’re responsible for what you post and what you do offline, be decent to each other, and we can remove content or accounts that break these rules. The long version follows.",
+      "englishPrevails": "These terms are available in several languages for convenience — if a translation ever disagrees with the English version, the English version applies."
+    },
+    "agreement": {
+      "title": "1. Who we are and what you're agreeing to",
+      "p1": "The Superhero (thesuperhe.ro) is operated from Switzerland. By creating an account or using the platform you agree to these terms and to our <link>privacy policy</link>. If you don’t agree with them, don’t use the platform."
+    },
+    "account": {
+      "title": "2. Your account",
+      "p1": "You need to be at least 16 years old to use The Superhero. Use your real identity, keep your login credentials to yourself, and don’t share or sell your account. You’re responsible for what happens under it. You can delete your account at any time from your profile settings."
+    },
+    "platform": {
+      "title": "3. What the platform is (and isn't)",
+      "p1": "We provide the infrastructure: project pages, blueprints, steps, updates, messaging and skill matching. The projects themselves are created and run by their leads, not by us. We don’t vet projects or their organisers, we don’t guarantee that a project will happen or succeed, and joining a project creates an arrangement between you and that project’s community — not with us.",
+      "p2": "Many projects involve real-world activities — planting, repairing, organising events. Assess them with the same judgment you’d apply to any volunteer activity: your safety, insurance, permits and legal obligations for offline activities are between you and the project you join, and remain your own responsibility."
+    },
+    "content": {
+      "title": "4. Your content",
+      "p1": "You own what you create here — project descriptions, blueprints, steps, updates and messages. So that the platform can work, you grant us a non-exclusive, worldwide licence to host, display and distribute your content within the service. Content you mark as public is visible to anyone on the internet.",
+      "p2": "Blueprints are special: the whole point is reuse. By publishing a blueprint you allow other members to fork, adapt and translate it on the platform, with the original credited as the family root.",
+      "p3": "Only post what you have the right to post. If content you upload infringes someone else’s rights, that’s on you — and we’ll remove it when we’re made aware."
+    },
+    "acceptableUse": {
+      "title": "5. Acceptable use",
+      "intro": "Don’t use the platform to:",
+      "items": {
+        "unlawful": "post content that is unlawful, defamatory, harassing, hateful or misleading;",
+        "impersonate": "impersonate someone or misrepresent a project or affiliation;",
+        "spam": "spam members via messages, updates or join requests;",
+        "advertise": "advertise unrelated commercial services;",
+        "scrape": "scrape the platform, probe its security, or interfere with its operation (rate limits exist for a reason);",
+        "collect": "collect other members’ personal data beyond what collaboration requires."
+      }
+    },
+    "moderation": {
+      "title": "6. Moderation",
+      "p1": "We can remove content, steps, projects or blueprints, and suspend or terminate accounts, when these terms are broken or when the law requires it. We’ll use that power sparingly and with judgment — the platform exists to make projects happen, not to police them. Project leads additionally moderate their own projects (accepting members, managing steps and updates)."
+    },
+    "availability": {
+      "title": "7. Availability and changes",
+      "p1": "The platform is provided “as is” and free of charge. We work to keep it available and correct, but we don’t warrant uninterrupted or error-free operation, and we may change, suspend or discontinue features. If we ever discontinue the platform entirely, we’ll give reasonable notice so you can export what matters to you."
+    },
+    "liability": {
+      "title": "8. Liability",
+      "p1": "To the extent permitted by law, we are not liable for indirect damages, lost data, lost profits, the content other members post, or anything that happens in the real-world activities of projects. Nothing in these terms excludes liability for intent or gross negligence, or any other liability that cannot be excluded under Swiss law."
+    },
+    "termsChanges": {
+      "title": "9. Changes to these terms",
+      "p1": "We may update these terms as the platform evolves. The date at the top tells you when. For material changes we’ll notify you in the app, and continuing to use the platform after that means you accept the new version."
+    },
+    "law": {
+      "title": "10. Governing law",
+      "p1": "These terms are governed by Swiss law. The courts at the operator’s seat in Switzerland have jurisdiction, subject to any mandatory consumer-protection forums that apply to you."
+    }
+  },
+  "footer": {
+    "questions": "Questions?",
+    "privacyLink": "Privacy policy",
+    "homeLink": "Back to the homepage"
+  }
+}

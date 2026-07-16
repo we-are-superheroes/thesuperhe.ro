@@ -4,7 +4,20 @@ import type { ProjectStatus } from '@prisma/client'
    Pure validators shared by the project server actions. Kept out of
    the 'use server' modules (which may only export async functions)
    so they're unit-testable.
+
+   Validators return ErrorDescriptors — a key into the `errors`
+   message namespace plus ICU params — never display strings. The
+   calling server action renders them in the requester's language via
+   tError() (lib/errors.ts). tests/i18n-catalogs.test.ts and the
+   coupling test in tests/validation.test.ts keep keys and catalog in
+   lockstep.
    ================================================================ */
+
+/** A key into messages/<locale>/errors.json plus its ICU params. */
+export interface ErrorDescriptor {
+  key: string
+  params?: Record<string, string | number>
+}
 
 export interface ProjectFormFields {
   title: string
@@ -22,24 +35,29 @@ export interface ProjectFormFields {
 export function validateProjectFields(
   data: ProjectFormFields,
   mode: 'create' | 'update',
-): string | null {
+): ErrorDescriptor | null {
   const title = data.title.trim()
   if (!title) {
-    return mode === 'create' ? 'Give your project a title first.' : 'Title can’t be empty.'
+    return {
+      key: mode === 'create' ? 'projectForm.titleRequiredCreate' : 'projectForm.titleRequired',
+    }
   }
-  if (title.length > 200) return 'Title is too long.'
+  if (title.length > 200) return { key: 'projectForm.titleTooLong' }
   const desc = data.description.trim()
   if (!desc) {
-    return mode === 'create'
-      ? 'Add a short description so people know what they’re joining.'
-      : 'Description can’t be empty.'
+    return {
+      key:
+        mode === 'create'
+          ? 'projectForm.descriptionRequiredCreate'
+          : 'projectForm.descriptionRequired',
+    }
   }
-  if (!['yes', 'some', 'no'].includes(data.remote)) return 'Pick a remote option.'
+  if (!['yes', 'some', 'no'].includes(data.remote)) return { key: 'projectForm.remoteRequired' }
   if (!['open', 'approval_required'].includes(data.joinPolicy)) {
-    return 'Pick a join policy.'
+    return { key: 'projectForm.joinPolicyRequired' }
   }
   if (data.address.trim().length > 500) {
-    return 'Address is too long.'
+    return { key: 'projectForm.addressTooLong' }
   }
   return null
 }
@@ -51,8 +69,8 @@ export const VALID_PROJECT_STATUSES = new Set<ProjectStatus>([
   'completed',
 ])
 
-export function validateProjectStatus(status: ProjectStatus): string | null {
-  return VALID_PROJECT_STATUSES.has(status) ? null : 'Pick a project status.'
+export function validateProjectStatus(status: ProjectStatus): ErrorDescriptor | null {
+  return VALID_PROJECT_STATUSES.has(status) ? null : { key: 'projectForm.statusRequired' }
 }
 
 export const MAX_UPDATE_LENGTH = 5000
@@ -60,11 +78,14 @@ export const MAX_UPDATE_LENGTH = 5000
 /** Body validation for project updates (post + edit). */
 export function validateUpdateBody(
   raw: string,
-): { ok: true; body: string } | { ok: false; error: string } {
+): { ok: true; body: string } | { ok: false; error: ErrorDescriptor } {
   const body = raw.trim()
-  if (!body) return { ok: false, error: 'An update needs some text.' }
+  if (!body) return { ok: false, error: { key: 'updates.bodyRequired' } }
   if (body.length > MAX_UPDATE_LENGTH) {
-    return { ok: false, error: `Updates are limited to ${MAX_UPDATE_LENGTH} characters.` }
+    return {
+      ok: false,
+      error: { key: 'updates.bodyTooLong', params: { max: MAX_UPDATE_LENGTH } },
+    }
   }
   return { ok: true, body }
 }

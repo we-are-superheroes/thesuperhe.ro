@@ -1,11 +1,15 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import Image from 'next/image'
 import { ChevronRight, MapPin, Globe, Calendar, FolderOpen, Clock, User, Pencil, ExternalLink } from 'lucide-react'
 import { ShareButton } from '@/components/platform/share-button'
 import { googleMapsUrl } from '@/lib/location'
+import { resolveLocale } from '@/lib/locale'
+import { fmtLongDate } from '@/lib/format'
 import { ProjectStepsList, type StepCardData } from '@/components/platform/project-steps-list'
 import { JoinProjectTopButton, JoinProjectCard } from '@/components/platform/join-project-controls'
 import { AdminDeleteButton } from '@/components/platform/admin-delete-button'
@@ -44,8 +48,8 @@ const TYPE_COVER_GRADIENT: Record<string, string> = {
   'Waste Reduction': 'radial-gradient(circle at 30% 50%, #f4a535 0%, transparent 70%), linear-gradient(160deg, #5C3600, #B86E00)',
 }
 
-function formatDate(d: Date): string {
-  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+function formatDate(d: Date, locale: string): string {
+  return fmtLongDate(d, locale)
 }
 
 function daysSince(d: Date): number {
@@ -56,26 +60,29 @@ interface ProjectViewParams {
   params: Promise<{ id: string }>
 }
 
-export async function generateMetadata({ params }: ProjectViewParams) {
+export async function generateMetadata({ params }: ProjectViewParams): Promise<Metadata> {
   const { id } = await params
-  const project = await db.project.findUnique({
-    where: { id },
-    select: {
-      title: true,
-      description: true,
-      coverImageUrl: true,
-      location: true,
-      visibility: true,
-    },
-  })
-  if (!project) return { title: 'Project not found — The Superhero' }
+  const [t, project] = await Promise.all([
+    getTranslations('meta'),
+    db.project.findUnique({
+      where: { id },
+      select: {
+        title: true,
+        description: true,
+        coverImageUrl: true,
+        location: true,
+        visibility: true,
+      },
+    }),
+  ])
+  if (!project) return { title: t('project.notFound') }
   // Members-only projects don't leak their title into tags/crawlers.
   if (project.visibility !== 'public') {
-    return { title: 'Members-only project — The Superhero' }
+    return { title: t('project.membersOnly') }
   }
   const description = project.description.split(/\n+/)[0].slice(0, 160)
   return {
-    title: `${project.title} — The Superhero`,
+    title: t('project.title', { name: project.title }),
     description,
     openGraph: {
       title: project.title,
@@ -88,6 +95,8 @@ export async function generateMetadata({ params }: ProjectViewParams) {
 export default async function ProjectViewPage({ params }: ProjectViewParams) {
   const { id } = await params
   const { userId } = await auth()
+  const locale = await resolveLocale()
+  const t = await getTranslations('project')
 
   const project = await db.project.findUnique({
     where: { id },
@@ -314,7 +323,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
     if (c.status !== 'active' || c.role === 'lead' || !c.user) continue
     const day = c.joinedAt.toISOString().slice(0, 10)
     const entry = joinsByDay.get(day) ?? { names: [], atMs: 0 }
-    entry.names.push(userId ? c.user.name : 'Someone')
+    entry.names.push(userId ? c.user.name : t('someone'))
     entry.atMs = Math.max(entry.atMs, c.joinedAt.getTime())
     joinsByDay.set(day, entry)
   }
@@ -346,13 +355,13 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
   const statusText = (() => {
     switch (project.status) {
       case 'defining':
-        return 'Being defined'
+        return t('status.defining')
       case 'needs_help':
-        return 'Needs help'
+        return t('status.needs_help')
       case 'in_progress':
-        return 'In progress'
+        return t('status.in_progress')
       case 'completed':
-        return 'Completed'
+        return t('status.completed')
       default:
         return project.status
     }
@@ -368,10 +377,10 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
     // Joiners are the active step-level contributions. For anonymous viewers
     // we keep the count + coordinator flag but anonymise the names.
     const joiners = s.contributions.map((c) => {
-      const name = c.user?.name ?? 'Someone'
+      const name = c.user?.name ?? t('someone')
       return {
         id: c.user?.id ?? 'anon',
-        name: userId ? name : 'Someone',
+        name: userId ? name : t('someone'),
         initials: userId ? initialsOf(name) : '?',
         isCoordinator: !!s.coordinatorId && s.coordinatorId === c.user?.id,
         isMe: !!userId && c.user?.id === userId,
@@ -382,7 +391,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
     // Time-log shaping. Anonymise user details for anonymous viewers.
     const stats = timeStatsByStep.get(s.id) ?? { total: 0, count: 0 }
     const recentLogs = s.timeLogs.map((tl) => {
-      const name = tl.user?.name ?? 'Someone'
+      const name = tl.user?.name ?? t('someone')
       return {
         id: tl.id,
         hours: tl.hours,
@@ -391,7 +400,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
         user: tl.user
           ? {
               id: tl.user.id,
-              name: userId ? name : 'Someone',
+              name: userId ? name : t('someone'),
               initials: userId ? initialsOf(name) : '?',
               isMe: !!userId && tl.user.id === userId,
             }
@@ -455,7 +464,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
             href="/projects"
             className="hidden transition-colors duration-fast hover:text-fg-primary sm:inline"
           >
-            Browse projects
+            {t('topbar.browseProjects')}
           </Link>
           <ChevronRight className="hidden size-3 sm:inline" />
           <span className="truncate text-fg-primary">{project.title}</span>
@@ -468,8 +477,8 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               className="inline-flex items-center gap-2 rounded-lg border border-amber-500/40 bg-amber-500/[0.12] px-3 py-2 text-sm font-medium text-amber-500 transition-all duration-standard hover:-translate-y-px hover:bg-amber-500/[0.18] sm:px-4 sm:py-2.5"
             >
               <Pencil className="size-3.5" strokeWidth={2.5} />
-              <span className="hidden sm:inline">Modify project</span>
-              <span className="sm:hidden">Modify</span>
+              <span className="hidden sm:inline">{t('topbar.modifyProject')}</span>
+              <span className="sm:hidden">{t('topbar.modify')}</span>
             </Link>
           )}
           {isAdmin && (
@@ -539,17 +548,17 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               )}
               {project.visibility === 'org_members' && (
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/[0.16] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-amber-400 backdrop-blur-sm">
-                  Members only
+                  {t('hero.membersOnly')}
                 </span>
               )}
               {isLead && (
                 <Link
                   href={`/projects/${id}/edit#sec-status`}
                   className="inline-flex items-center gap-1 rounded-full border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-fg-tertiary backdrop-blur-sm transition-colors hover:border-amber-500/50 hover:text-amber-500"
-                  title="Change project status"
+                  title={t('hero.changeStatusTitle')}
                 >
                   <Pencil className="size-3" strokeWidth={2.5} />
-                  Change
+                  {t('hero.change')}
                 </Link>
               )}
             </div>
@@ -573,10 +582,10 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 rounded-full border border-white/[0.12] bg-white/[0.04] px-2.5 py-1 text-xs font-semibold text-fg-secondary backdrop-blur-sm transition-colors hover:border-amber-500/55 hover:text-amber-500"
-                  title={project.address ?? project.location ?? 'Open in Google Maps'}
+                  title={project.address ?? project.location ?? t('hero.openInGoogleMaps')}
                 >
                   <ExternalLink className="size-3" strokeWidth={2.5} />
-                  Open in Google Maps
+                  {t('hero.openInGoogleMaps')}
                 </a>
               )}
               {(project.location || mapsUrl) && (project.remoteOk || project.createdAt) && (
@@ -585,7 +594,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               {project.remoteOk && (
                 <span className="inline-flex items-center gap-2">
                   <Globe className="size-3.5" />
-                  Remote contributors welcome
+                  {t('hero.remoteWelcome')}
                 </span>
               )}
               {project.remoteOk && project.createdAt && (
@@ -593,7 +602,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               )}
               <span className="inline-flex items-center gap-2">
                 <Calendar className="size-3.5" />
-                Started {formatDate(created)}
+                {t('hero.started', { date: formatDate(created, locale) })}
               </span>
             </div>
             {project.address && (
@@ -618,7 +627,7 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
             {/* About */}
             <section>
               <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">
-                About this project
+                {t('about.kicker')}
               </div>
               <h2 className="mb-2 font-display text-3xl font-normal leading-tight tracking-tight">
                 {project.title}
@@ -632,13 +641,13 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                   ))}
                 </div>
               ) : (
-                <EmptyInline text="No description yet — the project lead hasn’t written one." />
+                <EmptyInline text={t('about.noDescription')} />
               )}
             </section>
 
             {latestUpdate?.kind === 'update' && (
               <LatestUpdateTeaser
-                authorName={latestUpdate.author?.name ?? 'Former member'}
+                authorName={latestUpdate.author?.name ?? t('updates.formerMember')}
                 body={latestUpdate.body}
                 createdAtMs={latestUpdate.createdAtMs}
               />
@@ -650,23 +659,28 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
               <div className="mb-6 flex items-end justify-between gap-6">
                 <div>
                   <div className="mb-2 flex items-center gap-3 text-xs font-semibold uppercase tracking-widest text-amber-500 before:h-px before:w-5 before:bg-amber-500">
-                    Steps to take
+                    {t('stepsSection.kicker')}
                   </div>
                   {totalSteps > 0 ? (
                     <h2 className="font-display text-3xl font-normal leading-tight tracking-tight">
-                      {totalSteps} step{totalSteps === 1 ? '' : 's'}.{' '}
-                      {stepsByStatus.needs_help > 0 ? (
-                        <em className="italic text-amber-500">
-                          {stepsByStatus.needs_help} need{stepsByStatus.needs_help === 1 ? 's' : ''} help
-                        </em>
-                      ) : (
-                        <em className="italic text-amber-500">making progress</em>
-                      )}{' '}
-                      right now.
+                      {stepsByStatus.needs_help > 0
+                        ? t.rich('stepsSection.headingNeedsHelp', {
+                            total: totalSteps,
+                            needing: stepsByStatus.needs_help,
+                            em: (chunks) => (
+                              <em className="italic text-amber-500">{chunks}</em>
+                            ),
+                          })
+                        : t.rich('stepsSection.headingProgress', {
+                            total: totalSteps,
+                            em: (chunks) => (
+                              <em className="italic text-amber-500">{chunks}</em>
+                            ),
+                          })}
                     </h2>
                   ) : (
                     <h2 className="font-display text-3xl font-normal leading-tight tracking-tight">
-                      No steps yet.
+                      {t('stepsSection.noStepsYet')}
                     </h2>
                   )}
                 </div>
@@ -683,8 +697,8 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 />
               ) : (
                 <EmptyBlock
-                  title="The step list is empty."
-                  description="Once the project lead breaks the work down into steps, they’ll show up here so you can pick one to claim."
+                  title={t('stepsSection.emptyTitle')}
+                  description={t('stepsSection.emptyDescription')}
                 />
               )}
             </section>
@@ -717,10 +731,10 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
 
             {/* Stats */}
             <div className="rounded-2xl border border-white/[0.08] bg-bg-surface p-6">
-              <div className="mb-4 font-display text-lg">Project numbers</div>
+              <div className="mb-4 font-display text-lg">{t('stats.title')}</div>
               <div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.08]">
-                <Stat value={contributors.length} label="Contributors" />
-                <Stat value={totalHours} unit="h" label="Hours given" />
+                <Stat value={contributors.length} label={t('stats.contributors')} />
+                <Stat value={totalHours} unit={t('stats.hoursUnit')} label={t('stats.hoursGiven')} />
                 <Stat
                   value={stepsByStatus.completed}
                   trailing={
@@ -728,14 +742,14 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                       <span className="text-fg-tertiary text-[0.6em]">/{totalSteps}</span>
                     ) : null
                   }
-                  label="Steps done"
+                  label={t('stats.stepsDone')}
                 />
-                <Stat value={days} unit="d" label="Days active" />
+                <Stat value={days} unit={t('stats.daysUnit')} label={t('stats.daysActive')} />
               </div>
 
               {contributors.length === 0 ? (
                 <p className="mt-3 text-xs text-fg-tertiary">
-                  No contributors yet — be the first.
+                  {t('stats.noContributors')}
                 </p>
               ) : userId ? (
                 <div className="mt-3 flex items-center">
@@ -760,27 +774,27 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                 // Anonymous viewer — hide individual identities, just hint
                 // at the team size. They'll get the full list after sign-in.
                 <p className="mt-3 text-xs text-fg-tertiary">
-                  <Link
-                    href="/sign-in"
-                    className="text-amber-500 hover:underline"
-                  >
-                    Sign in
-                  </Link>{' '}
-                  to see who’s working on this.
+                  {t.rich('stats.signInToSee', {
+                    link: (chunks) => (
+                      <Link href="/sign-in" className="text-amber-500 hover:underline">
+                        {chunks}
+                      </Link>
+                    ),
+                  })}
                 </p>
               )}
             </div>
 
             {/* Details */}
             <div className="rounded-2xl border border-white/[0.08] bg-bg-surface p-6">
-              <div className="mb-4 font-display text-lg">Details</div>
-              <DetailRow icon={<FolderOpen className="size-3.5" />} label="Type">
-                {project.projectType?.name ?? <Muted>Not set</Muted>}
+              <div className="mb-4 font-display text-lg">{t('details.title')}</div>
+              <DetailRow icon={<FolderOpen className="size-3.5" />} label={t('details.type')}>
+                {project.projectType?.name ?? <Muted>{t('details.notSet')}</Muted>}
               </DetailRow>
-              <DetailRow icon={<Clock className="size-3.5" />} label="Status">
+              <DetailRow icon={<Clock className="size-3.5" />} label={t('details.status')}>
                 {statusText}
               </DetailRow>
-              <DetailRow icon={<MapPin className="size-3.5" />} label="Location">
+              <DetailRow icon={<MapPin className="size-3.5" />} label={t('details.location')}>
                 {project.location || project.address ? (
                   <span className="flex flex-col gap-1">
                     {project.location && <span>{project.location}</span>}
@@ -797,29 +811,29 @@ export default async function ProjectViewPage({ params }: ProjectViewParams) {
                         className="inline-flex w-fit items-center gap-1 text-xs font-medium text-amber-500 hover:underline"
                       >
                         <ExternalLink className="size-3" strokeWidth={2.5} />
-                        Open in Google Maps
+                        {t('hero.openInGoogleMaps')}
                       </a>
                     )}
                   </span>
                 ) : (
-                  <Muted>Not specified</Muted>
+                  <Muted>{t('details.notSpecified')}</Muted>
                 )}
               </DetailRow>
-              <DetailRow icon={<Globe className="size-3.5" />} label="Remote contributions">
-                {project.remoteOk ? 'Welcome' : 'Not for this project'}
+              <DetailRow icon={<Globe className="size-3.5" />} label={t('details.remoteContributions')}>
+                {project.remoteOk ? t('details.remoteWelcome') : t('details.remoteNo')}
               </DetailRow>
-              <DetailRow icon={<Clock className="size-3.5" />} label="Time commitment">
+              <DetailRow icon={<Clock className="size-3.5" />} label={t('details.timeCommitment')}>
                 {project.timeCommitmentHrs != null ? (
-                  `~${project.timeCommitmentHrs}h on average`
+                  t('details.avgHours', { hours: project.timeCommitmentHrs })
                 ) : (
-                  <Muted>Flexible</Muted>
+                  <Muted>{t('details.flexible')}</Muted>
                 )}
               </DetailRow>
-              <DetailRow icon={<Calendar className="size-3.5" />} label="Created">
-                {formatDate(created)} <Muted>· {days} day{days === 1 ? '' : 's'} ago</Muted>
+              <DetailRow icon={<Calendar className="size-3.5" />} label={t('details.created')}>
+                {formatDate(created, locale)} <Muted>{t('details.daysAgo', { count: days })}</Muted>
               </DetailRow>
-              <DetailRow icon={<User className="size-3.5" />} label="Lead">
-                {lead?.user?.name ?? <Muted>No lead yet</Muted>}
+              <DetailRow icon={<User className="size-3.5" />} label={t('details.lead')}>
+                {lead?.user?.name ?? <Muted>{t('details.noLead')}</Muted>}
               </DetailRow>
             </div>
           </aside>

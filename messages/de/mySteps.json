@@ -1,0 +1,50 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Schritte durchsuchen…",
+    "findStep": "Einen Schritt zum Mitmachen finden",
+    "findStepShort": "Finden"
+  },
+  "hero": {
+    "title": "Deine <em>Zeit</em>, erfasst.",
+    "subtitle": "Verfolge die Stunden, die du in jeden übernommenen Schritt gesteckt hast. Den Status eines Schritts änderst du auf der Projektseite, wenn du so weit bist."
+  },
+  "stats": {
+    "active": "Aktiv",
+    "completed": "Abgeschlossen",
+    "myHours": "Meine Stunden"
+  },
+  "filter": {
+    "active": "Aktiv",
+    "completed": "Abgeschlossen"
+  },
+  "sort": {
+    "recentlyLogged": "Zuletzt erfasst",
+    "byProject": "Nach Projekt",
+    "byName": "Nach Name"
+  },
+  "group": {
+    "title": "Gruppieren nach",
+    "none": "Keine Gruppen",
+    "byProject": "Nach Projekt gruppieren"
+  },
+  "badge": {
+    "coordinator": "Koordination"
+  },
+  "row": {
+    "myHours": "Du: {hours}"
+  },
+  "hours": {
+    "zero": "0 Std.",
+    "hoursOnly": "{hours} Std.",
+    "hoursMinutes": "{hours} Std. {minutes} Min.",
+    "minutesOnly": "{minutes} Min."
+  },
+  "empty": {
+    "searchTitle": "Kein Schritt passt zu dieser Suche.",
+    "searchDescription": "Probier ein anderes Stichwort oder leere die Suche.",
+    "completedTitle": "Noch nichts abgeschlossen.",
+    "completedDescription": "Markiere einen Schritt auf der Projektseite als abgeschlossen, dann erscheint er hier.",
+    "activeTitle": "Du hast noch keinen Schritt übernommen.",
+    "activeDescription": "Finde ein Projekt, übernimm einen Schritt und komm dann hierher zurück, um Zeit zu erfassen."
+  }
+}

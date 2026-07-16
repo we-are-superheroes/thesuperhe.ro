@@ -1,0 +1,124 @@
+{
+  "counts": {
+    "launches": "{count, plural, one {<strong>#</strong> lanzamiento} other {<strong>#</strong> lanzamientos}}",
+    "steps": "{count, plural, one {# paso} other {# pasos}}",
+    "variants": "{count, plural, one {# variante} other {# variantes}}"
+  },
+  "cta": {
+    "use": "Usar plantilla",
+    "createVariant": "Crear variante",
+    "createVariantTitle": "Adapta esta plantilla a otro lugar o idioma",
+    "modify": "Modificar plantilla"
+  },
+  "list": {
+    "searchPlaceholder": "Buscar plantillas...",
+    "saveYourOwn": "Guarda tu propia plantilla",
+    "newShort": "Nueva",
+    "eyebrow": "Biblioteca de plantillas",
+    "heading": "Empieza desde un patrón <em>probado</em>.",
+    "intro": "Las plantillas son recetas de proyecto probadas — nacidas en un lugar, adaptadas a otros. Elige un modelo que encaje con tu contexto, tu país y tu idioma; nosotros montamos el resto alrededor.",
+    "stats": {
+      "families": "Familias",
+      "variants": "Variantes",
+      "launches": "Lanzamientos"
+    },
+    "showing": "Mostrando <strong>{shown}</strong> de {total, plural, one {# plantilla} other {# plantillas}}"
+  },
+  "sort": {
+    "popular": "Más usadas",
+    "recent": "Añadidas hace poco",
+    "variants": "Más variantes",
+    "az": "A–Z"
+  },
+  "filters": {
+    "title": "Filtros",
+    "show": "Mostrar filtros",
+    "hide": "Ocultar filtros",
+    "clearAll": "Quitar todos",
+    "type": "Tipo",
+    "country": "País",
+    "language": "Idioma",
+    "searchCountriesPlaceholder": "Buscar países...",
+    "noMatches": "Sin coincidencias."
+  },
+  "chips": {
+    "search": "búsqueda",
+    "type": "tipo",
+    "country": "país",
+    "language": "idioma",
+    "remove": "Quitar filtro"
+  },
+  "empty": {
+    "title": "Ninguna plantilla coincide.",
+    "body": "Afloja un filtro, o guarda tú la primera plantilla que encaje en este nicho."
+  },
+  "card": {
+    "originalRecipe": "La receta original — adáptala a tu zona.",
+    "availableIn": "Disponible en",
+    "localeNotSet": "Localización sin definir"
+  },
+  "variants": {
+    "original": "original"
+  },
+  "steps": {
+    "orderOfTotal": "Paso {order} de {total}",
+    "estimatedHours": "~{hours}h"
+  },
+  "detail": {
+    "breadcrumbRoot": "Plantillas",
+    "variantBadge": "Variante",
+    "createdBy": "Creada por <author>{name}</author>",
+    "someone": "alguien",
+    "estimatedTotal": "~{hours}h estimadas",
+    "aboutEyebrow": "Sobre esta plantilla",
+    "aboutHeading": "Lo que vas a montar.",
+    "planEyebrow": "El plan",
+    "stepsHeading": "{count, plural, one {# paso} other {# pasos}} para hacerlo realidad.",
+    "noSteps": "Esta plantilla aún no tiene pasos.",
+    "family": "Familia",
+    "detailsTitle": "Detalles",
+    "type": "Tipo",
+    "country": "País",
+    "language": "Idioma",
+    "projectsForked": "Proyectos creados a partir de ella",
+    "notSet": "Sin definir",
+    "any": "Cualquiera"
+  },
+  "edit": {
+    "breadcrumbModify": "Modificar",
+    "backToBlueprint": "Volver a la plantilla",
+    "modifying": "Modificando",
+    "blueprintBadge": "Plantilla",
+    "untitledBlueprint": "Plantilla sin título",
+    "basics": {
+      "eyebrow": "Lo básico",
+      "title": "¿Qué es esta plantilla?",
+      "desc": "Dos frases bastan para describir el patrón. Puedes añadir más detalle después.",
+      "titleLabel": "Título",
+      "titlePlaceholder": "p. ej. Repair Café",
+      "descriptionLabel": "Descripción",
+      "descriptionHelp": "El primer párrafo es lo que aparece en la tarjeta de la plantilla.",
+      "descriptionPlaceholder": "¿Qué problema resuelve este patrón y cómo es ponerlo en marcha?",
+      "projectTypeLabel": "Tipo de proyecto",
+      "noneOption": "— ninguno —"
+    },
+    "locale": {
+      "eyebrow": "Localización",
+      "title": "¿Dónde y en qué idioma?",
+      "desc": "Los proyectos adaptados de esta plantilla heredan estas etiquetas por defecto. Las variantes deben declarar al menos país o idioma.",
+      "countryLabel": "País (opcional salvo que sea una variante)",
+      "languageLabel": "Idioma de trabajo (opcional salvo que sea una variante)",
+      "familyLabel": "Familia",
+      "familyHelpVariant": "Esta plantilla es actualmente una variante de la familia de abajo. Elige “Independiente” para promoverla a raíz.",
+      "familyHelpRoot": "Opcional. Si estás adaptando un patrón existente, enlázala con la raíz original para que las dos aparezcan juntas como una familia.",
+      "standaloneOption": "Independiente (sin plantilla original)",
+      "hasVariantsNotice": "Esta plantilla ya tiene <strong>{count, plural, one {# variante} other {# variantes}}</strong> propias, así que se queda como raíz de la familia."
+    },
+    "steps": {
+      "eyebrow": "El plan",
+      "title": "Pasos para hacer realidad el patrón.",
+      "desc": "Quien adapte esta plantilla empezará con estos pasos. Edita, reordena o elimina lo que haga falta."
+    },
+    "saveChanges": "Guardar cambios"
+  }
+}

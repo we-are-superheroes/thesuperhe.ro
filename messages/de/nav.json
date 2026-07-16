@@ -1,0 +1,70 @@
+{
+  "sidebar": {
+    "primaryNavAriaLabel": "Hauptnavigation",
+    "closeMenuAriaLabel": "Menü schließen",
+    "expandTitle": "Seitenleiste ausklappen",
+    "collapseTitle": "Seitenleiste einklappen",
+    "resizeAriaLabel": "Größe der Seitenleiste ändern",
+    "groups": {
+      "overview": "Überblick",
+      "discover": "Entdecken",
+      "account": "Konto"
+    },
+    "items": {
+      "dashboard": "Mein Dashboard",
+      "myProjects": "Meine Projekte",
+      "mySteps": "Meine Schritte",
+      "messages": "Nachrichten",
+      "notifications": "Benachrichtigungen",
+      "browseProjects": "Projekte durchstöbern",
+      "skillMatches": "Passende Fähigkeiten",
+      "blueprints": "Blaupausen",
+      "organisations": "Organisationen",
+      "profile": "Profil"
+    },
+    "accountMenuAriaLabel": "Kontomenü",
+    "signOut": "Abmelden",
+    "accountFallback": "Konto",
+    "userFallbackName": "Held",
+    "metaContributions": "{count, plural, one {# Projekt} other {# Projekte}} · {hours} Std.",
+    "metaNewHere": "Neu hier · 0 Std.",
+    "footer": {
+      "home": "Startseite",
+      "privacy": "Datenschutz",
+      "terms": "Nutzungsbedingungen"
+    }
+  },
+  "shell": {
+    "openMenuAriaLabel": "Menü öffnen",
+    "closeMenuAriaLabel": "Menü schließen"
+  },
+  "publicNav": {
+    "browseProjects": "Projekte durchstöbern",
+    "browseBlueprints": "Blaupausen durchstöbern",
+    "howItWorks": "So funktioniert’s",
+    "signIn": "Anmelden",
+    "getStarted": "Loslegen"
+  },
+  "themePicker": {
+    "themes": {
+      "dark": {
+        "name": "Mitternacht",
+        "badge": "Standard",
+        "desc": "Das Original in tiefem Blau & Bernstein."
+      },
+      "daylight": {
+        "name": "Tageslicht",
+        "desc": "Kühl und klar in Weiß & Blaugrau."
+      },
+      "paper": {
+        "name": "Papier",
+        "desc": "Warmes Elfenbein, Bernstein im Vordergrund."
+      },
+      "contrast": {
+        "name": "Hoher Kontrast",
+        "badge": "A11Y",
+        "desc": "Maximale Lesbarkeit — WCAG-AAA-Text & deutlicher Fokus."
+      }
+    }
+  }
+}

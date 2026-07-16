@@ -13,12 +13,15 @@
     "db:seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate",
-    "test": "vitest run"
+    "test": "vitest run",
+    "translate": "tsx -r dotenv/config scripts/translate.ts",
+    "translate:check": "tsx scripts/translate-check.ts"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@clerk/localizations": "^4.13.2",
     "@clerk/nextjs": "^7.3.0",
     "@clerk/themes": "^2.4.57",
     "@prisma/adapter-pg": "^7.8.0",
@@ -26,8 +29,10 @@
     "@supabase/supabase-js": "^2.105.3",
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
+    "intl-messageformat": "^11.2.11",
     "lucide-react": "^1.14.0",
     "next": "16.2.4",
+    "next-intl": "^4.13.2",
     "pg": "^8.20.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -36,6 +41,9 @@
     "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
+    "@formatjs/icu-messageformat-parser": "^3.5.14",
+    "@swc/helpers": "^0.5.23",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/pg": "^8.20.0",

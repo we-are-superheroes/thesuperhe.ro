@@ -1,0 +1,70 @@
+{
+  "sidebar": {
+    "primaryNavAriaLabel": "Navegação principal",
+    "closeMenuAriaLabel": "Fechar menu",
+    "expandTitle": "Expandir a barra lateral",
+    "collapseTitle": "Recolher a barra lateral",
+    "resizeAriaLabel": "Redimensionar a barra lateral",
+    "groups": {
+      "overview": "Visão geral",
+      "discover": "Descobrir",
+      "account": "Conta"
+    },
+    "items": {
+      "dashboard": "Meu painel",
+      "myProjects": "Meus projetos",
+      "mySteps": "Minhas etapas",
+      "messages": "Mensagens",
+      "notifications": "Notificações",
+      "browseProjects": "Explorar projetos",
+      "skillMatches": "Habilidades procuradas",
+      "blueprints": "Modelos",
+      "organisations": "Organizações",
+      "profile": "Perfil"
+    },
+    "accountMenuAriaLabel": "Menu da conta",
+    "signOut": "Sair",
+    "accountFallback": "Conta",
+    "userFallbackName": "Herói",
+    "metaContributions": "{count, plural, one {# projeto} other {# projetos}} · {hours}h",
+    "metaNewHere": "Novo por aqui · 0h",
+    "footer": {
+      "home": "Início",
+      "privacy": "Privacidade",
+      "terms": "Termos"
+    }
+  },
+  "shell": {
+    "openMenuAriaLabel": "Abrir menu",
+    "closeMenuAriaLabel": "Fechar menu"
+  },
+  "publicNav": {
+    "browseProjects": "Explorar projetos",
+    "browseBlueprints": "Explorar modelos",
+    "howItWorks": "Como funciona",
+    "signIn": "Entrar",
+    "getStarted": "Começar"
+  },
+  "themePicker": {
+    "themes": {
+      "dark": {
+        "name": "Meia-noite",
+        "badge": "Padrão",
+        "desc": "O azul profundo e âmbar original."
+      },
+      "daylight": {
+        "name": "Luz do dia",
+        "desc": "Branco fresco e limpo com cinza-azulado."
+      },
+      "paper": {
+        "name": "Papel",
+        "desc": "Marfim quente, âmbar em destaque."
+      },
+      "contrast": {
+        "name": "Alto contraste",
+        "badge": "A11Y",
+        "desc": "Legibilidade máxima — texto WCAG AAA e foco bem visível."
+      }
+    }
+  }
+}

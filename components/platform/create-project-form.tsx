@@ -3,6 +3,7 @@
 import { useState, useTransition, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import {
   Plus,
   ArrowRight,
@@ -96,6 +97,8 @@ export function CreateProjectForm({
   /** Pre-selected org when arriving via "+ New organisation project". */
   initialOrgSlug: string | null
 }) {
+  const t = useTranslations('project')
+  const tCommon = useTranslations('common')
   const router = useRouter()
 
   // When deep-linked from a blueprint (?blueprint=<id>), seed the editor from
@@ -108,7 +111,9 @@ export function CreateProjectForm({
   >(sourceBlueprint ? { kind: 'blueprint', blueprint: sourceBlueprint } : null)
 
   const [title, setTitle] = useState(
-    sourceBlueprint ? `${sourceBlueprint.title} — your area` : '',
+    sourceBlueprint
+      ? t('form.titleFromBlueprint', { title: sourceBlueprint.title })
+      : '',
   )
   const [description, setDescription] = useState(sourceBlueprint?.description ?? '')
   const [city, setCity] = useState('')
@@ -236,7 +241,7 @@ export function CreateProjectForm({
     })
   }
 
-  const titleForPreview = title.trim() || 'Untitled project'
+  const titleForPreview = title.trim() || t('form.untitledProject')
 
   /* ── Render ───────────────────────────────────────── */
 
@@ -246,15 +251,15 @@ export function CreateProjectForm({
       <div className="sticky top-0 z-10 flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.08] bg-bg-base px-4 py-4 sm:gap-6 sm:px-10 sm:py-5">
         <div className="flex items-center gap-2 text-sm text-fg-tertiary">
           <Link href="/my-projects" className="transition-colors duration-fast hover:text-fg-primary">
-            My projects
+            {t('form.breadcrumb.myProjects')}
           </Link>
           <span className="opacity-50">/</span>
           <span className="font-medium text-fg-primary">
             {phase === 'edit'
               ? origin?.kind === 'blueprint'
-                ? 'New project (from blueprint)'
-                : 'New project'
-              : 'Start a project'}
+                ? t('form.breadcrumb.newProjectFromBlueprint')
+                : t('form.breadcrumb.newProject')
+              : t('form.breadcrumb.startAProject')}
           </span>
         </div>
         <div className="flex items-center gap-3">
@@ -265,14 +270,14 @@ export function CreateProjectForm({
               className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
             >
               <ChevronLeft className="size-3.5" strokeWidth={2.5} />
-              Change starting point
+              {t('form.changeStartingPoint')}
             </button>
           ) : (
             <Link
               href="/my-projects"
               className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
             >
-              Cancel
+              {tCommon('actions.cancel')}
             </Link>
           )}
         </div>
@@ -333,30 +338,33 @@ export function CreateProjectForm({
    ================================================================ */
 
 function ChooserPhase({ onScratch }: { onScratch: () => void }) {
+  const t = useTranslations('project')
   return (
     <>
       <header>
         <h1 className="mb-3 font-display text-[clamp(36px,4vw,52px)] font-normal leading-none tracking-tight">
-          Start a <em className="italic text-amber-500">project</em>.
+          {t.rich('form.chooser.heading', {
+            em: (chunks) => <em className="italic text-amber-500">{chunks}</em>,
+          })}
         </h1>
         <p className="max-w-[600px] text-lg leading-relaxed text-fg-secondary">
-          You can begin with an empty plan, or fork a blueprint — a proven plan from someone who’s done this before.
+          {t('form.chooser.intro')}
         </p>
       </header>
 
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
         <StartCard
           icon={<Plus className="size-6" strokeWidth={2} />}
-          title="Start from scratch."
-          description="An empty plan. Best when your project is unusual, very local, or you’ve already worked out the steps yourself."
-          cta="Begin a fresh project"
+          title={t('form.chooser.scratchTitle')}
+          description={t('form.chooser.scratchDescription')}
+          cta={t('form.chooser.scratchCta')}
           onClick={onScratch}
         />
         <StartCard
           icon={<FileText className="size-6" strokeWidth={2} />}
-          title="Use a blueprint."
-          description="Copy freely. Pre-built plans for repair cafés, pocket forests, mutual aid groups and more — browse the library, then fork one and adapt it to your community."
-          cta="Browse blueprints"
+          title={t('form.chooser.blueprintTitle')}
+          description={t('form.chooser.blueprintDescription')}
+          cta={t('form.chooser.blueprintCta')}
           href="/blueprints"
         />
       </div>
@@ -434,6 +442,8 @@ function SaveBlueprintButton({
   disabled: boolean
   onSave: (asVariant: boolean) => void
 }) {
+  const t = useTranslations('project')
+  const tCommon = useTranslations('common')
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -447,7 +457,7 @@ function SaveBlueprintButton({
   }, [open])
 
   const labelFor = (variant: boolean) =>
-    variant ? 'Save as blueprint variant' : 'Save as new blueprint'
+    variant ? t('form.saveBar.saveAsBlueprintVariant') : t('form.saveBar.saveAsNewBlueprint')
 
   const outlineBtn =
     'inline-flex items-center gap-2 border border-neutral-700 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04] disabled:cursor-not-allowed disabled:opacity-60'
@@ -462,7 +472,7 @@ function SaveBlueprintButton({
         className={cn(outlineBtn, 'rounded-lg px-4 py-2.5')}
       >
         <FileText className="size-3.5" strokeWidth={2} />
-        {pending ? 'Saving…' : 'Save as blueprint'}
+        {pending ? tCommon('state.saving') : t('form.saveBar.saveAsBlueprint')}
       </button>
     )
   }
@@ -479,7 +489,7 @@ function SaveBlueprintButton({
         className={cn(outlineBtn, 'rounded-l-lg px-4 py-2.5')}
       >
         <FileText className="size-3.5" strokeWidth={2} />
-        {pending ? 'Saving…' : labelFor(primary)}
+        {pending ? tCommon('state.saving') : labelFor(primary)}
       </button>
       <button
         type="button"
@@ -487,7 +497,7 @@ function SaveBlueprintButton({
         disabled={disabled}
         aria-haspopup="menu"
         aria-expanded={open}
-        title="More save options"
+        title={t('form.saveBar.moreSaveOptions')}
         className={cn(outlineBtn, '-ml-px rounded-r-lg px-2 py-2.5')}
       >
         <ChevronDown
@@ -603,6 +613,7 @@ function EditorPhase({
   onSaveBlueprint: (asVariant: boolean) => void
   onChangeOrigin: () => void
 }) {
+  const t = useTranslations('project')
   return (
     <>
       {/* Editor header */}
@@ -610,12 +621,12 @@ function EditorPhase({
         <span className="mb-2 inline-flex items-center gap-2 text-xs text-fg-tertiary">
           {origin?.kind === 'blueprint'
             ? variantIntent
-              ? 'Creating a variant of'
-              : 'Forked from'
-            : 'Starting from scratch'}
+              ? t('form.origin.creatingVariantOf')
+              : t('form.origin.forkedFrom')
+            : t('form.origin.startingFromScratch')}
           {origin?.kind === 'blueprint' && (
             <span className="rounded-full border border-amber-500/40 bg-amber-500/[0.12] px-2.5 py-[3px] font-medium text-amber-500">
-              {origin.blueprint.title} blueprint
+              {t('form.origin.blueprintBadge', { title: origin.blueprint.title })}
             </span>
           )}
           <span className="opacity-60">·</span>
@@ -624,7 +635,7 @@ function EditorPhase({
             onClick={onChangeOrigin}
             className="cursor-pointer text-xs text-fg-secondary underline underline-offset-2 hover:text-amber-500"
           >
-            change
+            {t('form.origin.change')}
           </button>
         </span>
         <h1 className="font-display text-[clamp(28px,3vw,40px)] font-normal leading-tight tracking-tight">
@@ -635,32 +646,32 @@ function EditorPhase({
       {/* The basics */}
       <Card>
         <CardHead
-          eyebrow="The basics"
-          title="What is it?"
-          desc="Two sentences are enough. You can add more detail later."
+          eyebrow={t('form.basics.eyebrow')}
+          title={t('form.basics.title')}
+          desc={t('form.basics.desc')}
         />
         <div className="flex flex-col gap-5">
-          <Field label="Title" htmlFor="fld-title">
+          <Field label={t('form.basics.titleLabel')} htmlFor="fld-title">
             <input
               id="fld-title"
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Pocket Forest, Hackney Wick"
+              placeholder={t('form.basics.titlePlaceholder')}
               className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-4 py-3.5 font-display text-2xl leading-tight text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
             />
           </Field>
           <Field
-            label="Description"
+            label={t('form.basics.descriptionLabel')}
             htmlFor="fld-desc"
-            help="The first paragraph is what shows up on the project card."
+            help={t('form.basics.descriptionHelp')}
           >
             <textarea
               id="fld-desc"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={5}
-              placeholder="What are you trying to make happen, and why does it matter?"
+              placeholder={t('form.basics.descriptionPlaceholder')}
               className="min-h-[130px] w-full resize-y rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm leading-relaxed text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
             />
           </Field>
@@ -670,42 +681,42 @@ function EditorPhase({
       {/* Where */}
       <Card>
         <CardHead
-          eyebrow="Where it happens"
-          title="Location & access."
-          desc="Helps the right people find you. You’ll only show the area, never an exact address."
+          eyebrow={t('form.location.eyebrow')}
+          title={t('form.location.title')}
+          desc={t('form.location.desc')}
         />
         <div className="flex flex-col gap-5">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-            <Field label="City or area" htmlFor="fld-city">
+            <Field label={t('form.location.cityLabel')} htmlFor="fld-city">
               <input
                 id="fld-city"
                 type="text"
                 value={city}
                 onChange={(e) => setCity(e.target.value)}
-                placeholder="e.g. Hackney, London"
+                placeholder={t('form.location.cityPlaceholder')}
                 className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
               />
             </Field>
             <Field
-              label="Country (optional)"
+              label={t('form.location.countryLabel')}
               htmlFor="fld-country"
-              help="Shown on the project card and used by the browse-page country filter."
+              help={t('form.location.countryHelp')}
             >
               <CountrySelect id="fld-country" value={countryCode} onChange={setCountryCode} />
             </Field>
           </div>
 
           <Field
-            label="Specific address or place name (optional)"
+            label={t('form.location.addressLabel')}
             htmlFor="fld-address"
-            help="Shown to people who join. Skip this if your meet-up spot changes or you’d rather not publish it."
+            help={t('form.location.addressHelp')}
           >
             <input
               id="fld-address"
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              placeholder="e.g. The Old Library, 2 Wallis Road, E9 5LH"
+              placeholder={t('form.location.addressPlaceholder')}
               maxLength={500}
               className="w-full rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
             />
@@ -713,16 +724,16 @@ function EditorPhase({
 
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <Field
-              label="Working language (optional)"
+              label={t('form.location.languageLabel')}
               htmlFor="fld-lang"
-              help="Used by the browse-page language filter."
+              help={t('form.location.languageHelp')}
             >
               <SelectBox
                 id="fld-lang"
                 value={languageCode ?? ''}
                 onChange={(e) => setLanguageCode(e.target.value || null)}
               >
-                <option value="">— none —</option>
+                <option value="">{t('form.location.noneOption')}</option>
                 {ISO_LANGUAGES.map((l) => (
                   <option key={l.code} value={l.code}>
                     {l.label}
@@ -732,10 +743,10 @@ function EditorPhase({
             </Field>
           </div>
 
-          <Field label="Can people contribute remotely?">
+          <Field label={t('form.remote.label')}>
             <div
               role="radiogroup"
-              aria-label="Remote participation"
+              aria-label={t('form.remote.ariaLabel')}
               className="grid grid-cols-1 gap-0.5 rounded-lg border border-neutral-700 bg-bg-base p-1 sm:grid-cols-3"
             >
               {REMOTE_OPTIONS.map((opt) => {
@@ -754,20 +765,20 @@ function EditorPhase({
                     )}
                   >
                     <Icon className="size-3.5" strokeWidth={2} />
-                    {opt.label}
+                    {t(`form.remote.options.${opt.value}`)}
                   </button>
                 )
               })}
             </div>
             <span className="mt-1 text-xs text-fg-tertiary">
-              If “some steps only”, you can mark each step as remote-okay later.
+              {t('form.remote.someHint')}
             </span>
           </Field>
 
-          <Field label="Who can join?">
+          <Field label={t('form.joinPolicy.label')}>
             <div
               role="radiogroup"
-              aria-label="Join policy"
+              aria-label={t('form.joinPolicy.ariaLabel')}
               className="grid grid-cols-1 gap-2 sm:grid-cols-2"
             >
               {JOIN_POLICY_OPTIONS.map((opt) => {
@@ -792,10 +803,10 @@ function EditorPhase({
                         checked ? 'text-amber-500' : 'text-fg-primary',
                       )}
                     >
-                      {opt.label}
+                      {t(`form.joinPolicy.options.${opt.value}.label`)}
                     </span>
                     <span className="text-xs leading-relaxed text-fg-tertiary">
-                      {opt.description}
+                      {t(`form.joinPolicy.options.${opt.value}.description`)}
                     </span>
                   </button>
                 )
@@ -805,12 +816,12 @@ function EditorPhase({
 
           {myOrgs.length > 0 && (
             <>
-              <Field label="Organisation">
+              <Field label={t('form.org.label')}>
                 <SelectBox
                   value={orgId ?? ''}
                   onChange={(e) => setOrgId(e.target.value || null)}
                 >
-                  <option value="">Personal project — no organisation</option>
+                  <option value="">{t('form.org.personalOption')}</option>
                   {myOrgs.map((o) => (
                     <option key={o.id} value={o.id}>
                       {o.name}
@@ -818,32 +829,18 @@ function EditorPhase({
                   ))}
                 </SelectBox>
                 <span className="mt-1 text-xs text-fg-tertiary">
-                  Organisation projects show the organisation&rsquo;s name and count towards its
-                  contribution totals.
+                  {t('form.org.note')}
                 </span>
               </Field>
 
               {orgId && (
-                <Field label="Who can see it?">
+                <Field label={t('form.org.visibilityLabel')}>
                   <div
                     role="radiogroup"
-                    aria-label="Project visibility"
+                    aria-label={t('form.org.visibilityAriaLabel')}
                     className="grid grid-cols-1 gap-2 sm:grid-cols-2"
                   >
-                    {(
-                      [
-                        {
-                          value: 'public' as const,
-                          label: 'Public',
-                          description: 'Anyone can find and join it — with the organisation’s name on it.',
-                        },
-                        {
-                          value: 'org_members' as const,
-                          label: 'Members only',
-                          description: 'Only members of the organisation can see or join it.',
-                        },
-                      ]
-                    ).map((opt) => {
+                    {([{ value: 'public' as const }, { value: 'org_members' as const }]).map((opt) => {
                       const checked = orgVisibility === opt.value
                       return (
                         <button
@@ -865,10 +862,10 @@ function EditorPhase({
                               checked ? 'text-amber-500' : 'text-fg-primary',
                             )}
                           >
-                            {opt.label}
+                            {t(`form.org.options.${opt.value}.label`)}
                           </span>
                           <span className="text-xs leading-relaxed text-fg-tertiary">
-                            {opt.description}
+                            {t(`form.org.options.${opt.value}.description`)}
                           </span>
                         </button>
                       )
@@ -884,9 +881,9 @@ function EditorPhase({
       {/* Steps */}
       <Card>
         <CardHead
-          eyebrow="The plan"
-          title="Steps to make it real."
-          desc="Break the work into small pieces someone could do in an evening. You can always add more later — but a starter list of 3–8 helps people see how to help."
+          eyebrow={t('form.steps.eyebrow')}
+          title={t('form.steps.title')}
+          desc={t('form.steps.createDesc')}
         />
         <div className="flex flex-col gap-3">
           {steps.map((s, i) => (
@@ -913,13 +910,13 @@ function EditorPhase({
             <>
               <span className="size-[7px] rounded-full bg-green-500 shadow-[0_0_6px_var(--color-green-500)]" />
               {savedBlueprintAt === 'variant'
-                ? 'Saved as a blueprint variant — it now shows under the family.'
-                : 'Saved as a blueprint — others can fork it now.'}
+                ? t('form.saveBar.savedVariant')
+                : t('form.saveBar.savedNew')}
             </>
           ) : (
             <>
               <span className="size-[7px] animate-pulse rounded-full bg-amber-500 shadow-[0_0_8px_var(--color-amber-500)]" />
-              Draft is in your browser
+              {t('form.saveBar.draftInBrowser')}
             </>
           )}
         </div>
@@ -938,7 +935,7 @@ function EditorPhase({
             disabled={pendingLaunch || pendingBlueprint}
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0"
           >
-            {pendingLaunch ? 'Launching…' : 'Launch project'}
+            {pendingLaunch ? t('form.saveBar.launching') : t('form.saveBar.launchProject')}
             {!pendingLaunch && <ArrowRight className="size-3.5" strokeWidth={2.5} />}
           </button>
         </div>

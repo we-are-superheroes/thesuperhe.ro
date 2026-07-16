@@ -1,0 +1,81 @@
+{
+  "breadcrumb": {
+    "dashboard": "Dashboard",
+    "editProfile": "Profil bearbeiten"
+  },
+  "topbar": {
+    "unsavedChanges": "Ungespeicherte Änderungen",
+    "savedJustNow": "Gerade gespeichert",
+    "saveChanges": "Änderungen speichern"
+  },
+  "header": {
+    "title": "Dein <em>Profil</em>.",
+    "intro": "Das sehen Projektleitungen, wenn du deine Hilfe anbietest. Sei ehrlich — je genauer dein Profil, desto besser die Treffer."
+  },
+  "toc": {
+    "ariaLabel": "Profilabschnitte",
+    "onThisPage": "Auf dieser Seite",
+    "aboutYou": "Über dich",
+    "skills": "Fähigkeiten",
+    "whereWhen": "Wo & wann",
+    "organisations": "Organisationen",
+    "appearance": "Aussehen"
+  },
+  "identity": {
+    "eyebrow": "Über dich",
+    "title": "Erzähl deine Geschichte.",
+    "desc": "Eine kurze Bio und ein Bild helfen Projektleitungen zu verstehen, was dich antreibt. An welcher Veränderung willst du mitwirken?"
+  },
+  "avatar": {
+    "label": "Profilbild",
+    "uploading": "Wird hochgeladen…",
+    "replace": "Ersetzen",
+    "uploadNew": "Neues hochladen",
+    "remove": "Entfernen",
+    "hint": "Quadratisch, mindestens 256×256. PNG, JPG, WebP oder GIF, bis 4 MB."
+  },
+  "fields": {
+    "fullName": "Vollständiger Name",
+    "bio": "Bio",
+    "bioCounter": "{count} / {max}",
+    "bioHelp": "Zwei oder drei Sätze. Was dir wichtig ist, woran du arbeitest, wovon du gern mehr machen würdest.",
+    "city": "Stadt",
+    "cityPlaceholder": "z. B. Lausanne, Schweiz",
+    "timezone": "Zeitzone"
+  },
+  "proficiency": {
+    "beginner": "Anfänger(in)",
+    "intermediate": "Fortgeschritten",
+    "expert": "Experte/Expertin"
+  },
+  "skills": {
+    "eyebrow": "Fähigkeiten",
+    "title": "Was du mitbringst.",
+    "desc": "Wähle, was du gut kannst — und sag uns, ob du Projekte, die es brauchen, überhaupt <em>willst</em>. Es ist völlig okay, Experte in etwas zu sein, mit dem du abgeschlossen hast.",
+    "colSkill": "Fähigkeit",
+    "colLevel": "Stufe",
+    "colMatchMe": "Vorschlagen",
+    "empty": "Noch keine Fähigkeiten — füge unten welche hinzu oder wähle aus den Vorschlägen.",
+    "searchPlaceholder": "Fähigkeit hinzufügen — nach Name oder Kategorie suchen…",
+    "allAdded": "Du hast jede Fähigkeit aus unserem Katalog hinzugefügt.",
+    "add": "Hinzufügen",
+    "noMatch": "Keine Fähigkeit in unserem Katalog passt zu <query>„{term}“</query>.",
+    "suggestions": "Vorschläge:"
+  },
+  "skillRow": {
+    "matchMeMobile": "Mir passende Projekte vorschlagen",
+    "seekingOn": "Sucht Projekte",
+    "seekingOff": "Gerade nicht auf der Suche",
+    "remove": "Fähigkeit entfernen"
+  },
+  "where": {
+    "eyebrow": "Wo & wann",
+    "title": "Ort & Zeitzone.",
+    "desc": "Hilft uns, lokale Projekte zu zeigen und Anrufe zu koordinieren. Wir zeigen nie deine genaue Adresse — nur deine Stadt."
+  },
+  "appearance": {
+    "eyebrow": "Aussehen",
+    "title": "Theme.",
+    "desc": "Wähle, wie The Superhero für dich aussieht. Deine Wahl wird in diesem Browser gespeichert und gilt auf jeder Seite — sie hängt nicht am Speichern-Button."
+  }
+}

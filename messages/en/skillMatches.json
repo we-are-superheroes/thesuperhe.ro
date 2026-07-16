@@ -1,0 +1,63 @@
+{
+  "hero": {
+    "title": "Matched to <em>your skills</em>.",
+    "subtitle": "Steps and projects picked for what you’re good at — and where you are. Remote work is matched on the languages you speak instead."
+  },
+  "basis": {
+    "ariaLabel": "What these matches are based on",
+    "matchingOn": "Matching on",
+    "noSkills": "No skills on your profile yet",
+    "editProfile": "Edit profile"
+  },
+  "emptyProfile": {
+    "title": "Tell us what you’re good at.",
+    "description": "Matches are built from the skills on your profile. Add a few — any skill counts, not just technical ones — and matches will appear here.",
+    "cta": "Add skills to your profile"
+  },
+  "pills": {
+    "all": "All",
+    "steps": "Steps",
+    "projects": "Projects"
+  },
+  "tools": {
+    "searchPlaceholder": "Search matches…",
+    "remoteOnly": "Remote only"
+  },
+  "emptyFiltered": {
+    "title": "No matches with those filters.",
+    "description": "Try turning off “Remote only”, clearing the search — or add more skills to your profile to see more matches."
+  },
+  "groups": {
+    "strongTitle": "Strong matches",
+    "strongSub": "{count} — they need a skill you already have",
+    "adjacentTitle": "Adjacent to your skills",
+    "adjacentSub": "{count} — in the same skill areas, a chance to learn something new"
+  },
+  "ring": {
+    "percentSign": "%",
+    "matchLabel": "Match"
+  },
+  "card": {
+    "kindStep": "step",
+    "kindProject": "project",
+    "estimatedHours": "· ~{hours}h",
+    "claimStep": "Claim this step",
+    "viewProject": "View project"
+  },
+  "why": {
+    "needsSkills": "Needs {skills} — you have {count, plural, one {it} other {both}}",
+    "andJoiner": " and ",
+    "relatedSkills": "{skills} is close to your skills",
+    "near": "In {city}, same as you",
+    "far": "{location} — travel needed",
+    "locationUnknown": "Location unknown",
+    "remoteLang": "Remote, works in {language}",
+    "remoteNoLang": "Remote, but runs in {language}",
+    "remoteUnknown": "Remote contributors welcome"
+  },
+  "rail": {
+    "remote": "Remote",
+    "nearYou": "{location} · near you",
+    "locationNotSet": "Location not set"
+  }
+}

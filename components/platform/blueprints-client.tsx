@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import {
   Search,
   Plus,
@@ -76,6 +77,7 @@ export function BlueprintsClient({
   languages: CodeOption[]
   stats: { familyCount: number; variantCount: number; launchCount: number }
 }) {
+  const t = useTranslations('blueprints')
   const [query, setQuery] = useState('')
   const [countrySearch, setCountrySearch] = useState('')
   const [selectedTypes, setSelectedTypes] = useState<Set<string>>(new Set())
@@ -164,7 +166,8 @@ export function BlueprintsClient({
     setSelectedLanguages(new Set())
   }
 
-  const activeChips: Array<{ kind: string; key: string; label: string }> = []
+  type ChipKind = 'query' | 'type' | 'country' | 'language'
+  const activeChips: Array<{ kind: ChipKind; key: string; label: string }> = []
   if (query.trim()) activeChips.push({ kind: 'query', key: '', label: `"${query.trim()}"` })
   for (const id of selectedTypes) {
     const t = types.find((x) => x.id === id)
@@ -178,7 +181,7 @@ export function BlueprintsClient({
     const l = languages.find((x) => x.code === code)
     if (l) activeChips.push({ kind: 'language', key: code, label: l.label })
   }
-  const removeChip = (kind: string, key: string) => {
+  const removeChip = (kind: ChipKind, key: string) => {
     if (kind === 'query') setQuery('')
     else if (kind === 'type') toggle(selectedTypes, setSelectedTypes, key)
     else if (kind === 'country') toggle(selectedCountries, setSelectedCountries, key)
@@ -195,7 +198,7 @@ export function BlueprintsClient({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search blueprints..."
+            placeholder={t('list.searchPlaceholder')}
             className="w-full rounded-lg border border-neutral-700 bg-bg-surface py-2.5 pl-10 pr-3.5 font-sans text-sm text-fg-primary outline-none transition-colors duration-fast placeholder:text-fg-tertiary focus:border-amber-500"
           />
         </div>
@@ -205,32 +208,35 @@ export function BlueprintsClient({
             className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 transition-all duration-standard hover:-translate-y-px hover:bg-amber-400 hover:shadow-glow-amber"
           >
             <Plus className="size-3.5" strokeWidth={2.5} />
-            <span className="hidden sm:inline">Save your own blueprint</span>
-            <span className="sm:hidden">New</span>
+            <span className="hidden sm:inline">{t('list.saveYourOwn')}</span>
+            <span className="sm:hidden">{t('list.newShort')}</span>
           </Link>
         </div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 overflow-y-auto p-4 sm:p-6 lg:p-10">
+      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8 p-4 sm:p-6 lg:p-10">
         {/* Header */}
         <section className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <div className="mb-2 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">
-              Blueprint library
+              {t('list.eyebrow')}
             </div>
             <h1 className="font-display text-[clamp(32px,7vw,52px)] font-normal leading-none tracking-tight">
-              Start from a <em className="italic text-amber-500">proven</em> pattern.
+              {t.rich('list.heading', {
+                em: (chunks) => (
+                  <em className="italic text-amber-500">{chunks}</em>
+                ),
+              })}
             </h1>
             <p className="mt-3 max-w-[640px] text-base leading-relaxed text-fg-secondary sm:text-lg">
-              Blueprints are tested project recipes — born in one place, adapted
-              for others. Pick a model that fits your context, your country and
-              your language; we&apos;ll set the rest up around it.
+              {t('list.intro')}
             </p>
           </div>
           <div className="flex w-full flex-wrap gap-6 rounded-2xl border border-white/[0.08] bg-bg-surface px-5 py-4 sm:w-auto">
-            <Stat value={stats.familyCount} label="Families" />
-            <Stat value={stats.variantCount} label="Variants" />
-            <Stat value={stats.launchCount} label="Launches" dimIfZero />
+            <Stat value={stats.familyCount} label={t('list.stats.families')} />
+            <Stat value={stats.variantCount} label={t('list.stats.variants')} />
+            <Stat value={stats.launchCount} label={t('list.stats.launches')} dimIfZero />
           </div>
         </section>
 
@@ -241,7 +247,7 @@ export function BlueprintsClient({
           className="inline-flex w-fit items-center gap-2 self-start rounded-lg border border-neutral-700 bg-bg-surface px-3 py-2 text-sm text-fg-primary lg:hidden"
         >
           <SlidersHorizontal className="size-4" />
-          {mobileFiltersOpen ? 'Hide filters' : 'Show filters'}
+          {mobileFiltersOpen ? t('filters.hide') : t('filters.show')}
         </button>
 
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[260px_1fr]">
@@ -253,20 +259,20 @@ export function BlueprintsClient({
             )}
           >
             <div className="flex items-center justify-between">
-              <h3 className="font-display text-xl font-normal">Filters</h3>
+              <h3 className="font-display text-xl font-normal">{t('filters.title')}</h3>
               {activeChips.length > 0 && (
                 <button
                   type="button"
                   onClick={clearAll}
                   className="text-xs text-fg-tertiary underline-offset-2 hover:text-fg-primary hover:underline"
                 >
-                  Clear all
+                  {t('filters.clearAll')}
                 </button>
               )}
             </div>
 
             {types.length > 0 && (
-              <FilterGroup label="Type">
+              <FilterGroup label={t('filters.type')}>
                 <CheckList
                   items={types.map((t) => ({ id: t.id, label: t.name, count: t.count }))}
                   selected={selectedTypes}
@@ -276,11 +282,11 @@ export function BlueprintsClient({
             )}
 
             {countries.length > 0 && (
-              <FilterGroup label="Country">
+              <FilterGroup label={t('filters.country')}>
                 <FilterSearchInput
                   value={countrySearch}
                   onChange={setCountrySearch}
-                  placeholder="Search countries..."
+                  placeholder={t('filters.searchCountriesPlaceholder')}
                 />
                 <CheckList
                   items={visibleCountries.map((c) => ({
@@ -295,7 +301,7 @@ export function BlueprintsClient({
             )}
 
             {languages.length > 0 && (
-              <FilterGroup label="Language">
+              <FilterGroup label={t('filters.language')}>
                 <CheckList
                   items={languages.map((l) => ({
                     id: l.code,
@@ -313,18 +319,23 @@ export function BlueprintsClient({
           <div className="flex min-w-0 flex-col gap-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="text-sm text-fg-secondary">
-                Showing <strong className="font-semibold text-fg-primary">{visible.length}</strong>{' '}
-                of {families.length} blueprint{families.length === 1 ? '' : 's'}
+                {t.rich('list.showing', {
+                  shown: visible.length,
+                  total: families.length,
+                  strong: (chunks) => (
+                    <strong className="font-semibold text-fg-primary">{chunks}</strong>
+                  ),
+                })}
               </div>
               <SelectBox
                 value={sort}
                 onChange={(e) => setSort(e.target.value as SortKey)}
                 className="w-auto cursor-pointer bg-bg-surface py-2 pl-3 pr-8 [background-position:right_10px_center]"
               >
-                <option value="popular">Most used</option>
-                <option value="recent">Recently added</option>
-                <option value="variants">Most variants</option>
-                <option value="az">A–Z</option>
+                <option value="popular">{t('sort.popular')}</option>
+                <option value="recent">{t('sort.recent')}</option>
+                <option value="variants">{t('sort.variants')}</option>
+                <option value="az">{t('sort.az')}</option>
               </SelectBox>
             </div>
 
@@ -336,14 +347,14 @@ export function BlueprintsClient({
                     className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/[0.12] px-3 py-1 text-xs text-amber-500"
                   >
                     <span className="text-[10px] uppercase tracking-wider text-amber-500/70">
-                      {chip.kind === 'query' ? 'search' : chip.kind}
+                      {t(`chips.${chip.kind === 'query' ? 'search' : chip.kind}`)}
                     </span>
                     <span className="font-medium text-amber-500">{chip.label}</span>
                     <button
                       type="button"
                       onClick={() => removeChip(chip.kind, chip.key)}
                       className="text-amber-500/70 hover:text-amber-500"
-                      title="Remove filter"
+                      title={t('chips.remove')}
                     >
                       <X className="size-3" strokeWidth={2.5} />
                     </button>
@@ -354,10 +365,9 @@ export function BlueprintsClient({
 
             {visible.length === 0 ? (
               <div className="rounded-2xl border-[1.5px] border-dashed border-neutral-700 bg-[radial-gradient(ellipse_at_top,rgba(244,165,53,0.06),transparent_70%),var(--color-bg-surface)] px-8 py-12 text-center">
-                <h3 className="font-display text-2xl">No blueprints match.</h3>
+                <h3 className="font-display text-2xl">{t('empty.title')}</h3>
                 <p className="mx-auto mt-2 max-w-[460px] text-base leading-relaxed text-fg-secondary">
-                  Loosen a filter, or save the first blueprint that fits this niche
-                  yourself.
+                  {t('empty.body')}
                 </p>
               </div>
             ) : (
@@ -381,6 +391,7 @@ export function BlueprintsClient({
           </div>
         </div>
       </div>
+      </div>
     </>
   )
 }
@@ -398,6 +409,7 @@ function FamilyCard({
   onPickVariant: (variantId: string) => void
   isVariantDim: (v: BlueprintVariantOption) => boolean
 }) {
+  const t = useTranslations('blueprints')
   // Prefer the user's pick; otherwise the first variant that doesn't fall
   // outside the active filters; otherwise the root.
   const focused: BlueprintVariantOption =
@@ -423,7 +435,7 @@ function FamilyCard({
           </Link>
         </div>
         <span className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-fg-tertiary">
-          {family.variants.length} variant{family.variants.length === 1 ? '' : 's'}
+          {t('counts.variants', { count: family.variants.length })}
         </span>
       </div>
 
@@ -439,7 +451,7 @@ function FamilyCard({
             .
           </strong>{' '}
           {focused.id === family.id
-            ? 'The original recipe — adapt it for your area.'
+            ? t('card.originalRecipe')
             : truncate(focused.description, 180)}
         </p>
       )}
@@ -447,7 +459,7 @@ function FamilyCard({
       {/* Variant chips */}
       <div className="mt-4 flex flex-col gap-2">
         <div className="text-[10px] font-semibold uppercase tracking-widest text-fg-tertiary">
-          Available in
+          {t('card.availableIn')}
         </div>
         <div className="flex flex-wrap gap-1.5">
           {family.variants.map((v) => (
@@ -467,19 +479,23 @@ function FamilyCard({
         <div className="flex flex-wrap items-center gap-4 text-xs text-fg-tertiary">
           <span className="inline-flex items-center gap-1.5">
             <Zap className="size-3.5" />
-            <strong className="font-semibold text-fg-primary">{family.totalReuse}</strong>
-            launch{family.totalReuse === 1 ? '' : 'es'}
+            {t.rich('counts.launches', {
+              count: family.totalReuse,
+              strong: (chunks) => (
+                <strong className="font-semibold text-fg-primary">{chunks}</strong>
+              ),
+            })}
           </span>
           <span className="inline-flex items-center gap-1.5">
             <Clock className="size-3.5" />
-            {family.stepCount} step{family.stepCount === 1 ? '' : 's'}
+            {t('counts.steps', { count: family.stepCount })}
           </span>
         </div>
         <Link
           href={`/projects/new?blueprint=${focused.id}`}
           className="inline-flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-sm font-medium text-amber-900 transition-all hover:bg-amber-400"
         >
-          Use blueprint
+          {t('cta.use')}
           <ArrowRight className="size-3.5" strokeWidth={2.5} />
         </Link>
       </div>
@@ -498,6 +514,7 @@ function VariantChip({
   dim: boolean
   onClick: () => void
 }) {
+  const t = useTranslations('blueprints')
   const country = variant.country
   const lang = variant.language
   return (
@@ -506,7 +523,7 @@ function VariantChip({
       onClick={onClick}
       title={
         [countryLabel(country), languageLabel(lang)].filter(Boolean).join(' · ') ||
-        'Locale not set'
+        t('card.localeNotSet')
       }
       className={cn(
         'inline-flex items-center gap-1.5 rounded-full border px-2 py-1 text-[11px] font-medium transition-all',
@@ -531,7 +548,7 @@ function VariantChip({
       )}
       {variant.isRoot && (
         <span className="text-[9px] uppercase tracking-widest text-fg-tertiary">
-          original
+          {t('variants.original')}
         </span>
       )}
     </button>
@@ -589,6 +606,7 @@ function CheckList({
   selected: Set<string>
   onToggle: (id: string) => void
 }) {
+  const t = useTranslations('blueprints')
   return (
     <div className="flex max-h-[260px] flex-col gap-1 overflow-y-auto pr-1">
       {items.map((item) => {
@@ -634,7 +652,7 @@ function CheckList({
         )
       })}
       {items.length === 0 && (
-        <div className="px-1.5 py-2 text-xs text-fg-tertiary">No matches.</div>
+        <div className="px-1.5 py-2 text-xs text-fg-tertiary">{t('filters.noMatches')}</div>
       )}
     </div>
   )

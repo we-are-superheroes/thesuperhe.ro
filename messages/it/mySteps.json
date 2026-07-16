@@ -1,0 +1,50 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Cerca passaggi…",
+    "findStep": "Trova un passaggio a cui unirti",
+    "findStepShort": "Trova"
+  },
+  "hero": {
+    "title": "Il tuo <em>tempo</em>, registrato.",
+    "subtitle": "Tieni traccia delle ore che hai dedicato a ogni passaggio a cui ti sei unito. Cambia lo stato di un passaggio dalla pagina del progetto quando sei pronto."
+  },
+  "stats": {
+    "active": "Attivi",
+    "completed": "Completati",
+    "myHours": "Le mie ore"
+  },
+  "filter": {
+    "active": "Attivi",
+    "completed": "Completati"
+  },
+  "sort": {
+    "recentlyLogged": "Registrati di recente",
+    "byProject": "Per progetto",
+    "byName": "Per nome"
+  },
+  "group": {
+    "title": "Raggruppa per",
+    "none": "Nessun gruppo",
+    "byProject": "Raggruppa per progetto"
+  },
+  "badge": {
+    "coordinator": "Coordinatore"
+  },
+  "row": {
+    "myHours": "Tu: {hours}"
+  },
+  "hours": {
+    "zero": "0h",
+    "hoursOnly": "{hours}h",
+    "hoursMinutes": "{hours}h {minutes}m",
+    "minutesOnly": "{minutes}m"
+  },
+  "empty": {
+    "searchTitle": "Nessun passaggio corrisponde alla ricerca.",
+    "searchDescription": "Prova una parola diversa o svuota la ricerca.",
+    "completedTitle": "Ancora niente di completato.",
+    "completedDescription": "Segna un passaggio come completato dalla pagina del progetto e comparirà qui.",
+    "activeTitle": "Non ti sei ancora unito a nessun passaggio.",
+    "activeDescription": "Trova un progetto, unisciti a un passaggio, poi torna qui per registrare il tempo."
+  }
+}

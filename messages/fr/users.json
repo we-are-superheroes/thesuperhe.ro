@@ -1,0 +1,69 @@
+{
+  "breadcrumb": {
+    "discover": "Découvrir",
+    "people": "Personnes"
+  },
+  "hero": {
+    "joined": "Membre depuis le {date}",
+    "editProfile": "Modifier le profil",
+    "sendMessage": "Envoyer un message",
+    "inviteToProject": "Inviter à un projet",
+    "invitesComingSoon": "Les invitations à des projets arrivent bientôt"
+  },
+  "stats": {
+    "projectsLabel": "Projets",
+    "projectsSub": "{active, plural, one {# actif} other {# actifs}} · {finished, plural, one {# terminé} other {# terminés}}",
+    "contributedLabel": "Contribué",
+    "hoursUnit": "h",
+    "contributedSub": "Tous projets confondus",
+    "stepsShippedLabel": "Étapes livrées",
+    "stepsShippedSub": "Terminées par cette personne",
+    "blueprintsLabel": "Modèles",
+    "blueprintsSub": "Adapté {count, plural, one {# fois} other {# fois}}",
+    "none": "—"
+  },
+  "about": {
+    "eyebrow": "À propos",
+    "title": "Ce qui tient à cœur à {firstName}.",
+    "emptySelf": "Tu n’as pas encore écrit de bio. <link>Ajoutes-en une</link> pour aider les responsables de projet à comprendre ce qui te motive.",
+    "emptyOther": "{name} n’a pas encore écrit de bio."
+  },
+  "skills": {
+    "eyebrow": "Compétences",
+    "title": "Ce que {firstName} apporte.",
+    "emptySelf": "Pas encore de compétences sur ton profil. <link>Ajoutes-en</link> pour que les projets te trouvent.",
+    "emptyOther": "{name} n’a pas encore listé de compétences.",
+    "seeking": "Ouvert aux projets qui en ont besoin",
+    "notSeeking": "A cette compétence, mais ne cherche pas de projets qui en ont besoin"
+  },
+  "proficiency": {
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "expert": "Expert"
+  },
+  "projects": {
+    "eyebrow": "Projets",
+    "title": "Ce que fait {firstName}.",
+    "joined": "A rejoint le {date}",
+    "wrapped": "Terminé le {date}",
+    "typeOther": "Autre",
+    "remote": "À distance"
+  },
+  "role": {
+    "lead": "Responsable",
+    "contributor": "Contributeur"
+  },
+  "tabs": {
+    "active": "Actifs",
+    "finished": "Terminés",
+    "all": "Tous",
+    "emptyActive": "Rien d’actif en ce moment.",
+    "emptyFinished": "Rien de terminé pour l’instant.",
+    "emptyAll": "Pas encore de projets."
+  },
+  "card": {
+    "completed": "Terminé",
+    "activeStatus": "Actif",
+    "progressPct": "{progress}%"
+  }
+}

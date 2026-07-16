@@ -1,5 +1,6 @@
 import { auth } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { findOrCreateConversation } from '@/lib/messages'
 import {
@@ -34,6 +35,8 @@ function presenceOnline(lastSeenAt: Date | null): boolean {
 export default async function MessagesPage({ searchParams }: SearchParams) {
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
+
+  const t = await getTranslations('messagesInbox')
 
   const params = await searchParams
   const view: 'inbox' | 'archived' = params.view === 'archived' ? 'archived' : 'inbox'
@@ -141,9 +144,9 @@ export default async function MessagesPage({ searchParams }: SearchParams) {
             id: last.id,
             // Snippet: empty if deleted, "You: …" prefix if sent by caller.
             preview: last.deletedAt
-              ? '[deleted]'
+              ? t('list.previewDeleted')
               : last.senderId === userId
-                ? `You: ${last.body}`
+                ? t('list.previewYou', { body: last.body })
                 : last.body,
             ts: last.createdAt.getTime(),
           }
@@ -243,7 +246,7 @@ export default async function MessagesPage({ searchParams }: SearchParams) {
     <MessagesClient
       currentUser={{
         id: me?.id ?? userId,
-        name: me?.name ?? 'You',
+        name: me?.name ?? t('you'),
         avatarUrl: me?.avatarUrl ?? null,
       }}
       conversations={conversations}

@@ -1,0 +1,304 @@
+{
+  "status": {
+    "defining": "Being defined",
+    "needs_help": "Needs help",
+    "in_progress": "In progress",
+    "completed": "Completed"
+  },
+  "someone": "Someone",
+  "topbar": {
+    "browseProjects": "Browse projects",
+    "modifyProject": "Modify project",
+    "modify": "Modify"
+  },
+  "hero": {
+    "membersOnly": "Members only",
+    "changeStatusTitle": "Change project status",
+    "change": "Change",
+    "openInGoogleMaps": "Open in Google Maps",
+    "remoteWelcome": "Remote contributors welcome",
+    "started": "Started {date}"
+  },
+  "tabs": {
+    "ariaLabel": "Project sections",
+    "overview": "Overview",
+    "updates": "Updates"
+  },
+  "about": {
+    "kicker": "About this project",
+    "noDescription": "No description yet — the project lead hasn’t written one."
+  },
+  "stepsSection": {
+    "kicker": "Steps to take",
+    "headingNeedsHelp": "{total, plural, one {# step} other {# steps}}. <em>{needing, plural, one {# needs help} other {# need help}}</em> right now.",
+    "headingProgress": "{total, plural, one {# step} other {# steps}}. <em>making progress</em> right now.",
+    "noStepsYet": "No steps yet.",
+    "emptyTitle": "The step list is empty.",
+    "emptyDescription": "Once the project lead breaks the work down into steps, they’ll show up here so you can pick one to claim."
+  },
+  "join": {
+    "signInToJoin": "Sign in to join",
+    "requestSent": "Request sent",
+    "joining": "Joining…",
+    "joinProject": "Join project",
+    "leaving": "Leaving…",
+    "joined": "Joined",
+    "membershipMenu": "Membership menu",
+    "memberNote": "You’re a member. <b>{title}</b> shows in your dashboard and you can see members-only updates.",
+    "seeOpenSteps": "See open steps",
+    "leaveProject": "Leave project",
+    "leaveConfirm": "{count, plural, one {You have # step assigned to you on this project. If you leave, it goes back to the team.} other {You have # steps assigned to you on this project. If you leave, they go back to the team.}}\n\nAre you sure you want to leave?",
+    "youreAMember": "You’re a member.",
+    "memberCardBody": "This project is in your dashboard. Claim a step to start contributing, and check the Updates tab for news.",
+    "requestSentHeading": "Request sent.",
+    "requestSentBody": "The project lead will get a notification. You’ll become a member once they accept.",
+    "wantToJoin": "Want to join?",
+    "joinCardBody": "Join the project to claim steps, see updates in your dashboard, and chat with the team.",
+    "joinThisProject": "Join this project"
+  },
+  "stats": {
+    "title": "Project numbers",
+    "contributors": "Contributors",
+    "hoursGiven": "Hours given",
+    "stepsDone": "Steps done",
+    "daysActive": "Days active",
+    "hoursUnit": "h",
+    "daysUnit": "d",
+    "noContributors": "No contributors yet — be the first.",
+    "signInToSee": "<link>Sign in</link> to see who’s working on this."
+  },
+  "details": {
+    "title": "Details",
+    "type": "Type",
+    "status": "Status",
+    "location": "Location",
+    "remoteContributions": "Remote contributions",
+    "timeCommitment": "Time commitment",
+    "created": "Created",
+    "lead": "Lead",
+    "notSet": "Not set",
+    "notSpecified": "Not specified",
+    "remoteWelcome": "Welcome",
+    "remoteNo": "Not for this project",
+    "avgHours": "~{hours}h on average",
+    "flexible": "Flexible",
+    "daysAgo": "· {count, plural, one {# day ago} other {# days ago}}",
+    "noLead": "No lead yet"
+  },
+  "updates": {
+    "openTabTitle": "Open the Updates tab",
+    "latestUpdateBy": "Latest update · {name}",
+    "noUpdatesYet": "No updates yet.",
+    "updateCount": "{count, plural, one {# update} other {# updates}}.",
+    "forMembersOnly": "{count} for members only.",
+    "publicUpdateCount": "{count, plural, one {# public update} other {# public updates}}.",
+    "hiddenGate": "<b>{count}</b> members-only {count, plural, one {update is} other {updates are}} hidden.",
+    "joinTheProject": "Join the project",
+    "signInAndJoin": "Sign in and join",
+    "toSeeThem": "{count, plural, one {to see it.} other {to see them.}}",
+    "emptyTitle": "Nothing here yet.",
+    "emptyLead": "Post the first update above — members get notified, and public updates show visitors that this project is active.",
+    "emptyViewer": "When the project lead posts updates or steps get completed, they’ll show up here.",
+    "composerPlaceholder": "Share an update on {title}…",
+    "public": "Public",
+    "membersOnly": "Members only",
+    "visibleToMembers": "Visible only to the {count, plural, one {# project member} other {# project members}}",
+    "visibleToAnyone": "Visible to anyone browsing the project",
+    "posting": "Posting…",
+    "postUpdate": "Post update",
+    "formerMember": "Former member",
+    "leadBadge": "Lead",
+    "postedAgo": "Posted {ago}",
+    "edited": "· edited",
+    "confirmDelete": "Delete this update? This can’t be undone.",
+    "manageUpdate": "Manage update"
+  },
+  "milestones": {
+    "stepCompleted": "Step completed —",
+    "peopleJoined": "{count, plural, one {# person joined —} other {# people joined —}}",
+    "twoNames": "{a} and {b}",
+    "moreNames": "{first} and {last}"
+  },
+  "share": {
+    "share": "Share",
+    "sharePage": "Share this page",
+    "linkCopied": "Link copied"
+  },
+  "form": {
+    "bits": {
+      "countryPlaceholder": "Not set",
+      "searchCountriesPlaceholder": "Search countries…",
+      "countryNotSetOption": "— Not set —",
+      "noMatches": "No matches.",
+      "stepTitlePlaceholder": "Step title — click to modify",
+      "stepDescriptionPlaceholder": "Optional details — click to add",
+      "removeSkill": "Remove skill",
+      "addSkill": "Add skill",
+      "addAnotherSkill": "Add another",
+      "searchSkillsPlaceholder": "Search skills…",
+      "allSkillsAdded": "All skills added.",
+      "estimateAbbrev": "Est.",
+      "estimatedHours": "Estimated hours",
+      "hoursUnit": "h",
+      "removeStep": "Remove step",
+      "addAStep": "Add a step"
+    },
+    "breadcrumb": {
+      "myProjects": "My projects",
+      "newProject": "New project",
+      "newProjectFromBlueprint": "New project (from blueprint)",
+      "startAProject": "Start a project"
+    },
+    "changeStartingPoint": "Change starting point",
+    "backToProject": "Back to project",
+    "untitledProject": "Untitled project",
+    "titleFromBlueprint": "{title} — your area",
+    "chooser": {
+      "heading": "Start a <em>project</em>.",
+      "intro": "You can begin with an empty plan, or fork a blueprint — a proven plan from someone who’s done this before.",
+      "scratchTitle": "Start from scratch.",
+      "scratchDescription": "An empty plan. Best when your project is unusual, very local, or you’ve already worked out the steps yourself.",
+      "scratchCta": "Begin a fresh project",
+      "blueprintTitle": "Use a blueprint.",
+      "blueprintDescription": "Copy freely. Pre-built plans for repair cafés, pocket forests, mutual aid groups and more — browse the library, then fork one and adapt it to your community.",
+      "blueprintCta": "Browse blueprints"
+    },
+    "origin": {
+      "creatingVariantOf": "Creating a variant of",
+      "forkedFrom": "Forked from",
+      "startingFromScratch": "Starting from scratch",
+      "blueprintBadge": "{title} blueprint",
+      "change": "change"
+    },
+    "editHeader": {
+      "modifying": "Modifying",
+      "projectLead": "Project lead"
+    },
+    "sections": {
+      "ariaLabel": "Sections",
+      "onThisPage": "On this page",
+      "status": "Status",
+      "basics": "Basics",
+      "cover": "Cover",
+      "location": "Location & access",
+      "steps": "Steps"
+    },
+    "statusCard": {
+      "eyebrow": "Project status",
+      "title": "What's happening, in one word?",
+      "desc": "This appears at the top of the project page, in listings, and in everyone’s dashboard. Set it honestly — \"Needs help\" reaches more people than \"In progress\" when you really need them.",
+      "ariaLabel": "Project status",
+      "descriptions": {
+        "defining": "Still working out the plan. Not ready for contributors yet — people can follow along, but there’s nothing to do.",
+        "needs_help": "You need more people. Pushes the project to the top of skill matches and the home page.",
+        "in_progress": "Work is happening and the team is mostly set. The normal state for most live projects.",
+        "completed": "The work is done. Moves to the “Finished” tab. You can reopen the project at any time."
+      }
+    },
+    "basics": {
+      "eyebrow": "The basics",
+      "title": "What is it?",
+      "desc": "Two sentences are enough. You can add more detail later.",
+      "titleLabel": "Title",
+      "titlePlaceholder": "e.g. Pocket Forest, Hackney Wick",
+      "descriptionLabel": "Description",
+      "descriptionHelp": "The first paragraph is what shows up on the project card.",
+      "descriptionPlaceholder": "What are you trying to make happen, and why does it matter?"
+    },
+    "cover": {
+      "eyebrow": "Cover image",
+      "title": "A picture for your project.",
+      "desc": "Used on the project page and the cards on Browse and My projects. Optional — a colourful gradient stands in if you skip it.",
+      "alt": "Project cover",
+      "uploading": "Uploading…",
+      "replace": "Replace",
+      "upload": "Upload cover",
+      "remove": "Remove",
+      "hint": "Wide image works best — at least 1200×600. PNG, JPG, WebP or GIF, up to 8 MB."
+    },
+    "location": {
+      "eyebrow": "Where it happens",
+      "title": "Location & access.",
+      "desc": "Helps the right people find you. You’ll only show the area, never an exact address.",
+      "cityLabel": "City or area",
+      "cityPlaceholder": "e.g. Hackney, London",
+      "countryLabel": "Country (optional)",
+      "countryHelp": "Shown on the project card and used by the browse-page country filter.",
+      "addressLabel": "Specific address or place name (optional)",
+      "addressHelp": "Shown to people who join. Skip this if your meet-up spot changes or you’d rather not publish it.",
+      "addressPlaceholder": "e.g. The Old Library, 2 Wallis Road, E9 5LH",
+      "languageLabel": "Working language (optional)",
+      "languageHelp": "Used by the browse-page language filter.",
+      "noneOption": "— none —"
+    },
+    "remote": {
+      "label": "Can people contribute remotely?",
+      "ariaLabel": "Remote participation",
+      "options": {
+        "yes": "Yes, remote-friendly",
+        "some": "Some steps only",
+        "no": "No, in-person only"
+      },
+      "someHint": "If “some steps only”, you can mark each step as remote-okay later."
+    },
+    "joinPolicy": {
+      "label": "Who can join?",
+      "ariaLabel": "Join policy",
+      "options": {
+        "open": {
+          "label": "Open to the world",
+          "description": "Anyone can join instantly and start contributing."
+        },
+        "approval_required": {
+          "label": "Approval needed",
+          "description": "Joins land in your inbox as a request to accept or decline."
+        }
+      }
+    },
+    "org": {
+      "label": "Organisation",
+      "personalOption": "Personal project — no organisation",
+      "note": "Organisation projects show the organisation’s name and count towards its contribution totals.",
+      "visibilityLabel": "Who can see it?",
+      "visibilityAriaLabel": "Project visibility",
+      "options": {
+        "public": {
+          "label": "Public",
+          "description": "Anyone can find and join it — with the organisation’s name on it."
+        },
+        "org_members": {
+          "label": "Members only",
+          "description": "Only members of the organisation can see or join it."
+        }
+      }
+    },
+    "steps": {
+      "eyebrow": "The plan",
+      "title": "Steps to make it real.",
+      "createDesc": "Break the work into small pieces someone could do in an evening. You can always add more later — but a starter list of 3–8 helps people see how to help.",
+      "editDesc": "Add, edit, reorder, or remove steps. If you delete a step someone has claimed, that person is removed from it — be careful."
+    },
+    "saveBar": {
+      "savedVariant": "Saved as a blueprint variant — it now shows under the family.",
+      "savedNew": "Saved as a blueprint — others can fork it now.",
+      "savedAsBlueprint": "Saved as blueprint — others can fork it now.",
+      "draftInBrowser": "Draft is in your browser",
+      "launching": "Launching…",
+      "launchProject": "Launch project",
+      "saveAsBlueprint": "Save as blueprint",
+      "saveAsBlueprintVariant": "Save as blueprint variant",
+      "saveAsNewBlueprint": "Save as new blueprint",
+      "moreSaveOptions": "More save options",
+      "saveChanges": "Save changes"
+    }
+  },
+  "adminDelete": {
+    "deleteKind": "Delete {kind, select, blueprint {blueprint} other {project}}",
+    "triggerTitle": "Delete {kind, select, blueprint {blueprint} other {project}} (admin)",
+    "confirmTitle": "Delete this {kind, select, blueprint {blueprint} other {project}}?",
+    "confirmBody": "You're about to permanently delete <b>{name}</b>. This can't be undone.",
+    "projectConsequence": "All its steps, contributions and logged time go with it.",
+    "blueprintConsequence": "Its steps are removed; projects forked from it and any variants are kept (just unlinked).",
+    "deleting": "Deleting…"
+  }
+}

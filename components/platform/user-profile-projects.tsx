@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { MapPin, Star, Users, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -37,11 +38,6 @@ const IMG_CLASS: Record<string, string> = {
     '[background:radial-gradient(circle_at_60%_50%,#F7BD64_0%,transparent_60%),linear-gradient(135deg,#2A3A52,#5A7090)]',
 }
 
-const ROLE_LABEL: Record<ProfileProject['role'], string> = {
-  lead: 'Leading',
-  contributor: 'Contributing',
-}
-
 function RoleIcon({ role, className }: { role: ProfileProject['role']; className?: string }) {
   if (role === 'lead') return <Star className={cn('fill-current', className)} strokeWidth={0} />
   return <Users className={className} strokeWidth={2.5} />
@@ -54,6 +50,7 @@ export function UserProfileProjects({
   active: ProfileProject[]
   finished: ProfileProject[]
 }) {
+  const t = useTranslations('users')
   const [tab, setTab] = useState<Tab>(active.length > 0 ? 'active' : finished.length > 0 ? 'finished' : 'active')
 
   const visible = tab === 'all' ? [...active, ...finished] : tab === 'active' ? active : finished
@@ -62,11 +59,11 @@ export function UserProfileProjects({
     <>
       {/* Tabs */}
       <div className="mb-4 flex flex-wrap gap-1 border-b border-white/[0.08]">
-        <TabButton active={tab === 'active'} label="Active" count={active.length} onClick={() => setTab('active')} />
-        <TabButton active={tab === 'finished'} label="Finished" count={finished.length} onClick={() => setTab('finished')} />
+        <TabButton active={tab === 'active'} label={t('tabs.active')} count={active.length} onClick={() => setTab('active')} />
+        <TabButton active={tab === 'finished'} label={t('tabs.finished')} count={finished.length} onClick={() => setTab('finished')} />
         <TabButton
           active={tab === 'all'}
-          label="All"
+          label={t('tabs.all')}
           count={active.length + finished.length}
           onClick={() => setTab('all')}
         />
@@ -75,9 +72,9 @@ export function UserProfileProjects({
       {/* Grid */}
       {visible.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-neutral-700 bg-bg-surface px-6 py-8 text-center text-sm text-fg-tertiary">
-          {tab === 'active' && 'Nothing active right now.'}
-          {tab === 'finished' && 'Nothing finished yet.'}
-          {tab === 'all' && 'No projects yet.'}
+          {tab === 'active' && t('tabs.emptyActive')}
+          {tab === 'finished' && t('tabs.emptyFinished')}
+          {tab === 'all' && t('tabs.emptyAll')}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -126,6 +123,7 @@ function TabButton({
 }
 
 function ProjectCard({ project: p }: { project: ProfileProject }) {
+  const t = useTranslations('users')
   const finished = p.status === 'finished'
   const roleClass =
     p.role === 'lead'
@@ -150,7 +148,7 @@ function ProjectCard({ project: p }: { project: ProfileProject }) {
           )}
         >
           <RoleIcon role={p.role} className="size-2.5" />
-          {ROLE_LABEL[p.role]}
+          {t(`role.${p.role}`)}
         </span>
       </div>
       <div className="flex flex-1 flex-col gap-2 p-4 sm:px-5">
@@ -165,12 +163,12 @@ function ProjectCard({ project: p }: { project: ProfileProject }) {
           {finished ? (
             <span className="inline-flex items-center gap-1.5 text-green-300">
               <Check className="size-3" strokeWidth={2.5} />
-              Completed
+              {t('card.completed')}
             </span>
           ) : (
             <>
               <span>
-                <strong className="font-semibold text-fg-primary">Active</strong>
+                <strong className="font-semibold text-fg-primary">{t('card.activeStatus')}</strong>
               </span>
               <div className="mx-3 h-[3px] max-w-[100px] flex-1 overflow-hidden rounded-sm bg-bg-surface-2">
                 <div
@@ -179,7 +177,9 @@ function ProjectCard({ project: p }: { project: ProfileProject }) {
                 />
               </div>
               <span>
-                <strong className="font-semibold text-fg-primary">{p.progress}%</strong>
+                <strong className="font-semibold text-fg-primary">
+                  {t('card.progressPct', { progress: p.progress })}
+                </strong>
               </span>
             </>
           )}

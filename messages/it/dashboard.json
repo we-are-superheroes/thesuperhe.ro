@@ -1,0 +1,92 @@
+{
+  "topbar": {
+    "notificationsTitle": "Notifiche",
+    "startProject": "Avvia un progetto",
+    "startProjectShort": "Avvia"
+  },
+  "greeting": {
+    "welcomeBack": "Bentornato,",
+    "welcome": "Benvenuto,",
+    "fallbackName": "Hero",
+    "summary": "Hai {steps, plural, one {# passaggio} other {# passaggi}} in {projects, plural, one {# progetto} other {# progetti}}.",
+    "someNeedHelp": "Ad alcuni serve aiuto proprio ora.",
+    "newUser": "È tutto pronto — ora troviamo qualcosa su cui lavorare. Dicci cosa sai fare e ti proporremo progetti che cercano proprio quello."
+  },
+  "stats": {
+    "projects": "Progetti",
+    "openSteps": "Passaggi aperti",
+    "contributed": "Contributo",
+    "hoursSuffix": "h"
+  },
+  "checklist": {
+    "eyebrow": "Per iniziare",
+    "title": "Tre piccole cose, e sei <em>pronto</em>.",
+    "progress": "{count} di 3 fatte",
+    "account": {
+      "title": "Crea il tuo account",
+      "description": "Benvenuto, {name}.",
+      "cta": "Fatto"
+    },
+    "skills": {
+      "title": "Aggiungi le tue competenze",
+      "description": "Scegli le cose che sai fare — e che vuoi usare. Ci vogliono ~2 minuti.",
+      "cta": "Aggiungi competenze"
+    },
+    "project": {
+      "title": "Unisciti al tuo primo progetto",
+      "description": "Esplora i progetti aperti, o prendi in carico un solo passaggio per iniziare in piccolo.",
+      "cta": "Esplora i progetti"
+    }
+  },
+  "pinned": {
+    "eyebrow": "Progetti fissati",
+    "title": "Il lavoro in cui sei <em>più coinvolto</em>.",
+    "seeAll": "Vedi tutti i miei progetti",
+    "role": {
+      "lead": "Responsabile",
+      "contributor": "Collaboratore",
+      "advisor": "Consulente",
+      "observer": "Osservatore"
+    },
+    "needHelp": "{n, plural, one {a # serve aiuto} other {a # serve aiuto}}",
+    "typeFallback": "Progetto",
+    "progressLabel": "Avanzamento",
+    "progressValue": "<strong>{pct}%</strong> · {done} di {total, plural, one {# passaggio} other {# passaggi}}",
+    "emptyHeading": "Ancora nessun progetto.",
+    "emptyTitle": "Fissa un progetto per tenerlo a portata di mano.",
+    "emptyDescription": "Quando ti unisci a un progetto, fissalo qui per raggiungerlo al volo. Puoi anche esplorare cosa è attivo in questo momento e trovarne uno che fa per te.",
+    "browseProjects": "Esplora i progetti",
+    "startYourOwn": "Avvia il tuo progetto"
+  },
+  "nextSteps": {
+    "eyebrow": "I tuoi prossimi passaggi",
+    "title": "Scegline uno, finiscine uno.",
+    "viewAll": "Vedi {n, plural, one {# passaggio} other {tutti i # passaggi}}",
+    "open": "Apri",
+    "emptyHeading": "Niente in programma per ora.",
+    "emptyTitle": "I tuoi passaggi compariranno qui.",
+    "emptyDescription": "Quando prendi in carico un passaggio di un progetto, comparirà qui così puoi vedere cosa viene dopo. Anche un compito da 1 ora conta."
+  },
+  "stepStatus": {
+    "needsHelpAriaLabel": "Stato: serve aiuto",
+    "needsHelpTitle": "Serve aiuto",
+    "inProgressAriaLabel": "Stato: in corso",
+    "inProgressTitle": "In corso",
+    "notStartedAriaLabel": "Stato: non iniziato",
+    "notStartedTitle": "Non iniziato"
+  },
+  "matches": {
+    "eyebrow": "In linea con le tue competenze",
+    "title": "Progetti che hanno <em>bisogno</em> di te.",
+    "browseAll": "Esplora tutte le corrispondenze",
+    "typeFallback": "Progetto",
+    "remote": "A distanza",
+    "matchLabel": "Corrispondenza",
+    "stepIn": "Un passaggio di {project}",
+    "emptyHeading": "Dicci in cosa sei <em>bravo</em>.",
+    "emptyTitle": "Aggiungi le tue competenze per vedere le corrispondenze.",
+    "emptyDescription": "Ti proporremo progetti che cercano proprio quello che porti. Va bene anche scegliere competenze che vuoi usare, anche se non sono il tuo lavoro di tutti i giorni.",
+    "addSkills": "Aggiungi le mie competenze"
+  },
+  "estimatedHours": "~{hours}h"
+}

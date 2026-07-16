@@ -1,0 +1,68 @@
+{
+  "topbar": {
+    "searchPlaceholder": "Projekte durchsuchen...",
+    "notificationsTitle": "Benachrichtigungen",
+    "startProject": "Projekt starten",
+    "startProjectShort": "Starten"
+  },
+  "header": {
+    "titleLine1": "Finde ein Projekt,",
+    "titleLine2": "das dich <em>braucht</em>.",
+    "intro": "Jedes Projekt hier ist echt, aktiv und sucht Hilfe. Filtere nach deinem Ort, deinen Stärken oder der Art von Arbeit, die dich interessiert."
+  },
+  "filters": {
+    "show": "Filter anzeigen",
+    "hide": "Filter ausblenden",
+    "activeCount": "{n, plural, one {# aktiv} other {# aktiv}}",
+    "title": "Filter",
+    "clearAll": "Alle löschen",
+    "yourOrganisations": "Deine Organisationen",
+    "typeOfProject": "Projekttyp",
+    "skillsNeeded": "Gesuchte Fähigkeiten",
+    "location": "Ort",
+    "country": "Land",
+    "language": "Sprache",
+    "searchSkillsPlaceholder": "Fähigkeiten durchsuchen...",
+    "searchLocationsPlaceholder": "Orte durchsuchen...",
+    "searchCountriesPlaceholder": "Länder durchsuchen...",
+    "noMatches": "Keine Treffer."
+  },
+  "results": {
+    "showingAll": "Zeige <strong>alle {total}</strong> {total, plural, one {laufenden Projekte} other {laufenden Projekte}}",
+    "showingFiltered": "Zeige <strong>{showing}</strong> von {total, plural, one {# Projekt} other {# Projekten}}"
+  },
+  "sort": {
+    "recent": "Neueste zuerst",
+    "needs": "Am meisten Hilfe gesucht",
+    "progress": "Am weitesten fortgeschritten"
+  },
+  "view": {
+    "gridTitle": "Rasteransicht",
+    "listTitle": "Listenansicht"
+  },
+  "chips": {
+    "query": "„{query}“",
+    "removeAriaLabel": "Filter entfernen"
+  },
+  "empty": {
+    "title": "Kein Projekt passt zu diesen Filtern.",
+    "body": "Weite den Ort aus, entferne eine Fähigkeit oder leere das Suchfeld."
+  },
+  "card": {
+    "needsHelp": "{n, plural, one {# braucht Hilfe} other {# brauchen Hilfe}}",
+    "membersOnly": "Nur für Mitglieder",
+    "posted": "Veröffentlicht {when}",
+    "contributors": "{n, plural, one {<strong>#</strong> Mitwirkende(r)} other {<strong>#</strong> Mitwirkende}}",
+    "contributorsPlain": "{n, plural, one {# Mitwirkende(r)} other {# Mitwirkende}}",
+    "percentComplete": "<strong>{pct}%</strong> abgeschlossen"
+  },
+  "posted": {
+    "today": "heute",
+    "daysAgo": "{n, plural, one {vor # Tag} other {vor # Tagen}}",
+    "weeksAgo": "{n, plural, one {vor # Woche} other {vor # Wochen}}"
+  },
+  "fallback": {
+    "remoteLocation": "Remote",
+    "otherType": "Sonstiges"
+  }
+}

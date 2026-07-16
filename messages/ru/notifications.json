@@ -1,0 +1,66 @@
+{
+  "titles": {
+    "projectJoinWelcome": "{leadName} принимает вас в проект «{projectTitle}».",
+    "projectJoin": "{actorName} присоединяется к проекту «{projectTitle}».",
+    "projectJoinRequest": "{actorName} хочет присоединиться к проекту «{projectTitle}».",
+    "projectJoinDeclined": "Вашу заявку на вступление в «{projectTitle}» на этот раз не приняли.",
+    "projectLeave": "{actorName} покидает проект «{projectTitle}».",
+    "projectUpdated": "{actorName} вносит изменения в проект «{projectTitle}».",
+    "projectRenamed": "{actorName} переименовывает «{oldTitle}» в «{newTitle}».",
+    "updatePosted": "{actorName} публикует обновление в проекте «{projectTitle}».",
+    "stepClaimed": "{actorName} присоединяется к шагу «{stepTitle}» в проекте «{projectTitle}».",
+    "stepUnclaimed": "{actorName} покидает шаг «{stepTitle}» в проекте «{projectTitle}».",
+    "stepCompleted": "{actorName} завершает шаг «{stepTitle}» в проекте «{projectTitle}».",
+    "stepNeedsHelp": "{actorName} просит помощи с шагом «{stepTitle}» в проекте «{projectTitle}».",
+    "blueprintForked": "{actorName} адаптирует ваш шаблон «{blueprintTitle}» как «{projectTitle}».",
+    "skillMatch": "Новому проекту «{projectTitle}» нужен навык «{skillName}».",
+    "inviteReceived": "{actorName} приглашает вас вступить в {orgName}.",
+    "messageReceived": "{count, plural, one {{senderName} отправляет вам сообщение.} few {# новых сообщения от {senderName}.} many {# новых сообщений от {senderName}.} other {# нового сообщения от {senderName}.}}"
+  },
+  "bodies": {
+    "projectJoinDeclined": "Спасибо, что предложили помощь, — сейчас команда не может принять эту заявку. Вашим навыкам будут рады во множестве других проектов.",
+    "inviteReceived": "Используйте код приглашения {code} на странице организации."
+  },
+  "ui": {
+    "header": {
+      "title": "Ваши <em>уведомления</em>.",
+      "subtitle": "То, что требует вашего внимания, — и кое-что, о чём приятно узнать.",
+      "markAllRead": "Отметить всё прочитанным"
+    },
+    "tabs": {
+      "all": "Все",
+      "unread": "Непрочитанные",
+      "action": "Требуют действия",
+      "mention": "Упоминания"
+    },
+    "groups": {
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "week": "Ранее на этой неделе",
+      "earlier": "Ранее"
+    },
+    "empty": {
+      "unreadTitle": "Непрочитанного нет. Вы в курсе всего.",
+      "unreadSubtitle": "Новые события будут появляться здесь по мере их появления.",
+      "mentionTitle": "Пока нет упоминаний.",
+      "mentionSubtitle": "Упоминания с досок проектов и из обсуждений будут появляться здесь.",
+      "actionTitle": "От вас ничего не ждут.",
+      "actionSubtitle": "Заявки на вступление и приглашения появятся здесь, когда потребуется решение.",
+      "allTitle": "Здесь пусто.",
+      "allSubtitle": "Когда вы присоединитесь к проектам и возьмёте шаги, новости от команды будут появляться здесь."
+    },
+    "joinRequest": {
+      "accept": "Принять",
+      "decline": "Не подходит"
+    },
+    "resolution": {
+      "accepted": "Принят в проект.",
+      "declined": "Вежливо отклонено."
+    },
+    "links": {
+      "openConversation": "Открыть переписку",
+      "openOrgPage": "Открыть страницу организации",
+      "openProject": "Открыть {name}"
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "chrome": {
+    "eyebrow": "Mentions légales",
+    "title": "Politique de confidentialité",
+    "lastUpdated": "Dernière mise à jour : {date}"
+  },
+  "sections": {
+    "whoWeAre": {
+      "title": "Qui nous sommes",
+      "p1": "The Superhero (thesuperhe.ro) est une plateforme qui met des personnes en relation avec des projets climat et durabilité. Elle est exploitée depuis la Suisse. Pour tout ce qui concerne tes données, contacte-nous à <link>{email}</link>. Nous sommes le responsable du traitement des données personnelles décrites ci-dessous, et nous les traitons conformément à la Loi fédérale suisse sur la protection des données (LPD) et, lorsqu’il s’applique, au Règlement général sur la protection des données de l’UE (RGPD).",
+      "englishPrevails": "Cette page est disponible en plusieurs langues pour ta commodité — si une traduction contredit un jour la version anglaise, c’est la version anglaise qui fait foi."
+    },
+    "whatWeCollect": {
+      "title": "Ce que nous collectons",
+      "p1": "<strong>Données de compte.</strong> Quand tu t’inscris, notre fournisseur d’authentification (Clerk) collecte ton nom, ton adresse e-mail et, si tu utilises une connexion via un réseau social, ton avatar. Nous en gardons une copie dans notre propre base de données pour que la plateforme puisse montrer qui tu es.",
+      "p2": "<strong>Données de profil que tu choisis d’ajouter.</strong> Une bio, un lieu, un fuseau horaire, une photo de profil et les compétences que tu déclares avoir — y compris si tu cherches à les utiliser. Tout cela est facultatif.",
+      "p3": "<strong>Contenu que tu crées.</strong> Projets, modèles, étapes de projet, actualités, messages aux autres membres, les étapes que tu rejoins et les heures que tu enregistres. Une partie est publique par conception (voir ci-dessous).",
+      "p4": "<strong>Données techniques.</strong> Notre hébergeur (Vercel) conserve des journaux serveur de courte durée (adresse IP, chemin de la requête, horodatages) pour exploiter et sécuriser le service. Nous n’utilisons aucun traceur publicitaire ni d’analyse d’audience."
+    },
+    "whatWeUseItFor": {
+      "title": "À quoi elles servent",
+      "p1": "À faire fonctionner la plateforme : montrer ton profil aux autres membres, faire correspondre tes compétences avec les étapes qui en ont besoin, t’envoyer des notifications dans l’application et te permettre d’écrire aux autres membres. La base légale est l’exécution de notre contrat avec toi (fournir le service auquel tu t’es inscrit) et notre intérêt légitime à garder la plateforme sûre et fonctionnelle. Nous ne vendons pas tes données et nous ne les utilisons pas à des fins publicitaires."
+    },
+    "whatIsPublic": {
+      "title": "Ce qui est public",
+      "p1": "C’est une plateforme de collaboration, donc certaines choses sont visibles par n’importe qui sur Internet : les projets et leurs étapes, les modèles et leur auteur, les actualités de projet marquées « publiques », et ton nom sur le contenu auquel tu as contribué publiquement. Les actualités réservées aux membres ne sont visibles que par les membres d’un projet. Les messages ne sont visibles que par toi et la personne avec qui tu écris. Ton adresse e-mail n’est jamais montrée aux autres utilisateurs.",
+      "p2": "Les images téléversées (photos de profil, couvertures de projet) sont stockées dans un espace accessible publiquement — toute personne disposant du lien peut les voir, alors n’envoie pas d’images que tu ne voudrais pas voir publiques."
+    },
+    "cookies": {
+      "title": "Cookies",
+      "p1": "Nous n’utilisons que des cookies strictement nécessaires au fonctionnement du service : les cookies de session posés par Clerk pour te garder connecté, et un cookie <code>superhero-locale</code> qui retient la langue que tu as choisie pour le site. Ta préférence de thème est stockée dans le stockage local de ton navigateur et ne quitte jamais ton appareil. Il n’y a aucun cookie publicitaire, d’analyse d’audience ou de suivi tiers, c’est pourquoi tu ne vois pas de bannière de cookies."
+    },
+    "processors": {
+      "title": "Où vivent tes données",
+      "intro": "Nos prestataires de services (sous-traitants) sont :",
+      "items": {
+        "supabase": "<strong>Supabase</strong> — base de données et stockage d’images, hébergés sur AWS dans l’UE (Irlande, eu-west-1).",
+        "clerk": "<strong>Clerk</strong> — authentification, basé aux États-Unis. Les transferts sont couverts par les clauses contractuelles types de l’UE.",
+        "vercel": "<strong>Vercel</strong> — hébergement de l’application et journaux serveur."
+      },
+      "outro": "Chacun d’eux ne traite les données que sur nos instructions et dans le cadre d’un accord de traitement des données."
+    },
+    "retention": {
+      "title": "Combien de temps nous les gardons",
+      "p1": "Aussi longtemps que tu as un compte. Si tu supprimes ton compte, ton profil, tes compétences et tes contributions sont supprimés avec. Le contenu dont d’autres personnes dépendent — les messages que tu as envoyés, les actualités publiques que tu as publiées — est conservé mais détaché de ton identité et présenté comme venant d’un membre supprimé ou ancien. Les journaux serveur sont conservés par notre hébergeur pendant une courte période puis effacés."
+    },
+    "yourRights": {
+      "title": "Tes droits",
+      "p1": "En vertu de la LPD et du RGPD, tu peux nous demander l’accès aux données que nous détenons sur toi, les faire corriger ou supprimer, en recevoir une copie dans un format portable, ou t’opposer à leur traitement ou le restreindre. Écris à <link>{email}</link> et nous répondrons sous 30 jours. Tu peux aussi supprimer ton compte toi-même depuis les réglages de ton profil, à tout moment.",
+      "p2": "Si tu estimes que nous traitons mal tes données, tu as le droit de déposer une plainte auprès d’une autorité de contrôle — en Suisse, le Préposé fédéral à la protection des données et à la transparence (PFPDT), ou ton autorité locale de protection des données dans l’UE/EEE."
+    },
+    "policyChanges": {
+      "title": "Modifications de cette politique",
+      "p1": "Si nous changeons la façon dont nous traitons tes données — par exemple si nous commençons à envoyer des notifications par e-mail — nous mettrons cette page à jour et ajusterons la date en haut. Pour les changements importants, nous te préviendrons dans l’application."
+    }
+  },
+  "footer": {
+    "questions": "Des questions ?",
+    "termsLink": "Conditions d’utilisation",
+    "homeLink": "Retour à la page d’accueil"
+  }
+}

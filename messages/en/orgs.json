@@ -1,0 +1,207 @@
+{
+  "type": {
+    "nonprofit": "Non-profit",
+    "company": "Company"
+  },
+  "role": {
+    "creator": "Creator",
+    "admin": "Admin",
+    "member": "Member"
+  },
+  "statusBadge": {
+    "pending": "Waiting for approval",
+    "suspended": "Suspended"
+  },
+  "back": {
+    "toProjects": "Back to projects",
+    "toProject": "Back to the project",
+    "toOrganisations": "Back to organisations"
+  },
+  "header": {
+    "since": "On The Superhero since {date}",
+    "haveInviteCode": "Have an invite code?",
+    "editOrganisation": "Edit organisation"
+  },
+  "status": {
+    "pending": "<strong>Waiting for approval.</strong> We review every organisation request by hand. Until it is approved, only you can see this page and invites are switched off.",
+    "suspended": "<strong>This organisation is suspended.</strong> The page is hidden from non-members and membership changes are switched off. Contact support@thesuperhe.ro if you think this is a mistake."
+  },
+  "stats": {
+    "ariaLabel": "Impact",
+    "hours": "{hours} hrs",
+    "employees": "employees taking part",
+    "members": "members",
+    "contributed": "contributed so far",
+    "hoursFine": "Hours from this organisation's own projects, plus public-project hours its members chose to share.",
+    "publicProjects": "public projects"
+  },
+  "about": {
+    "title": "About"
+  },
+  "edit": {
+    "logoLabel": "Logo",
+    "logoHint": "Square works best — shown on the page and on project cards.",
+    "bannerLabel": "Banner",
+    "bannerHint": "Wide image for the top of this page (about 1600×400).",
+    "aboutLabel": "About",
+    "websiteLabel": "Website",
+    "websitePlaceholder": "example.org",
+    "listedLabel": "List in the directory",
+    "listedHint": "Listed organisations appear on the Organisations page for everyone. Unlisted ones can still be reached by link or invite.",
+    "image": {
+      "noneYet": "None yet",
+      "uploading": "Uploading…",
+      "replace": "Replace",
+      "upload": "Upload",
+      "remove": "Remove"
+    }
+  },
+  "projects": {
+    "title": "Organisation projects",
+    "typeFallback": "Project",
+    "liveCount": "{count} live",
+    "newProject": "+ New organisation project",
+    "filter": {
+      "all": "All",
+      "public": "Public",
+      "members": "Members only"
+    },
+    "membersOnly": "Members only",
+    "contributors": "{count, plural, one {<strong>#</strong> contributor} other {<strong>#</strong> contributors}}",
+    "needsHelp": "{count, plural, one {# needs help} other {# need help}}",
+    "empty": {
+      "membersFilter": "No members-only projects yet. Any member can start one.",
+      "publicFilter": "No public projects yet.",
+      "member": "No projects yet. Any member can start one."
+    }
+  },
+  "teaser": {
+    "title": "Members see more.",
+    "body": "The member list, members-only projects and the contribution dashboard are visible to members of {org}. Membership is by invitation.",
+    "invitePlaceholder": "Invite code",
+    "joining": "Joining…",
+    "join": "Join",
+    "signInAccept": "Sign in to accept the invite",
+    "signInUse": "Sign in to use an invite code"
+  },
+  "dash": {
+    "title": "Contributions",
+    "lock": "Members only",
+    "allTime": "All time",
+    "empty": "No hours logged yet. Hours appear here as members log time on project steps.",
+    "attributedHours": "attributed hours",
+    "method": "Worked out from when hours were logged, each person’s membership dates, and their sharing setting.",
+    "orgLegend": "Organisation projects — <b>{hours} hrs</b> (always counted)",
+    "sharedLegend": "Shared public contributions — <b>{hours} hrs</b> (members who opted in)",
+    "footnote": "Includes hours from former members from when they were members — they appear as “Former member” in exports and never in the member list. Members choose whether to share their public-project hours in <link>profile settings</link>.",
+    "downloadCsv": "Download CSV — all attributed hours",
+    "visMembersOnly": "Members only",
+    "visOrgPublic": "Public · owned by the organisation",
+    "sharedRowName": "Shared public contributions",
+    "sharedRowVis": "Other projects · members who share their hours"
+  },
+  "members": {
+    "title": "Members",
+    "lock": "Members only",
+    "activeCount": "{count} active",
+    "you": "(you)",
+    "makeAdmin": "Make admin",
+    "remove": "Remove",
+    "removeConfirm": "Remove {name} from {org}? Their past hours stay in the organisation's totals.",
+    "metaJoined": "Joined {date}",
+    "metaJoinedHours": "Joined {date} · {hours} hrs"
+  },
+  "invites": {
+    "title": "Invites",
+    "lock": "Admins only",
+    "codesHeading": "Invite codes",
+    "none": "No invite codes yet.",
+    "copied": "Copied",
+    "copyLink": "Copy invite link",
+    "copyFailed": "Could not copy — copy the code by hand instead.",
+    "cancelCode": "Cancel code",
+    "generate": "Generate new code",
+    "emailHeading": "Invite by email",
+    "emailBody": "Sends an in-app invitation to an existing account. If they are not on The Superhero yet, you will get a code to share with them.",
+    "emailPlaceholder": "name@example.org",
+    "emailAria": "Email to invite",
+    "send": "Send invite",
+    "sent": "Invitation sent — they will see it in their notifications.",
+    "shareCode": "No account with that email yet. Share this code with them: {code}",
+    "meta": {
+      "cancelled": "Cancelled {date}",
+      "forEmail": "For {email}",
+      "openCode": "Open code",
+      "usesOfMax": "{used} of {max} uses",
+      "uses": "{count, plural, one {# use} other {# uses}}",
+      "validUntil": "valid until {date}"
+    }
+  },
+  "list": {
+    "searchPlaceholder": "Search your organisations…",
+    "request": "Request an organisation",
+    "requestShort": "Request",
+    "title": "Your <em>organisations</em>.",
+    "intro": "The groups you belong to on The Superhero — each with its own page, members-only projects and contribution totals.",
+    "emptyTitle": "No organisations yet.",
+    "emptyBody": "Join one from the directory below or with an invite link from its admins — or bring your own group onto the platform with the request button above. We approve each organisation by hand.",
+    "noMatch": "None of your organisations match “{query}”.",
+    "rowMeta": "{members, plural, one {# member} other {# members}} · {projects, plural, one {# project} other {# projects}} · joined {joined}",
+    "footer": "Control what each organisation sees of your hours in your <link>profile settings</link>."
+  },
+  "directory": {
+    "heading": "Directory",
+    "listedCount": "{count} listed",
+    "empty": "No organisations have listed themselves yet.",
+    "noMatch": "Nothing in the directory matches “{query}”.",
+    "meta": "{members, plural, one {# member} other {# members}} · {projects, plural, one {# public project} other {# public projects}}"
+  },
+  "requestPage": {
+    "title": "Bring your <em>organisation</em>.",
+    "intro": "An organisation page gives your group a public face, private members-only projects, and a shared record of the hours your people contribute. We approve each request by hand to keep impersonators out."
+  },
+  "request": {
+    "nameLabel": "Organisation name",
+    "namePlaceholder": "e.g. Hackney Rewilders",
+    "typeQuestion": "What kind of organisation is it?",
+    "typeAria": "Organisation type",
+    "nonprofitLabel": "Non-profit or community group",
+    "nonprofitDescription": "Associations, cooperatives, schools, community groups. Free — the test is whether the organisation exists to make a profit for its owners.",
+    "companyLabel": "Company",
+    "companyDescription": "Businesses that want employees contributing on work time, with contribution reporting. Paid — we will contact you about pricing.",
+    "typeHint": "We confirm the type during review — the legal form matters less than whether the organisation exists to make a profit.",
+    "websiteLabel": "Website (optional)",
+    "websitePlaceholder": "example.org",
+    "useLabel": "How do you plan to use it?",
+    "usePlaceholder": "A sentence or two: who you are, and what your organisation would do here.",
+    "useHint": "This becomes the first draft of your organisation’s About text — you can change it any time.",
+    "logoLabel": "Logo (optional)",
+    "logoHint": "Square works best.",
+    "bannerLabel": "Banner (optional)",
+    "bannerHint": "Wide image, about 1600×400.",
+    "listedLabel": "List in the directory once approved",
+    "listedHint": "Listed organisations appear on the Organisations page for everyone. You can change this any time.",
+    "send": "Send request",
+    "genericError": "Something went wrong sending the request. Try again.",
+    "imageNotSaved": "{image, select, logo {The logo was not saved: {error}} other {The banner was not saved: {error}}}",
+    "imageUploadFailed": "{image, select, logo {The logo could not be uploaded — you can add it later from “Edit organisation”.} other {The banner could not be uploaded — you can add it later from “Edit organisation”.}}",
+    "doneTitle": "Request sent.",
+    "doneBody": "We review every organisation by hand — usually within a few days. Until then, only you can see <link>your organisation page</link>. We will contact you by email if we have questions.",
+    "file": {
+      "noFile": "No file chosen",
+      "replace": "Replace",
+      "choose": "Choose file",
+      "clear": "Clear"
+    }
+  },
+  "profileOrgs": {
+    "kicker": "Organisations",
+    "title": "Your organisations.",
+    "intro": "For each organisation, you choose whether it can count your hours on <strong>other public projects</strong> in its totals and reports. Hours on an organisation’s own projects always count. What you do outside these projects is never shared without this setting.",
+    "empty": "You are not in any organisation yet. Join one with an invite code on its page.",
+    "share": "Share my public-project hours",
+    "leave": "Leave",
+    "leaveConfirm": "Leave {org}? Your past hours stay in the organisation's totals, but you will no longer appear in the member list.",
+    "footer": "Want to bring your own group onto The Superhero? <link>Request an organisation</link> — we approve each one by hand."
+  }
+}

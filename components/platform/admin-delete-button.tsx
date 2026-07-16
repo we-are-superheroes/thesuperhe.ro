@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { Trash2, AlertTriangle, X } from 'lucide-react'
 import {
   deleteProjectAction,
@@ -33,6 +34,8 @@ export function AdminDeleteButton({
   /** 'button' = labelled danger button; 'icon' = compact icon-only trigger. */
   variant?: 'button' | 'icon'
 }) {
+  const t = useTranslations('project')
+  const tCommon = useTranslations('common')
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -61,8 +64,8 @@ export function AdminDeleteButton({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          title={`Delete ${kind} (admin)`}
-          aria-label={`Delete ${kind}`}
+          title={t('adminDelete.triggerTitle', { kind })}
+          aria-label={t('adminDelete.deleteKind', { kind })}
           className="inline-flex size-[38px] items-center justify-center rounded-lg border border-red-500/40 bg-red-500/[0.08] text-red-300 transition-colors hover:border-red-500 hover:bg-red-500/[0.16] hover:text-red-200"
         >
           <Trash2 className="size-4" />
@@ -74,8 +77,8 @@ export function AdminDeleteButton({
           className="inline-flex items-center gap-2 rounded-lg border border-red-500/40 bg-red-500/[0.08] px-3 py-2 text-sm font-medium text-red-300 transition-colors hover:border-red-500 hover:bg-red-500/[0.16] hover:text-red-200 sm:px-4 sm:py-2.5"
         >
           <Trash2 className="size-3.5" strokeWidth={2.5} />
-          <span className="hidden sm:inline">Delete {kind}</span>
-          <span className="sm:hidden">Delete</span>
+          <span className="hidden sm:inline">{t('adminDelete.deleteKind', { kind })}</span>
+          <span className="sm:hidden">{tCommon('actions.delete')}</span>
         </button>
       )}
 
@@ -87,7 +90,7 @@ export function AdminDeleteButton({
         >
           <button
             type="button"
-            aria-label="Cancel"
+            aria-label={tCommon('actions.cancel')}
             onClick={() => !pending && setOpen(false)}
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
           />
@@ -96,7 +99,7 @@ export function AdminDeleteButton({
               type="button"
               onClick={() => !pending && setOpen(false)}
               className="absolute right-4 top-4 text-fg-tertiary transition-colors hover:text-fg-primary"
-              aria-label="Close"
+              aria-label={tCommon('actions.close')}
             >
               <X className="size-4" />
             </button>
@@ -106,15 +109,18 @@ export function AdminDeleteButton({
             </div>
 
             <h2 className="mb-2 font-display text-2xl leading-tight">
-              Delete this {kind}?
+              {t('adminDelete.confirmTitle', { kind })}
             </h2>
             <p className="text-sm leading-relaxed text-fg-secondary">
-              You&apos;re about to permanently delete{' '}
-              <span className="font-medium text-fg-primary">{name}</span>. This
-              can&apos;t be undone.
+              {t.rich('adminDelete.confirmBody', {
+                name,
+                b: (chunks) => (
+                  <span className="font-medium text-fg-primary">{chunks}</span>
+                ),
+              })}{' '}
               {kind === 'project'
-                ? ' All its steps, contributions and logged time go with it.'
-                : ' Its steps are removed; projects forked from it and any variants are kept (just unlinked).'}
+                ? t('adminDelete.projectConsequence')
+                : t('adminDelete.blueprintConsequence')}
             </p>
 
             {error && (
@@ -130,7 +136,7 @@ export function AdminDeleteButton({
                 disabled={pending}
                 className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-colors hover:border-neutral-600 hover:bg-white/[0.04] disabled:opacity-60"
               >
-                Cancel
+                {tCommon('actions.cancel')}
               </button>
               <button
                 type="button"
@@ -139,7 +145,9 @@ export function AdminDeleteButton({
                 className="inline-flex items-center gap-2 rounded-lg bg-red-500 px-4 py-2.5 text-sm font-medium text-white transition-colors hover:bg-red-500/90 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 <Trash2 className="size-3.5" strokeWidth={2.5} />
-                {pending ? 'Deleting…' : `Delete ${kind}`}
+                {pending
+                  ? t('adminDelete.deleting')
+                  : t('adminDelete.deleteKind', { kind })}
               </button>
             </div>
           </div>

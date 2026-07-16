@@ -1,0 +1,92 @@
+{
+  "topbar": {
+    "notificationsTitle": "Benachrichtigungen",
+    "startProject": "Projekt starten",
+    "startProjectShort": "Starten"
+  },
+  "greeting": {
+    "welcomeBack": "Willkommen zurück,",
+    "welcome": "Willkommen,",
+    "fallbackName": "Held",
+    "summary": "Du hast {steps, plural, one {# Schritt} other {# Schritte}} in {projects, plural, one {# Projekt} other {# Projekten}}.",
+    "someNeedHelp": "Bei einigen wird gerade Hilfe gesucht.",
+    "newUser": "Du bist startklar — jetzt finden wir etwas für dich. Sag uns, was du gut kannst, und wir zeigen dir Projekte, die genau das brauchen."
+  },
+  "stats": {
+    "projects": "Projekte",
+    "openSteps": "Offene Schritte",
+    "contributed": "Beigetragen",
+    "hoursSuffix": " Std."
+  },
+  "checklist": {
+    "eyebrow": "Leg los",
+    "title": "Drei kurze Dinge, und du bist <em>bereit</em>.",
+    "progress": "{count} von 3 erledigt",
+    "account": {
+      "title": "Konto erstellen",
+      "description": "Willkommen, {name}.",
+      "cta": "Erledigt"
+    },
+    "skills": {
+      "title": "Fähigkeiten hinzufügen",
+      "description": "Wähle, was du gut kannst — und einsetzen willst. Dauert ~2 Minuten.",
+      "cta": "Fähigkeiten hinzufügen"
+    },
+    "project": {
+      "title": "Deinem ersten Projekt beitreten",
+      "description": "Durchstöbere offene Projekte, oder übernimm einen einzelnen Schritt, um klein anzufangen.",
+      "cta": "Projekte durchstöbern"
+    }
+  },
+  "pinned": {
+    "eyebrow": "Angepinnte Projekte",
+    "title": "Die Arbeit, bei der du <em>am stärksten dabei</em> bist.",
+    "seeAll": "Alle meine Projekte ansehen",
+    "role": {
+      "lead": "Projektleitung",
+      "contributor": "Mitwirkende(r)",
+      "advisor": "Beratend",
+      "observer": "Beobachtend"
+    },
+    "needHelp": "{n, plural, one {# braucht Hilfe} other {# brauchen Hilfe}}",
+    "typeFallback": "Projekt",
+    "progressLabel": "Fortschritt",
+    "progressValue": "<strong>{pct}%</strong> · {done} von {total, plural, one {# Schritt} other {# Schritten}}",
+    "emptyHeading": "Noch keine Projekte.",
+    "emptyTitle": "Pinne ein Projekt an, um es griffbereit zu haben.",
+    "emptyDescription": "Sobald du einem Projekt beitrittst, kannst du es hier anpinnen. Du kannst auch durchstöbern, was gerade läuft, und eines finden, das passt.",
+    "browseProjects": "Projekte durchstöbern",
+    "startYourOwn": "Eigenes Projekt starten"
+  },
+  "nextSteps": {
+    "eyebrow": "Deine nächsten Schritte",
+    "title": "Nimm dir einen vor, bring ihn zu Ende.",
+    "viewAll": "Alle {n, plural, one {# Schritt} other {# Schritte}} ansehen",
+    "open": "Öffnen",
+    "emptyHeading": "Noch nichts auf deinem Zettel.",
+    "emptyTitle": "Deine Schritte erscheinen hier.",
+    "emptyDescription": "Sobald du in einem Projekt einen Schritt übernimmst, taucht er hier auf, damit du im Blick hast, was als Nächstes kommt. Auch eine 1-Stunden-Aufgabe zählt."
+  },
+  "stepStatus": {
+    "needsHelpAriaLabel": "Status: Hilfe gesucht",
+    "needsHelpTitle": "Hilfe gesucht",
+    "inProgressAriaLabel": "Status: in Arbeit",
+    "inProgressTitle": "In Arbeit",
+    "notStartedAriaLabel": "Status: nicht begonnen",
+    "notStartedTitle": "Nicht begonnen"
+  },
+  "matches": {
+    "eyebrow": "Passend zu deinen Fähigkeiten",
+    "title": "Projekte, die dich <em>brauchen</em>.",
+    "browseAll": "Alle Treffer durchstöbern",
+    "typeFallback": "Projekt",
+    "remote": "Remote",
+    "matchLabel": "Treffer",
+    "stepIn": "Ein Schritt in {project}",
+    "emptyHeading": "Sag uns, was du <em>gut kannst</em>.",
+    "emptyTitle": "Füge deine Fähigkeiten hinzu, um Treffer zu sehen.",
+    "emptyDescription": "Wir stellen dir Projekte zusammen, die genau das suchen, was du mitbringst. Du darfst auch Fähigkeiten wählen, die du nutzen willst, selbst wenn sie nicht dein Beruf sind.",
+    "addSkills": "Meine Fähigkeiten hinzufügen"
+  },
+  "estimatedHours": "~{hours} Std."
+}

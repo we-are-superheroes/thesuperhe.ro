@@ -2,7 +2,10 @@ import { auth } from '@clerk/nextjs/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
+import { resolveLocale } from '@/lib/locale'
+import { fmtMonthYear } from '@/lib/format'
 import {
   MapPin,
   Clock,
@@ -53,20 +56,12 @@ function initialsFor(name: string): string {
   return ((parts[0][0] ?? '') + (parts[1]?.[0] ?? '')).toUpperCase() || '?'
 }
 
-function joinedLabel(d: Date): string {
-  return `Joined ${d.toLocaleString('en-GB', { month: 'short', year: 'numeric' })}`
-}
-
-const LEVEL_LABEL = {
-  beginner: 'Beginner',
-  intermediate: 'Intermediate',
-  expert: 'Expert',
-} as const
-
 export default async function UserProfilePage({ params }: Params) {
   const { id } = await params
   const { userId: viewerId } = await auth()
   if (!viewerId) redirect('/sign-in')
+  const locale = await resolveLocale()
+  const t = await getTranslations('users')
 
   const [user, stepsShipped, blueprintAggregate] = await Promise.all([
     db.user.findUnique({
@@ -177,17 +172,17 @@ export default async function UserProfilePage({ params }: Params) {
     return {
       id: p.id,
       title: p.title,
-      type: p.projectType?.name ?? 'Other',
+      type: p.projectType?.name ?? t('projects.typeOther'),
       imgKey: (p.projectType?.name && TYPE_IMG_KEY[p.projectType.name]) ?? 'rewild',
-      location: p.location ?? 'Remote',
+      location: p.location ?? t('projects.remote'),
       // advisor/observer no longer exist as live roles; any rollout-window
       // straggler reads as a contributor.
       role: c.role === 'lead' ? 'lead' : 'contributor',
       status,
       progress,
       since: status === 'active'
-        ? `Joined ${c.joinedAt.toLocaleString('en-GB', { month: 'short', year: 'numeric' })}`
-        : `Wrapped ${p.updatedAt.toLocaleString('en-GB', { month: 'short', year: 'numeric' })}`,
+        ? t('projects.joined', { date: fmtMonthYear(c.joinedAt, locale) })
+        : t('projects.wrapped', { date: fmtMonthYear(p.updatedAt, locale) }),
     }
   }
 
@@ -195,6 +190,7 @@ export default async function UserProfilePage({ params }: Params) {
 
   // ─── Render ──────────────────────────────────────────────
   const initials = initialsFor(user.name)
+  const firstName = user.name.split(' ')[0]
   const stats = {
     projects: { total: totalProjects, active: activeProjects.length, finished: finishedProjects.length },
     hours: totalHours,
@@ -214,10 +210,10 @@ export default async function UserProfilePage({ params }: Params) {
             href="/projects"
             className="hidden transition-colors duration-fast hover:text-fg-primary sm:inline"
           >
-            Discover
+            {t('breadcrumb.discover')}
           </Link>
           <span className="hidden opacity-50 sm:inline">/</span>
-          <span className="hidden text-fg-secondary sm:inline">People</span>
+          <span className="hidden text-fg-secondary sm:inline">{t('breadcrumb.people')}</span>
           <span className="hidden opacity-50 sm:inline">/</span>
           <span className="truncate font-medium text-fg-primary">{user.name}</span>
         </div>
@@ -269,7 +265,7 @@ export default async function UserProfilePage({ params }: Params) {
               )}
               <span className="inline-flex items-center gap-1.5">
                 <Calendar className="size-3.5" />
-                {joinedLabel(user.createdAt)}
+                {t('hero.joined', { date: fmtMonthYear(user.createdAt, locale) })}
               </span>
             </div>
           </div>
@@ -281,7 +277,7 @@ export default async function UserProfilePage({ params }: Params) {
                 className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-all duration-standard hover:border-neutral-600 hover:bg-white/[0.04]"
               >
                 <Pencil className="size-3.5" strokeWidth={2.5} />
-                Edit profile
+                {t('hero.editProfile')}
               </Link>
             ) : (
               <>
@@ -290,16 +286,16 @@ export default async function UserProfilePage({ params }: Params) {
                   className="inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-amber-900 shadow-glow-amber transition-all duration-standard hover:bg-amber-400"
                 >
                   <MessageSquare className="size-3.5" strokeWidth={2.5} />
-                  Send a message
+                  {t('hero.sendMessage')}
                 </Link>
                 <button
                   type="button"
                   disabled
-                  title="Project invites are coming soon"
+                  title={t('hero.invitesComingSoon')}
                   className="inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary opacity-60"
                 >
                   <UsersIcon className="size-3.5" strokeWidth={2.5} />
-                  Invite to a project
+                  {t('hero.inviteToProject')}
                 </button>
               </>
             )}
@@ -311,54 +307,55 @@ export default async function UserProfilePage({ params }: Params) {
           <Stat
             num={stats.projects.total}
             accent
-            label="Projects"
+            label={t('stats.projectsLabel')}
             sub={
               stats.projects.total === 0
-                ? '—'
-                : `${stats.projects.active} active · ${stats.projects.finished} finished`
+                ? t('stats.none')
+                : t('stats.projectsSub', {
+                    active: stats.projects.active,
+                    finished: stats.projects.finished,
+                  })
             }
             divider
           />
           <Stat
             num={stats.hours}
-            label="Contributed"
-            unit="h"
-            sub={stats.hours === 0 ? '—' : 'Across all projects'}
+            label={t('stats.contributedLabel')}
+            unit={t('stats.hoursUnit')}
+            sub={stats.hours === 0 ? t('stats.none') : t('stats.contributedSub')}
             divider
           />
           <Stat
             num={stats.stepsShipped}
-            label="Steps shipped"
-            sub={stats.stepsShipped === 0 ? '—' : 'Completed by them'}
+            label={t('stats.stepsShippedLabel')}
+            sub={stats.stepsShipped === 0 ? t('stats.none') : t('stats.stepsShippedSub')}
             divider
           />
           <Stat
             num={stats.blueprints.count}
-            label="Blueprints"
+            label={t('stats.blueprintsLabel')}
             sub={
               stats.blueprints.count === 0
-                ? '—'
-                : `Forked ${stats.blueprints.forked} ${stats.blueprints.forked === 1 ? 'time' : 'times'}`
+                ? t('stats.none')
+                : t('stats.blueprintsSub', { count: stats.blueprints.forked })
             }
           />
         </section>
 
         {/* ── About ── */}
         <section>
-          <SectionHead eyebrow="About" title={`What ${user.name.split(' ')[0]} cares about.`} />
+          <SectionHead eyebrow={t('about.eyebrow')} title={t('about.title', { firstName })} />
           {bioParagraphs.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-neutral-700 bg-bg-surface px-6 py-8 text-center text-sm text-fg-tertiary">
-              {isSelf ? (
-                <>
-                  You haven’t written a bio yet.{' '}
-                  <Link href="/profile" className="text-amber-500 hover:underline">
-                    Add one
-                  </Link>{' '}
-                  to help leads understand what drives you.
-                </>
-              ) : (
-                <>{user.name} hasn’t written a bio yet.</>
-              )}
+              {isSelf
+                ? t.rich('about.emptySelf', {
+                    link: (chunks) => (
+                      <Link href="/profile" className="text-amber-500 hover:underline">
+                        {chunks}
+                      </Link>
+                    ),
+                  })
+                : t('about.emptyOther', { name: user.name })}
             </div>
           ) : (
             <div className="rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6 lg:p-8">
@@ -373,25 +370,28 @@ export default async function UserProfilePage({ params }: Params) {
 
         {/* ── Skills ── */}
         <section>
-          <SectionHead eyebrow="Skills" title={`What ${user.name.split(' ')[0]} brings.`} />
+          <SectionHead eyebrow={t('skills.eyebrow')} title={t('skills.title', { firstName })} />
           {skills.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-neutral-700 bg-bg-surface px-6 py-8 text-center text-sm text-fg-tertiary">
-              {isSelf ? (
-                <>
-                  No skills on your profile yet.{' '}
-                  <Link href="/profile" className="text-amber-500 hover:underline">
-                    Add some
-                  </Link>{' '}
-                  so projects can find you.
-                </>
-              ) : (
-                <>{user.name} hasn’t listed any skills yet.</>
-              )}
+              {isSelf
+                ? t.rich('skills.emptySelf', {
+                    link: (chunks) => (
+                      <Link href="/profile" className="text-amber-500 hover:underline">
+                        {chunks}
+                      </Link>
+                    ),
+                  })
+                : t('skills.emptyOther', { name: user.name })}
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               {skills.map((s) => (
-                <SkillCard key={s.name} skill={s} />
+                <SkillCard
+                  key={s.name}
+                  skill={s}
+                  levelLabel={t(`proficiency.${s.proficiency}`)}
+                  seekingNote={s.isSeeking ? t('skills.seeking') : t('skills.notSeeking')}
+                />
               ))}
             </div>
           )}
@@ -399,7 +399,7 @@ export default async function UserProfilePage({ params }: Params) {
 
         {/* ── Projects ── */}
         <section>
-          <SectionHead eyebrow="Projects" title={`What ${user.name.split(' ')[0]} is doing.`} />
+          <SectionHead eyebrow={t('projects.eyebrow')} title={t('projects.title', { firstName })} />
           <UserProfileProjects
             active={projectCards.filter((p) => p.status === 'active')}
             finished={projectCards.filter((p) => p.status === 'finished')}
@@ -467,8 +467,12 @@ function Stat({
 
 function SkillCard({
   skill,
+  levelLabel,
+  seekingNote,
 }: {
   skill: { name: string; category: string; proficiency: 'beginner' | 'intermediate' | 'expert'; isSeeking: boolean }
+  levelLabel: string
+  seekingNote: string
 }) {
   const levelClass = (() => {
     if (skill.proficiency === 'beginner') return 'text-blue-300 bg-blue-500/[0.10] border-blue-500/30'
@@ -497,10 +501,10 @@ function SkillCard({
         {skill.isSeeking ? (
           <span className="inline-flex items-center gap-1 text-xs font-medium text-amber-500">
             <Star className="size-3 fill-amber-500" strokeWidth={0} />
-            Open to projects needing this
+            {seekingNote}
           </span>
         ) : (
-          <span className="text-xs italic text-fg-tertiary">Has this skill, but not looking for projects that need it</span>
+          <span className="text-xs italic text-fg-tertiary">{seekingNote}</span>
         )}
       </div>
       <span
@@ -520,7 +524,7 @@ function SkillCard({
             />
           ))}
         </span>
-        {LEVEL_LABEL[skill.proficiency]}
+        {levelLabel}
       </span>
     </div>
   )

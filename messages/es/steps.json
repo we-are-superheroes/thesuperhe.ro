@@ -1,0 +1,65 @@
+{
+  "status": {
+    "open": "Abierto",
+    "in_progress": "En marcha",
+    "completed": "Completado"
+  },
+  "needsHelp": "Necesita ayuda",
+  "filter": {
+    "all": "Todos"
+  },
+  "list": {
+    "empty": "No hay pasos en este estado.",
+    "showAll": "Mostrar {count, plural, one {# paso} other {los # pasos}}"
+  },
+  "card": {
+    "orderOfTotal": "Paso {order} de {total}",
+    "estimatedHours": "~{hours}h",
+    "noSkills": "No requiere habilidades"
+  },
+  "joiners": {
+    "coordinatorName": "{name} (coordina)",
+    "youCoordinate": "Tú coordinas",
+    "nameCoordinates": "{name} coordina",
+    "changeCoordinator": "Cambiar coordinador",
+    "menuTitle": "Coordinador del paso",
+    "noCoordinator": "Sin coordinador"
+  },
+  "action": {
+    "done": "Hecho",
+    "signInToJoin": "Inicia sesión para unirte",
+    "joinProjectFirst": "Únete al proyecto para unirte a este paso",
+    "askForHelp": "Pedir ayuda",
+    "withdrawHelpRequest": "Retirar la petición de ayuda",
+    "markComplete": "Marcar como completado",
+    "reopen": "Reabrir",
+    "youreOnThis": "Estás en este paso",
+    "leaveStep": "Salir del paso",
+    "leaving": "Saliendo…",
+    "joinThisStep": "Unirme a este paso",
+    "joinToo": "Unirme también",
+    "joining": "Uniéndote…"
+  },
+  "timeLog": {
+    "hoursOnly": "{hours}h",
+    "hoursMinutes": "{hours}h {minutes}m",
+    "minutesOnly": "{minutes}m",
+    "noTimeYet": "Aún no hay tiempo registrado",
+    "totalLogged": "<strong>{hours}</strong> registradas",
+    "byName": "por {name}",
+    "contributorCount": "{count, plural, one {# colaborador} other {# colaboradores}}",
+    "logTime": "Registrar tiempo",
+    "beFirst": "Sé la primera persona en registrar tiempo en este paso.",
+    "nothingLogged": "Aún no hay nada registrado.",
+    "earlierEntries": "+ {count, plural, one {# entrada anterior} other {# entradas anteriores}}",
+    "hoursPlaceholder": "0.5",
+    "hourSymbol": "h",
+    "dateTitle": "¿Cuándo hiciste el trabajo?",
+    "notePlaceholder": "¿Qué hiciste? (opcional)",
+    "log": "Registrar",
+    "quickAddMinutes": "+{minutes} min",
+    "quickAddHours": "+{hours}h",
+    "someone": "Alguien",
+    "deleteEntry": "Eliminar entrada"
+  }
+}
