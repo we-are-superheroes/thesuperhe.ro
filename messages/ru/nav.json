@@ -9,7 +9,7 @@
       "overview": "Обзор",
       "discover": "Поиск",
       "account": "Аккаунт",
-      "admin": "Админ"
+      "admin": "Администрирование"
     },
     "items": {
       "dashboard": "Моя панель",
@@ -22,7 +22,7 @@
       "blueprints": "Шаблоны",
       "organisations": "Организации",
       "profile": "Профиль",
-      "broadcast": "Анонс запуска"
+      "broadcast": "Запустить рассылку"
     },
     "accountMenuAriaLabel": "Меню аккаунта",
     "signOut": "Выйти",

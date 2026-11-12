@@ -64,23 +64,23 @@
     }
   },
   "email": {
-    "subject": "{count, plural, one {Sie haben eine neue Benachrichtigung} other {Sie haben # neue Benachrichtigungen}} auf The Superhero",
-    "heading": "{count, plural, one {Sie haben eine neue Benachrichtigung} other {Sie haben # neue Benachrichtigungen}}",
-    "intro": "Das ist seit Ihrem letzten Besuch passiert:",
-    "more": "…und {count, plural, one {# weitere} other {# weitere}}.",
-    "button": "Ihre Benachrichtigungen ansehen",
-    "why": "Sie erhalten dies, weil Aktivitäts-E-Mails für Ihr Konto aktiviert sind.",
-    "unsubscribe": "Aktivitäts-E-Mails ausschalten"
+    "subject": "{count, plural, one {Du hast eine neue Benachrichtigung} other {Du hast # neue Benachrichtigungen}} auf The Superhero",
+    "heading": "{count, plural, one {Du hast eine neue Benachrichtigung} other {Du hast # neue Benachrichtigungen}}",
+    "intro": "Das ist seit deinem letzten Besuch passiert:",
+    "more": "… und {count, plural, one {# weitere} other {# weitere}}.",
+    "button": "Deine Benachrichtigungen ansehen",
+    "why": "Du bekommst diese E-Mail, weil Aktivitäts-E-Mails für dein Konto aktiviert sind.",
+    "unsubscribe": "Aktivitäts-E-Mails abschalten"
   },
   "emailUnsub": {
     "managePrefs": "E-Mail-Einstellungen verwalten",
     "ok": {
-      "title": "Sie sind abgemeldet.",
-      "body": "Sie erhalten keine Aktivitäts-E-Mails mehr. Sie können sie jederzeit in Ihrem Profil wieder einschalten."
+      "title": "Du hast dich abgemeldet.",
+      "body": "Du bekommst keine Aktivitäts-E-Mails mehr. Du kannst sie jederzeit in deinem Profil wieder einschalten."
     },
     "invalid": {
       "title": "Dieser Link hat nicht funktioniert.",
-      "body": "Dieser Abmeldelink ist nicht mehr gültig. Sie können E-Mails stattdessen in Ihrem Profil verwalten."
+      "body": "Dieser Abmelde-Link ist nicht mehr gültig. Du kannst deine E-Mails stattdessen in deinem Profil verwalten."
     }
   }
 }

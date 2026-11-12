@@ -9,7 +9,7 @@
       "overview": "Resumen",
       "discover": "Descubrir",
       "account": "Cuenta",
-      "admin": "Admin"
+      "admin": "Administración"
     },
     "items": {
       "dashboard": "Mi panel",
@@ -22,7 +22,7 @@
       "blueprints": "Plantillas",
       "organisations": "Organizaciones",
       "profile": "Perfil",
-      "broadcast": "Anuncio de lanzamiento"
+      "broadcast": "Enviar difusión"
     },
     "accountMenuAriaLabel": "Menú de cuenta",
     "signOut": "Cerrar sesión",

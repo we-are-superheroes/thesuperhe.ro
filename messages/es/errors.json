@@ -167,11 +167,11 @@
     "broadcastEmpty": "Añade un asunto y un mensaje antes de enviar.",
     "broadcastTooLong": "Ese asunto o mensaje es demasiado largo.",
     "broadcastTestFailed": "No se pudo enviar el correo de prueba.",
-    "broadcastNoTestAddress": "Tu cuenta no tiene una dirección de correo para la prueba."
+    "broadcastNoTestAddress": "Tu cuenta no tiene ninguna dirección de correo para la prueba."
   },
   "waitlist": {
-    "emailRequired": "Introduce tu dirección de correo.",
-    "emailInvalid": "Esa dirección de correo no parece válida.",
-    "saveFailed": "Algo salió mal: inténtalo de nuevo."
+    "emailRequired": "Escribe tu dirección de correo.",
+    "emailInvalid": "Eso no parece una dirección de correo válida.",
+    "saveFailed": "Algo salió mal — inténtalo de nuevo."
   }
 }

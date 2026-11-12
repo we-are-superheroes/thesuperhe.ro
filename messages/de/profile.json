@@ -81,7 +81,7 @@
   "email": {
     "eyebrow": "E-Mails",
     "title": "Aktivitäts-E-Mails.",
-    "desc": "Erhalten Sie eine E-Mail, wenn auf Ihren Projekten etwas passiert — Beitrittsanfragen, Schritte, die Hilfe brauchen, Neuigkeiten und Nachrichten. Dies wird von selbst gespeichert, nicht mit der Schaltfläche Speichern.",
-    "toggleLabel": "Mir E-Mails zu Aktivitäten senden"
+    "desc": "Erhalte eine E-Mail, wenn in deinen Projekten etwas passiert — Beitrittsanfragen, Schritte, die Hilfe brauchen, Updates und Nachrichten. Das wird sofort gespeichert, nicht mit dem Speichern-Button.",
+    "toggleLabel": "Schick mir E-Mails zu Aktivitäten"
   }
 }

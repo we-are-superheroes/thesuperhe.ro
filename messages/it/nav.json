@@ -9,7 +9,7 @@
       "overview": "Panoramica",
       "discover": "Scopri",
       "account": "Account",
-      "admin": "Admin"
+      "admin": "Amministrazione"
     },
     "items": {
       "dashboard": "La mia bacheca",
@@ -22,7 +22,7 @@
       "blueprints": "Modelli",
       "organisations": "Organizzazioni",
       "profile": "Profilo",
-      "broadcast": "Annuncio di lancio"
+      "broadcast": "Invia comunicazione"
     },
     "accountMenuAriaLabel": "Menu account",
     "signOut": "Esci",

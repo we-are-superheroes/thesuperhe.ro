@@ -17,13 +17,13 @@
     "timeNote": "De tarefas de 1 hora a projetos longos",
     "skillsNote": "Todas as habilidades são bem-vindas",
     "annotation": "projetos reais, impacto real",
+    "notifyLink": "Receba aviso no lançamento",
     "contributors": "{count, plural, one {# colaborador} other {# colaboradores}}",
     "stepsNeedHelp": "{count, plural, one {# etapa precisa de ajuda} other {# etapas precisam de ajuda}}",
     "commitment": "~{hours}h de dedicação",
     "showcaseKicker": "Repair Café",
     "showcaseQuote": "“Traga quebrado, leve reparado.”",
-    "showcaseMeta": "★ Camden, todos os meses",
-    "notifyLink": "Avisar-me no lançamento"
+    "showcaseMeta": "★ Camden, todos os meses"
   },
   "entry": {
     "browseTitle": "Explorar projetos",
@@ -72,6 +72,60 @@
     "dashboard": "Ir para o painel",
     "signIn": "Entrar"
   },
+  "waitlist": {
+    "eyebrow": "Lançamento em breve",
+    "title": "Seja o primeiro a saber quando os <em>projetos ficarem disponíveis</em>.",
+    "subtitle": "Estamos a trazer as primeiras organizações e projetos para a plataforma agora. Deixe o seu e-mail e avisamos assim que houver algo a que se possa juntar. Não precisa de conta.",
+    "label": "O seu endereço de e-mail",
+    "placeholder": "voce@exemplo.com",
+    "submit": "Avisem-me",
+    "submitting": "Só um momento…",
+    "perks": {
+      "noAccount": "Não precisa de conta",
+      "noSpam": "Poucos e-mails, sem spam",
+      "unsubscribe": "Cancele quando quiser"
+    },
+    "fineprint": "Ao inscrever-se, concorda em receber e-mails sobre The Superhero. Veja a nossa <privacy>política de privacidade</privacy>.",
+    "consentText": "Ao inscrever-se, concorda em receber e-mails sobre The Superhero.",
+    "success": {
+      "title": "Está na lista.",
+      "body": "Verifique a sua caixa de entrada para confirmar o endereço. Entraremos em contacto assim que os primeiros projetos estiverem prontos para si."
+    },
+    "status": {
+      "home": "Voltar ao início",
+      "confirmed": {
+        "title": "Está tudo pronto.",
+        "body": "Obrigado por confirmar. Enviamos-lhe um e-mail assim que os primeiros projetos estiverem prontos para se juntar."
+      },
+      "already": {
+        "title": "Já confirmado.",
+        "body": "O seu endereço já estava na lista — não há mais nada a fazer. Entraremos em contacto em breve."
+      },
+      "invalid": {
+        "title": "Esta ligação expirou.",
+        "body": "Essa ligação de confirmação já não é válida. Inscreva-se de novo na página inicial e enviamos uma nova."
+      },
+      "unsubscribed": {
+        "title": "A sua subscrição foi cancelada.",
+        "body": "Não vai receber mais e-mails de lançamento da nossa parte. Pode inscrever-se de novo quando quiser."
+      }
+    },
+    "email": {
+      "unsubscribe": "Cancelar subscrição",
+      "confirm": {
+        "preview": "Confirme o seu e-mail para entrar na lista de lançamento de The Superhero.",
+        "subject": "Confirme o seu e-mail — The Superhero",
+        "heading": "Falta só um passo rápido",
+        "p1": "Obrigado pelo seu interesse em The Superhero. Confirme que este é o seu endereço para podermos avisá-lo quando os primeiros projetos estiverem prontos para se juntar.",
+        "p2": "Se não foi você que se inscreveu, pode ignorar este e-mail sem problemas — não acontece nada.",
+        "button": "Confirmar o meu e-mail",
+        "why": "Está a receber isto porque alguém inseriu este endereço em thesuperhe.ro."
+      },
+      "broadcast": {
+        "why": "Está a receber isto porque se inscreveu para saber quando The Superhero fosse lançado."
+      }
+    }
+  },
   "footer": {
     "copyright": "© {year} The Superhero · colaboração em clima e sustentabilidade",
     "projects": "Projetos",
@@ -80,59 +134,5 @@
     "terms": "Termos",
     "createdIn": "Criado na Suíça",
     "swissFlagAlt": "Bandeira da Suíça"
-  },
-  "waitlist": {
-    "eyebrow": "Em breve",
-    "title": "Seja o primeiro a saber quando <em>os projetos arrancam</em>.",
-    "subtitle": "Estamos a trazer as primeiras organizações e os primeiros projetos para a plataforma. Deixe o seu e-mail e avisá-lo-emos assim que houver algo a que se juntar. Não é preciso conta.",
-    "label": "O seu endereço de e-mail",
-    "placeholder": "voce@exemplo.com",
-    "submit": "Avise-me",
-    "submitting": "Um momento…",
-    "perks": {
-      "noAccount": "Não é preciso conta",
-      "noSpam": "Uns poucos e-mails, sem spam",
-      "unsubscribe": "Cancele quando quiser"
-    },
-    "fineprint": "Ao inscrever-se, aceita receber e-mails sobre The Superhero. Consulte a nossa <privacy>política de privacidade</privacy>.",
-    "consentText": "Ao inscrever-se, aceita receber e-mails sobre The Superhero.",
-    "success": {
-      "title": "Está na lista.",
-      "body": "Verifique a sua caixa de entrada para confirmar o seu endereço. Entraremos em contacto assim que os primeiros projetos estiverem prontos para si."
-    },
-    "status": {
-      "home": "Voltar ao início",
-      "confirmed": {
-        "title": "Está tudo pronto.",
-        "body": "Obrigado por confirmar. Enviaremos um e-mail assim que os primeiros projetos estiverem prontos para se juntar."
-      },
-      "already": {
-        "title": "Já confirmado.",
-        "body": "O seu endereço já estava na lista — nada mais a fazer. Entraremos em contacto em breve."
-      },
-      "invalid": {
-        "title": "Este link expirou.",
-        "body": "Esse link de confirmação já não é válido. Inscreva-se novamente na página inicial e enviaremos um novo."
-      },
-      "unsubscribed": {
-        "title": "A sua subscrição foi cancelada.",
-        "body": "Não receberá mais e-mails de lançamento. Pode inscrever-se de novo a qualquer momento."
-      }
-    },
-    "email": {
-      "unsubscribe": "Cancelar subscrição",
-      "confirm": {
-        "preview": "Confirme o seu e-mail para entrar na lista de lançamento de The Superhero.",
-        "subject": "Confirme o seu e-mail — The Superhero",
-        "heading": "Falta só um passo",
-        "p1": "Obrigado pelo seu interesse em The Superhero. Confirme que este é o seu endereço para que o possamos avisar quando os primeiros projetos estiverem prontos para se juntar.",
-        "p2": "Se não se inscreveu, pode ignorar este e-mail com segurança — não acontecerá nada.",
-        "button": "Confirmar o meu e-mail",
-        "why": "Está a receber isto porque alguém introduziu este endereço em thesuperhe.ro."
-      },
-      "broadcast": {
-        "why": "Está a receber isto porque se inscreveu para saber quando The Superhero fosse lançado."
-      }
-    }
   }
 }

@@ -165,13 +165,13 @@
     "deleteProjectFailed": "Non è stato possibile eliminare il progetto.",
     "deleteBlueprintFailed": "Non è stato possibile eliminare il modello.",
     "broadcastEmpty": "Aggiungi un oggetto e un messaggio prima di inviare.",
-    "broadcastTooLong": "L’oggetto o il messaggio è troppo lungo.",
-    "broadcastTestFailed": "Impossibile inviare l’e-mail di prova.",
-    "broadcastNoTestAddress": "Il tuo account non ha un indirizzo e-mail per la prova."
+    "broadcastTooLong": "L'oggetto o il messaggio è troppo lungo.",
+    "broadcastTestFailed": "Non è stato possibile inviare l'e-mail di prova.",
+    "broadcastNoTestAddress": "Il tuo account non ha un indirizzo e-mail per una prova."
   },
   "waitlist": {
     "emailRequired": "Inserisci il tuo indirizzo e-mail.",
-    "emailInvalid": "Questo indirizzo e-mail non sembra valido.",
-    "saveFailed": "Qualcosa è andato storto: riprova."
+    "emailInvalid": "Questo non sembra un indirizzo e-mail valido.",
+    "saveFailed": "Qualcosa è andato storto — riprova."
   }
 }

@@ -9,7 +9,7 @@
       "overview": "Огляд",
       "discover": "Знайти",
       "account": "Обліковий запис",
-      "admin": "Адмін"
+      "admin": "Адміністрування"
     },
     "items": {
       "dashboard": "Моя панель",
@@ -22,7 +22,7 @@
       "blueprints": "Шаблони",
       "organisations": "Організації",
       "profile": "Профіль",
-      "broadcast": "Анонс запуску"
+      "broadcast": "Запустити розсилку"
     },
     "accountMenuAriaLabel": "Меню облікового запису",
     "signOut": "Вийти",

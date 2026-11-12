@@ -81,7 +81,7 @@
   "email": {
     "eyebrow": "E-mails",
     "title": "E-mails d’activité.",
-    "desc": "Recevez un e-mail quand il se passe quelque chose sur vos projets — demandes pour rejoindre, étapes qui ont besoin d'aide, actualités et messages. Ceci s'enregistre tout seul, pas avec le bouton Enregistrer.",
-    "toggleLabel": "M’envoyer un e-mail en cas d’activité"
+    "desc": "Reçois un e-mail quand il se passe quelque chose sur tes projets — demandes pour rejoindre, étapes qui ont besoin d’aide, mises à jour et messages. Ceci s’enregistre tout seul, pas avec le bouton Enregistrer.",
+    "toggleLabel": "M’envoyer un e-mail sur l’activité"
   }
 }

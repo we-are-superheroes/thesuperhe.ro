@@ -64,23 +64,23 @@
     }
   },
   "email": {
-    "subject": "{count, plural, one {Tem uma nova notificação} other {Tem # novas notificações}} em The Superhero",
+    "subject": "{count, plural, one {Tem uma nova notificação} other {Tem # novas notificações}} no The Superhero",
     "heading": "{count, plural, one {Tem uma nova notificação} other {Tem # novas notificações}}",
-    "intro": "Eis o que aconteceu desde a sua última visita:",
-    "more": "…e mais {count, plural, one {# notificação} other {# notificações}}.",
+    "intro": "Eis o que aconteceu desde a última vez que entrou:",
+    "more": "…e mais {count, plural, one {#} other {#}}.",
     "button": "Ver as suas notificações",
-    "why": "Está a receber isto porque os e-mails de atividade estão ativos na sua conta.",
+    "why": "Recebeu isto porque os e-mails de atividade estão ativos na sua conta.",
     "unsubscribe": "Desativar os e-mails de atividade"
   },
   "emailUnsub": {
     "managePrefs": "Gerir preferências de e-mail",
     "ok": {
       "title": "A sua subscrição foi cancelada.",
-      "body": "Já não receberá e-mails de atividade. Pode voltar a ativá-los a qualquer momento no seu perfil."
+      "body": "Já não vai receber e-mails de atividade. Pode voltar a ativá-los a qualquer momento no seu perfil."
     },
     "invalid": {
-      "title": "Este link não funcionou.",
-      "body": "Esse link de cancelamento já não é válido. Pode gerir os e-mails no seu perfil."
+      "title": "Esta ligação não funcionou.",
+      "body": "Essa ligação de cancelamento já não é válida. Em alternativa, pode gerir os e-mails no seu perfil."
     }
   }
 }

@@ -164,14 +164,14 @@
     "projectNotFound": "Projet introuvable.",
     "deleteProjectFailed": "Impossible de supprimer le projet.",
     "deleteBlueprintFailed": "Impossible de supprimer le modèle.",
-    "broadcastEmpty": "Ajoutez un objet et un message avant d’envoyer.",
-    "broadcastTooLong": "Ce sujet ou ce message est trop long.",
+    "broadcastEmpty": "Ajoute un objet et un message avant d’envoyer.",
+    "broadcastTooLong": "Cet objet ou ce message est trop long.",
     "broadcastTestFailed": "Impossible d’envoyer l’e-mail de test.",
-    "broadcastNoTestAddress": "Votre compte n’a pas d’adresse e-mail pour un test."
+    "broadcastNoTestAddress": "Ton compte n’a pas d’adresse e-mail pour un test."
   },
   "waitlist": {
-    "emailRequired": "Veuillez saisir votre adresse e-mail.",
+    "emailRequired": "Saisis ton adresse e-mail.",
     "emailInvalid": "Cette adresse e-mail ne semble pas valide.",
-    "saveFailed": "Une erreur s’est produite — veuillez réessayer."
+    "saveFailed": "Quelque chose s’est mal passé — réessaie."
   }
 }

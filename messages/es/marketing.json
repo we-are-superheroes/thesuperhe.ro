@@ -17,13 +17,13 @@
     "timeNote": "Desde tareas de 1 hora hasta proyectos largos",
     "skillsNote": "Todas las habilidades son bienvenidas",
     "annotation": "proyectos reales, impacto real",
+    "notifyLink": "Avísame en el lanzamiento",
     "contributors": "{count, plural, one {# colaborador} other {# colaboradores}}",
     "stepsNeedHelp": "{count, plural, one {# paso necesita ayuda} other {# pasos necesitan ayuda}}",
     "commitment": "~{hours}h de dedicación",
     "showcaseKicker": "Repair Café",
     "showcaseQuote": "«Tráelo roto, llévatelo arreglado.»",
-    "showcaseMeta": "★ Camden, cada mes",
-    "notifyLink": "Avísame en el lanzamiento"
+    "showcaseMeta": "★ Camden, cada mes"
   },
   "entry": {
     "browseTitle": "Explorar proyectos",
@@ -72,30 +72,21 @@
     "dashboard": "Ir al panel",
     "signIn": "Iniciar sesión"
   },
-  "footer": {
-    "copyright": "© {year} The Superhero · colaboración por el clima y la sostenibilidad",
-    "projects": "Proyectos",
-    "blueprints": "Plantillas",
-    "privacy": "Privacidad",
-    "terms": "Condiciones",
-    "createdIn": "Creado en Suiza",
-    "swissFlagAlt": "Bandera suiza"
-  },
   "waitlist": {
-    "eyebrow": "Pronto disponible",
-    "title": "Sé el primero en saber cuándo <em>arrancan los proyectos</em>.",
-    "subtitle": "Estamos incorporando las primeras organizaciones y proyectos a la plataforma. Deja tu correo y te avisaremos en cuanto haya algo a lo que puedas unirte. No hace falta cuenta.",
-    "label": "Tu dirección de correo",
+    "eyebrow": "Muy pronto",
+    "title": "Sé el primero en saber cuándo <em>los proyectos se activan</em>.",
+    "subtitle": "Ahora estamos sumando las primeras organizaciones y proyectos a la plataforma. Deja tu correo y te avisaremos en cuanto haya algo a lo que puedas unirte. No necesitas cuenta.",
+    "label": "Tu correo electrónico",
     "placeholder": "tu@ejemplo.com",
     "submit": "Avísame",
     "submitting": "Un momento…",
     "perks": {
-      "noAccount": "No hace falta cuenta",
+      "noAccount": "No necesitas cuenta",
       "noSpam": "Unos pocos correos, sin spam",
       "unsubscribe": "Cancela cuando quieras"
     },
-    "fineprint": "Al registrarte aceptas recibir correos sobre The Superhero. Consulta nuestra <privacy>política de privacidad</privacy>.",
-    "consentText": "Al registrarte aceptas recibir correos sobre The Superhero.",
+    "fineprint": "Al registrarte, aceptas recibir correos sobre The Superhero. Consulta nuestra <privacy>política de privacidad</privacy>.",
+    "consentText": "Al registrarte, aceptas recibir correos sobre The Superhero.",
     "success": {
       "title": "Estás en la lista.",
       "body": "Revisa tu bandeja de entrada para confirmar tu dirección. Te escribiremos en cuanto los primeros proyectos estén listos para ti."
@@ -104,35 +95,44 @@
       "home": "Volver al inicio",
       "confirmed": {
         "title": "Todo listo.",
-        "body": "Gracias por confirmar. Te escribiremos en cuanto los primeros proyectos estén listos para unirse."
+        "body": "Gracias por confirmar. Te escribiremos en cuanto los primeros proyectos estén listos para unirte."
       },
       "already": {
         "title": "Ya confirmado.",
-        "body": "Tu dirección ya estaba en la lista: nada más que hacer. Te contactaremos pronto."
+        "body": "Tu dirección ya estaba en la lista; no hay nada más que hacer. Te escribiremos pronto."
       },
       "invalid": {
         "title": "Este enlace ha caducado.",
         "body": "Ese enlace de confirmación ya no es válido. Regístrate de nuevo desde la página de inicio y te enviaremos uno nuevo."
       },
       "unsubscribed": {
-        "title": "Te has dado de baja.",
-        "body": "No recibirás más correos de lanzamiento. Puedes registrarte de nuevo cuando quieras."
+        "title": "Has cancelado tu suscripción.",
+        "body": "No recibirás más correos de lanzamiento de nuestra parte. Puedes registrarte de nuevo cuando quieras."
       }
     },
     "email": {
-      "unsubscribe": "Darse de baja",
+      "unsubscribe": "Cancelar suscripción",
       "confirm": {
         "preview": "Confirma tu correo para unirte a la lista de lanzamiento de The Superhero.",
         "subject": "Confirma tu correo — The Superhero",
-        "heading": "Solo falta un paso",
-        "p1": "Gracias por tu interés en The Superhero. Confirma que esta es tu dirección para que podamos avisarte cuando los primeros proyectos estén listos para unirse.",
+        "heading": "Solo falta un paso rápido",
+        "p1": "Gracias por tu interés en The Superhero. Confirma que esta es tu dirección para que podamos avisarte cuando los primeros proyectos estén listos para unirte.",
         "p2": "Si no te registraste, puedes ignorar este correo sin problema: no pasará nada.",
         "button": "Confirmar mi correo",
-        "why": "Recibes esto porque alguien introdujo esta dirección en thesuperhe.ro."
+        "why": "Recibes este correo porque alguien introdujo esta dirección en thesuperhe.ro."
       },
       "broadcast": {
-        "why": "Recibes esto porque te registraste para saber cuándo se lanzaba The Superhero."
+        "why": "Recibes este correo porque te registraste para saber cuándo se lanzaba The Superhero."
       }
     }
+  },
+  "footer": {
+    "copyright": "© {year} The Superhero · colaboración por el clima y la sostenibilidad",
+    "projects": "Proyectos",
+    "blueprints": "Plantillas",
+    "privacy": "Privacidad",
+    "terms": "Condiciones",
+    "createdIn": "Creado en Suiza",
+    "swissFlagAlt": "Bandera suiza"
   }
 }

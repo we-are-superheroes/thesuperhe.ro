@@ -1,25 +1,25 @@
 {
   "broadcast": {
-    "title": "Anuncio de lanzamiento",
+    "title": "Lanzar difusión",
     "subtitle": "Envía un correo único a todas las personas que confirmaron su lugar en la lista de espera.",
     "recipients": "{count, plural, one {# suscriptor confirmado} other {# suscriptores confirmados}}",
     "subjectLabel": "Asunto",
     "subjectPlaceholder": "Los primeros proyectos ya están disponibles",
     "bodyLabel": "Mensaje",
-    "bodyPlaceholder": "Escribe tu anuncio. Deja una línea en blanco entre párrafos.",
-    "bodyHint": "Texto sin formato. Deja una línea en blanco entre párrafos: se añade un enlace para darse de baja automáticamente.",
-    "test": "Enviarme una prueba",
+    "bodyPlaceholder": "Escribe tu anuncio. Deja una línea en blanco entre los párrafos.",
+    "bodyHint": "Texto simple. Deja una línea en blanco entre los párrafos; el enlace para darse de baja se añade automáticamente.",
+    "test": "Enviarme una prueba a mí",
     "testing": "Enviando prueba…",
     "testSent": "Correo de prueba enviado a {email}.",
     "send": "Enviar a {count, plural, one {# suscriptor} other {# suscriptores}}",
     "sending": "Enviando…",
-    "emptyState": "Podrás enviar en cuanto al menos una persona confirme su lugar en la lista.",
-    "confirmTitle": "¿Enviar este anuncio?",
-    "confirmBody": "Se enviará de inmediato a todas las personas de la lista confirmada. No se puede deshacer.",
+    "emptyState": "Puedes enviar cuando al menos una persona haya confirmado su lugar en la lista.",
+    "confirmTitle": "¿Enviar esta difusión?",
+    "confirmBody": "Se envía de inmediato a todas las personas de la lista de espera confirmada. No puedes deshacerlo.",
     "confirmSend": "Enviar ahora",
     "cancel": "Cancelar",
     "resultSent": "Enviado a {count, plural, one {# suscriptor} other {# suscriptores}}.",
-    "resultFailed": "Enviado a {sent} de {recipients}: {failed} no se pudieron entregar.",
+    "resultFailed": "Enviado a {sent} de {recipients}; {failed} no se pudieron entregar.",
     "sendAnother": "Escribir otro"
   }
 }

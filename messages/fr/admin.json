@@ -1,25 +1,25 @@
 {
   "broadcast": {
-    "title": "Annonce de lancement",
-    "subtitle": "Envoyez un e-mail unique à toutes les personnes ayant confirmé leur inscription à la liste d’attente.",
-    "recipients": "{count, plural, one {# inscrit confirmé} other {# inscrits confirmés}}",
+    "title": "Lancer une diffusion",
+    "subtitle": "Envoie un e-mail unique à toutes les personnes qui ont confirmé leur place sur la liste d'attente.",
+    "recipients": "{count, plural, one {# abonné confirmé} other {# abonnés confirmés}}",
     "subjectLabel": "Objet",
     "subjectPlaceholder": "Les premiers projets sont en ligne",
     "bodyLabel": "Message",
-    "bodyPlaceholder": "Rédigez votre annonce. Laissez une ligne vide entre les paragraphes.",
-    "bodyHint": "Texte brut. Laissez une ligne vide entre les paragraphes — un lien de désinscription est ajouté automatiquement.",
-    "test": "M’envoyer un test",
+    "bodyPlaceholder": "Rédige ton annonce. Laisse une ligne vide entre les paragraphes.",
+    "bodyHint": "Texte brut. Laisse une ligne vide entre les paragraphes — un lien de désabonnement est ajouté pour toi.",
+    "test": "M'envoyer un test",
     "testing": "Envoi du test…",
     "testSent": "E-mail de test envoyé à {email}.",
-    "send": "Envoyer à {count, plural, one {# inscrit} other {# inscrits}}",
+    "send": "Envoyer à {count, plural, one {# abonné} other {# abonnés}}",
     "sending": "Envoi…",
-    "emptyState": "Vous pourrez envoyer dès qu’au moins une personne aura confirmé son inscription.",
-    "confirmTitle": "Envoyer cette annonce ?",
-    "confirmBody": "Elle sera envoyée immédiatement à toutes les personnes de la liste confirmée. Impossible de l’annuler.",
+    "emptyState": "Tu pourras envoyer dès qu'au moins une personne aura confirmé sa place sur la liste.",
+    "confirmTitle": "Envoyer cette diffusion ?",
+    "confirmBody": "Elle part tout de suite à toutes les personnes de la liste d'attente confirmée. Tu ne peux pas l'annuler.",
     "confirmSend": "Envoyer maintenant",
     "cancel": "Annuler",
-    "resultSent": "Envoyé à {count, plural, one {# inscrit} other {# inscrits}}.",
-    "resultFailed": "Envoyé à {sent} sur {recipients} — {failed} n’ont pas pu être remis.",
-    "sendAnother": "Rédiger une autre annonce"
+    "resultSent": "Envoyé à {count, plural, one {# abonné} other {# abonnés}}.",
+    "resultFailed": "Envoyé à {sent} sur {recipients} — {failed} n'ont pas pu être livrés.",
+    "sendAnother": "Rédiger un autre"
   }
 }

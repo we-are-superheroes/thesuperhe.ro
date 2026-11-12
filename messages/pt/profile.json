@@ -81,7 +81,7 @@
   "email": {
     "eyebrow": "E-mails",
     "title": "E-mails de atividade.",
-    "desc": "Receba um e-mail quando algo acontecer nos seus projetos — pedidos para se juntar, passos que precisam de ajuda, novidades e mensagens. Isto guarda-se sozinho, não com o botão Guardar.",
+    "desc": "Receba um e-mail quando algo acontece nos seus projetos — pedidos para participar, etapas que precisam de ajuda, atualizações e mensagens. Isto guarda-se sozinho, não com o botão Guardar.",
     "toggleLabel": "Enviar-me e-mails sobre atividade"
   }
 }

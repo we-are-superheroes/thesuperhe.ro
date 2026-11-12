@@ -66,21 +66,21 @@
   "email": {
     "subject": "{count, plural, one {Hai una nuova notifica} other {Hai # nuove notifiche}} su The Superhero",
     "heading": "{count, plural, one {Hai una nuova notifica} other {Hai # nuove notifiche}}",
-    "intro": "Ecco cosa è successo dall’ultima volta:",
+    "intro": "Ecco cosa è successo dall'ultima volta che hai controllato:",
     "more": "…e {count, plural, one {# altra} other {# altre}}.",
     "button": "Vedi le tue notifiche",
-    "why": "Ricevi questo messaggio perché le e-mail di attività sono attive per il tuo account.",
+    "why": "Ricevi questo messaggio perché le e-mail di attività sono attive sul tuo account.",
     "unsubscribe": "Disattiva le e-mail di attività"
   },
   "emailUnsub": {
     "managePrefs": "Gestisci le preferenze e-mail",
     "ok": {
-      "title": "Sei stato disiscritto.",
+      "title": "Disiscrizione completata.",
       "body": "Non riceverai più e-mail di attività. Puoi riattivarle quando vuoi dal tuo profilo."
     },
     "invalid": {
       "title": "Questo link non ha funzionato.",
-      "body": "Il link di disiscrizione non è più valido. Puoi gestire le e-mail dal tuo profilo."
+      "body": "Questo link di disiscrizione non è più valido. Puoi gestire le e-mail dal tuo profilo."
     }
   }
 }

@@ -64,23 +64,23 @@
     }
   },
   "email": {
-    "subject": "{count, plural, one {Vous avez une nouvelle notification} other {Vous avez # nouvelles notifications}} sur The Superhero",
-    "heading": "{count, plural, one {Vous avez une nouvelle notification} other {Vous avez # nouvelles notifications}}",
-    "intro": "Voici ce qui s’est passé depuis votre dernière visite :",
+    "subject": "{count, plural, one {Tu as une nouvelle notification} other {Tu as # nouvelles notifications}} sur The Superhero",
+    "heading": "{count, plural, one {Tu as une nouvelle notification} other {Tu as # nouvelles notifications}}",
+    "intro": "Voici ce qui s’est passé depuis ta dernière visite :",
     "more": "…et {count, plural, one {# de plus} other {# de plus}}.",
-    "button": "Voir vos notifications",
-    "why": "Vous recevez ceci parce que les e-mails d’activité sont activés pour votre compte.",
+    "button": "Voir tes notifications",
+    "why": "Tu reçois ce message parce que les e-mails d’activité sont activés sur ton compte.",
     "unsubscribe": "Désactiver les e-mails d’activité"
   },
   "emailUnsub": {
     "managePrefs": "Gérer les préférences d’e-mail",
     "ok": {
-      "title": "Vous êtes désabonné.",
-      "body": "Vous ne recevrez plus d’e-mails d’activité. Vous pouvez les réactiver à tout moment depuis votre profil."
+      "title": "Tu es désabonné.",
+      "body": "Tu ne recevras plus d’e-mails d’activité. Tu peux les réactiver à tout moment depuis ton profil."
     },
     "invalid": {
       "title": "Ce lien n’a pas fonctionné.",
-      "body": "Ce lien de désabonnement n’est plus valable. Vous pouvez gérer les e-mails depuis votre profil."
+      "body": "Ce lien de désabonnement n’est plus valide. Tu peux gérer tes e-mails depuis ton profil à la place."
     }
   }
 }
