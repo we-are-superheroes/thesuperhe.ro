@@ -6,6 +6,7 @@ import { db } from '@/lib/db'
 import { stepNeedsHelp } from '@/lib/step-status'
 import { LeavesMark } from '@/components/ui/logo'
 import { LocaleSwitcher } from '@/components/ui/locale-switcher'
+import { WaitlistForm } from '@/components/marketing/waitlist-form'
 import {
   ArrowRight,
   Search,
@@ -102,10 +103,12 @@ export async function MarketingHome() {
   return (
     <div className="overflow-x-hidden">
       <Navbar isSignedIn={isSignedIn} />
-      <Hero projects={projects} />
+      <Hero projects={projects} isSignedIn={isSignedIn} />
       <EntryPoints isSignedIn={isSignedIn} />
       <NewProjects projects={projects} />
       <HowItWorks />
+      {/* Pre-launch waitlist — only meaningful for signed-out visitors. */}
+      {!isSignedIn && <WaitlistSection />}
       <FinalCTA isSignedIn={isSignedIn} />
       <Footer />
     </div>
@@ -202,7 +205,13 @@ function SignOutButton({ label }: { label: string }) {
 
 /* ── Hero ────────────────────────────────────────────────────── */
 
-async function Hero({ projects }: { projects: ProjectSummary[] }) {
+async function Hero({
+  projects,
+  isSignedIn,
+}: {
+  projects: ProjectSummary[]
+  isSignedIn: boolean
+}) {
   const t = await getTranslations('marketing')
 
   // Use the first two projects for the collage cards
@@ -272,6 +281,17 @@ async function Hero({ projects }: { projects: ProjectSummary[] }) {
               {t('hero.startProject')}
             </Link>
           </div>
+
+          {!isSignedIn && (
+            <div className="mb-10 animate-[rise_800ms_ease-out_450ms_backwards]">
+              <a
+                href="#notify"
+                className="text-sm text-amber-500 underline underline-offset-[3px] transition-colors hover:text-amber-400"
+              >
+                {t('hero.notifyLink')}
+              </a>
+            </div>
+          )}
 
           <div className="flex items-center gap-6 text-sm text-neutral-400 animate-[rise_800ms_ease-out_500ms_backwards]">
             <span className="flex items-center gap-2">
@@ -724,6 +744,44 @@ async function FinalCTA({ isSignedIn }: { isSignedIn: boolean }) {
                 {t('cta.signIn')}
               </Link>
             )}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+/* ── Launch waitlist (signed-out only) ───────────────────────── */
+
+async function WaitlistSection() {
+  const t = await getTranslations('marketing')
+
+  return (
+    <section className="border-t border-white/[0.07] py-12 sm:py-20" id="notify">
+      <div className="mx-auto max-w-[1420px] px-4 sm:px-8">
+        <div
+          className="grid grid-cols-1 items-center gap-8 overflow-hidden rounded-2xl border border-amber-500 p-8 shadow-lg sm:p-12 lg:grid-cols-[1.1fr_1fr] lg:gap-12"
+          style={{
+            background:
+              'radial-gradient(ellipse 70% 90% at 100% 0%, rgba(244,165,53,0.22) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 0% 100%, rgba(61,175,124,0.14) 0%, transparent 60%), var(--color-bg-surface)',
+          }}
+        >
+          <div>
+            <div className="mb-3 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.12em] text-amber-500">
+              <span className="h-px w-6 bg-amber-500" />
+              {t('waitlist.eyebrow')}
+            </div>
+            <h2 className="font-display text-[clamp(32px,3.6vw,48px)] leading-[1.05] tracking-[-0.02em]">
+              {t.rich('waitlist.title', {
+                em: (chunks) => <em className="not-italic text-amber-500">{chunks}</em>,
+              })}
+            </h2>
+            <p className="mt-4 max-w-[520px] text-lg leading-relaxed text-neutral-300">
+              {t('waitlist.subtitle')}
+            </p>
+          </div>
+          <div>
+            <WaitlistForm />
           </div>
         </div>
       </div>

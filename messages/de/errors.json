@@ -163,6 +163,15 @@
     "notAuthorised": "Nicht berechtigt.",
     "projectNotFound": "Projekt nicht gefunden.",
     "deleteProjectFailed": "Das Projekt konnte nicht gelöscht werden.",
-    "deleteBlueprintFailed": "Die Blaupause konnte nicht gelöscht werden."
+    "deleteBlueprintFailed": "Die Blaupause konnte nicht gelöscht werden.",
+    "broadcastEmpty": "Fügen Sie einen Betreff und eine Nachricht hinzu, bevor Sie senden.",
+    "broadcastTooLong": "Dieser Betreff oder diese Nachricht ist zu lang.",
+    "broadcastTestFailed": "Die Test-E-Mail konnte nicht gesendet werden.",
+    "broadcastNoTestAddress": "Dein Konto hat keine E-Mail-Adresse für einen Test."
+  },
+  "waitlist": {
+    "emailRequired": "Bitte geben Sie Ihre E-Mail-Adresse ein.",
+    "emailInvalid": "Das sieht nicht nach einer gültigen E-Mail-Adresse aus.",
+    "saveFailed": "Etwas ist schiefgelaufen — bitte versuchen Sie es erneut."
   }
 }

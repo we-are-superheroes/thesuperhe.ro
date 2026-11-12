@@ -120,7 +120,19 @@ manually first (`DATABASE_URL=… npx tsx prisma/apply-pending-migrations.ts`).
    (typically apex `A @ → 76.76.21.21` and `CNAME www → cname.vercel-dns.com`).
 2. **Clerk production**: add the ~5 CNAMEs the production instance lists; Clerk
    verifies them before going live.
-3. Email (Resend SPF/DKIM): not needed until email is wired up.
+3. **Email (Resend)**: email sending is now wired up (guest waitlist + user
+   notification digests). Before production sends:
+   - Add your domain in Resend and create the **SPF**, **DKIM** and **DMARC**
+     records it lists on the registrar. Sends from an unverified domain are
+     rejected or land in spam.
+   - Sign Resend's DPA (processor of subscriber/user email addresses); name
+     Resend in the privacy policy.
+   - Set `RESEND_API_KEY`, `EMAIL_FROM` (on the verified domain) and
+     `CRON_SECRET` in the Vercel env scopes. With no key, emails are logged,
+     not sent — safe for preview, but nothing actually reaches inboxes.
+   - The notification-email cron is declared in `vercel.json`
+     (`/api/cron/send-notification-emails`, every 5 min); it stays inert until
+     `CRON_SECRET` is set.
 
 ---
 

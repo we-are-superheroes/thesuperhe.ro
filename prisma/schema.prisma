@@ -109,6 +109,14 @@ model User {
   // request falls back to cookie → Accept-Language → en. Set only by
   // setLocaleAction — the Clerk webhook never touches it (like `role`).
   locale     String?
+  // Whether we email this member about their in-app notifications. Flipped
+  // by the profile toggle (setEmailPreferenceAction) or the one-click
+  // unsubscribe link in those emails. The Clerk webhook never touches it.
+  emailNotifications Boolean @default(true) @map("email_notifications")
+  // Opaque per-user token for the one-click unsubscribe link in notification
+  // emails. DB-generated (gen_random_uuid) so every row — existing and new —
+  // has one without application involvement.
+  emailUnsubToken String @unique @default(dbgenerated("gen_random_uuid()")) @map("email_unsub_token")
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
 
@@ -599,4 +607,42 @@ model Message {
 
   @@index([conversationId, createdAt(sort: Desc)])
   @@map("messages")
+}
+
+// =============================================================================
+// WAITLIST (pre-launch guest mailing list — double opt-in)
+// =============================================================================
+
+// Guests who ask to be told when projects go live. Separate from `users`:
+// these people have no account and their consent is marketing consent, not
+// anything implied by signing up. Double opt-in — a row starts `pending` and
+// only becomes `confirmed` once the confirmation link is clicked. We own this
+// list; Resend is only the pipe. Right-to-erasure = delete the row.
+model WaitlistSubscriber {
+  id      String @id @default(uuid())
+  // Stored lowercased; the unique index makes re-subscribes idempotent.
+  email   String @unique
+  // pending → confirmed (link clicked) → unsubscribed. Validated in app code.
+  status  String @default("pending")
+  // Captured at signup so the confirmation + launch emails go out in the
+  // guest's language (no account to read a preference from).
+  locale  String?
+  // Where the signup happened (e.g. "home") — light attribution.
+  source  String?
+
+  // Single-use link in the confirmation email. Cleared on confirm.
+  confirmToken     String? @unique @map("confirm_token")
+  // Stable one-click unsubscribe token (List-Unsubscribe + link).
+  unsubscribeToken String  @unique @map("unsubscribe_token")
+
+  // Snapshot of the exact wording the guest agreed to, for consent proof.
+  consentText    String?   @map("consent_text")
+  consentedAt    DateTime? @map("consented_at")
+  confirmedAt    DateTime? @map("confirmed_at")
+  unsubscribedAt DateTime? @map("unsubscribed_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@map("waitlist_subscribers")
 }

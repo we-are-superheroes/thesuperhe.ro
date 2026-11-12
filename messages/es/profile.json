@@ -77,5 +77,11 @@
     "eyebrow": "Apariencia",
     "title": "Tema.",
     "desc": "Elige cómo se ve The Superhero para ti. Tu elección se guarda en este navegador y se aplica en todas las páginas — no depende del botón Guardar."
+  },
+  "email": {
+    "eyebrow": "Correos",
+    "title": "Correos de actividad.",
+    "desc": "Recibe un correo cuando pase algo en tus proyectos: solicitudes para unirse, pasos que necesitan ayuda, novedades y mensajes. Esto se guarda solo, no con el botón Guardar.",
+    "toggleLabel": "Enviarme correos sobre la actividad"
   }
 }

@@ -1,1 +1,25 @@
-{}
+{
+  "broadcast": {
+    "title": "Launch broadcast",
+    "subtitle": "Send a one-off e-mail to everyone who confirmed their place on the waitlist.",
+    "recipients": "{count, plural, one {# confirmed subscriber} other {# confirmed subscribers}}",
+    "subjectLabel": "Subject",
+    "subjectPlaceholder": "The first projects are live",
+    "bodyLabel": "Message",
+    "bodyPlaceholder": "Write your announcement. Leave a blank line between paragraphs.",
+    "bodyHint": "Plain text. Leave a blank line between paragraphs — an unsubscribe link is added for you.",
+    "test": "Send a test to myself",
+    "testing": "Sending test…",
+    "testSent": "Test e-mail sent to {email}.",
+    "send": "Send to {count, plural, one {# subscriber} other {# subscribers}}",
+    "sending": "Sending…",
+    "emptyState": "You can send once at least one person has confirmed their place on the list.",
+    "confirmTitle": "Send this broadcast?",
+    "confirmBody": "This goes to everyone on the confirmed waitlist right away. You can’t unsend it.",
+    "confirmSend": "Send now",
+    "cancel": "Cancel",
+    "resultSent": "Sent to {count, plural, one {# subscriber} other {# subscribers}}.",
+    "resultFailed": "Sent to {sent} of {recipients} — {failed} couldn’t be delivered.",
+    "sendAnother": "Write another"
+  }
+}

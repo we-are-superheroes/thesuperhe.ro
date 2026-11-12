@@ -163,6 +163,15 @@
     "notAuthorised": "Нет прав для этого действия.",
     "projectNotFound": "Проект не найден.",
     "deleteProjectFailed": "Не удалось удалить проект.",
-    "deleteBlueprintFailed": "Не удалось удалить шаблон."
+    "deleteBlueprintFailed": "Не удалось удалить шаблон.",
+    "broadcastEmpty": "Добавьте тему и сообщение перед отправкой.",
+    "broadcastTooLong": "Слишком длинная тема или сообщение.",
+    "broadcastTestFailed": "Не удалось отправить тестовое письмо.",
+    "broadcastNoTestAddress": "К вашему аккаунту не привязан адрес e-mail для теста."
+  },
+  "waitlist": {
+    "emailRequired": "Пожалуйста, введите ваш адрес e-mail.",
+    "emailInvalid": "Этот адрес e-mail выглядит неверным.",
+    "saveFailed": "Что-то пошло не так — попробуйте ещё раз."
   }
 }

@@ -66,12 +66,15 @@ export function ProfileEditForm({
   skillOptions,
   timezones,
   orgsSlot,
+  emailPrefsSlot,
 }: {
   initial: ProfileFormInitial
   skillOptions: SkillOption[]
   timezones: string[]
   /** Server-rendered organisations section (memberships + sharing toggles). */
   orgsSlot?: React.ReactNode
+  /** Email-notification preference card. */
+  emailPrefsSlot?: React.ReactNode
 }) {
   const t = useTranslations('profile')
   const tCommon = useTranslations('common')
@@ -611,6 +614,9 @@ export function ProfileEditForm({
 
           {/* Appearance — device preference, independent of Save */}
           {orgsSlot}
+
+          {/* Email preferences — saves on toggle, independent of Save */}
+          {emailPrefsSlot}
 
           <Card id="sec-appearance">
             <CardHead

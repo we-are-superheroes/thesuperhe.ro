@@ -8,7 +8,8 @@
     "groups": {
       "overview": "Overview",
       "discover": "Discover",
-      "account": "Account"
+      "account": "Account",
+      "admin": "Admin"
     },
     "items": {
       "dashboard": "My dashboard",
@@ -20,7 +21,8 @@
       "skillMatches": "Skill matches",
       "blueprints": "Blueprints",
       "organisations": "Organisations",
-      "profile": "Profile"
+      "profile": "Profile",
+      "broadcast": "Launch broadcast"
     },
     "accountMenuAriaLabel": "Account menu",
     "signOut": "Sign out",

@@ -8,7 +8,8 @@
     "groups": {
       "overview": "Überblick",
       "discover": "Entdecken",
-      "account": "Konto"
+      "account": "Konto",
+      "admin": "Admin"
     },
     "items": {
       "dashboard": "Mein Dashboard",
@@ -20,7 +21,8 @@
       "skillMatches": "Passende Fähigkeiten",
       "blueprints": "Blaupausen",
       "organisations": "Organisationen",
-      "profile": "Profil"
+      "profile": "Profil",
+      "broadcast": "Start-Rundmail"
     },
     "accountMenuAriaLabel": "Kontomenü",
     "signOut": "Abmelden",

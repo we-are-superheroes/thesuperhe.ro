@@ -62,5 +62,25 @@
       "openOrgPage": "Organisationsseite öffnen",
       "openProject": "{name} öffnen"
     }
+  },
+  "email": {
+    "subject": "{count, plural, one {Sie haben eine neue Benachrichtigung} other {Sie haben # neue Benachrichtigungen}} auf The Superhero",
+    "heading": "{count, plural, one {Sie haben eine neue Benachrichtigung} other {Sie haben # neue Benachrichtigungen}}",
+    "intro": "Das ist seit Ihrem letzten Besuch passiert:",
+    "more": "…und {count, plural, one {# weitere} other {# weitere}}.",
+    "button": "Ihre Benachrichtigungen ansehen",
+    "why": "Sie erhalten dies, weil Aktivitäts-E-Mails für Ihr Konto aktiviert sind.",
+    "unsubscribe": "Aktivitäts-E-Mails ausschalten"
+  },
+  "emailUnsub": {
+    "managePrefs": "E-Mail-Einstellungen verwalten",
+    "ok": {
+      "title": "Sie sind abgemeldet.",
+      "body": "Sie erhalten keine Aktivitäts-E-Mails mehr. Sie können sie jederzeit in Ihrem Profil wieder einschalten."
+    },
+    "invalid": {
+      "title": "Dieser Link hat nicht funktioniert.",
+      "body": "Dieser Abmeldelink ist nicht mehr gültig. Sie können E-Mails stattdessen in Ihrem Profil verwalten."
+    }
   }
 }

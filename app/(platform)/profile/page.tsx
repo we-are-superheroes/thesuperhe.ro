@@ -5,6 +5,7 @@ import { db } from '@/lib/db'
 import { isOrgAdminRole } from '@/lib/org-utils'
 import { ProfileEditForm, type ProfileFormInitial, type SkillOption } from '@/components/platform/profile-edit-form'
 import { ProfileOrgsSection, type ProfileOrgRow } from '@/components/platform/profile-orgs-section'
+import { ProfileEmailPrefs } from '@/components/platform/profile-email-prefs'
 
 const TIMEZONE_OPTIONS = [
   '(GMT−08:00) Pacific — Los Angeles',
@@ -31,6 +32,7 @@ export default async function ProfilePage() {
         location: true,
         timezone: true,
         avatarUrl: true,
+        emailNotifications: true,
         skills: {
           select: {
             proficiency: true,
@@ -102,6 +104,7 @@ export default async function ProfilePage() {
       skillOptions={skillOptions}
       timezones={TIMEZONE_OPTIONS}
       orgsSlot={<ProfileOrgsSection orgs={orgRows} />}
+      emailPrefsSlot={<ProfileEmailPrefs initialEnabled={user?.emailNotifications ?? true} />}
     />
   )
 }

@@ -22,7 +22,8 @@
     "commitment": "~{hours}h di impegno",
     "showcaseKicker": "Repair Café",
     "showcaseQuote": "“Portalo rotto, riportalo a casa aggiustato.”",
-    "showcaseMeta": "★ Camden, una volta al mese"
+    "showcaseMeta": "★ Camden, una volta al mese",
+    "notifyLink": "Avvisami al lancio"
   },
   "entry": {
     "browseTitle": "Esplora i progetti",
@@ -79,5 +80,59 @@
     "terms": "Termini",
     "createdIn": "Creato in Svizzera",
     "swissFlagAlt": "Bandiera svizzera"
+  },
+  "waitlist": {
+    "eyebrow": "In arrivo",
+    "title": "Sii il primo a sapere quando <em>i progetti partono</em>.",
+    "subtitle": "Stiamo portando sulla piattaforma le prime organizzazioni e i primi progetti. Lascia la tua e-mail e ti avviseremo appena ci sarà qualcosa a cui unirti. Nessun account richiesto.",
+    "label": "Il tuo indirizzo e-mail",
+    "placeholder": "tu@esempio.com",
+    "submit": "Avvisami",
+    "submitting": "Un attimo…",
+    "perks": {
+      "noAccount": "Nessun account richiesto",
+      "noSpam": "Poche e-mail, niente spam",
+      "unsubscribe": "Disiscrizione quando vuoi"
+    },
+    "fineprint": "Iscrivendoti accetti di ricevere e-mail su The Superhero. Consulta la nostra <privacy>informativa sulla privacy</privacy>.",
+    "consentText": "Iscrivendoti accetti di ricevere e-mail su The Superhero.",
+    "success": {
+      "title": "Sei nella lista.",
+      "body": "Controlla la tua casella per confermare l’indirizzo. Ti scriveremo appena i primi progetti saranno pronti per te."
+    },
+    "status": {
+      "home": "Torna alla home",
+      "confirmed": {
+        "title": "Tutto pronto.",
+        "body": "Grazie per la conferma. Ti scriveremo appena i primi progetti saranno pronti a cui unirti."
+      },
+      "already": {
+        "title": "Già confermato.",
+        "body": "Il tuo indirizzo era già nella lista: niente altro da fare. Ti contatteremo presto."
+      },
+      "invalid": {
+        "title": "Questo link è scaduto.",
+        "body": "Il link di conferma non è più valido. Iscriviti di nuovo dalla home e te ne invieremo uno nuovo."
+      },
+      "unsubscribed": {
+        "title": "Sei stato disiscritto.",
+        "body": "Non riceverai più e-mail di lancio da noi. Puoi iscriverti di nuovo quando vuoi."
+      }
+    },
+    "email": {
+      "unsubscribe": "Disiscriviti",
+      "confirm": {
+        "preview": "Conferma la tua e-mail per unirti alla lista di lancio di The Superhero.",
+        "subject": "Conferma la tua e-mail — The Superhero",
+        "heading": "Manca solo un passo",
+        "p1": "Grazie per il tuo interesse in The Superhero. Conferma che questo è il tuo indirizzo così potremo avvisarti quando i primi progetti saranno pronti a cui unirti.",
+        "p2": "Se non ti sei iscritto, puoi ignorare tranquillamente questa e-mail: non succederà nulla.",
+        "button": "Conferma la mia e-mail",
+        "why": "Ricevi questo messaggio perché qualcuno ha inserito questo indirizzo su thesuperhe.ro."
+      },
+      "broadcast": {
+        "why": "Ricevi questo messaggio perché ti sei iscritto per sapere quando The Superhero sarebbe stato lanciato."
+      }
+    }
   }
 }

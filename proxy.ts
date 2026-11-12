@@ -14,6 +14,14 @@ const isPublicRoute = createRouteMatcher([
   '/sign-up(.*)',
   '/api/webhooks(.*)',
   '/api/health',
+  // Pre-launch waitlist: guest signup + double-opt-in link targets.
+  '/waitlist(.*)',
+  '/api/waitlist(.*)',
+  // Token-guarded unsubscribe for notification emails, and the
+  // secret-guarded cron that sends them. Both must be hittable unauthenticated.
+  '/api/notifications/unsubscribe',
+  '/email-unsubscribed',
+  '/api/cron(.*)',
   '/privacy',
   '/terms',
   '/robots.txt',

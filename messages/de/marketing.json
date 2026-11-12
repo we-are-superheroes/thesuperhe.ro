@@ -22,7 +22,8 @@
     "commitment": "~{hours} Std. Einsatz",
     "showcaseKicker": "Repair Café",
     "showcaseQuote": "„Kaputt bringen, repariert mitnehmen.“",
-    "showcaseMeta": "★ Camden, monatlich"
+    "showcaseMeta": "★ Camden, monatlich",
+    "notifyLink": "Beim Start benachrichtigt werden"
   },
   "entry": {
     "browseTitle": "Projekte durchstöbern",
@@ -79,5 +80,59 @@
     "terms": "Nutzungsbedingungen",
     "createdIn": "Entstanden in der Schweiz",
     "swissFlagAlt": "Schweizer Flagge"
+  },
+  "waitlist": {
+    "eyebrow": "Bald verfügbar",
+    "title": "Erfahren Sie als Erste, wenn <em>Projekte starten</em>.",
+    "subtitle": "Wir bringen gerade die ersten Organisationen und Projekte auf die Plattform. Hinterlassen Sie Ihre E-Mail, und wir sagen Ihnen Bescheid, sobald es etwas zum Mitmachen gibt. Kein Konto nötig.",
+    "label": "Ihre E-Mail-Adresse",
+    "placeholder": "sie@beispiel.com",
+    "submit": "Benachrichtigen",
+    "submitting": "Einen Moment…",
+    "perks": {
+      "noAccount": "Kein Konto nötig",
+      "noSpam": "Ein paar E-Mails, kein Spam",
+      "unsubscribe": "Jederzeit abbestellbar"
+    },
+    "fineprint": "Mit der Anmeldung stimmen Sie zu, E-Mails über The Superhero zu erhalten. Siehe unsere <privacy>Datenschutzerklärung</privacy>.",
+    "consentText": "Mit der Anmeldung stimmen Sie zu, E-Mails über The Superhero zu erhalten.",
+    "success": {
+      "title": "Sie stehen auf der Liste.",
+      "body": "Prüfen Sie Ihr Postfach, um Ihre Adresse zu bestätigen. Wir melden uns, sobald die ersten Projekte für Sie bereit sind."
+    },
+    "status": {
+      "home": "Zurück zur Startseite",
+      "confirmed": {
+        "title": "Alles erledigt.",
+        "body": "Danke für die Bestätigung. Wir schreiben Ihnen, sobald die ersten Projekte zum Mitmachen bereit sind."
+      },
+      "already": {
+        "title": "Bereits bestätigt.",
+        "body": "Ihre Adresse stand schon auf der Liste — nichts weiter zu tun. Wir melden uns bald."
+      },
+      "invalid": {
+        "title": "Dieser Link ist abgelaufen.",
+        "body": "Dieser Bestätigungslink ist nicht mehr gültig. Melden Sie sich auf der Startseite erneut an, und wir senden einen neuen."
+      },
+      "unsubscribed": {
+        "title": "Sie wurden abgemeldet.",
+        "body": "Sie erhalten keine Start-E-Mails mehr von uns. Sie können sich jederzeit wieder anmelden."
+      }
+    },
+    "email": {
+      "unsubscribe": "Abbestellen",
+      "confirm": {
+        "preview": "Bestätigen Sie Ihre E-Mail für die Start-Liste von The Superhero.",
+        "subject": "Bestätigen Sie Ihre E-Mail — The Superhero",
+        "heading": "Nur noch ein kurzer Schritt",
+        "p1": "Danke für Ihr Interesse an The Superhero. Bitte bestätigen Sie, dass dies Ihre Adresse ist, damit wir Ihnen Bescheid geben können, wenn die ersten Projekte zum Mitmachen bereit sind.",
+        "p2": "Falls Sie sich nicht angemeldet haben, können Sie diese E-Mail bedenkenlos ignorieren — es passiert nichts.",
+        "button": "Meine E-Mail bestätigen",
+        "why": "Sie erhalten dies, weil jemand diese Adresse auf thesuperhe.ro eingegeben hat."
+      },
+      "broadcast": {
+        "why": "Sie erhalten dies, weil Sie sich angemeldet haben, um vom Start von The Superhero zu erfahren."
+      }
+    }
   }
 }

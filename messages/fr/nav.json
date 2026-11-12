@@ -8,7 +8,8 @@
     "groups": {
       "overview": "Vue d’ensemble",
       "discover": "Découvrir",
-      "account": "Compte"
+      "account": "Compte",
+      "admin": "Admin"
     },
     "items": {
       "dashboard": "Mon tableau de bord",
@@ -20,7 +21,8 @@
       "skillMatches": "Compétences recherchées",
       "blueprints": "Modèles",
       "organisations": "Organisations",
-      "profile": "Profil"
+      "profile": "Profil",
+      "broadcast": "Annonce de lancement"
     },
     "accountMenuAriaLabel": "Menu du compte",
     "signOut": "Se déconnecter",

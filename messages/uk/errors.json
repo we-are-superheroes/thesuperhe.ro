@@ -163,6 +163,15 @@
     "notAuthorised": "Немає доступу.",
     "projectNotFound": "Проєкт не знайдено.",
     "deleteProjectFailed": "Не вдалося видалити проєкт.",
-    "deleteBlueprintFailed": "Не вдалося видалити шаблон."
+    "deleteBlueprintFailed": "Не вдалося видалити шаблон.",
+    "broadcastEmpty": "Додайте тему й повідомлення перед надсиланням.",
+    "broadcastTooLong": "Надто довга тема або повідомлення.",
+    "broadcastTestFailed": "Не вдалося надіслати тестовий лист.",
+    "broadcastNoTestAddress": "До вашого облікового запису не прив’язано адресу e-mail для тесту."
+  },
+  "waitlist": {
+    "emailRequired": "Будь ласка, введіть вашу адресу e-mail.",
+    "emailInvalid": "Ця адреса e-mail виглядає недійсною.",
+    "saveFailed": "Щось пішло не так — спробуйте ще раз."
   }
 }

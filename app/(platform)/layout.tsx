@@ -25,6 +25,7 @@ export default async function PlatformLayout({
       where: { id: userId },
       select: {
         name: true,
+        role: true,
         contributions: {
           where: { status: { in: ['active', 'pending'] } },
           select: {
@@ -41,6 +42,7 @@ export default async function PlatformLayout({
   ])
 
   const name = user?.name ?? null
+  const isAdmin = user?.role === 'admin'
   const initials = name
     ? name
         .split(' ')
@@ -70,6 +72,7 @@ export default async function PlatformLayout({
         hoursContributed={hoursContributed}
         notificationsBadge={unreadNotifications}
         messagesBadge={messagesBadge}
+        isAdmin={isAdmin}
       >
         {children}
       </PlatformShell>

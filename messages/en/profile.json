@@ -77,5 +77,11 @@
     "eyebrow": "Appearance",
     "title": "Theme.",
     "desc": "Choose how The Superhero looks for you. Your choice is saved to this browser and applies across every page — it isn't tied to the Save button."
+  },
+  "email": {
+    "eyebrow": "E-mails",
+    "title": "Activity e-mails.",
+    "desc": "Get an e-mail when something happens on your projects — join requests, steps that need help, updates and messages. This saves on its own, not with the Save button.",
+    "toggleLabel": "E-mail me about activity"
   }
 }

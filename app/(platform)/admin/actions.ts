@@ -5,6 +5,10 @@ import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { requireAdmin } from '@/lib/auth'
 import { log } from '@/lib/log'
+import { sendEmail, sendEmailBatch, type SendEmailParams } from '@/lib/email'
+import { renderEmail } from '@/lib/email-templates'
+import { SITE_URL } from '@/lib/site'
+import { DEFAULT_LOCALE, isSupportedLocale } from '@/lib/locale-shared'
 import type { ServerActionResult } from '@/types'
 
 /* ================================================================
@@ -93,4 +97,162 @@ export async function deleteBlueprintAction(
 
   revalidatePath('/blueprints')
   return { success: true, data: { deleted: true } }
+}
+
+/* ================================================================
+   Launch broadcast — a one-off email to every confirmed waitlist
+   subscriber. Operator-authored subject + body (one language); only
+   the unsubscribe footer is localised per subscriber. The list stays
+   in our DB — no Resend Audiences dependency.
+
+   `sendWaitlistTestAction` renders the exact same email and sends it
+   to the admin alone, so they can preview it in a real inbox before
+   the irreversible broadcast.
+   ================================================================ */
+
+/** Hard caps so a stray paste can't produce a monster email. */
+const MAX_BROADCAST_SUBJECT = 150
+const MAX_BROADCAST_BODY = 10_000
+
+type ParsedBroadcast = { subject: string; paragraphs: string[] }
+
+/** Normalise + validate the operator's input. Blank lines separate paragraphs. */
+function parseBroadcast(params: { subject: string; body: string }): ParsedBroadcast | 'empty' | 'tooLong' {
+  const subject = params.subject.trim()
+  const paragraphs = params.body
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+  if (!subject || paragraphs.length === 0) return 'empty'
+  if (subject.length > MAX_BROADCAST_SUBJECT || params.body.length > MAX_BROADCAST_BODY) {
+    return 'tooLong'
+  }
+  return { subject, paragraphs }
+}
+
+/** Build the exact email a subscriber receives, given their localised footer. */
+function broadcastEmail(opts: {
+  to: string
+  subject: string
+  paragraphs: string[]
+  footer: { why: string; unsub: string }
+  unsubscribeToken: string
+  kind: string
+}): SendEmailParams {
+  const unsubUrl = `${SITE_URL}/api/waitlist/unsubscribe?token=${encodeURIComponent(opts.unsubscribeToken)}`
+  const { html, text } = renderEmail({
+    previewText: opts.subject,
+    heading: opts.subject,
+    paragraphs: opts.paragraphs,
+    footerLines: [opts.footer.why],
+    unsubscribe: { url: unsubUrl, label: opts.footer.unsub },
+  })
+  return {
+    to: opts.to,
+    subject: opts.subject,
+    html,
+    text,
+    headers: {
+      'List-Unsubscribe': `<${unsubUrl}>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    },
+    tags: [{ name: 'kind', value: opts.kind }],
+  }
+}
+
+/** Localised unsubscribe-footer strings, memoised per locale. */
+function makeFooterResolver() {
+  const cache = new Map<string, { why: string; unsub: string }>()
+  return async function footerFor(locale: string | null) {
+    const key = locale && isSupportedLocale(locale) ? locale : DEFAULT_LOCALE
+    const cached = cache.get(key)
+    if (cached) return cached
+    const tm = await getTranslations({ locale: key, namespace: 'marketing' })
+    const value = {
+      why: tm('waitlist.email.broadcast.why'),
+      unsub: tm('waitlist.email.unsubscribe'),
+    }
+    cache.set(key, value)
+    return value
+  }
+}
+
+export async function sendWaitlistTestAction(params: {
+  subject: string
+  body: string
+}): Promise<ServerActionResult<{ email: string }>> {
+  const t = await getTranslations('errors')
+  const adminId = await requireAdmin()
+  if (!adminId) return { success: false, error: t('admin.notAuthorised') }
+
+  const parsed = parseBroadcast(params)
+  if (parsed === 'empty') return { success: false, error: t('admin.broadcastEmpty') }
+  if (parsed === 'tooLong') return { success: false, error: t('admin.broadcastTooLong') }
+
+  const admin = await db.user.findUnique({
+    where: { id: adminId },
+    select: { email: true, locale: true },
+  })
+  if (!admin?.email) return { success: false, error: t('admin.broadcastNoTestAddress') }
+
+  const footerFor = makeFooterResolver()
+  const footer = await footerFor(admin.locale)
+  // A preview token: the unsubscribe link renders but resolves to the
+  // "link expired" page if clicked — this isn't a real list membership.
+  const result = await sendEmail(
+    broadcastEmail({
+      to: admin.email,
+      subject: parsed.subject,
+      paragraphs: parsed.paragraphs,
+      footer,
+      unsubscribeToken: 'preview',
+      kind: 'waitlist_broadcast_test',
+    }),
+  )
+  if (!result.ok) return { success: false, error: t('admin.broadcastTestFailed') }
+
+  return { success: true, data: { email: admin.email } }
+}
+
+export async function sendWaitlistBroadcastAction(params: {
+  subject: string
+  /** Plain text; blank lines separate paragraphs. */
+  body: string
+}): Promise<ServerActionResult<{ sent: number; failed: number; recipients: number }>> {
+  const t = await getTranslations('errors')
+  const adminId = await requireAdmin()
+  if (!adminId) return { success: false, error: t('admin.notAuthorised') }
+
+  const parsed = parseBroadcast(params)
+  if (parsed === 'empty') return { success: false, error: t('admin.broadcastEmpty') }
+  if (parsed === 'tooLong') return { success: false, error: t('admin.broadcastTooLong') }
+
+  const subscribers = await db.waitlistSubscriber.findMany({
+    where: { status: 'confirmed' },
+    select: { email: true, locale: true, unsubscribeToken: true },
+  })
+  if (subscribers.length === 0) {
+    return { success: true, data: { sent: 0, failed: 0, recipients: 0 } }
+  }
+
+  const footerFor = makeFooterResolver()
+  const items: SendEmailParams[] = []
+  for (const sub of subscribers) {
+    const footer = await footerFor(sub.locale)
+    items.push(
+      broadcastEmail({
+        to: sub.email,
+        subject: parsed.subject,
+        paragraphs: parsed.paragraphs,
+        footer,
+        unsubscribeToken: sub.unsubscribeToken,
+        kind: 'waitlist_broadcast',
+      }),
+    )
+  }
+
+  const { sent, failed } = await sendEmailBatch(items)
+  log.info('admin.waitlist_broadcast', { adminId, recipients: subscribers.length, sent, failed })
+
+  return { success: true, data: { sent, failed, recipients: subscribers.length } }
 }

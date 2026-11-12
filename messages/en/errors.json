@@ -163,6 +163,15 @@
     "notAuthorised": "Not authorised.",
     "projectNotFound": "Project not found.",
     "deleteProjectFailed": "Could not delete the project.",
-    "deleteBlueprintFailed": "Could not delete the blueprint."
+    "deleteBlueprintFailed": "Could not delete the blueprint.",
+    "broadcastEmpty": "Add a subject and a message before sending.",
+    "broadcastTooLong": "That subject or message is too long.",
+    "broadcastTestFailed": "Could not send the test e-mail.",
+    "broadcastNoTestAddress": "Your account has no e-mail address for a test."
+  },
+  "waitlist": {
+    "emailRequired": "Please enter your e-mail address.",
+    "emailInvalid": "That doesn't look like a valid e-mail address.",
+    "saveFailed": "Something went wrong — please try again."
   }
 }

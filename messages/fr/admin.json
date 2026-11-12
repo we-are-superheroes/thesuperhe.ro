@@ -1,1 +1,25 @@
-{}
+{
+  "broadcast": {
+    "title": "Annonce de lancement",
+    "subtitle": "Envoyez un e-mail unique à toutes les personnes ayant confirmé leur inscription à la liste d’attente.",
+    "recipients": "{count, plural, one {# inscrit confirmé} other {# inscrits confirmés}}",
+    "subjectLabel": "Objet",
+    "subjectPlaceholder": "Les premiers projets sont en ligne",
+    "bodyLabel": "Message",
+    "bodyPlaceholder": "Rédigez votre annonce. Laissez une ligne vide entre les paragraphes.",
+    "bodyHint": "Texte brut. Laissez une ligne vide entre les paragraphes — un lien de désinscription est ajouté automatiquement.",
+    "test": "M’envoyer un test",
+    "testing": "Envoi du test…",
+    "testSent": "E-mail de test envoyé à {email}.",
+    "send": "Envoyer à {count, plural, one {# inscrit} other {# inscrits}}",
+    "sending": "Envoi…",
+    "emptyState": "Vous pourrez envoyer dès qu’au moins une personne aura confirmé son inscription.",
+    "confirmTitle": "Envoyer cette annonce ?",
+    "confirmBody": "Elle sera envoyée immédiatement à toutes les personnes de la liste confirmée. Impossible de l’annuler.",
+    "confirmSend": "Envoyer maintenant",
+    "cancel": "Annuler",
+    "resultSent": "Envoyé à {count, plural, one {# inscrit} other {# inscrits}}.",
+    "resultFailed": "Envoyé à {sent} sur {recipients} — {failed} n’ont pas pu être remis.",
+    "sendAnother": "Rédiger une autre annonce"
+  }
+}

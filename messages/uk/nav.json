@@ -8,7 +8,8 @@
     "groups": {
       "overview": "Огляд",
       "discover": "Знайти",
-      "account": "Обліковий запис"
+      "account": "Обліковий запис",
+      "admin": "Адмін"
     },
     "items": {
       "dashboard": "Моя панель",
@@ -20,7 +21,8 @@
       "skillMatches": "Відповідні навички",
       "blueprints": "Шаблони",
       "organisations": "Організації",
-      "profile": "Профіль"
+      "profile": "Профіль",
+      "broadcast": "Анонс запуску"
     },
     "accountMenuAriaLabel": "Меню облікового запису",
     "signOut": "Вийти",

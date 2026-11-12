@@ -62,5 +62,25 @@
       "openOrgPage": "Open the organisation page",
       "openProject": "Open {name}"
     }
+  },
+  "email": {
+    "subject": "{count, plural, one {You have a new notification} other {You have # new notifications}} on The Superhero",
+    "heading": "{count, plural, one {You have a new notification} other {You have # new notifications}}",
+    "intro": "Here's what's happened since you last checked:",
+    "more": "…and {count, plural, one {# more} other {# more}}.",
+    "button": "View your notifications",
+    "why": "You're getting this because activity e-mails are on for your account.",
+    "unsubscribe": "Turn off activity e-mails"
+  },
+  "emailUnsub": {
+    "managePrefs": "Manage e-mail preferences",
+    "ok": {
+      "title": "You're unsubscribed.",
+      "body": "You won't get activity e-mails any more. You can turn them back on any time from your profile."
+    },
+    "invalid": {
+      "title": "This link didn't work.",
+      "body": "That unsubscribe link is no longer valid. You can manage e-mails from your profile instead."
+    }
   }
 }

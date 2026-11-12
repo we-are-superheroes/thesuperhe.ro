@@ -89,3 +89,31 @@ export function validateUpdateBody(
   }
   return { ok: true, body }
 }
+
+/* ================================================================
+   Email — used by the guest waitlist signup. Deliberately lenient:
+   a pragmatic single-@ shape check with length bounds, not a full
+   RFC 5322 parser (those reject valid addresses and accept junk).
+   Real validity is proven by the double opt-in click, not the regex.
+   ================================================================ */
+
+// One @, non-empty local part, a dotted domain, no spaces.
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+export const MAX_EMAIL_LENGTH = 254 // RFC 5321 address limit
+
+/**
+ * Normalise + validate a waitlist email. Returns the lowercased, trimmed
+ * address on success (what we store, so the unique index dedupes
+ * case-insensitively) or an ErrorDescriptor.
+ */
+export function validateEmail(
+  raw: string,
+): { ok: true; email: string } | { ok: false; error: ErrorDescriptor } {
+  const email = raw.trim().toLowerCase()
+  if (!email) return { ok: false, error: { key: 'waitlist.emailRequired' } }
+  if (email.length > MAX_EMAIL_LENGTH || !EMAIL_RE.test(email)) {
+    return { ok: false, error: { key: 'waitlist.emailInvalid' } }
+  }
+  return { ok: true, email }
+}

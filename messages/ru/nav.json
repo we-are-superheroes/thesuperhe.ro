@@ -8,7 +8,8 @@
     "groups": {
       "overview": "Обзор",
       "discover": "Поиск",
-      "account": "Аккаунт"
+      "account": "Аккаунт",
+      "admin": "Админ"
     },
     "items": {
       "dashboard": "Моя панель",
@@ -20,7 +21,8 @@
       "skillMatches": "Подходящие навыки",
       "blueprints": "Шаблоны",
       "organisations": "Организации",
-      "profile": "Профиль"
+      "profile": "Профиль",
+      "broadcast": "Анонс запуска"
     },
     "accountMenuAriaLabel": "Меню аккаунта",
     "signOut": "Выйти",
