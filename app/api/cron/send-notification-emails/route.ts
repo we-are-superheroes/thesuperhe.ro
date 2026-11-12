@@ -4,7 +4,12 @@ import { log } from '@/lib/log'
 
 /* Cron-driven notification-email sweep. Scheduled in vercel.json; Vercel
    sends `Authorization: Bearer <CRON_SECRET>` when CRON_SECRET is set.
-   Guarded so the public endpoint can't be triggered by anyone else. */
+   Guarded so the public endpoint can't be triggered by anyone else.
+
+   Cadence: once daily (07:00 UTC) — Vercel Hobby caps crons at one run per
+   day. Each run turns the day's unsent, still-unread notifications into one
+   digest per user (a humane once-a-day email). On Pro you can tighten the
+   schedule in vercel.json for nearer-real-time delivery. */
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 60

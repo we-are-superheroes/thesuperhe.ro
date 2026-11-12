@@ -131,8 +131,9 @@ manually first (`DATABASE_URL=… npx tsx prisma/apply-pending-migrations.ts`).
      `CRON_SECRET` in the Vercel env scopes. With no key, emails are logged,
      not sent — safe for preview, but nothing actually reaches inboxes.
    - The notification-email cron is declared in `vercel.json`
-     (`/api/cron/send-notification-emails`, every 5 min); it stays inert until
-     `CRON_SECRET` is set.
+     (`/api/cron/send-notification-emails`, daily at 07:00 UTC — Vercel Hobby
+     caps crons at one run per day; tighten the schedule on Pro). It stays
+     inert until `CRON_SECRET` is set.
 
 ---
 
