@@ -1,4 +1,5 @@
 import 'server-only'
+import { SITE_URL } from '@/lib/site'
 
 /* ================================================================
    Email templates — layout only. All copy is passed in already
@@ -27,6 +28,13 @@ export interface EmailContent {
   /** Optional unsubscribe link rendered in the footer. */
   unsubscribe?: { url: string; label: string }
 }
+
+/* The two-leaves brand mark (components/ui/logo.tsx `LeavesMark`) as a PNG.
+   Mail clients such as Gmail and Outlook do not render SVG, so the e-mail
+   header loads this hosted image instead; public/email/logo.png is the same
+   artwork at 144px (shown at 36px, so it stays sharp on high-density
+   screens). If the mark changes, re-export this file. */
+const LOGO_URL = `${SITE_URL}/email/logo.png`
 
 const BRAND = '#f4a535' // amber accent
 const INK = '#1a2b1f'
@@ -82,9 +90,14 @@ export function renderEmail(c: EmailContent): { html: string; text: string } {
   <tr><td align="center">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:${CARD};border-radius:16px;border:1px solid #e5e7eb;overflow:hidden;">
       <tr><td style="padding:28px 32px 0;">
-        <div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:700;color:${INK};">
-          <span style="color:${BRAND};">❧</span> The Superhero
-        </div>
+        <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+          <td style="padding-right:10px;vertical-align:middle;">
+            <img src="${esc(LOGO_URL)}" width="36" height="36" alt="" style="display:block;border:0;outline:none;" />
+          </td>
+          <td style="vertical-align:middle;font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:700;color:${INK};">
+            The <span style="color:${BRAND};">Superhero</span>
+          </td>
+        </tr></table>
       </td></tr>
       <tr><td style="padding:20px 32px 32px;">
         <h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:26px;line-height:1.2;font-weight:400;color:${INK};">${esc(c.heading)}</h1>
