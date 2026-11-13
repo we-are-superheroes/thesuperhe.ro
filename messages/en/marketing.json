@@ -9,7 +9,7 @@
     "signOut": "Sign out"
   },
   "hero": {
-    "badge": "Climate & sustainability — together",
+    "badge": "Climate & sustainability, together",
     "title": "Don't act alone.<br></br>Let's be <em>superheroes</em><br></br>together.",
     "subtitle": "Find climate and sustainability projects that need your skills, or bring your own idea and let collaborators help you make it real.",
     "browseProjects": "Browse projects",
@@ -17,6 +17,7 @@
     "timeNote": "From 1-hour tasks to long projects",
     "skillsNote": "All skills welcome",
     "annotation": "real projects, real impact",
+    "notifyLink": "Get notified at launch",
     "contributors": "{count, plural, one {# contributor} other {# contributors}}",
     "stepsNeedHelp": "{count, plural, one {# step needs help} other {# steps need help}}",
     "commitment": "~{hours}h commitment",
@@ -57,6 +58,7 @@
   "how": {
     "kicker": "How it works",
     "title": "Contribute as much, <em>or as little</em>, as your time allows.",
+    "subtitle": "Whether you're an individual, an association or an enterprise, find projects that need your support. Or, if you're very motivated, create your own from scratch or from a blueprint, and find collaborators to help make it real.",
     "step1Title": "Tell us your skills",
     "step1Desc": "Add the things you're good at, and the ones you actually want to use on a project. A burnt-out developer doesn't have to do coding.",
     "step2Title": "Find a fit",
@@ -70,6 +72,78 @@
     "browseProjects": "Browse projects",
     "dashboard": "Go to dashboard",
     "signIn": "Sign in"
+  },
+  "waitlist": {
+    "eyebrow": "Launching soon",
+    "title": "Be the first to know when <em>projects go live</em>.",
+    "subtitle": "We're bringing the first organisations and projects onto the platform now. Leave your e-mail and we'll tell you as soon as there's something you can join. No account needed.",
+    "label": "Your e-mail address",
+    "placeholder": "you@example.com",
+    "submit": "Notify me",
+    "submitting": "Just a moment…",
+    "perks": {
+      "noAccount": "No account needed",
+      "noSpam": "A few e-mails, no spam",
+      "unsubscribe": "Unsubscribe anytime"
+    },
+    "fineprint": "By signing up you agree to receive e-mails about The Superhero. See our <privacy>privacy policy</privacy>.",
+    "consentText": "By signing up you agree to receive e-mails about The Superhero.",
+    "success": {
+      "title": "Almost there...",
+      "body": "Check your inbox to confirm your address. We'll be in touch as soon as the first projects are ready for you."
+    },
+    "throttled": {
+      "title": "Check your inbox",
+      "body": "You should already have a confirmation e-mail from us. Please check your inbox and your spam folder. If it hasn't arrived in a few minutes, try again."
+    },
+    "confirmPage": {
+      "title": "Confirm your e-mail",
+      "body": "Press the button to join The Superhero launch list. We only add your address once you confirm it here.",
+      "button": "Confirm my e-mail"
+    },
+    "unsubscribePage": {
+      "title": "Unsubscribe from launch e-mails?",
+      "body": "Press the button and we will stop sending launch e-mails to this address.",
+      "button": "Unsubscribe"
+    },
+    "status": {
+      "home": "Back to home",
+      "confirmed": {
+        "title": "You're on the list.",
+        "body": "Thanks for confirming. We'll e-mail you the moment the first projects are ready to join."
+      },
+      "already": {
+        "title": "Already confirmed.",
+        "body": "Your address was already on the list, there's nothing more to do at this point. We'll be in touch soon."
+      },
+      "invalid": {
+        "title": "This link has expired.",
+        "body": "That confirmation link is no longer valid. Sign up again from the home page and we'll send a fresh one."
+      },
+      "unsubscribed": {
+        "title": "You've been unsubscribed.",
+        "body": "You won't receive any more launch e-mails from us. You can sign up again any time."
+      },
+      "unsubscribeInvalid": {
+        "title": "This link didn't work.",
+        "body": "That unsubscribe link is not valid. Use the unsubscribe link in the most recent e-mail we sent you."
+      }
+    },
+    "email": {
+      "unsubscribe": "Unsubscribe",
+      "confirm": {
+        "preview": "Confirm your e-mail to join The Superhero launch list.",
+        "subject": "Confirm your e-mail — The Superhero",
+        "heading": "One quick step to go",
+        "p1": "Thanks for your interest in The Superhero. Please confirm this is your address so we can tell you when the first projects are ready to join.",
+        "p2": "If you didn't sign up, you can safely ignore this e-mail; nothing will happen.",
+        "button": "Confirm my e-mail",
+        "why": "You're getting this because someone entered this address on thesuperhe.ro."
+      },
+      "broadcast": {
+        "why": "You're getting this because you signed up to hear when The Superhero launched."
+      }
+    }
   },
   "footer": {
     "copyright": "© {year} The Superhero · climate & sustainability collaboration",

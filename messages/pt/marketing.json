@@ -9,7 +9,7 @@
     "signOut": "Sair"
   },
   "hero": {
-    "badge": "Clima e sustentabilidade — juntos",
+    "badge": "Clima e sustentabilidade, juntos",
     "title": "Não aja sozinho.<br></br>Vamos ser <em>super-heróis</em><br></br>juntos.",
     "subtitle": "Encontre projetos de clima e sustentabilidade que precisam das suas habilidades, ou traga a sua própria ideia e deixe outras pessoas ajudarem a torná-la real.",
     "browseProjects": "Explorar projetos",
@@ -17,6 +17,7 @@
     "timeNote": "De tarefas de 1 hora a projetos longos",
     "skillsNote": "Todas as habilidades são bem-vindas",
     "annotation": "projetos reais, impacto real",
+    "notifyLink": "Receba aviso no lançamento",
     "contributors": "{count, plural, one {# colaborador} other {# colaboradores}}",
     "stepsNeedHelp": "{count, plural, one {# etapa precisa de ajuda} other {# etapas precisam de ajuda}}",
     "commitment": "~{hours}h de dedicação",
@@ -57,6 +58,7 @@
   "how": {
     "kicker": "Como funciona",
     "title": "Contribua muito <em>ou pouco</em> — conforme o seu tempo permitir.",
+    "subtitle": "Seja uma pessoa, uma associação ou uma empresa, encontre projetos que precisam do seu apoio. Ou, se estiver muito motivado, crie o seu próprio projeto do zero ou a partir de um modelo, e encontre colaboradores para ajudar a torná-lo real.",
     "step1Title": "Diga-nos as suas habilidades",
     "step1Desc": "Adicione o que você sabe fazer bem — e o que realmente quer usar num projeto. Quem está cansado de programar não precisa programar aqui.",
     "step2Title": "Encontre o seu encaixe",
@@ -70,6 +72,78 @@
     "browseProjects": "Explorar projetos",
     "dashboard": "Ir para o painel",
     "signIn": "Entrar"
+  },
+  "waitlist": {
+    "eyebrow": "Lançamento em breve",
+    "title": "Seja o primeiro a saber quando os <em>projetos ficarem disponíveis</em>.",
+    "subtitle": "Estamos a trazer as primeiras organizações e projetos para a plataforma agora. Deixe o seu e-mail e avisamos assim que houver algo a que se possa juntar. Não precisa de conta.",
+    "label": "O seu endereço de e-mail",
+    "placeholder": "voce@exemplo.com",
+    "submit": "Avisem-me",
+    "submitting": "Só um momento…",
+    "perks": {
+      "noAccount": "Não precisa de conta",
+      "noSpam": "Poucos e-mails, sem spam",
+      "unsubscribe": "Cancele quando quiser"
+    },
+    "fineprint": "Ao inscrever-se, concorda em receber e-mails sobre The Superhero. Veja a nossa <privacy>política de privacidade</privacy>.",
+    "consentText": "Ao inscrever-se, concorda em receber e-mails sobre The Superhero.",
+    "success": {
+      "title": "Quase lá...",
+      "body": "Verifique a sua caixa de entrada para confirmar o endereço. Entraremos em contacto assim que os primeiros projetos estiverem prontos para si."
+    },
+    "throttled": {
+      "title": "Verifique a sua caixa de entrada",
+      "body": "Já deverá ter recebido um e-mail de confirmação da nossa parte. Verifique a sua caixa de entrada e a pasta de spam. Se não chegar dentro de alguns minutos, tente novamente."
+    },
+    "confirmPage": {
+      "title": "Confirme o seu e-mail",
+      "body": "Carregue no botão para entrar na lista de lançamento da The Superhero. Só adicionamos o seu endereço depois de o confirmar aqui.",
+      "button": "Confirmar o meu e-mail"
+    },
+    "unsubscribePage": {
+      "title": "Cancelar os e-mails de lançamento?",
+      "body": "Carregue no botão e deixamos de enviar e-mails de lançamento para este endereço.",
+      "button": "Cancelar subscrição"
+    },
+    "status": {
+      "home": "Voltar ao início",
+      "confirmed": {
+        "title": "Está na lista.",
+        "body": "Obrigado por confirmar. Enviamos-lhe um e-mail assim que os primeiros projetos estiverem prontos para se juntar."
+      },
+      "already": {
+        "title": "Já confirmado.",
+        "body": "O seu endereço já estava na lista, não há mais nada a fazer de momento. Entraremos em contacto em breve."
+      },
+      "invalid": {
+        "title": "Esta ligação expirou.",
+        "body": "Essa ligação de confirmação já não é válida. Inscreva-se de novo na página inicial e enviamos uma nova."
+      },
+      "unsubscribed": {
+        "title": "A sua subscrição foi cancelada.",
+        "body": "Não vai receber mais e-mails de lançamento da nossa parte. Pode inscrever-se de novo quando quiser."
+      },
+      "unsubscribeInvalid": {
+        "title": "Esta ligação não funcionou.",
+        "body": "Essa ligação de cancelamento não é válida. Use a ligação de cancelamento no e-mail mais recente que lhe enviámos."
+      }
+    },
+    "email": {
+      "unsubscribe": "Cancelar subscrição",
+      "confirm": {
+        "preview": "Confirme o seu e-mail para entrar na lista de lançamento de The Superhero.",
+        "subject": "Confirme o seu e-mail — The Superhero",
+        "heading": "Falta só um passo rápido",
+        "p1": "Obrigado pelo seu interesse em The Superhero. Confirme que este é o seu endereço para podermos avisá-lo quando os primeiros projetos estiverem prontos para se juntar.",
+        "p2": "Se não se inscreveu, pode ignorar este e-mail com segurança; nada vai acontecer.",
+        "button": "Confirmar o meu e-mail",
+        "why": "Está a receber isto porque alguém inseriu este endereço em thesuperhe.ro."
+      },
+      "broadcast": {
+        "why": "Está a receber isto porque se inscreveu para saber quando The Superhero fosse lançado."
+      }
+    }
   },
   "footer": {
     "copyright": "© {year} The Superhero · colaboração em clima e sustentabilidade",

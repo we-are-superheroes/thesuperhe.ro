@@ -163,6 +163,16 @@
     "notAuthorised": "Sem autorização.",
     "projectNotFound": "Projeto não encontrado.",
     "deleteProjectFailed": "Não foi possível apagar o projeto.",
-    "deleteBlueprintFailed": "Não foi possível apagar o modelo."
+    "deleteBlueprintFailed": "Não foi possível apagar o modelo.",
+    "broadcastEmpty": "Adicione um assunto e uma mensagem antes de enviar.",
+    "broadcastTooLong": "Esse assunto ou mensagem é longo demais.",
+    "broadcastTestFailed": "Não foi possível enviar o e-mail de teste.",
+    "broadcastNoTestAddress": "A sua conta não tem nenhum endereço de e-mail para o teste.",
+    "broadcastFailed": "Não foi possível enviar o e-mail. Nada foi enviado duas vezes — tente de novo."
+  },
+  "waitlist": {
+    "emailRequired": "Introduza o seu endereço de e-mail.",
+    "emailInvalid": "Isto não parece um endereço de e-mail válido.",
+    "saveFailed": "Algo deu errado — tente de novo."
   }
 }

@@ -15,11 +15,13 @@
       "p1": "<strong>Dati dell'account.</strong> Quando ti registri, il nostro fornitore di autenticazione (Clerk) raccoglie il tuo nome, il tuo indirizzo email e, se usi un accesso tramite social, la tua immagine del profilo. Ne conserviamo una copia nel nostro database affinché la piattaforma possa mostrare chi sei.",
       "p2": "<strong>Dati del profilo che scegli di aggiungere.</strong> Una bio, un luogo, un fuso orario, una foto del profilo e le competenze che dichiari di avere — incluso se desideri usarle. Tutto questo è facoltativo.",
       "p3": "<strong>Contenuti che crei.</strong> Progetti, modelli, passaggi dei progetti, aggiornamenti, messaggi ad altri membri, i passaggi a cui ti unisci e le ore che registri. Parte di questi contenuti è pubblica per scelta di progettazione (vedi sotto).",
-      "p4": "<strong>Dati tecnici.</strong> Il nostro fornitore di hosting (Vercel) conserva log del server di breve durata (indirizzo IP, percorso della richiesta, marche temporali) per il funzionamento e la sicurezza del servizio. Non usiamo tracciatori pubblicitari né di analisi."
+      "p4": "<strong>Dati tecnici.</strong> Il nostro fornitore di hosting (Vercel) conserva log del server di breve durata (indirizzo IP, percorso della richiesta, marche temporali) per il funzionamento e la sicurezza del servizio. Non usiamo tracciatori pubblicitari né di analisi.",
+      "p5": "<strong>Lista d'attesa per il lancio.</strong> Se ci chiedi di avvisarti quando i progetti partono, conserviamo il tuo indirizzo email, la lingua che hai usato, il testo che hai accettato e il momento in cui hai confermato. Conserviamo anche il paese da cui ti sei iscritto e le impostazioni di lingua del tuo browser; il paese viene ricavato dal tuo indirizzo IP, ma non conserviamo l'indirizzo IP stesso. Per questo non serve un account."
     },
     "whatWeUseItFor": {
       "title": "Per cosa li usiamo",
-      "p1": "Per far funzionare la piattaforma: mostrare il tuo profilo agli altri membri, abbinare le tue competenze ai passaggi che le richiedono, inviarti notifiche nell'app e permetterti di scrivere agli altri membri. La base giuridica è l'esecuzione del nostro contratto con te (la fornitura del servizio per cui ti sei registrato) e il nostro legittimo interesse a mantenere la piattaforma sicura e funzionante. Non vendiamo i tuoi dati e non li usiamo per pubblicità."
+      "p1": "Per far funzionare la piattaforma: mostrare il tuo profilo agli altri membri, abbinare le tue competenze ai passaggi che le richiedono, inviarti notifiche nell'app e permetterti di scrivere agli altri membri. La base giuridica è l'esecuzione del nostro contratto con te (la fornitura del servizio per cui ti sei registrato) e il nostro legittimo interesse a mantenere la piattaforma sicura e funzionante. Non vendiamo i tuoi dati e non li usiamo per pubblicità.",
+      "p2": "Se ti sei iscritto alla lista d'attesa per il lancio, usiamo il tuo indirizzo solo per inviarti notizie sul lancio di The Superhero. Usiamo le impostazioni di paese e lingua solo per inviarti notizie sui progetti rilevanti nel luogo in cui ti trovi. La base giuridica è il tuo consenso, che puoi revocare in qualsiasi momento tramite il link per disiscriverti presente in ogni email. Se hai un account, ti inviamo anche via email un riepilogo delle tue nuove notifiche; puoi disattivarlo nel tuo profilo o tramite il link nell'email."
     },
     "whatIsPublic": {
       "title": "Cosa è pubblico",
@@ -36,13 +38,15 @@
       "items": {
         "supabase": "<strong>Supabase</strong> — database e archiviazione delle immagini, ospitati su AWS nell'UE (Irlanda, eu-west-1).",
         "clerk": "<strong>Clerk</strong> — autenticazione, con sede negli Stati Uniti. I trasferimenti sono coperti dalle Clausole contrattuali tipo dell'UE.",
-        "vercel": "<strong>Vercel</strong> — hosting dell'applicazione e log del server."
+        "vercel": "<strong>Vercel</strong> — hosting dell'applicazione e log del server.",
+        "resend": "<strong>Resend</strong> — invio di email (email di conferma, di lancio e di notifica), con sede negli Stati Uniti. I trasferimenti sono coperti dalle Clausole contrattuali standard dell'UE."
       },
       "outro": "Ciascuno di questi tratta i dati solo secondo le nostre istruzioni e in base a un accordo sul trattamento dei dati."
     },
     "retention": {
       "title": "Per quanto tempo li conserviamo",
-      "p1": "Per tutto il tempo in cui hai un account. Se elimini il tuo account, il tuo profilo, le competenze e i contributi vengono eliminati con esso. I contenuti da cui dipendono altre persone — i messaggi che hai inviato, gli aggiornamenti pubblici che hai pubblicato — vengono conservati ma scollegati dalla tua identità e mostrati come provenienti da un membro eliminato o da un ex membro. I log del server sono conservati dal nostro fornitore di hosting per un breve periodo e poi eliminati."
+      "p1": "Per tutto il tempo in cui hai un account. Se elimini il tuo account, il tuo profilo, le competenze e i contributi vengono eliminati con esso. I contenuti da cui dipendono altre persone — i messaggi che hai inviato, gli aggiornamenti pubblici che hai pubblicato — vengono conservati ma scollegati dalla tua identità e mostrati come provenienti da un membro eliminato o da un ex membro. I log del server sono conservati dal nostro fornitore di hosting per un breve periodo e poi eliminati.",
+      "p2": "Se ti sei iscritto alla lista d'attesa per il lancio, conserviamo il tuo indirizzo finché non annulli l'iscrizione o ci chiedi di cancellarlo. Dopo che hai annullato l'iscrizione, conserviamo solo la registrazione del fatto che l'indirizzo si è disiscritto, così da non inviargli più email."
     },
     "yourRights": {
       "title": "I tuoi diritti",
@@ -51,7 +55,7 @@
     },
     "policyChanges": {
       "title": "Modifiche a questa informativa",
-      "p1": "Se cambiamo il modo in cui trattiamo i tuoi dati — per esempio, se iniziamo a inviare notifiche via email — aggiorneremo questa pagina e la data in alto. Per le modifiche significative te lo comunicheremo nell'app."
+      "p1": "Se cambiamo il modo in cui gestiamo i tuoi dati — per esempio, se iniziamo a collaborare con un nuovo fornitore di servizi — aggiorneremo questa pagina e modificheremo la data in alto. Per i cambiamenti significativi te lo comunicheremo nell'app."
     }
   },
   "footer": {

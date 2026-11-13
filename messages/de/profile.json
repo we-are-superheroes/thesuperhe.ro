@@ -77,5 +77,11 @@
     "eyebrow": "Aussehen",
     "title": "Theme.",
     "desc": "Wähle, wie The Superhero für dich aussieht. Deine Wahl wird in diesem Browser gespeichert und gilt auf jeder Seite — sie hängt nicht am Speichern-Button."
+  },
+  "email": {
+    "eyebrow": "E-Mails",
+    "title": "Aktivitäts-E-Mails.",
+    "desc": "Erhalte eine E-Mail, wenn in deinen Projekten etwas passiert — Beitrittsanfragen, Schritte, die Hilfe brauchen, Updates und Nachrichten. Das wird sofort gespeichert, nicht mit dem Speichern-Button.",
+    "toggleLabel": "Schick mir E-Mails zu Aktivitäten"
   }
 }

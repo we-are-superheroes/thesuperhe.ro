@@ -1,1 +1,31 @@
-{}
+{
+  "broadcast": {
+    "title": "Lancer une diffusion",
+    "subtitle": "Envoie un e-mail unique à toutes les personnes qui ont confirmé leur place sur la liste d'attente.",
+    "recipients": "{count, plural, one {# abonné confirmé} other {# abonnés confirmés}}",
+    "audienceLabel": "Envoyer seulement à ces pays",
+    "audienceAll": "Aucun pays choisi : l'e-mail part vers tout le monde.",
+    "audienceSome": "L'e-mail part vers {count, plural, one {# abonné} other {# abonnés}}.",
+    "audienceUnknown": "{count, plural, one {# abonné n'a} other {# abonnés n'ont}} pas de pays connu et {count, plural, one {reçoit} other {reçoivent}} toujours l'e-mail.",
+    "subjectLabel": "Objet",
+    "subjectPlaceholder": "Les premiers projets sont en ligne",
+    "bodyLabel": "Message",
+    "bodyPlaceholder": "Rédige ton annonce. Laisse une ligne vide entre les paragraphes.",
+    "bodyHint": "Texte brut. Laisse une ligne vide entre les paragraphes — un lien de désabonnement est ajouté pour toi.",
+    "test": "M'envoyer un test",
+    "testing": "Envoi du test…",
+    "testSent": "E-mail de test envoyé à {email}.",
+    "send": "Envoyer à {count, plural, one {# abonné} other {# abonnés}}",
+    "sending": "Envoi…",
+    "emptyState": "Tu pourras envoyer dès qu'au moins une personne aura confirmé sa place sur la liste.",
+    "confirmTitle": "Envoyer cette diffusion ?",
+    "confirmBody": "Cet e-mail part tout de suite vers {count, plural, one {# abonné} other {# abonnés}}. Tu ne peux pas annuler l'envoi.",
+    "confirmSend": "Envoyer maintenant",
+    "cancel": "Annuler",
+    "resultSent": "Envoyé à {count, plural, one {# abonné} other {# abonnés}}.",
+    "resultPartial": "Envoyé à {sent} pour l'instant — {left} restant à envoyer.",
+    "resultAlready": "Toutes les personnes que tu as choisies ont déjà reçu cet e-mail.",
+    "sendRest": "Envoyer aux autres",
+    "sendAnother": "Rédiger un autre"
+  }
+}

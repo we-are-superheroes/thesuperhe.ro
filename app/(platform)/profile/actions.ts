@@ -93,6 +93,31 @@ export async function saveProfileAction(
   return { success: true, data: { saved: true } }
 }
 
+/**
+ * Flip the master "email me about activity" preference. The one-click
+ * unsubscribe link in notification emails sets this to false through its own
+ * token route; this is the in-app toggle for the same column.
+ */
+export async function setEmailPreferenceAction(
+  enabled: boolean,
+): Promise<ServerActionResult<{ emailNotifications: boolean }>> {
+  const t = await getTranslations('errors')
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
+
+  try {
+    await db.user.update({
+      where: { id: userId },
+      data: { emailNotifications: enabled },
+    })
+  } catch {
+    return { success: false, error: t('profile.saveFailed') }
+  }
+
+  revalidatePath('/profile')
+  return { success: true, data: { emailNotifications: enabled } }
+}
+
 export async function clearAvatarAction(): Promise<ServerActionResult<{ cleared: true }>> {
   const t = await getTranslations('errors')
   const { userId } = await auth()

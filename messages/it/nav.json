@@ -8,7 +8,8 @@
     "groups": {
       "overview": "Panoramica",
       "discover": "Scopri",
-      "account": "Account"
+      "account": "Account",
+      "admin": "Amministrazione"
     },
     "items": {
       "dashboard": "La mia bacheca",
@@ -20,7 +21,8 @@
       "skillMatches": "Competenze richieste",
       "blueprints": "Modelli",
       "organisations": "Organizzazioni",
-      "profile": "Profilo"
+      "profile": "Profilo",
+      "broadcast": "Invia comunicazione"
     },
     "accountMenuAriaLabel": "Menu account",
     "signOut": "Esci",

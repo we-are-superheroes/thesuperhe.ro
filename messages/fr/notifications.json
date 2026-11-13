@@ -62,5 +62,30 @@
       "openOrgPage": "Ouvrir la page de l’organisation",
       "openProject": "Ouvrir {name}"
     }
+  },
+  "email": {
+    "subject": "{count, plural, one {Tu as une nouvelle notification} other {Tu as # nouvelles notifications}} sur The Superhero",
+    "heading": "{count, plural, one {Tu as une nouvelle notification} other {Tu as # nouvelles notifications}}",
+    "intro": "Voici ce qui s’est passé depuis ta dernière visite :",
+    "more": "…et {count, plural, one {# de plus} other {# de plus}}.",
+    "button": "Voir tes notifications",
+    "why": "Tu reçois ce message parce que les e-mails d’activité sont activés sur ton compte.",
+    "unsubscribe": "Désactiver les e-mails d’activité"
+  },
+  "emailUnsub": {
+    "managePrefs": "Gérer les préférences d’e-mail",
+    "confirm": {
+      "title": "Arrêter les e-mails d’activité ?",
+      "body": "Appuie sur le bouton et nous arrêterons de t’envoyer des e-mails sur l’activité de tes projets. Tu peux réactiver les e-mails depuis ton profil.",
+      "button": "Se désabonner"
+    },
+    "ok": {
+      "title": "Tu es désabonné.",
+      "body": "Tu ne recevras plus d’e-mails d’activité. Tu peux les réactiver à tout moment depuis ton profil."
+    },
+    "invalid": {
+      "title": "Ce lien n’a pas fonctionné.",
+      "body": "Ce lien de désabonnement n’est plus valide. Tu peux gérer tes e-mails depuis ton profil à la place."
+    }
   }
 }

@@ -163,6 +163,16 @@
     "notAuthorised": "Sin autorización.",
     "projectNotFound": "Proyecto no encontrado.",
     "deleteProjectFailed": "No se pudo eliminar el proyecto.",
-    "deleteBlueprintFailed": "No se pudo eliminar la plantilla."
+    "deleteBlueprintFailed": "No se pudo eliminar la plantilla.",
+    "broadcastEmpty": "Añade un asunto y un mensaje antes de enviar.",
+    "broadcastTooLong": "Ese asunto o mensaje es demasiado largo.",
+    "broadcastTestFailed": "No se pudo enviar el correo de prueba.",
+    "broadcastNoTestAddress": "Tu cuenta no tiene ninguna dirección de correo para la prueba.",
+    "broadcastFailed": "No se pudo enviar el correo. No se envió nada dos veces — inténtalo de nuevo."
+  },
+  "waitlist": {
+    "emailRequired": "Escribe tu dirección de correo.",
+    "emailInvalid": "Eso no parece una dirección de correo válida.",
+    "saveFailed": "Algo salió mal — inténtalo de nuevo."
   }
 }

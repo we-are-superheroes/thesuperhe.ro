@@ -1,1 +1,31 @@
-{}
+{
+  "broadcast": {
+    "title": "Rundmail senden",
+    "subtitle": "Sende eine einmalige E-Mail an alle, die ihren Platz auf der Warteliste bestätigt haben.",
+    "recipients": "{count, plural, one {# bestätigte Person} other {# bestätigte Personen}}",
+    "audienceLabel": "Nur an diese Länder senden",
+    "audienceAll": "Kein Land ausgewählt: Die E-Mail geht an alle.",
+    "audienceSome": "Die E-Mail geht an {count, plural, one {# Person} other {# Personen}}.",
+    "audienceUnknown": "{count, plural, one {# Person hat} other {# Personen haben}} kein bekanntes Land und erhalten die E-Mail immer.",
+    "subjectLabel": "Betreff",
+    "subjectPlaceholder": "Die ersten Projekte sind da",
+    "bodyLabel": "Nachricht",
+    "bodyPlaceholder": "Schreibe deine Ankündigung. Lass zwischen Absätzen eine Leerzeile.",
+    "bodyHint": "Nur Text. Lass zwischen Absätzen eine Leerzeile — einen Abmeldelink fügen wir für dich hinzu.",
+    "test": "Test an mich selbst senden",
+    "testing": "Test wird gesendet…",
+    "testSent": "Test-E-Mail an {email} gesendet.",
+    "send": "An {count, plural, one {# Person} other {# Personen}} senden",
+    "sending": "Wird gesendet…",
+    "emptyState": "Du kannst senden, sobald mindestens eine Person ihren Platz auf der Liste bestätigt hat.",
+    "confirmTitle": "Diese Rundmail senden?",
+    "confirmBody": "Diese E-Mail geht sofort an {count, plural, one {# bestätigte Person} other {# bestätigte Personen}}. Du kannst sie nicht zurückholen.",
+    "confirmSend": "Jetzt senden",
+    "cancel": "Abbrechen",
+    "resultSent": "An {count, plural, one {# Person} other {# Personen}} gesendet.",
+    "resultPartial": "Bisher an {sent} gesendet — {left} noch zu senden.",
+    "resultAlready": "Alle Ausgewählten haben diese E-Mail bereits erhalten.",
+    "sendRest": "An die Übrigen senden",
+    "sendAnother": "Weitere schreiben"
+  }
+}

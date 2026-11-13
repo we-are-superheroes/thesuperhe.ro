@@ -15,6 +15,7 @@ import {
   Star,
   FileText,
   Building2,
+  Megaphone,
   User as UserIcon,
   LogOut,
   ChevronUp,
@@ -58,6 +59,7 @@ export function Sidebar({
   hoursContributed,
   notificationsBadge = 0,
   messagesBadge = 0,
+  isAdmin = false,
   drawerOpen = false,
   onDrawerClose,
 }: {
@@ -68,6 +70,7 @@ export function Sidebar({
   hoursContributed: number
   notificationsBadge?: number
   messagesBadge?: number
+  isAdmin?: boolean
   drawerOpen?: boolean
   onDrawerClose?: () => void
 }) {
@@ -206,6 +209,16 @@ export function Sidebar({
       label: t('sidebar.groups.account'),
       items: [{ label: t('sidebar.items.profile'), icon: UserIcon, href: '/profile' }],
     },
+    ...(isAdmin
+      ? [
+          {
+            label: t('sidebar.groups.admin'),
+            items: [
+              { label: t('sidebar.items.broadcast'), icon: Megaphone, href: '/admin/broadcast' },
+            ],
+          },
+        ]
+      : []),
   ]
 
   const metaText = projectCount > 0

@@ -8,7 +8,8 @@
     "groups": {
       "overview": "Resumen",
       "discover": "Descubrir",
-      "account": "Cuenta"
+      "account": "Cuenta",
+      "admin": "Administración"
     },
     "items": {
       "dashboard": "Mi panel",
@@ -20,7 +21,8 @@
       "skillMatches": "Habilidades buscadas",
       "blueprints": "Plantillas",
       "organisations": "Organizaciones",
-      "profile": "Perfil"
+      "profile": "Perfil",
+      "broadcast": "Enviar difusión"
     },
     "accountMenuAriaLabel": "Menú de cuenta",
     "signOut": "Cerrar sesión",

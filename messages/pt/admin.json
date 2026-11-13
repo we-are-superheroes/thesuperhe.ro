@@ -1,1 +1,31 @@
-{}
+{
+  "broadcast": {
+    "title": "Lançar comunicado",
+    "subtitle": "Envie um e-mail único a todas as pessoas que confirmaram o seu lugar na lista de espera.",
+    "recipients": "{count, plural, one {# subscritor confirmado} other {# subscritores confirmados}}",
+    "audienceLabel": "Enviar apenas a estes países",
+    "audienceAll": "Nenhum país escolhido: o e-mail é enviado a todas as pessoas.",
+    "audienceSome": "O e-mail é enviado a {count, plural, one {# subscritor} other {# subscritores}}.",
+    "audienceUnknown": "{count, plural, one {# subscritor não tem} other {# subscritores não têm}} país conhecido e recebem sempre o e-mail.",
+    "subjectLabel": "Assunto",
+    "subjectPlaceholder": "Os primeiros projetos já estão online",
+    "bodyLabel": "Mensagem",
+    "bodyPlaceholder": "Escreva o seu anúncio. Deixe uma linha em branco entre parágrafos.",
+    "bodyHint": "Texto simples. Deixe uma linha em branco entre parágrafos — uma ligação para cancelar a subscrição é adicionada automaticamente.",
+    "test": "Enviar um teste para mim",
+    "testing": "A enviar teste…",
+    "testSent": "E-mail de teste enviado para {email}.",
+    "send": "Enviar a {count, plural, one {# subscritor} other {# subscritores}}",
+    "sending": "A enviar…",
+    "emptyState": "Pode enviar assim que pelo menos uma pessoa tiver confirmado o seu lugar na lista.",
+    "confirmTitle": "Enviar este comunicado?",
+    "confirmBody": "Este e-mail é enviado já a {count, plural, one {# subscritor} other {# subscritores}}. Não pode cancelar o envio.",
+    "confirmSend": "Enviar agora",
+    "cancel": "Cancelar",
+    "resultSent": "Enviado a {count, plural, one {# subscritor} other {# subscritores}}.",
+    "resultPartial": "Enviado a {sent} até agora — faltam {left} por enviar.",
+    "resultAlready": "Todas as pessoas que escolheu já receberam este e-mail.",
+    "sendRest": "Enviar aos restantes",
+    "sendAnother": "Escrever outro"
+  }
+}

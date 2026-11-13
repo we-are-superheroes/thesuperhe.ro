@@ -77,5 +77,11 @@
     "eyebrow": "Aparência",
     "title": "Tema.",
     "desc": "Escolha como o The Superhero aparece para você. A escolha fica guardada neste navegador e vale em todas as páginas — não depende do botão Guardar."
+  },
+  "email": {
+    "eyebrow": "E-mails",
+    "title": "E-mails de atividade.",
+    "desc": "Receba um e-mail quando algo acontece nos seus projetos — pedidos para participar, etapas que precisam de ajuda, atualizações e mensagens. Isto guarda-se sozinho, não com o botão Guardar.",
+    "toggleLabel": "Enviar-me e-mails sobre atividade"
   }
 }

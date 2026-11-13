@@ -62,5 +62,30 @@
       "openOrgPage": "Abrir la página de la organización",
       "openProject": "Abrir {name}"
     }
+  },
+  "email": {
+    "subject": "{count, plural, one {Tienes una notificación nueva} other {Tienes # notificaciones nuevas}} en The Superhero",
+    "heading": "{count, plural, one {Tienes una notificación nueva} other {Tienes # notificaciones nuevas}}",
+    "intro": "Esto es lo que ha pasado desde la última vez que entraste:",
+    "more": "…y {count, plural, one {# más} other {# más}}.",
+    "button": "Ver tus notificaciones",
+    "why": "Recibes esto porque los correos de actividad están activados en tu cuenta.",
+    "unsubscribe": "Desactivar los correos de actividad"
+  },
+  "emailUnsub": {
+    "managePrefs": "Gestionar las preferencias de correo",
+    "confirm": {
+      "title": "¿Dejar de recibir correos de actividad?",
+      "body": "Pulsa el botón y dejaremos de enviarte correos sobre la actividad de tus proyectos. Puedes volver a activar los correos desde tu perfil.",
+      "button": "Cancelar suscripción"
+    },
+    "ok": {
+      "title": "Cancelaste la suscripción.",
+      "body": "Ya no recibirás correos de actividad. Puedes volver a activarlos cuando quieras desde tu perfil."
+    },
+    "invalid": {
+      "title": "Este enlace no funcionó.",
+      "body": "Ese enlace para cancelar la suscripción ya no es válido. En su lugar, puedes gestionar los correos desde tu perfil."
+    }
   }
 }

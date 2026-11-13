@@ -77,5 +77,11 @@
     "eyebrow": "Apparence",
     "title": "Thème.",
     "desc": "Choisis l’apparence de The Superhero pour toi. Ton choix est gardé dans ce navigateur et s’applique à toutes les pages — il ne dépend pas du bouton Enregistrer."
+  },
+  "email": {
+    "eyebrow": "E-mails",
+    "title": "E-mails d’activité.",
+    "desc": "Reçois un e-mail quand il se passe quelque chose sur tes projets — demandes pour rejoindre, étapes qui ont besoin d’aide, mises à jour et messages. Ceci s’enregistre tout seul, pas avec le bouton Enregistrer.",
+    "toggleLabel": "M’envoyer un e-mail sur l’activité"
   }
 }

@@ -15,11 +15,13 @@
       "p1": "<strong>Account data.</strong> When you sign up, our authentication provider (Clerk) collects your name, email address and, if you use a social login, your avatar. We keep a copy of these in our own database so the platform can show who you are.",
       "p2": "<strong>Profile data you choose to add.</strong> A bio, a location, a timezone, a profile photo, and the skills you say you have — including whether you’re looking to use them. All of this is optional.",
       "p3": "<strong>Content you create.</strong> Projects, blueprints, project steps, updates, messages to other members, the steps you join and the hours you log. Some of this is public by design (see below).",
-      "p4": "<strong>Technical data.</strong> Our hosting provider (Vercel) keeps short-lived server logs (IP address, request path, timestamps) for operating and securing the service. We run no advertising or analytics trackers."
+      "p4": "<strong>Technical data.</strong> Our hosting provider (Vercel) keeps short-lived server logs (IP address, request path, timestamps) for operating and securing the service. We run no advertising or analytics trackers.",
+      "p5": "<strong>Launch mailing list.</strong> If you ask to be told when projects go live, we store your email address, the language you used, the wording you agreed to and the time you confirmed. We also store the country you signed up from and your browser’s language settings; the country is worked out from your IP address, but we do not store the IP address itself. You don’t need an account for this."
     },
     "whatWeUseItFor": {
       "title": "What we use it for",
-      "p1": "To run the platform: showing your profile to other members, matching your skills with steps that need them, sending you in-app notifications, and letting you message other members. The legal basis is the performance of our contract with you (providing the service you signed up for) and our legitimate interest in keeping the platform secure and functional. We don’t sell your data, and we don’t use it for advertising."
+      "p1": "To run the platform: showing your profile to other members, matching your skills with steps that need them, sending you in-app notifications, and letting you message other members. The legal basis is the performance of our contract with you (providing the service you signed up for) and our legitimate interest in keeping the platform secure and functional. We don’t sell your data, and we don’t use it for advertising.",
+      "p2": "If you joined the launch mailing list, we use your address only to send you news about The Superhero’s launch. We use the country and language settings only to send you news about projects that are relevant where you are. The legal basis is your consent, which you can withdraw at any time with the unsubscribe link in every email. If you have an account, we also email you a summary of your new notifications; you can switch this off in your profile or with the link in the email."
     },
     "whatIsPublic": {
       "title": "What is public",
@@ -36,13 +38,15 @@
       "items": {
         "supabase": "<strong>Supabase</strong> — database and image storage, hosted on AWS in the EU (Ireland, eu-west-1).",
         "clerk": "<strong>Clerk</strong> — authentication, based in the United States. Transfers are covered by the EU Standard Contractual Clauses.",
-        "vercel": "<strong>Vercel</strong> — application hosting and server logs."
+        "vercel": "<strong>Vercel</strong> — application hosting and server logs.",
+        "resend": "<strong>Resend</strong> — sending email (confirmation, launch and notification emails), based in the United States. Transfers are covered by the EU Standard Contractual Clauses."
       },
       "outro": "Each of these processes data only on our instructions and under a data processing agreement."
     },
     "retention": {
       "title": "How long we keep it",
-      "p1": "For as long as you have an account. If you delete your account, your profile, skills and contributions are deleted with it. Content that other people depend on — messages you sent, public updates you posted — is kept but detached from your identity and shown as coming from a deleted or former member. Server logs are retained by our hosting provider for a short period and then discarded."
+      "p1": "For as long as you have an account. If you delete your account, your profile, skills and contributions are deleted with it. Content that other people depend on — messages you sent, public updates you posted — is kept but detached from your identity and shown as coming from a deleted or former member. Server logs are retained by our hosting provider for a short period and then discarded.",
+      "p2": "If you joined the launch mailing list, we keep your address until you unsubscribe or ask us to delete it. After you unsubscribe we keep only a record that the address opted out, so that we don’t email it again."
     },
     "yourRights": {
       "title": "Your rights",
@@ -51,7 +55,7 @@
     },
     "policyChanges": {
       "title": "Changes to this policy",
-      "p1": "If we change how we handle your data — for example, if we start sending email notifications — we’ll update this page and adjust the date at the top. For significant changes we’ll tell you in the app."
+      "p1": "If we change how we handle your data — for example, if we start working with a new service provider — we’ll update this page and adjust the date at the top. For significant changes we’ll tell you in the app."
     }
   },
   "footer": {
