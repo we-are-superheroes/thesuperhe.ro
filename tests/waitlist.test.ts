@@ -118,6 +118,30 @@ describe('requestWaitlistConfirmation', () => {
     expect(sentHtml()).toContain('/waitlist/unsubscribe?token=keep-me')
   })
 
+  it('stores the signup country and browser languages on a new row', async () => {
+    findUnique.mockResolvedValue(null)
+    await requestWaitlistConfirmation({ ...base, country: 'CH', acceptLanguage: 'fr-CH,fr' })
+
+    const data = create.mock.calls[0][0].data
+    expect(data.country).toBe('CH')
+    expect(data.acceptLanguage).toBe('fr-CH,fr')
+  })
+
+  it('does not wipe a known country when a later request has none', async () => {
+    findUnique.mockResolvedValue({
+      id: '1',
+      status: 'pending',
+      confirmToken: 'tok',
+      unsubscribeToken: 'u',
+      consentedAt: longAgo(),
+    })
+    await requestWaitlistConfirmation(base)
+
+    const data = update.mock.calls[0][0].data
+    expect('country' in data).toBe(false)
+    expect('acceptLanguage' in data).toBe(false)
+  })
+
   it('re-opts-in a previously unsubscribed address with a fresh token', async () => {
     findUnique.mockResolvedValue({
       id: '1',

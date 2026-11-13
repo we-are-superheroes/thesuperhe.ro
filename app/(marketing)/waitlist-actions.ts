@@ -6,6 +6,7 @@ import { validateEmail } from '@/lib/validation'
 import { tError } from '@/lib/errors'
 import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import { requestWaitlistConfirmation, type WaitlistRequestOutcome } from '@/lib/waitlist'
+import { COUNTRY_HEADER, parseAcceptLanguage, parseCountryCode } from '@/lib/waitlist-geo'
 import { resolveLocale, DEFAULT_LOCALE } from '@/lib/locale'
 import { log } from '@/lib/log'
 import type { ServerActionResult } from '@/types'
@@ -40,9 +41,21 @@ export async function subscribeWaitlistAction(
   const tMarketing = await getTranslations({ locale, namespace: 'marketing' })
   const consentText = tMarketing('waitlist.consentText')
 
+  // Rough location, so launch e-mails can be sent by country. The country
+  // comes from the host's lookup; the IP address itself is not stored.
+  const country = parseCountryCode(hdrs.get(COUNTRY_HEADER))
+  const acceptLanguage = parseAcceptLanguage(hdrs.get('accept-language'))
+
   let outcome: WaitlistRequestOutcome
   try {
-    outcome = await requestWaitlistConfirmation({ email, locale, source: 'home', consentText })
+    outcome = await requestWaitlistConfirmation({
+      email,
+      locale,
+      source: 'home',
+      consentText,
+      country,
+      acceptLanguage,
+    })
   } catch (e) {
     log.error('waitlist.action_failed', {
       message: e instanceof Error ? e.message : String(e),

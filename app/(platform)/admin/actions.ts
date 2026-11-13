@@ -9,6 +9,7 @@ import { createHash } from 'node:crypto'
 import { sendEmail, sendEmailBulk, EMAIL_BATCH_SIZE, type SendEmailParams } from '@/lib/email'
 import { renderEmail } from '@/lib/email-templates'
 import { waitlistUnsubscribeHeaders, waitlistUnsubscribePageUrl } from '@/lib/waitlist'
+import { parseCountryCode } from '@/lib/waitlist-geo'
 import { DEFAULT_LOCALE, isSupportedLocale } from '@/lib/locale-shared'
 import type { ServerActionResult } from '@/types'
 
@@ -241,7 +242,10 @@ export interface BroadcastSendResult {
 }
 
 /**
- * Send the broadcast to every confirmed subscriber who has not had it yet.
+ * Send the broadcast to every confirmed subscriber who has not had it yet —
+ * or, when `countries` is given, only to those who signed up from one of
+ * those countries. Subscribers with no known country are always included:
+ * one e-mail too many is better than missing a project near you.
  *
  * Safe to run again with the same subject + body: each accepted e-mail is
  * written to waitlist_broadcast_sends, and subscribers in that log are
@@ -253,6 +257,8 @@ export async function sendWaitlistBroadcastAction(params: {
   subject: string
   /** Plain text; blank lines separate paragraphs. */
   body: string
+  /** ISO country codes to limit the send to. Empty or absent → everyone. */
+  countries?: string[]
 }): Promise<ServerActionResult<BroadcastSendResult>> {
   const t = await getTranslations('errors')
   const adminId = await requireAdmin()
@@ -262,17 +268,34 @@ export async function sendWaitlistBroadcastAction(params: {
   if (parsed === 'empty') return { success: false, error: t('admin.broadcastEmpty') }
   if (parsed === 'tooLong') return { success: false, error: t('admin.broadcastTooLong') }
 
+  const countries = [
+    ...new Set(
+      (params.countries ?? [])
+        .map((code) => parseCountryCode(code))
+        .filter((code): code is string => code !== null),
+    ),
+  ]
+  // A filter was asked for but nothing in it is a country code: stop rather
+  // than quietly send to everyone.
+  if ((params.countries?.length ?? 0) > 0 && countries.length === 0) {
+    return { success: false, error: t('admin.broadcastFailed') }
+  }
+  const audience =
+    countries.length > 0 ? { OR: [{ country: { in: countries } }, { country: null }] } : {}
+
   const broadcastKey = broadcastKeyFor(parsed)
   const startedAt = Date.now()
 
   try {
     const [pending, alreadySent] = await Promise.all([
       db.waitlistSubscriber.findMany({
-        where: { status: 'confirmed', broadcastSends: { none: { broadcastKey } } },
+        where: { status: 'confirmed', ...audience, broadcastSends: { none: { broadcastKey } } },
         orderBy: { createdAt: 'asc' },
         select: { id: true, email: true, locale: true, unsubscribeToken: true },
       }),
-      db.waitlistBroadcastSend.count({ where: { broadcastKey } }),
+      db.waitlistBroadcastSend.count({
+        where: { broadcastKey, subscriber: { status: 'confirmed', ...audience } },
+      }),
     ])
 
     const footerFor = makeFooterResolver()
@@ -314,7 +337,14 @@ export async function sendWaitlistBroadcastAction(params: {
     }
 
     const remaining = pending.length - processed
-    log.info('admin.waitlist_broadcast', { adminId, sent, failed, remaining, alreadySent })
+    log.info('admin.waitlist_broadcast', {
+      adminId,
+      sent,
+      failed,
+      remaining,
+      alreadySent,
+      countries: countries.join(',') || 'all',
+    })
     return { success: true, data: { sent, failed, remaining, alreadySent } }
   } catch (e) {
     log.error('admin.waitlist_broadcast_failed', {

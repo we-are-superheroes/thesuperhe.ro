@@ -16,12 +16,12 @@
       "p2": "<strong>Profile data you choose to add.</strong> A bio, a location, a timezone, a profile photo, and the skills you say you have — including whether you’re looking to use them. All of this is optional.",
       "p3": "<strong>Content you create.</strong> Projects, blueprints, project steps, updates, messages to other members, the steps you join and the hours you log. Some of this is public by design (see below).",
       "p4": "<strong>Technical data.</strong> Our hosting provider (Vercel) keeps short-lived server logs (IP address, request path, timestamps) for operating and securing the service. We run no advertising or analytics trackers.",
-      "p5": "<strong>Launch mailing list.</strong> If you ask to be told when projects go live, we store your email address, the language you used, the wording you agreed to and the time you confirmed. You don’t need an account for this."
+      "p5": "<strong>Launch mailing list.</strong> If you ask to be told when projects go live, we store your email address, the language you used, the wording you agreed to and the time you confirmed. We also store the country you signed up from and your browser’s language settings; the country is worked out from your IP address, but we do not store the IP address itself. You don’t need an account for this."
     },
     "whatWeUseItFor": {
       "title": "What we use it for",
       "p1": "To run the platform: showing your profile to other members, matching your skills with steps that need them, sending you in-app notifications, and letting you message other members. The legal basis is the performance of our contract with you (providing the service you signed up for) and our legitimate interest in keeping the platform secure and functional. We don’t sell your data, and we don’t use it for advertising.",
-      "p2": "If you joined the launch mailing list, we use your address only to send you news about The Superhero’s launch. The legal basis is your consent, which you can withdraw at any time with the unsubscribe link in every email. If you have an account, we also email you a summary of your new notifications; you can switch this off in your profile or with the link in the email."
+      "p2": "If you joined the launch mailing list, we use your address only to send you news about The Superhero’s launch. We use the country and language settings only to send you news about projects that are relevant where you are. The legal basis is your consent, which you can withdraw at any time with the unsubscribe link in every email. If you have an account, we also email you a summary of your new notifications; you can switch this off in your profile or with the link in the email."
     },
     "whatIsPublic": {
       "title": "What is public",

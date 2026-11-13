@@ -629,6 +629,11 @@ model WaitlistSubscriber {
   locale  String?
   // Where the signup happened (e.g. "home") — light attribution.
   source  String?
+  // Rough location at signup, for sending launch e-mails by country: the
+  // ISO country code from the host's lookup, and the browser's language tags
+  // (e.g. "en-GB,en") as a cross-check. The IP address is never stored.
+  country        String?
+  acceptLanguage String? @map("accept_language")
 
   // Token behind the confirmation link. Kept after confirming (so a second
   // click reports "already confirmed"); cleared on unsubscribe.
@@ -649,6 +654,7 @@ model WaitlistSubscriber {
   broadcastSends WaitlistBroadcastSend[]
 
   @@index([status])
+  @@index([status, country])
   @@map("waitlist_subscribers")
 }
 

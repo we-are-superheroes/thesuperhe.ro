@@ -112,8 +112,14 @@ export async function requestWaitlistConfirmation(params: {
   locale: string
   source: string
   consentText: string
+  /** ISO country code of the request, when the host could tell. */
+  country?: string | null
+  /** The browser's language tags (lib/waitlist-geo `parseAcceptLanguage`). */
+  acceptLanguage?: string | null
 }): Promise<WaitlistRequestOutcome> {
   const { email, locale, source, consentText } = params
+  const country = params.country ?? null
+  const acceptLanguage = params.acceptLanguage ?? null
 
   const existing = await db.waitlistSubscriber.findUnique({
     where: { email },
@@ -153,6 +159,8 @@ export async function requestWaitlistConfirmation(params: {
           status: 'pending',
           locale: storedLocale,
           source,
+          country,
+          acceptLanguage,
           confirmToken,
           unsubscribeToken,
           consentText,
@@ -188,6 +196,10 @@ export async function requestWaitlistConfirmation(params: {
       confirmToken,
       locale: storedLocale,
       source,
+      // Only overwrite with something known — a request without the headers
+      // must not wipe what an earlier signup told us.
+      ...(country ? { country } : {}),
+      ...(acceptLanguage ? { acceptLanguage } : {}),
       consentText,
       consentedAt: now,
       unsubscribedAt: null,

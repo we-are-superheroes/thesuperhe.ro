@@ -20,8 +20,36 @@ import {
 /** Running totals across the runs of one broadcast ("send to the rest"). */
 type BroadcastResult = { sent: number; left: number; alreadySent: number }
 
-export function BroadcastComposer({ recipientCount }: { recipientCount: number }) {
+/** Confirmed subscribers who signed up from one country. */
+export interface BroadcastCountry {
+  /** ISO 3166-1 alpha-2 code. */
+  code: string
+  /** Display name in the admin's language. */
+  name: string
+  count: number
+}
+
+export function BroadcastComposer({
+  countries,
+  unknownCount,
+}: {
+  countries: BroadcastCountry[]
+  /** Confirmed subscribers with no known country — they get every send. */
+  unknownCount: number
+}) {
   const t = useTranslations('admin')
+
+  // Countries the send is limited to. None picked → everyone.
+  const [selected, setSelected] = useState<string[]>([])
+  const totalCount = countries.reduce((sum, c) => sum + c.count, unknownCount)
+  const recipientCount =
+    selected.length > 0
+      ? countries.reduce((sum, c) => (selected.includes(c.code) ? sum + c.count : sum), unknownCount)
+      : totalCount
+
+  function toggleCountry(code: string) {
+    setSelected((prev) => (prev.includes(code) ? prev.filter((c) => c !== code) : [...prev, code]))
+  }
 
   const [subject, setSubject] = useState('')
   const [body, setBody] = useState('')
@@ -50,7 +78,7 @@ export function BroadcastComposer({ recipientCount }: { recipientCount: number }
     setError(null)
     setTestNotice(null)
     startSend(async () => {
-      const res = await sendWaitlistBroadcastAction({ subject, body })
+      const res = await sendWaitlistBroadcastAction({ subject, body, countries: selected })
       setConfirmOpen(false)
       if (res.success) {
         // A re-run only reaches people who haven't had it, so totals add up.
@@ -68,6 +96,7 @@ export function BroadcastComposer({ recipientCount }: { recipientCount: number }
   function reset() {
     setSubject('')
     setBody('')
+    setSelected([])
     setResult(null)
     setError(null)
     setTestNotice(null)
@@ -137,12 +166,47 @@ export function BroadcastComposer({ recipientCount }: { recipientCount: number }
       </div>
 
       <p className="mb-5 text-sm font-medium text-fg-primary">
-        {hasRecipients
-          ? t('broadcast.recipients', { count: recipientCount })
+        {totalCount > 0
+          ? t('broadcast.recipients', { count: totalCount })
           : t('broadcast.emptyState')}
       </p>
 
       <div className="space-y-5 rounded-2xl border border-white/[0.08] bg-bg-surface p-5 sm:p-6">
+        {countries.length > 0 && (
+          <fieldset>
+            <legend className="mb-2 block text-sm font-medium text-fg-primary">
+              {t('broadcast.audienceLabel')}
+            </legend>
+            <div className="flex flex-wrap gap-2">
+              {countries.map((country) => {
+                const on = selected.includes(country.code)
+                return (
+                  <button
+                    key={country.code}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => toggleCountry(country.code)}
+                    className={
+                      on
+                        ? 'inline-flex items-center gap-2 rounded-full border border-amber-500 bg-amber-500/[0.14] px-3 py-1.5 text-sm font-medium text-amber-300 transition-colors'
+                        : 'inline-flex items-center gap-2 rounded-full border border-white/[0.13] px-3 py-1.5 text-sm text-fg-secondary transition-colors hover:border-neutral-500 hover:text-fg-primary'
+                    }
+                  >
+                    {country.name}
+                    <span className="text-xs tabular-nums opacity-70">{country.count}</span>
+                  </button>
+                )
+              })}
+            </div>
+            <p className="mt-2 text-xs leading-relaxed text-fg-tertiary">
+              {selected.length > 0
+                ? t('broadcast.audienceSome', { count: recipientCount })
+                : t('broadcast.audienceAll')}
+              {unknownCount > 0 && <> {t('broadcast.audienceUnknown', { count: unknownCount })}</>}
+            </p>
+          </fieldset>
+        )}
+
         <div>
           <label
             htmlFor="broadcast-subject"
@@ -255,7 +319,9 @@ export function BroadcastComposer({ recipientCount }: { recipientCount: number }
             <h2 className="mb-2 font-display text-2xl leading-tight">
               {t('broadcast.confirmTitle')}
             </h2>
-            <p className="text-sm leading-relaxed text-fg-secondary">{t('broadcast.confirmBody')}</p>
+            <p className="text-sm leading-relaxed text-fg-secondary">
+              {t('broadcast.confirmBody', { count: recipientCount })}
+            </p>
 
             <div className="mt-6 flex justify-end gap-3">
               <button
