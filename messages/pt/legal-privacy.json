@@ -15,11 +15,13 @@
       "p1": "<strong>Dados de conta.</strong> Quando você se regista, o nosso fornecedor de autenticação (Clerk) recolhe o seu nome, endereço de email e, se você usar um login social, a sua foto de perfil. Guardamos uma cópia destes dados na nossa própria base de dados para que a plataforma possa mostrar quem você é.",
       "p2": "<strong>Dados de perfil que você escolhe adicionar.</strong> Uma bio, uma localização, um fuso horário, uma foto de perfil e as habilidades que você declara ter — incluindo se você procura usá-las. Tudo isto é opcional.",
       "p3": "<strong>Conteúdo que você cria.</strong> Projetos, modelos, etapas de projeto, atualizações, mensagens a outros membros, as etapas em que você entra e as horas que regista. Parte disto é público por definição (veja abaixo).",
-      "p4": "<strong>Dados técnicos.</strong> O nosso fornecedor de alojamento (Vercel) mantém registos de servidor de curta duração (endereço IP, caminho do pedido, data e hora) para operar e proteger o serviço. Não usamos rastreadores de publicidade nem de análise."
+      "p4": "<strong>Dados técnicos.</strong> O nosso fornecedor de alojamento (Vercel) mantém registos de servidor de curta duração (endereço IP, caminho do pedido, data e hora) para operar e proteger o serviço. Não usamos rastreadores de publicidade nem de análise.",
+      "p5": "<strong>Lista de divulgação do lançamento.</strong> Se você pedir para ser avisado quando os projetos entrarem em funcionamento, guardamos o seu endereço de email, o idioma que você usou, o texto que você aceitou e a hora em que você confirmou. Você não precisa de uma conta para isto."
     },
     "whatWeUseItFor": {
       "title": "Para que os usamos",
-      "p1": "Para operar a plataforma: mostrar o seu perfil a outros membros, ligar as suas habilidades a etapas que precisam delas, enviar notificações dentro da aplicação e permitir que você troque mensagens com outros membros. A base legal é a execução do nosso contrato com você (a prestação do serviço em que você se registou) e o nosso interesse legítimo em manter a plataforma segura e funcional. Não vendemos os seus dados e não os usamos para publicidade."
+      "p1": "Para operar a plataforma: mostrar o seu perfil a outros membros, ligar as suas habilidades a etapas que precisam delas, enviar notificações dentro da aplicação e permitir que você troque mensagens com outros membros. A base legal é a execução do nosso contrato com você (a prestação do serviço em que você se registou) e o nosso interesse legítimo em manter a plataforma segura e funcional. Não vendemos os seus dados e não os usamos para publicidade.",
+      "p2": "Se você se inscreveu na lista de divulgação do lançamento, usamos o seu endereço apenas para lhe enviar notícias sobre o lançamento da The Superhero. A base legal é o seu consentimento, que você pode retirar a qualquer momento através do link para cancelar a subscrição presente em cada email. Se você tiver uma conta, enviamos-lhe também por email um resumo das suas novas notificações; você pode desativar isto no seu perfil ou através do link no email."
     },
     "whatIsPublic": {
       "title": "O que é público",
@@ -36,13 +38,15 @@
       "items": {
         "supabase": "<strong>Supabase</strong> — base de dados e armazenamento de imagens, alojado na AWS na UE (Irlanda, eu-west-1).",
         "clerk": "<strong>Clerk</strong> — autenticação, sediado nos Estados Unidos. As transferências estão cobertas pelas Cláusulas Contratuais-Tipo da UE.",
-        "vercel": "<strong>Vercel</strong> — alojamento da aplicação e registos de servidor."
+        "vercel": "<strong>Vercel</strong> — alojamento da aplicação e registos de servidor.",
+        "resend": "<strong>Resend</strong> — envio de email (emails de confirmação, de lançamento e de notificação), com sede nos Estados Unidos. As transferências estão cobertas pelas Cláusulas Contratuais-Tipo da UE."
       },
       "outro": "Cada um deles trata dados apenas segundo as nossas instruções e ao abrigo de um acordo de tratamento de dados."
     },
     "retention": {
       "title": "Por quanto tempo os guardamos",
-      "p1": "Enquanto você tiver uma conta. Se você apagar a sua conta, o seu perfil, as suas habilidades e as suas contribuições são apagados com ela. O conteúdo de que outras pessoas dependem — mensagens que você enviou, atualizações públicas que você publicou — é mantido, mas desligado da sua identidade e mostrado como vindo de um membro apagado ou antigo. Os registos de servidor são retidos pelo nosso fornecedor de alojamento por um curto período e depois descartados."
+      "p1": "Enquanto você tiver uma conta. Se você apagar a sua conta, o seu perfil, as suas habilidades e as suas contribuições são apagados com ela. O conteúdo de que outras pessoas dependem — mensagens que você enviou, atualizações públicas que você publicou — é mantido, mas desligado da sua identidade e mostrado como vindo de um membro apagado ou antigo. Os registos de servidor são retidos pelo nosso fornecedor de alojamento por um curto período e depois descartados.",
+      "p2": "Se você se inscreveu na lista de divulgação do lançamento, mantemos o seu endereço até que você cancele a subscrição ou nos peça para o eliminar. Depois de você cancelar a subscrição, mantemos apenas um registo de que o endereço optou por sair, para que não o contactemos novamente por email."
     },
     "yourRights": {
       "title": "Os seus direitos",
@@ -51,7 +55,7 @@
     },
     "policyChanges": {
       "title": "Alterações a esta política",
-      "p1": "Se mudarmos a forma como tratamos os seus dados — por exemplo, se começarmos a enviar notificações por email — atualizaremos esta página e a data no topo. Para alterações significativas, avisaremos você dentro da aplicação."
+      "p1": "Se mudarmos a forma como tratamos os seus dados — por exemplo, se começarmos a trabalhar com um novo prestador de serviços — atualizaremos esta página e ajustaremos a data no topo. Para alterações significativas, avisaremos você na aplicação."
     }
   },
   "footer": {

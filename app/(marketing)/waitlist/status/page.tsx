@@ -2,12 +2,12 @@ import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
 import { CheckCircle2, Info } from 'lucide-react'
 
-/* Friendly landing for the waitlist email links (confirm + unsubscribe).
-   The API routes do the work, then redirect here with ?state=. */
+/* Result page for the waitlist email links (confirm + unsubscribe). The
+   API routes do the work on POST, then redirect here with ?state=. */
 
-type State = 'confirmed' | 'already' | 'invalid' | 'unsubscribed'
+type State = 'confirmed' | 'already' | 'invalid' | 'unsubscribed' | 'unsubscribeInvalid'
 
-const VALID: State[] = ['confirmed', 'already', 'invalid', 'unsubscribed']
+const VALID: State[] = ['confirmed', 'already', 'invalid', 'unsubscribed', 'unsubscribeInvalid']
 
 export default async function WaitlistStatusPage({
   searchParams,

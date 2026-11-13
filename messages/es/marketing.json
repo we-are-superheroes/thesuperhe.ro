@@ -95,6 +95,16 @@
       "title": "Revisa tu bandeja de entrada",
       "body": "Ya deberías tener un correo de confirmación nuestro. Revisa tu bandeja de entrada y también la carpeta de spam. Si no llega en unos minutos, inténtalo de nuevo."
     },
+    "confirmPage": {
+      "title": "Confirma tu correo electrónico",
+      "body": "Pulsa el botón para unirte a la lista de lanzamiento de The Superhero. Solo añadimos tu dirección cuando la confirmas aquí.",
+      "button": "Confirmar mi correo electrónico"
+    },
+    "unsubscribePage": {
+      "title": "¿Cancelar los correos de lanzamiento?",
+      "body": "Pulsa el botón y dejaremos de enviar correos de lanzamiento a esta dirección.",
+      "button": "Cancelar la suscripción"
+    },
     "status": {
       "home": "Volver al inicio",
       "confirmed": {
@@ -112,6 +122,10 @@
       "unsubscribed": {
         "title": "Has cancelado tu suscripción.",
         "body": "No recibirás más correos de lanzamiento de nuestra parte. Puedes registrarte de nuevo cuando quieras."
+      },
+      "unsubscribeInvalid": {
+        "title": "Este enlace no funcionó.",
+        "body": "Ese enlace para cancelar la suscripción no es válido. Usa el enlace de cancelación del último correo que te enviamos."
       }
     },
     "email": {

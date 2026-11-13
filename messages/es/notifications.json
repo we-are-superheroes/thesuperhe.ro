@@ -74,6 +74,11 @@
   },
   "emailUnsub": {
     "managePrefs": "Gestionar las preferencias de correo",
+    "confirm": {
+      "title": "¿Dejar de recibir correos de actividad?",
+      "body": "Pulsa el botón y dejaremos de enviarte correos sobre la actividad de tus proyectos. Puedes volver a activar los correos desde tu perfil.",
+      "button": "Cancelar suscripción"
+    },
     "ok": {
       "title": "Cancelaste la suscripción.",
       "body": "Ya no recibirás correos de actividad. Puedes volver a activarlos cuando quieras desde tu perfil."

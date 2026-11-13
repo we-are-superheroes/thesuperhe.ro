@@ -5,7 +5,7 @@ import { getTranslations } from 'next-intl/server'
 import { validateEmail } from '@/lib/validation'
 import { tError } from '@/lib/errors'
 import { rateLimit, rateLimitError } from '@/lib/rate-limit'
-import { requestWaitlistConfirmation } from '@/lib/waitlist'
+import { requestWaitlistConfirmation, type WaitlistRequestOutcome } from '@/lib/waitlist'
 import { resolveLocale, DEFAULT_LOCALE } from '@/lib/locale'
 import { log } from '@/lib/log'
 import type { ServerActionResult } from '@/types'
@@ -15,13 +15,9 @@ import type { ServerActionResult } from '@/types'
 
    Double opt-in: this only ever creates/updates a `pending` row and
    emails a confirmation link — it never adds a confirmed subscriber.
-   Enumeration-safe: every path that isn't a validation/rate-limit
-   error returns the same success, so the response can't reveal
-   whether an address is already on the list.
+   A new address and an already-confirmed one get the same success, so
+   a single request can't reveal whether an address is on the list.
    ================================================================ */
-
-/** At most one confirmation (re)send per address per this window. */
-const WAITLIST_RESEND_WINDOW_MS = 5 * 60 * 1000
 
 export async function subscribeWaitlistAction(
   rawEmail: string,
@@ -38,20 +34,15 @@ export async function subscribeWaitlistAction(
   const limited = rateLimit(`waitlist:${ip}`, 5, 10 * 60 * 1000)
   if (!limited.ok) return { success: false, error: await tError(rateLimitError(limited)) }
 
-  // Per-address throttle: at most one (re)send per window, so repeat submits
-  // of the same address don't fan out into several confirmation e-mails. Keyed
-  // on the address alone and returning the same generic success — it never
-  // reveals whether the address is already on the list; the UI just asks the
-  // visitor to check their inbox/spam or try again shortly.
-  const resend = rateLimit(`waitlist-email:${email}`, 1, WAITLIST_RESEND_WINDOW_MS)
-  if (!resend.ok) return { success: true, data: { queued: true, throttled: true } }
-
+  // The wording the visitor actually saw and agreed to, in their language —
+  // that is what the consent record has to show.
   const locale = await resolveLocale().catch(() => DEFAULT_LOCALE)
-  const tEn = await getTranslations({ locale: 'en', namespace: 'marketing' })
-  const consentText = tEn('waitlist.consentText')
+  const tMarketing = await getTranslations({ locale, namespace: 'marketing' })
+  const consentText = tMarketing('waitlist.consentText')
 
+  let outcome: WaitlistRequestOutcome
   try {
-    await requestWaitlistConfirmation({ email, locale, source: 'home', consentText })
+    outcome = await requestWaitlistConfirmation({ email, locale, source: 'home', consentText })
   } catch (e) {
     log.error('waitlist.action_failed', {
       message: e instanceof Error ? e.message : String(e),
@@ -59,6 +50,17 @@ export async function subscribeWaitlistAction(
     const t = await getTranslations('errors')
     return { success: false, error: t('waitlist.saveFailed') }
   }
+
+  if (outcome === 'send_failed') {
+    const t = await getTranslations('errors')
+    return { success: false, error: t('waitlist.saveFailed') }
+  }
+
+  // 'throttled': a confirmation went to this address within the last few
+  // minutes (the check lives in the database, so it holds across server
+  // instances). The form asks the visitor to look in their inbox/spam or try
+  // again shortly instead of sending another e-mail.
+  if (outcome === 'throttled') return { success: true, data: { queued: true, throttled: true } }
 
   return { success: true, data: { queued: true } }
 }

@@ -95,6 +95,16 @@
       "title": "Check your inbox",
       "body": "You should already have a confirmation e-mail from us. Please check your inbox — and your spam folder. If it hasn't arrived in a few minutes, try again."
     },
+    "confirmPage": {
+      "title": "Confirm your e-mail",
+      "body": "Press the button to join The Superhero launch list. We only add your address once you confirm it here.",
+      "button": "Confirm my e-mail"
+    },
+    "unsubscribePage": {
+      "title": "Unsubscribe from launch e-mails?",
+      "body": "Press the button and we will stop sending launch e-mails to this address.",
+      "button": "Unsubscribe"
+    },
     "status": {
       "home": "Back to home",
       "confirmed": {
@@ -112,6 +122,10 @@
       "unsubscribed": {
         "title": "You've been unsubscribed.",
         "body": "You won't receive any more launch e-mails from us. You can sign up again any time."
+      },
+      "unsubscribeInvalid": {
+        "title": "This link didn't work.",
+        "body": "That unsubscribe link is not valid. Use the unsubscribe link in the most recent e-mail we sent you."
       }
     },
     "email": {

@@ -5,9 +5,10 @@ import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { requireAdmin } from '@/lib/auth'
 import { log } from '@/lib/log'
-import { sendEmail, sendEmailBatch, type SendEmailParams } from '@/lib/email'
+import { createHash } from 'node:crypto'
+import { sendEmail, sendEmailBulk, EMAIL_BATCH_SIZE, type SendEmailParams } from '@/lib/email'
 import { renderEmail } from '@/lib/email-templates'
-import { SITE_URL } from '@/lib/site'
+import { waitlistUnsubscribeHeaders, waitlistUnsubscribePageUrl } from '@/lib/waitlist'
 import { DEFAULT_LOCALE, isSupportedLocale } from '@/lib/locale-shared'
 import type { ServerActionResult } from '@/types'
 
@@ -139,23 +140,22 @@ function broadcastEmail(opts: {
   unsubscribeToken: string
   kind: string
 }): SendEmailParams {
-  const unsubUrl = `${SITE_URL}/api/waitlist/unsubscribe?token=${encodeURIComponent(opts.unsubscribeToken)}`
   const { html, text } = renderEmail({
     previewText: opts.subject,
     heading: opts.subject,
     paragraphs: opts.paragraphs,
     footerLines: [opts.footer.why],
-    unsubscribe: { url: unsubUrl, label: opts.footer.unsub },
+    unsubscribe: {
+      url: waitlistUnsubscribePageUrl(opts.unsubscribeToken),
+      label: opts.footer.unsub,
+    },
   })
   return {
     to: opts.to,
     subject: opts.subject,
     html,
     text,
-    headers: {
-      'List-Unsubscribe': `<${unsubUrl}>`,
-      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
-    },
+    headers: waitlistUnsubscribeHeaders(opts.unsubscribeToken),
     tags: [{ name: 'kind', value: opts.kind }],
   }
 }
@@ -214,11 +214,46 @@ export async function sendWaitlistTestAction(params: {
   return { success: true, data: { email: admin.email } }
 }
 
+/** Stop starting new batches after this long, well inside the function's
+ *  time limit; the admin sends "the rest" to carry on. */
+const BROADCAST_TIME_BUDGET_MS = 40_000
+/** Pause between provider calls to stay under Resend's request rate limit. */
+const BROADCAST_BATCH_PAUSE_MS = 600
+
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms))
+
+/** Identifies "this broadcast" in the sent-log: same subject + body → same key. */
+function broadcastKeyFor(parsed: ParsedBroadcast): string {
+  return createHash('sha256')
+    .update([parsed.subject, ...parsed.paragraphs].join('\n\n'), 'utf8')
+    .digest('hex')
+}
+
+export interface BroadcastSendResult {
+  /** Accepted by the provider in THIS run. */
+  sent: number
+  /** Refused by the provider in this run (they stay un-logged, so a re-run retries them). */
+  failed: number
+  /** Confirmed subscribers this run did not get to before the time budget ran out. */
+  remaining: number
+  /** Subscribers who already had this exact broadcast before this run. */
+  alreadySent: number
+}
+
+/**
+ * Send the broadcast to every confirmed subscriber who has not had it yet.
+ *
+ * Safe to run again with the same subject + body: each accepted e-mail is
+ * written to waitlist_broadcast_sends, and subscribers in that log are
+ * skipped — so a retry after a partial failure or a timeout never
+ * double-sends. E-mails go out through the provider's batch endpoint
+ * (EMAIL_BATCH_SIZE per call) within a time budget.
+ */
 export async function sendWaitlistBroadcastAction(params: {
   subject: string
   /** Plain text; blank lines separate paragraphs. */
   body: string
-}): Promise<ServerActionResult<{ sent: number; failed: number; recipients: number }>> {
+}): Promise<ServerActionResult<BroadcastSendResult>> {
   const t = await getTranslations('errors')
   const adminId = await requireAdmin()
   if (!adminId) return { success: false, error: t('admin.notAuthorised') }
@@ -227,32 +262,65 @@ export async function sendWaitlistBroadcastAction(params: {
   if (parsed === 'empty') return { success: false, error: t('admin.broadcastEmpty') }
   if (parsed === 'tooLong') return { success: false, error: t('admin.broadcastTooLong') }
 
-  const subscribers = await db.waitlistSubscriber.findMany({
-    where: { status: 'confirmed' },
-    select: { email: true, locale: true, unsubscribeToken: true },
-  })
-  if (subscribers.length === 0) {
-    return { success: true, data: { sent: 0, failed: 0, recipients: 0 } }
-  }
+  const broadcastKey = broadcastKeyFor(parsed)
+  const startedAt = Date.now()
 
-  const footerFor = makeFooterResolver()
-  const items: SendEmailParams[] = []
-  for (const sub of subscribers) {
-    const footer = await footerFor(sub.locale)
-    items.push(
-      broadcastEmail({
-        to: sub.email,
-        subject: parsed.subject,
-        paragraphs: parsed.paragraphs,
-        footer,
-        unsubscribeToken: sub.unsubscribeToken,
-        kind: 'waitlist_broadcast',
+  try {
+    const [pending, alreadySent] = await Promise.all([
+      db.waitlistSubscriber.findMany({
+        where: { status: 'confirmed', broadcastSends: { none: { broadcastKey } } },
+        orderBy: { createdAt: 'asc' },
+        select: { id: true, email: true, locale: true, unsubscribeToken: true },
       }),
-    )
+      db.waitlistBroadcastSend.count({ where: { broadcastKey } }),
+    ])
+
+    const footerFor = makeFooterResolver()
+    let sent = 0
+    let failed = 0
+    let processed = 0
+
+    while (processed < pending.length) {
+      if (Date.now() - startedAt > BROADCAST_TIME_BUDGET_MS) break
+      if (processed > 0) await sleep(BROADCAST_BATCH_PAUSE_MS)
+
+      const chunk = pending.slice(processed, processed + EMAIL_BATCH_SIZE)
+      const items: SendEmailParams[] = []
+      for (const sub of chunk) {
+        items.push(
+          broadcastEmail({
+            to: sub.email,
+            subject: parsed.subject,
+            paragraphs: parsed.paragraphs,
+            footer: await footerFor(sub.locale),
+            unsubscribeToken: sub.unsubscribeToken,
+            kind: 'waitlist_broadcast',
+          }),
+        )
+      }
+
+      const accepted = await sendEmailBulk(items)
+      const acceptedIds = chunk.filter((_, i) => accepted[i]).map((sub) => sub.id)
+      if (acceptedIds.length > 0) {
+        // Log straight away, so a later failure can't lose track of these.
+        await db.waitlistBroadcastSend.createMany({
+          data: acceptedIds.map((subscriberId) => ({ broadcastKey, subscriberId })),
+          skipDuplicates: true,
+        })
+      }
+      sent += acceptedIds.length
+      failed += chunk.length - acceptedIds.length
+      processed += chunk.length
+    }
+
+    const remaining = pending.length - processed
+    log.info('admin.waitlist_broadcast', { adminId, sent, failed, remaining, alreadySent })
+    return { success: true, data: { sent, failed, remaining, alreadySent } }
+  } catch (e) {
+    log.error('admin.waitlist_broadcast_failed', {
+      adminId,
+      message: e instanceof Error ? e.message : String(e),
+    })
+    return { success: false, error: t('admin.broadcastFailed') }
   }
-
-  const { sent, failed } = await sendEmailBatch(items)
-  log.info('admin.waitlist_broadcast', { adminId, recipients: subscribers.length, sent, failed })
-
-  return { success: true, data: { sent, failed, recipients: subscribers.length } }
 }

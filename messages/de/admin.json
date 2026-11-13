@@ -19,7 +19,9 @@
     "confirmSend": "Jetzt senden",
     "cancel": "Abbrechen",
     "resultSent": "An {count, plural, one {# Person} other {# Personen}} gesendet.",
-    "resultFailed": "An {sent} von {recipients} gesendet — {failed} konnten nicht zugestellt werden.",
+    "resultPartial": "Bisher an {sent} gesendet — {left} noch zu senden.",
+    "resultAlready": "Alle auf der Liste haben diese E-Mail bereits erhalten.",
+    "sendRest": "An die Übrigen senden",
     "sendAnother": "Weitere schreiben"
   }
 }

@@ -74,6 +74,11 @@
   },
   "emailUnsub": {
     "managePrefs": "E-Mail-Einstellungen verwalten",
+    "confirm": {
+      "title": "Aktivitäts-E-Mails stoppen?",
+      "body": "Klicke auf die Schaltfläche, dann schicken wir dir keine E-Mails mehr über Aktivitäten in deinen Projekten. Du kannst die E-Mails in deinem Profil wieder einschalten.",
+      "button": "Abbestellen"
+    },
     "ok": {
       "title": "Du hast dich abgemeldet.",
       "body": "Du bekommst keine Aktivitäts-E-Mails mehr. Du kannst sie jederzeit in deinem Profil wieder einschalten."

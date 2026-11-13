@@ -19,7 +19,9 @@
     "confirmSend": "Invia ora",
     "cancel": "Annulla",
     "resultSent": "Inviata a {count, plural, one {# iscritto} other {# iscritti}}.",
-    "resultFailed": "Inviata a {sent} di {recipients}: {failed} non è stato possibile consegnarle.",
+    "resultPartial": "Inviata finora a {sent} — ne restano {left} da inviare.",
+    "resultAlready": "Tutti nella lista hanno già ricevuto questa e-mail.",
+    "sendRest": "Invia ai restanti",
     "sendAnother": "Scrivine un'altra"
   }
 }

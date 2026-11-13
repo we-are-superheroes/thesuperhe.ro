@@ -19,7 +19,9 @@
     "confirmSend": "Envoyer maintenant",
     "cancel": "Annuler",
     "resultSent": "Envoyé à {count, plural, one {# abonné} other {# abonnés}}.",
-    "resultFailed": "Envoyé à {sent} sur {recipients} — {failed} n'ont pas pu être livrés.",
+    "resultPartial": "Envoyé à {sent} pour l'instant — {left} restant à envoyer.",
+    "resultAlready": "Toutes les personnes de la liste ont déjà reçu cet e-mail.",
+    "sendRest": "Envoyer aux autres",
     "sendAnother": "Rédiger un autre"
   }
 }

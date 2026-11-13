@@ -17,7 +17,8 @@ import {
    server actions; this is only the trigger.
    ================================================================ */
 
-type BroadcastResult = { sent: number; failed: number; recipients: number }
+/** Running totals across the runs of one broadcast ("send to the rest"). */
+type BroadcastResult = { sent: number; left: number; alreadySent: number }
 
 export function BroadcastComposer({ recipientCount }: { recipientCount: number }) {
   const t = useTranslations('admin')
@@ -50,12 +51,16 @@ export function BroadcastComposer({ recipientCount }: { recipientCount: number }
     setTestNotice(null)
     startSend(async () => {
       const res = await sendWaitlistBroadcastAction({ subject, body })
+      setConfirmOpen(false)
       if (res.success) {
-        setResult(res.data)
-        setConfirmOpen(false)
+        // A re-run only reaches people who haven't had it, so totals add up.
+        setResult((prev) => ({
+          sent: (prev?.sent ?? 0) + res.data.sent,
+          left: res.data.failed + res.data.remaining,
+          alreadySent: prev?.alreadySent ?? res.data.alreadySent,
+        }))
       } else {
         setError(res.error)
-        setConfirmOpen(false)
       }
     })
   }
@@ -70,30 +75,48 @@ export function BroadcastComposer({ recipientCount }: { recipientCount: number }
 
   // ---- Success screen -------------------------------------------------
   if (result) {
-    const delivered = result.sent
-    const failed = result.failed
+    const summary =
+      result.left > 0
+        ? t('broadcast.resultPartial', { sent: result.sent, left: result.left })
+        : result.sent === 0 && result.alreadySent > 0
+          ? t('broadcast.resultAlready')
+          : t('broadcast.resultSent', { count: result.sent })
     return (
       <div className="rounded-2xl border border-white/[0.08] bg-bg-surface p-6 sm:p-8">
         <div className="mb-4 flex size-12 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/[0.12] text-emerald-300">
           <CheckCircle2 className="size-6" strokeWidth={2} />
         </div>
         <h1 className="mb-2 font-display text-2xl leading-tight">{t('broadcast.title')}</h1>
-        <p className="text-sm leading-relaxed text-fg-secondary">
-          {failed > 0
-            ? t('broadcast.resultFailed', {
-                sent: delivered,
-                recipients: result.recipients,
-                failed,
-              })
-            : t('broadcast.resultSent', { count: delivered })}
-        </p>
-        <button
-          type="button"
-          onClick={reset}
-          className="mt-6 inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-colors hover:border-neutral-600 hover:bg-white/[0.04]"
-        >
-          {t('broadcast.sendAnother')}
-        </button>
+        <p className="text-sm leading-relaxed text-fg-secondary">{summary}</p>
+        {error && (
+          <p
+            className="mt-3 rounded-lg border border-red-500/30 bg-red-500/[0.08] px-3 py-2 text-sm text-red-300"
+            role="alert"
+          >
+            {error}
+          </p>
+        )}
+        <div className="mt-6 flex flex-wrap gap-3">
+          {result.left > 0 && (
+            <button
+              type="button"
+              onClick={onSend}
+              disabled={sending}
+              className="inline-flex items-center gap-2 rounded-lg border border-amber-500 bg-amber-500 px-4 py-2.5 text-sm font-medium text-blue-900 transition-colors hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              <Send className="size-3.5" strokeWidth={2.5} />
+              {sending ? t('broadcast.sending') : t('broadcast.sendRest')}
+            </button>
+          )}
+          <button
+            type="button"
+            onClick={reset}
+            disabled={sending}
+            className="inline-flex items-center gap-2 rounded-lg border border-neutral-700 px-4 py-2.5 text-sm font-medium text-fg-primary transition-colors hover:border-neutral-600 hover:bg-white/[0.04] disabled:opacity-60"
+          >
+            {t('broadcast.sendAnother')}
+          </button>
+        </div>
       </div>
     )
   }

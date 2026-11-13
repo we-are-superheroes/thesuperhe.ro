@@ -630,12 +630,15 @@ model WaitlistSubscriber {
   // Where the signup happened (e.g. "home") — light attribution.
   source  String?
 
-  // Single-use link in the confirmation email. Cleared on confirm.
+  // Token behind the confirmation link. Kept after confirming (so a second
+  // click reports "already confirmed"); cleared on unsubscribe.
   confirmToken     String? @unique @map("confirm_token")
   // Stable one-click unsubscribe token (List-Unsubscribe + link).
   unsubscribeToken String  @unique @map("unsubscribe_token")
 
-  // Snapshot of the exact wording the guest agreed to, for consent proof.
+  // Snapshot of the exact wording the guest agreed to (in the language they
+  // saw), for consent proof. consentedAt is also the resend clock: the time
+  // of the last confirmation e-mail that actually went out.
   consentText    String?   @map("consent_text")
   consentedAt    DateTime? @map("consented_at")
   confirmedAt    DateTime? @map("confirmed_at")
@@ -643,6 +646,23 @@ model WaitlistSubscriber {
   createdAt      DateTime  @default(now()) @map("created_at")
   updatedAt      DateTime  @updatedAt @map("updated_at")
 
+  broadcastSends WaitlistBroadcastSend[]
+
   @@index([status])
   @@map("waitlist_subscribers")
+}
+
+// Sent-log for launch broadcasts: one row per (broadcast, subscriber) the
+// provider accepted. broadcastKey is a hash of the subject + body, so sending
+// the same broadcast again only reaches people who haven't had it yet.
+model WaitlistBroadcastSend {
+  broadcastKey String   @map("broadcast_key")
+  subscriberId String   @map("subscriber_id")
+  sentAt       DateTime @default(now()) @map("sent_at")
+
+  subscriber WaitlistSubscriber @relation(fields: [subscriberId], references: [id], onDelete: Cascade)
+
+  @@id([broadcastKey, subscriberId])
+  @@index([subscriberId])
+  @@map("waitlist_broadcast_sends")
 }

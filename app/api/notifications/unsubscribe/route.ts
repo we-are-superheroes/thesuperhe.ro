@@ -1,9 +1,15 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import { readEmailLinkPost, seeOther } from '@/lib/email-link'
 
-/* One-click unsubscribe for notification emails. The link/header carry the
-   user's opaque emailUnsubToken; we flip the master preference off. The
-   in-app toggle on the profile page turns it back on. */
+/* Unsubscribe from notification emails. The link/header carry the user's
+   opaque emailUnsubToken; we flip the master preference off. The in-app
+   toggle on the profile page turns it back on.
+
+   GET never changes anything (mail scanners fetch every link, and would
+   otherwise switch people's e-mails off). It forwards to the page with the
+   button. POST does the work: a bare 200 for a mail client's RFC 8058
+   one-click request, a redirect when it came from the button on our page. */
 
 async function unsubscribe(token: string): Promise<boolean> {
   if (!token) return false
@@ -16,19 +22,16 @@ async function unsubscribe(token: string): Promise<boolean> {
   return true
 }
 
-function tokenOf(req: Request): string {
-  return new URL(req.url).searchParams.get('token') ?? ''
-}
-
-/* RFC 8058 one-click POST from the mail client. */
-export async function POST(req: Request) {
-  await unsubscribe(tokenOf(req))
-  return new NextResponse(null, { status: 200 })
-}
-
-/* Human-clicked link in the email footer. */
 export async function GET(req: Request) {
-  const ok = await unsubscribe(tokenOf(req))
-  const state = ok ? 'ok' : 'invalid'
-  return NextResponse.redirect(new URL(`/email-unsubscribed?state=${state}`, req.url))
+  const token = new URL(req.url).searchParams.get('token') ?? ''
+  return NextResponse.redirect(
+    new URL(`/email-unsubscribe?token=${encodeURIComponent(token)}`, req.url),
+  )
+}
+
+export async function POST(req: Request) {
+  const { token, fromPage } = await readEmailLinkPost(req)
+  const ok = await unsubscribe(token)
+  if (!fromPage) return new NextResponse(null, { status: 200 })
+  return seeOther(req, `/email-unsubscribed?state=${ok ? 'ok' : 'invalid'}`)
 }

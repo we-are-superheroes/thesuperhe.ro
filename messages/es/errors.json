@@ -167,7 +167,8 @@
     "broadcastEmpty": "Añade un asunto y un mensaje antes de enviar.",
     "broadcastTooLong": "Ese asunto o mensaje es demasiado largo.",
     "broadcastTestFailed": "No se pudo enviar el correo de prueba.",
-    "broadcastNoTestAddress": "Tu cuenta no tiene ninguna dirección de correo para la prueba."
+    "broadcastNoTestAddress": "Tu cuenta no tiene ninguna dirección de correo para la prueba.",
+    "broadcastFailed": "No se pudo enviar el correo. No se envió nada dos veces — inténtalo de nuevo."
   },
   "waitlist": {
     "emailRequired": "Escribe tu dirección de correo.",

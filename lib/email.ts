@@ -77,25 +77,61 @@ export async function sendEmail(params: SendEmailParams): Promise<SendEmailResul
   }
 }
 
+/** Resend's batch endpoint takes at most this many e-mails per call. */
+export const EMAIL_BATCH_SIZE = 100
+
 /**
- * Send many emails with bounded concurrency (the launch broadcast + the
- * notification digest sweep). Returns per-recipient outcomes so the caller
- * can record what went out. Never throws — a single bad address must not
- * sink the batch.
+ * Send up to EMAIL_BATCH_SIZE e-mails in ONE provider call (the launch
+ * broadcast). Returns, per item and in order, whether the provider accepted
+ * it — so the caller can record exactly who was sent what. Never throws: if
+ * the whole call fails, every item is reported as not sent.
  */
-export async function sendEmailBatch(
-  items: SendEmailParams[],
-  concurrency = 5,
-): Promise<{ sent: number; failed: number }> {
-  let sent = 0
-  let failed = 0
-  for (let i = 0; i < items.length; i += concurrency) {
-    const slice = items.slice(i, i + concurrency)
-    const results = await Promise.all(slice.map((item) => sendEmail(item)))
-    for (const r of results) {
-      if (r.ok) sent++
-      else failed++
-    }
+export async function sendEmailBulk(items: SendEmailParams[]): Promise<boolean[]> {
+  if (items.length === 0) return []
+  if (items.length > EMAIL_BATCH_SIZE) {
+    throw new Error(`sendEmailBulk takes at most ${EMAIL_BATCH_SIZE} e-mails per call`)
   }
-  return { sent, failed }
+  const client = getClient()
+
+  if (!client) {
+    for (const item of items) {
+      log.info('email.skipped_no_key', {
+        to: item.to,
+        subject: item.subject,
+        headers: item.headers,
+        text: item.text,
+      })
+    }
+    return items.map(() => true)
+  }
+
+  try {
+    // 'permissive': one bad address is reported by index instead of
+    // rejecting the whole batch.
+    const { data, error } = await client.batch.send(
+      items.map((item) => ({
+        from: FROM,
+        to: item.to,
+        subject: item.subject,
+        html: item.html,
+        text: item.text,
+        headers: item.headers,
+        tags: item.tags,
+      })),
+      { batchValidation: 'permissive' },
+    )
+    if (error || !data) {
+      log.error('email.batch_failed', { count: items.length, message: error?.message })
+      return items.map(() => false)
+    }
+    const rejected = new Set((data.errors ?? []).map((e) => e.index))
+    if (rejected.size > 0) {
+      log.error('email.batch_partial', { count: items.length, rejected: rejected.size })
+    }
+    return items.map((_, i) => !rejected.has(i))
+  } catch (e) {
+    const message = e instanceof Error ? e.message : String(e)
+    log.error('email.batch_threw', { count: items.length, message })
+    return items.map(() => false)
+  }
 }

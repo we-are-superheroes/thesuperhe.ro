@@ -167,7 +167,8 @@
     "broadcastEmpty": "Add a subject and a message before sending.",
     "broadcastTooLong": "That subject or message is too long.",
     "broadcastTestFailed": "Could not send the test e-mail.",
-    "broadcastNoTestAddress": "Your account has no e-mail address for a test."
+    "broadcastNoTestAddress": "Your account has no e-mail address for a test.",
+    "broadcastFailed": "Could not send the e-mail. Nothing was sent twice — try again."
   },
   "waitlist": {
     "emailRequired": "Please enter your e-mail address.",

@@ -74,6 +74,11 @@
   },
   "emailUnsub": {
     "managePrefs": "Gerir preferências de e-mail",
+    "confirm": {
+      "title": "Parar os e-mails de atividade?",
+      "body": "Carregue no botão e deixamos de lhe enviar e-mails sobre a atividade nos seus projetos. Pode voltar a ativar os e-mails no seu perfil.",
+      "button": "Cancelar subscrição"
+    },
     "ok": {
       "title": "A sua subscrição foi cancelada.",
       "body": "Já não vai receber e-mails de atividade. Pode voltar a ativá-los a qualquer momento no seu perfil."

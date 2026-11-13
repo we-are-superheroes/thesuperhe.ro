@@ -15,11 +15,13 @@
       "p1": "<strong>Données de compte.</strong> Quand tu t’inscris, notre fournisseur d’authentification (Clerk) collecte ton nom, ton adresse e-mail et, si tu utilises une connexion via un réseau social, ton avatar. Nous en gardons une copie dans notre propre base de données pour que la plateforme puisse montrer qui tu es.",
       "p2": "<strong>Données de profil que tu choisis d’ajouter.</strong> Une bio, un lieu, un fuseau horaire, une photo de profil et les compétences que tu déclares avoir — y compris si tu cherches à les utiliser. Tout cela est facultatif.",
       "p3": "<strong>Contenu que tu crées.</strong> Projets, modèles, étapes de projet, actualités, messages aux autres membres, les étapes que tu rejoins et les heures que tu enregistres. Une partie est publique par conception (voir ci-dessous).",
-      "p4": "<strong>Données techniques.</strong> Notre hébergeur (Vercel) conserve des journaux serveur de courte durée (adresse IP, chemin de la requête, horodatages) pour exploiter et sécuriser le service. Nous n’utilisons aucun traceur publicitaire ni d’analyse d’audience."
+      "p4": "<strong>Données techniques.</strong> Notre hébergeur (Vercel) conserve des journaux serveur de courte durée (adresse IP, chemin de la requête, horodatages) pour exploiter et sécuriser le service. Nous n’utilisons aucun traceur publicitaire ni d’analyse d’audience.",
+      "p5": "<strong>Liste de diffusion de lancement.</strong> Si tu demandes à être prévenu(e) quand des projets seront en ligne, nous conservons ton adresse e-mail, la langue que tu as utilisée, le texte que tu as accepté et l’heure à laquelle tu as confirmé. Aucun compte n’est nécessaire pour cela."
     },
     "whatWeUseItFor": {
       "title": "À quoi elles servent",
-      "p1": "À faire fonctionner la plateforme : montrer ton profil aux autres membres, faire correspondre tes compétences avec les étapes qui en ont besoin, t’envoyer des notifications dans l’application et te permettre d’écrire aux autres membres. La base légale est l’exécution de notre contrat avec toi (fournir le service auquel tu t’es inscrit) et notre intérêt légitime à garder la plateforme sûre et fonctionnelle. Nous ne vendons pas tes données et nous ne les utilisons pas à des fins publicitaires."
+      "p1": "À faire fonctionner la plateforme : montrer ton profil aux autres membres, faire correspondre tes compétences avec les étapes qui en ont besoin, t’envoyer des notifications dans l’application et te permettre d’écrire aux autres membres. La base légale est l’exécution de notre contrat avec toi (fournir le service auquel tu t’es inscrit) et notre intérêt légitime à garder la plateforme sûre et fonctionnelle. Nous ne vendons pas tes données et nous ne les utilisons pas à des fins publicitaires.",
+      "p2": "Si tu t’es inscrit(e) à la liste de diffusion de lancement, nous utilisons ton adresse uniquement pour t’envoyer des nouvelles sur le lancement de The Superhero. La base légale est ton consentement, que tu peux retirer à tout moment grâce au lien de désinscription présent dans chaque e-mail. Si tu as un compte, nous t’envoyons aussi par e-mail un résumé de tes nouvelles notifications ; tu peux désactiver cela dans ton profil ou avec le lien dans l’e-mail."
     },
     "whatIsPublic": {
       "title": "Ce qui est public",
@@ -36,13 +38,15 @@
       "items": {
         "supabase": "<strong>Supabase</strong> — base de données et stockage d’images, hébergés sur AWS dans l’UE (Irlande, eu-west-1).",
         "clerk": "<strong>Clerk</strong> — authentification, basé aux États-Unis. Les transferts sont couverts par les clauses contractuelles types de l’UE.",
-        "vercel": "<strong>Vercel</strong> — hébergement de l’application et journaux serveur."
+        "vercel": "<strong>Vercel</strong> — hébergement de l’application et journaux serveur.",
+        "resend": "<strong>Resend</strong> — envoi d’e-mails (e-mails de confirmation, de lancement et de notification), basé aux États-Unis. Les transferts sont couverts par les clauses contractuelles types de l’UE."
       },
       "outro": "Chacun d’eux ne traite les données que sur nos instructions et dans le cadre d’un accord de traitement des données."
     },
     "retention": {
       "title": "Combien de temps nous les gardons",
-      "p1": "Aussi longtemps que tu as un compte. Si tu supprimes ton compte, ton profil, tes compétences et tes contributions sont supprimés avec. Le contenu dont d’autres personnes dépendent — les messages que tu as envoyés, les actualités publiques que tu as publiées — est conservé mais détaché de ton identité et présenté comme venant d’un membre supprimé ou ancien. Les journaux serveur sont conservés par notre hébergeur pendant une courte période puis effacés."
+      "p1": "Aussi longtemps que tu as un compte. Si tu supprimes ton compte, ton profil, tes compétences et tes contributions sont supprimés avec. Le contenu dont d’autres personnes dépendent — les messages que tu as envoyés, les actualités publiques que tu as publiées — est conservé mais détaché de ton identité et présenté comme venant d’un membre supprimé ou ancien. Les journaux serveur sont conservés par notre hébergeur pendant une courte période puis effacés.",
+      "p2": "Si tu t’es inscrit(e) à la liste de diffusion de lancement, nous conservons ton adresse jusqu’à ce que tu te désinscrives ou que tu nous demandes de la supprimer. Après ta désinscription, nous gardons seulement la trace que cette adresse s’est désinscrite, afin de ne plus lui envoyer d’e-mails."
     },
     "yourRights": {
       "title": "Tes droits",
@@ -51,7 +55,7 @@
     },
     "policyChanges": {
       "title": "Modifications de cette politique",
-      "p1": "Si nous changeons la façon dont nous traitons tes données — par exemple si nous commençons à envoyer des notifications par e-mail — nous mettrons cette page à jour et ajusterons la date en haut. Pour les changements importants, nous te préviendrons dans l’application."
+      "p1": "Si nous changeons la façon dont nous traitons tes données — par exemple si nous commençons à travailler avec un nouveau prestataire de services — nous mettrons cette page à jour et modifierons la date en haut. Pour les changements importants, nous te préviendrons dans l’application."
     }
   },
   "footer": {

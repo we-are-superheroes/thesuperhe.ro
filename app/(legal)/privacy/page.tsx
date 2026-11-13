@@ -9,15 +9,16 @@ export async function generateMetadata() {
 
 /* ================================================================
    Privacy policy. Written for the platform as it actually works
-   today (Clerk auth, Supabase in the EU, Vercel hosting, essential
-   cookies only, no analytics). Keep it in sync when that changes —
-   especially if analytics or email sending are added.
+   today (Clerk auth, Supabase in the EU, Vercel hosting, Resend for
+   email incl. the launch mailing list, essential cookies only, no
+   analytics). Keep it in sync when that changes — especially if
+   analytics or another processor are added.
 
    English is the authoritative text (the policy says so): copy
    lives in messages/<locale>/legal-privacy.json, en is the source.
    ================================================================ */
 
-const LAST_UPDATED = '12 July 2026'
+const LAST_UPDATED = '13 November 2026'
 const SUPPORT_EMAIL = 'support@thesuperhe.ro'
 
 export default async function PrivacyPage() {
@@ -49,10 +50,12 @@ export default async function PrivacyPage() {
         <p>{t.rich('sections.whatWeCollect.p2', { strong })}</p>
         <p>{t.rich('sections.whatWeCollect.p3', { strong })}</p>
         <p>{t.rich('sections.whatWeCollect.p4', { strong })}</p>
+        <p>{t.rich('sections.whatWeCollect.p5', { strong })}</p>
       </Section>
 
       <Section title={t('sections.whatWeUseItFor.title')}>
         <p>{t('sections.whatWeUseItFor.p1')}</p>
+        <p>{t('sections.whatWeUseItFor.p2')}</p>
       </Section>
 
       <Section title={t('sections.whatIsPublic.title')}>
@@ -74,12 +77,14 @@ export default async function PrivacyPage() {
           <li>{t.rich('sections.processors.items.supabase', { strong })}</li>
           <li>{t.rich('sections.processors.items.clerk', { strong })}</li>
           <li>{t.rich('sections.processors.items.vercel', { strong })}</li>
+          <li>{t.rich('sections.processors.items.resend', { strong })}</li>
         </ul>
         <p>{t('sections.processors.outro')}</p>
       </Section>
 
       <Section title={t('sections.retention.title')}>
         <p>{t('sections.retention.p1')}</p>
+        <p>{t('sections.retention.p2')}</p>
       </Section>
 
       <Section title={t('sections.yourRights.title')}>

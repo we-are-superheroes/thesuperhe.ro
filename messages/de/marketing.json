@@ -95,6 +95,16 @@
       "title": "Schau in dein Postfach",
       "body": "Du solltest bereits eine Bestätigungs-E-Mail von uns haben. Schau bitte in dein Postfach — und in den Spam-Ordner. Wenn sie nach ein paar Minuten nicht da ist, versuch es noch einmal."
     },
+    "confirmPage": {
+      "title": "Bestätige deine E-Mail",
+      "body": "Klick auf den Button, um auf die Launch-Liste von The Superhero zu kommen. Wir nehmen deine Adresse erst auf, wenn du sie hier bestätigst.",
+      "button": "E-Mail bestätigen"
+    },
+    "unsubscribePage": {
+      "title": "Launch-E-Mails abbestellen?",
+      "body": "Klick auf den Button, dann senden wir keine Launch-E-Mails mehr an diese Adresse.",
+      "button": "Abbestellen"
+    },
     "status": {
       "home": "Zurück zur Startseite",
       "confirmed": {
@@ -112,6 +122,10 @@
       "unsubscribed": {
         "title": "Du wurdest abgemeldet.",
         "body": "Du bekommst keine Start-E-Mails mehr von uns. Du kannst dich jederzeit wieder anmelden."
+      },
+      "unsubscribeInvalid": {
+        "title": "Dieser Link hat nicht funktioniert.",
+        "body": "Dieser Abmelde-Link ist ungültig. Nutze den Abmelde-Link aus der letzten E-Mail, die wir dir geschickt haben."
       }
     },
     "email": {

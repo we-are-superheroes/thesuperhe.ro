@@ -95,6 +95,16 @@
       "title": "Vérifie ta boîte de réception",
       "body": "Tu as sûrement déjà reçu un e-mail de confirmation de notre part. Vérifie ta boîte de réception, et ton dossier spam. S’il n’arrive pas d’ici quelques minutes, réessaie."
     },
+    "confirmPage": {
+      "title": "Confirme ton e-mail",
+      "body": "Appuie sur le bouton pour rejoindre la liste de lancement de The Superhero. Nous ajoutons ton adresse seulement après ta confirmation ici.",
+      "button": "Confirmer mon e-mail"
+    },
+    "unsubscribePage": {
+      "title": "Se désabonner des e-mails de lancement ?",
+      "body": "Appuie sur le bouton et nous arrêterons d’envoyer des e-mails de lancement à cette adresse.",
+      "button": "Se désabonner"
+    },
     "status": {
       "home": "Retour à l’accueil",
       "confirmed": {
@@ -112,6 +122,10 @@
       "unsubscribed": {
         "title": "Tu es désabonné.",
         "body": "Tu ne recevras plus d’e-mails de lancement de notre part. Tu peux te réinscrire à tout moment."
+      },
+      "unsubscribeInvalid": {
+        "title": "Ce lien n’a pas fonctionné.",
+        "body": "Ce lien de désabonnement n’est pas valide. Utilise le lien de désabonnement dans le dernier e-mail que nous t’avons envoyé."
       }
     },
     "email": {

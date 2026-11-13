@@ -74,6 +74,11 @@
   },
   "emailUnsub": {
     "managePrefs": "Manage e-mail preferences",
+    "confirm": {
+      "title": "Stop activity e-mails?",
+      "body": "Press the button and we will stop e-mailing you about activity on your projects. You can turn the e-mails back on from your profile.",
+      "button": "Unsubscribe"
+    },
     "ok": {
       "title": "You're unsubscribed.",
       "body": "You won't get activity e-mails any more. You can turn them back on any time from your profile."

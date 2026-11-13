@@ -20,6 +20,7 @@ const isPublicRoute = createRouteMatcher([
   // Token-guarded unsubscribe for notification emails, and the
   // secret-guarded cron that sends them. Both must be hittable unauthenticated.
   '/api/notifications/unsubscribe',
+  '/email-unsubscribe',
   '/email-unsubscribed',
   '/api/cron(.*)',
   '/privacy',

@@ -95,6 +95,16 @@
       "title": "Controlla la tua casella di posta",
       "body": "Dovresti aver già ricevuto una nostra e-mail di conferma. Controlla la casella di posta e anche la cartella spam. Se tra qualche minuto non è ancora arrivata, riprova."
     },
+    "confirmPage": {
+      "title": "Conferma la tua e-mail",
+      "body": "Premi il pulsante per unirti alla lista di lancio di The Superhero. Aggiungiamo il tuo indirizzo solo dopo che lo confermi qui.",
+      "button": "Conferma la mia e-mail"
+    },
+    "unsubscribePage": {
+      "title": "Annullare l'iscrizione alle e-mail di lancio?",
+      "body": "Premi il pulsante e smetteremo di inviare e-mail di lancio a questo indirizzo.",
+      "button": "Annulla l'iscrizione"
+    },
     "status": {
       "home": "Torna alla home",
       "confirmed": {
@@ -112,6 +122,10 @@
       "unsubscribed": {
         "title": "Sei stato disiscritto.",
         "body": "Non riceverai più e-mail sul lancio da parte nostra. Puoi iscriverti di nuovo quando vuoi."
+      },
+      "unsubscribeInvalid": {
+        "title": "Questo link non ha funzionato.",
+        "body": "Questo link per annullare l'iscrizione non è valido. Usa il link per annullare l'iscrizione presente nell'ultima e-mail che ti abbiamo inviato."
       }
     },
     "email": {

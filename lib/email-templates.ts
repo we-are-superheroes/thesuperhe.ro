@@ -93,7 +93,7 @@ export function renderEmail(c: EmailContent): { html: string; text: string } {
         ${footer}
       </td></tr>
     </table>
-    <div style="max-width:560px;margin:16px auto 0;font-size:12px;color:${MUTED};text-align:center;">The Superhero · Lausanne, Switzerland</div>
+    <div style="max-width:560px;margin:16px auto 0;font-size:12px;color:${MUTED};text-align:center;">The Superhero · Switzerland</div>
   </td></tr>
 </table>
 </body>

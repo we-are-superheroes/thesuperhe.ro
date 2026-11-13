@@ -167,7 +167,8 @@
     "broadcastEmpty": "Füge einen Betreff und eine Nachricht hinzu, bevor du sendest.",
     "broadcastTooLong": "Dieser Betreff oder diese Nachricht ist zu lang.",
     "broadcastTestFailed": "Die Test-E-Mail konnte nicht gesendet werden.",
-    "broadcastNoTestAddress": "Dein Konto hat keine E-Mail-Adresse für einen Test."
+    "broadcastNoTestAddress": "Dein Konto hat keine E-Mail-Adresse für einen Test.",
+    "broadcastFailed": "Die E-Mail konnte nicht gesendet werden. Nichts wurde doppelt verschickt — versuch es noch einmal."
   },
   "waitlist": {
     "emailRequired": "Bitte gib deine E-Mail-Adresse ein.",

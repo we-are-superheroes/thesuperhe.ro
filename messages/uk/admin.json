@@ -19,7 +19,9 @@
     "confirmSend": "Надіслати зараз",
     "cancel": "Скасувати",
     "resultSent": "Надіслано для {count, plural, one {# підписника} few {# підписників} many {# підписників} other {# підписників}}.",
-    "resultFailed": "Надіслано {sent} із {recipients} — {failed} не вдалося доставити.",
+    "resultPartial": "Поки що надіслано для {sent} — залишилося надіслати {left}.",
+    "resultAlready": "Усі зі списку вже отримали цей лист.",
+    "sendRest": "Надіслати решті",
     "sendAnother": "Написати ще одну"
   }
 }

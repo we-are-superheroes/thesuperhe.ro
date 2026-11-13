@@ -11,6 +11,10 @@ import { BroadcastComposer } from '@/components/platform/broadcast-composer'
    actions the composer calls — this gate only decides what renders.
    ================================================================ */
 
+// The send action works through the list in batches inside a time budget;
+// give it the room it plans for.
+export const maxDuration = 60
+
 export default async function BroadcastPage() {
   if (!(await isCurrentUserAdmin())) notFound()
 

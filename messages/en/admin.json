@@ -19,7 +19,9 @@
     "confirmSend": "Send now",
     "cancel": "Cancel",
     "resultSent": "Sent to {count, plural, one {# subscriber} other {# subscribers}}.",
-    "resultFailed": "Sent to {sent} of {recipients} — {failed} couldn’t be delivered.",
+    "resultPartial": "Sent to {sent} so far — {left} still to send.",
+    "resultAlready": "Everyone on the list has already had this e-mail.",
+    "sendRest": "Send to the rest",
     "sendAnother": "Write another"
   }
 }

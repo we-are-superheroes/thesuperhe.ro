@@ -167,7 +167,8 @@
     "broadcastEmpty": "Ajoute un objet et un message avant d’envoyer.",
     "broadcastTooLong": "Cet objet ou ce message est trop long.",
     "broadcastTestFailed": "Impossible d’envoyer l’e-mail de test.",
-    "broadcastNoTestAddress": "Ton compte n’a pas d’adresse e-mail pour un test."
+    "broadcastNoTestAddress": "Ton compte n’a pas d’adresse e-mail pour un test.",
+    "broadcastFailed": "Impossible d’envoyer l’e-mail. Rien n’a été envoyé deux fois — réessaie."
   },
   "waitlist": {
     "emailRequired": "Saisis ton adresse e-mail.",

@@ -19,7 +19,9 @@
     "confirmSend": "Отправить сейчас",
     "cancel": "Отмена",
     "resultSent": "Отправлено {count, plural, one {# подписчику} few {# подписчикам} many {# подписчикам} other {# подписчикам}}.",
-    "resultFailed": "Отправлено {sent} из {recipients} — {failed} не удалось доставить.",
+    "resultPartial": "Пока отправлено {sent}, осталось отправить {left}.",
+    "resultAlready": "Все из списка уже получили это письмо.",
+    "sendRest": "Отправить остальным",
     "sendAnother": "Написать ещё"
   }
 }

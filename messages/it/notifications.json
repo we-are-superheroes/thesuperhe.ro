@@ -74,6 +74,11 @@
   },
   "emailUnsub": {
     "managePrefs": "Gestisci le preferenze e-mail",
+    "confirm": {
+      "title": "Vuoi non ricevere più e-mail sulle attività?",
+      "body": "Premi il pulsante e smetteremo di inviarti e-mail sulle attività dei tuoi progetti. Puoi riattivare le e-mail dal tuo profilo.",
+      "button": "Annulla iscrizione"
+    },
     "ok": {
       "title": "Disiscrizione completata.",
       "body": "Non riceverai più e-mail di attività. Puoi riattivarle quando vuoi dal tuo profilo."

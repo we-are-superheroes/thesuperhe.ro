@@ -74,6 +74,11 @@
   },
   "emailUnsub": {
     "managePrefs": "Gérer les préférences d’e-mail",
+    "confirm": {
+      "title": "Arrêter les e-mails d’activité ?",
+      "body": "Appuie sur le bouton et nous arrêterons de t’envoyer des e-mails sur l’activité de tes projets. Tu peux réactiver les e-mails depuis ton profil.",
+      "button": "Se désabonner"
+    },
     "ok": {
       "title": "Tu es désabonné.",
       "body": "Tu ne recevras plus d’e-mails d’activité. Tu peux les réactiver à tout moment depuis ton profil."

@@ -30,8 +30,14 @@ type I18n = { key?: string; params?: Record<string, string | number> }
  *  here, and we format dynamic notification keys anyway. */
 type NotifT = (key: string, values?: Record<string, string | number>) => string
 
-function unsubscribeUrl(token: string): string {
+/** RFC 8058 one-click endpoint — only for the List-Unsubscribe header. */
+function oneClickUnsubscribeUrl(token: string): string {
   return `${SITE_URL}/api/notifications/unsubscribe?token=${encodeURIComponent(token)}`
+}
+
+/** Page with the unsubscribe button — the human-clickable footer link. */
+function unsubscribePageUrl(token: string): string {
+  return `${SITE_URL}/email-unsubscribe?token=${encodeURIComponent(token)}`
 }
 
 /** Render one notification's title in the reader's language, falling back to
@@ -106,7 +112,8 @@ export async function sendPendingNotificationEmails(): Promise<{
       lines.push(t('email.more', { count: count - MAX_LINES_PER_USER }))
     }
 
-    const unsub = unsubscribeUrl(user.emailUnsubToken)
+    const unsub = unsubscribePageUrl(user.emailUnsubToken)
+    const oneClick = oneClickUnsubscribeUrl(user.emailUnsubToken)
     const { html, text } = renderEmail({
       previewText: t('email.subject', { count }),
       heading: t('email.heading', { count }),
@@ -122,7 +129,7 @@ export async function sendPendingNotificationEmails(): Promise<{
       html,
       text,
       headers: {
-        'List-Unsubscribe': `<${unsub}>`,
+        'List-Unsubscribe': `<${oneClick}>`,
         'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
       },
       tags: [{ name: 'kind', value: 'notification_digest' }],
