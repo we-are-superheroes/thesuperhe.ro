@@ -91,6 +91,10 @@
       "title": "Sei nella lista.",
       "body": "Controlla la tua casella per confermare l'indirizzo. Ti scriveremo appena i primi progetti saranno pronti per te."
     },
+    "throttled": {
+      "title": "Controlla la tua casella di posta",
+      "body": "Dovresti aver già ricevuto una nostra e-mail di conferma. Controlla la casella di posta e anche la cartella spam. Se tra qualche minuto non è ancora arrivata, riprova."
+    },
     "status": {
       "home": "Torna alla home",
       "confirmed": {

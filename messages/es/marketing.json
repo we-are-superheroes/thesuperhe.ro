@@ -91,6 +91,10 @@
       "title": "Estás en la lista.",
       "body": "Revisa tu bandeja de entrada para confirmar tu dirección. Te escribiremos en cuanto los primeros proyectos estén listos para ti."
     },
+    "throttled": {
+      "title": "Revisa tu bandeja de entrada",
+      "body": "Ya deberías tener un correo de confirmación nuestro. Revisa tu bandeja de entrada y también la carpeta de spam. Si no llega en unos minutos, inténtalo de nuevo."
+    },
     "status": {
       "home": "Volver al inicio",
       "confirmed": {

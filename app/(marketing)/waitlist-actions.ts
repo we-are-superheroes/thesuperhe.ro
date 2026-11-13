@@ -20,9 +20,12 @@ import type { ServerActionResult } from '@/types'
    whether an address is already on the list.
    ================================================================ */
 
+/** At most one confirmation (re)send per address per this window. */
+const WAITLIST_RESEND_WINDOW_MS = 5 * 60 * 1000
+
 export async function subscribeWaitlistAction(
   rawEmail: string,
-): Promise<ServerActionResult<{ queued: true }>> {
+): Promise<ServerActionResult<{ queued: true; throttled?: boolean }>> {
   const check = validateEmail(rawEmail)
   if (!check.ok) return { success: false, error: await tError(check.error) }
   const email = check.email
@@ -34,6 +37,14 @@ export async function subscribeWaitlistAction(
   const ip = (hdrs.get('x-forwarded-for')?.split(',')[0] ?? hdrs.get('x-real-ip') ?? 'unknown').trim()
   const limited = rateLimit(`waitlist:${ip}`, 5, 10 * 60 * 1000)
   if (!limited.ok) return { success: false, error: await tError(rateLimitError(limited)) }
+
+  // Per-address throttle: at most one (re)send per window, so repeat submits
+  // of the same address don't fan out into several confirmation e-mails. Keyed
+  // on the address alone and returning the same generic success — it never
+  // reveals whether the address is already on the list; the UI just asks the
+  // visitor to check their inbox/spam or try again shortly.
+  const resend = rateLimit(`waitlist-email:${email}`, 1, WAITLIST_RESEND_WINDOW_MS)
+  if (!resend.ok) return { success: true, data: { queued: true, throttled: true } }
 
   const locale = await resolveLocale().catch(() => DEFAULT_LOCALE)
   const tEn = await getTranslations({ locale: 'en', namespace: 'marketing' })

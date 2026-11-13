@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react'
 import { useTranslations } from 'next-intl'
-import { ArrowRight, Check, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, Check, CheckCircle2, MailCheck } from 'lucide-react'
 import { subscribeWaitlistAction } from '@/app/(marketing)/waitlist-actions'
 
 /* ================================================================
@@ -15,7 +15,7 @@ import { subscribeWaitlistAction } from '@/app/(marketing)/waitlist-actions'
 export function WaitlistForm() {
   const t = useTranslations('marketing')
   const [email, setEmail] = useState('')
-  const [done, setDone] = useState(false)
+  const [state, setState] = useState<'idle' | 'done' | 'throttled'>('idle')
   const [error, setError] = useState<string | null>(null)
   const [pending, startTransition] = useTransition()
 
@@ -24,25 +24,27 @@ export function WaitlistForm() {
     setError(null)
     startTransition(async () => {
       const result = await subscribeWaitlistAction(email)
-      if (result.success) setDone(true)
+      if (result.success) setState(result.data.throttled ? 'throttled' : 'done')
       else setError(result.error)
     })
   }
 
-  if (done) {
+  if (state !== 'idle') {
+    const throttled = state === 'throttled'
+    const Icon = throttled ? MailCheck : CheckCircle2
     return (
       <div
         className="flex items-start gap-3 rounded-xl border border-amber-500 bg-bg-surface-2 p-5"
         role="status"
         aria-live="polite"
       >
-        <CheckCircle2 className="size-7 shrink-0 text-amber-500" />
+        <Icon className="size-7 shrink-0 text-amber-500" />
         <div>
           <strong className="mb-1 block font-display text-xl font-normal">
-            {t('waitlist.success.title')}
+            {t(throttled ? 'waitlist.throttled.title' : 'waitlist.success.title')}
           </strong>
           <p className="text-sm leading-relaxed text-neutral-300">
-            {t('waitlist.success.body')}
+            {t(throttled ? 'waitlist.throttled.body' : 'waitlist.success.body')}
           </p>
         </div>
       </div>

@@ -91,6 +91,10 @@
       "title": "Du bist auf der Liste.",
       "body": "Schau in dein Postfach, um deine Adresse zu bestätigen. Wir melden uns, sobald die ersten Projekte für dich bereit sind."
     },
+    "throttled": {
+      "title": "Schau in dein Postfach",
+      "body": "Du solltest bereits eine Bestätigungs-E-Mail von uns haben. Schau bitte in dein Postfach — und in den Spam-Ordner. Wenn sie nach ein paar Minuten nicht da ist, versuch es noch einmal."
+    },
     "status": {
       "home": "Zurück zur Startseite",
       "confirmed": {

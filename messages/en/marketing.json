@@ -91,6 +91,10 @@
       "title": "You're on the list.",
       "body": "Check your inbox to confirm your address. We'll be in touch as soon as the first projects are ready for you."
     },
+    "throttled": {
+      "title": "Check your inbox",
+      "body": "You should already have a confirmation e-mail from us. Please check your inbox — and your spam folder. If it hasn't arrived in a few minutes, try again."
+    },
     "status": {
       "home": "Back to home",
       "confirmed": {

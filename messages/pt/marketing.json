@@ -91,6 +91,10 @@
       "title": "Está na lista.",
       "body": "Verifique a sua caixa de entrada para confirmar o endereço. Entraremos em contacto assim que os primeiros projetos estiverem prontos para si."
     },
+    "throttled": {
+      "title": "Verifique a sua caixa de entrada",
+      "body": "Já deve ter recebido um e-mail de confirmação da nossa parte. Verifique a sua caixa de entrada — e a pasta de spam. Se não chegar dentro de alguns minutos, tente novamente."
+    },
     "status": {
       "home": "Voltar ao início",
       "confirmed": {
