@@ -9,7 +9,7 @@
     "signOut": "Abmelden"
   },
   "hero": {
-    "badge": "Klima & Nachhaltigkeit — gemeinsam",
+    "badge": "Klima & Nachhaltigkeit, gemeinsam",
     "title": "Kämpf nicht allein.<br></br>Lass uns <em>gemeinsam</em><br></br>Superhelden sein.",
     "subtitle": "Finde Klima- und Nachhaltigkeitsprojekte, die deine Fähigkeiten brauchen — oder bring deine eigene Idee mit und lass Mitstreiter sie mit dir Wirklichkeit werden.",
     "browseProjects": "Projekte durchstöbern",
@@ -58,6 +58,7 @@
   "how": {
     "kicker": "So funktioniert’s",
     "title": "Trag so viel bei — <em>oder so wenig</em> — wie deine Zeit erlaubt.",
+    "subtitle": "Ob Einzelperson, Verein oder Unternehmen – finde Projekte, die deine Unterstützung brauchen. Oder, wenn du richtig motiviert bist, erstell dein eigenes Projekt von Grund auf oder aus einer Blaupause und finde Mitstreiter, die es mit dir Wirklichkeit werden lassen.",
     "step1Title": "Sag uns deine Fähigkeiten",
     "step1Desc": "Füge hinzu, was du gut kannst — und was du in einem Projekt wirklich einsetzen willst. Wer vom Programmieren ausgebrannt ist, muss nicht programmieren.",
     "step2Title": "Finde, was passt",
@@ -88,12 +89,12 @@
     "fineprint": "Mit der Anmeldung stimmst du zu, E-Mails über The Superhero zu erhalten. Siehe unsere <privacy>Datenschutzerklärung</privacy>.",
     "consentText": "Mit der Anmeldung stimmst du zu, E-Mails über The Superhero zu erhalten.",
     "success": {
-      "title": "Du bist auf der Liste.",
+      "title": "Fast geschafft …",
       "body": "Schau in dein Postfach, um deine Adresse zu bestätigen. Wir melden uns, sobald die ersten Projekte für dich bereit sind."
     },
     "throttled": {
       "title": "Schau in dein Postfach",
-      "body": "Du solltest bereits eine Bestätigungs-E-Mail von uns haben. Schau bitte in dein Postfach — und in den Spam-Ordner. Wenn sie nach ein paar Minuten nicht da ist, versuch es noch einmal."
+      "body": "Du solltest bereits eine Bestätigungs-E-Mail von uns haben. Bitte schau in deinem Posteingang und im Spam-Ordner nach. Falls sie in ein paar Minuten nicht da ist, versuch es noch einmal."
     },
     "confirmPage": {
       "title": "Bestätige deine E-Mail",
@@ -108,12 +109,12 @@
     "status": {
       "home": "Zurück zur Startseite",
       "confirmed": {
-        "title": "Alles erledigt.",
+        "title": "Du bist dabei.",
         "body": "Danke fürs Bestätigen. Wir schreiben dir, sobald die ersten Projekte zum Mitmachen bereit sind."
       },
       "already": {
         "title": "Bereits bestätigt.",
-        "body": "Deine Adresse stand schon auf der Liste — mehr musst du nicht tun. Wir melden uns bald."
+        "body": "Deine Adresse stand schon auf der Liste – du musst jetzt nichts weiter tun. Wir melden uns bald bei dir."
       },
       "invalid": {
         "title": "Dieser Link ist abgelaufen.",
@@ -135,7 +136,7 @@
         "subject": "Bestätige deine E-Mail — The Superhero",
         "heading": "Nur noch ein kurzer Schritt",
         "p1": "Danke für dein Interesse an The Superhero. Bitte bestätige, dass dies deine Adresse ist, damit wir dir sagen können, wann die ersten Projekte zum Mitmachen bereit sind.",
-        "p2": "Falls du dich nicht angemeldet hast, kannst du diese E-Mail einfach ignorieren — es passiert nichts.",
+        "p2": "Falls du dich nicht angemeldet hast, kannst du diese E-Mail einfach ignorieren; es passiert nichts.",
         "button": "Meine E-Mail bestätigen",
         "why": "Du bekommst diese E-Mail, weil jemand diese Adresse auf thesuperhe.ro eingetragen hat."
       },

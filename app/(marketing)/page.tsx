@@ -664,6 +664,9 @@ async function HowItWorks() {
               ),
             })}
           </h2>
+          <p className="mt-4 max-w-[680px] text-lg leading-relaxed text-neutral-300">
+            {t('how.subtitle')}
+          </p>
         </div>
         <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {steps.map((step) => (

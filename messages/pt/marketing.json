@@ -9,7 +9,7 @@
     "signOut": "Sair"
   },
   "hero": {
-    "badge": "Clima e sustentabilidade — juntos",
+    "badge": "Clima e sustentabilidade, juntos",
     "title": "Não aja sozinho.<br></br>Vamos ser <em>super-heróis</em><br></br>juntos.",
     "subtitle": "Encontre projetos de clima e sustentabilidade que precisam das suas habilidades, ou traga a sua própria ideia e deixe outras pessoas ajudarem a torná-la real.",
     "browseProjects": "Explorar projetos",
@@ -58,6 +58,7 @@
   "how": {
     "kicker": "Como funciona",
     "title": "Contribua muito <em>ou pouco</em> — conforme o seu tempo permitir.",
+    "subtitle": "Seja uma pessoa, uma associação ou uma empresa, encontre projetos que precisam do seu apoio. Ou, se estiver muito motivado, crie o seu próprio projeto do zero ou a partir de um modelo, e encontre colaboradores para ajudar a torná-lo real.",
     "step1Title": "Diga-nos as suas habilidades",
     "step1Desc": "Adicione o que você sabe fazer bem — e o que realmente quer usar num projeto. Quem está cansado de programar não precisa programar aqui.",
     "step2Title": "Encontre o seu encaixe",
@@ -88,12 +89,12 @@
     "fineprint": "Ao inscrever-se, concorda em receber e-mails sobre The Superhero. Veja a nossa <privacy>política de privacidade</privacy>.",
     "consentText": "Ao inscrever-se, concorda em receber e-mails sobre The Superhero.",
     "success": {
-      "title": "Está na lista.",
+      "title": "Quase lá...",
       "body": "Verifique a sua caixa de entrada para confirmar o endereço. Entraremos em contacto assim que os primeiros projetos estiverem prontos para si."
     },
     "throttled": {
       "title": "Verifique a sua caixa de entrada",
-      "body": "Já deve ter recebido um e-mail de confirmação da nossa parte. Verifique a sua caixa de entrada — e a pasta de spam. Se não chegar dentro de alguns minutos, tente novamente."
+      "body": "Já deverá ter recebido um e-mail de confirmação da nossa parte. Verifique a sua caixa de entrada e a pasta de spam. Se não chegar dentro de alguns minutos, tente novamente."
     },
     "confirmPage": {
       "title": "Confirme o seu e-mail",
@@ -108,12 +109,12 @@
     "status": {
       "home": "Voltar ao início",
       "confirmed": {
-        "title": "Está tudo pronto.",
+        "title": "Está na lista.",
         "body": "Obrigado por confirmar. Enviamos-lhe um e-mail assim que os primeiros projetos estiverem prontos para se juntar."
       },
       "already": {
         "title": "Já confirmado.",
-        "body": "O seu endereço já estava na lista — não há mais nada a fazer. Entraremos em contacto em breve."
+        "body": "O seu endereço já estava na lista, não há mais nada a fazer de momento. Entraremos em contacto em breve."
       },
       "invalid": {
         "title": "Esta ligação expirou.",
@@ -135,7 +136,7 @@
         "subject": "Confirme o seu e-mail — The Superhero",
         "heading": "Falta só um passo rápido",
         "p1": "Obrigado pelo seu interesse em The Superhero. Confirme que este é o seu endereço para podermos avisá-lo quando os primeiros projetos estiverem prontos para se juntar.",
-        "p2": "Se não foi você que se inscreveu, pode ignorar este e-mail sem problemas — não acontece nada.",
+        "p2": "Se não se inscreveu, pode ignorar este e-mail com segurança; nada vai acontecer.",
         "button": "Confirmar o meu e-mail",
         "why": "Está a receber isto porque alguém inseriu este endereço em thesuperhe.ro."
       },

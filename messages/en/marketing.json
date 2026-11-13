@@ -9,7 +9,7 @@
     "signOut": "Sign out"
   },
   "hero": {
-    "badge": "Climate & sustainability — together",
+    "badge": "Climate & sustainability, together",
     "title": "Don't act alone.<br></br>Let's be <em>superheroes</em><br></br>together.",
     "subtitle": "Find climate and sustainability projects that need your skills, or bring your own idea and let collaborators help you make it real.",
     "browseProjects": "Browse projects",
@@ -58,6 +58,7 @@
   "how": {
     "kicker": "How it works",
     "title": "Contribute as much, <em>or as little</em>, as your time allows.",
+    "subtitle": "Whether you're an individual, an association or an enterprise, find projects that need your support. Or, if you're very motivated, create your own from scratch or from a blueprint, and find collaborators to help make it real.",
     "step1Title": "Tell us your skills",
     "step1Desc": "Add the things you're good at, and the ones you actually want to use on a project. A burnt-out developer doesn't have to do coding.",
     "step2Title": "Find a fit",
@@ -88,12 +89,12 @@
     "fineprint": "By signing up you agree to receive e-mails about The Superhero. See our <privacy>privacy policy</privacy>.",
     "consentText": "By signing up you agree to receive e-mails about The Superhero.",
     "success": {
-      "title": "You're on the list.",
+      "title": "Almost there...",
       "body": "Check your inbox to confirm your address. We'll be in touch as soon as the first projects are ready for you."
     },
     "throttled": {
       "title": "Check your inbox",
-      "body": "You should already have a confirmation e-mail from us. Please check your inbox — and your spam folder. If it hasn't arrived in a few minutes, try again."
+      "body": "You should already have a confirmation e-mail from us. Please check your inbox and your spam folder. If it hasn't arrived in a few minutes, try again."
     },
     "confirmPage": {
       "title": "Confirm your e-mail",
@@ -108,12 +109,12 @@
     "status": {
       "home": "Back to home",
       "confirmed": {
-        "title": "You're all set.",
+        "title": "You're on the list.",
         "body": "Thanks for confirming. We'll e-mail you the moment the first projects are ready to join."
       },
       "already": {
         "title": "Already confirmed.",
-        "body": "Your address was already on the list — nothing more to do. We'll be in touch soon."
+        "body": "Your address was already on the list, there's nothing more to do at this point. We'll be in touch soon."
       },
       "invalid": {
         "title": "This link has expired.",
@@ -135,7 +136,7 @@
         "subject": "Confirm your e-mail — The Superhero",
         "heading": "One quick step to go",
         "p1": "Thanks for your interest in The Superhero. Please confirm this is your address so we can tell you when the first projects are ready to join.",
-        "p2": "If you didn't sign up, you can safely ignore this e-mail — nothing will happen.",
+        "p2": "If you didn't sign up, you can safely ignore this e-mail; nothing will happen.",
         "button": "Confirm my e-mail",
         "why": "You're getting this because someone entered this address on thesuperhe.ro."
       },
