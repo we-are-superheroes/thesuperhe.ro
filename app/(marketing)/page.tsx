@@ -286,9 +286,19 @@ async function Hero({
             <div className="mb-10 animate-[rise_800ms_ease-out_450ms_backwards]">
               <a
                 href="#notify"
-                className="text-sm text-amber-500 underline underline-offset-[3px] transition-colors hover:text-amber-400"
+                className="group inline-flex w-full items-center gap-3 rounded-full border border-amber-500/45 bg-gradient-to-r from-amber-500/[0.16] to-amber-500/[0.06] py-2 pl-3.5 pr-2 text-sm text-fg-primary transition-all duration-standard hover:-translate-y-px hover:border-amber-500 hover:from-amber-500/25 hover:to-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-bg-base sm:w-auto"
               >
-                {t('hero.notifyLink')}
+                <span className="relative flex size-2 shrink-0" aria-hidden="true">
+                  <span className="absolute inline-flex size-full animate-ping rounded-full border-2 border-amber-500 opacity-70 motion-reduce:hidden" />
+                  <span className="relative inline-flex size-2 rounded-full bg-amber-500" />
+                </span>
+                <span className="font-semibold text-amber-500">{t('hero.notifyChipLabel')}</span>
+                <span className="hidden h-3.5 w-px bg-amber-500/40 sm:block" aria-hidden="true" />
+                <span className="hidden sm:block">{t('hero.notifyChipText')}</span>
+                <span className="ml-auto inline-flex items-center gap-1.5 rounded-full bg-amber-500 px-3 py-1.5 font-semibold text-fg-on-accent sm:ml-0">
+                  {t('hero.notifyChipAction')}
+                  <ArrowRight className="size-3.5 transition-transform duration-standard group-hover:translate-x-0.5" />
+                </span>
               </a>
             </div>
           )}
