@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { countUnreadConversations } from '@/lib/messages'
 import { PlatformShell } from '@/components/platform/platform-shell'
 import { isCuratorRole } from '@/lib/places'
+import { ensureUserExists } from '@/lib/users'
 import { GroupIntlProvider } from '@/i18n/provider'
 
 export default async function PlatformLayout({
@@ -21,7 +22,7 @@ export default async function PlatformLayout({
     .update({ where: { id: userId }, data: { lastSeenAt: new Date() } })
     .catch(() => {})
 
-  const [user, unreadNotifications, messagesBadge] = await Promise.all([
+  const [foundUser, unreadNotifications, messagesBadge] = await Promise.all([
     db.user.findUnique({
       where: { id: userId },
       select: {
@@ -41,6 +42,19 @@ export default async function PlatformLayout({
     db.notification.count({ where: { userId, readAt: null } }),
     countUnreadConversations(db, userId),
   ])
+
+  // First signed-in page load without a row in our database (the Clerk
+  // webhook was slow, or never arrived): create it now, so the member exists
+  // for everything that looks people up — not only once they first save
+  // something. A new row has no contributions, so the counts below stay zero.
+  let user = foundUser
+  if (!user && (await ensureUserExists(userId)).success) {
+    const created = await db.user.findUnique({
+      where: { id: userId },
+      select: { name: true, role: true },
+    })
+    if (created) user = { ...created, contributions: [] }
+  }
 
   const name = user?.name ?? null
   const isAdmin = user?.role === 'admin'
