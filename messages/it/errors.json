@@ -183,7 +183,7 @@
     "positionRequired": "Posiziona il segnaposto sulla mappa.",
     "countryInvalid": "Scegli un paese dall'elenco.",
     "websiteInvalid": "L'indirizzo del sito web non sembra corretto. Dovrebbe essere simile a https://example.org.",
-    "fieldTooLong": "{field, select, name {Il nome} summary {La breve descrizione} description {La descrizione lunga} address {L'indirizzo} city {La città} website {L'indirizzo del sito web} contact {Il contatto} practicalNote {Il testo “utile da sapere”} openingNote {La nota sugli orari di apertura} statusNote {La nota sulla chiusura} productName {Il nome di un prodotto} productNote {La nota di un prodotto} productUnit {L'unità di un prodotto} proposalNote {La tua nota} reviewNote {Il motivo} other {Questo testo}} è troppo lungo. Usa al massimo {max} caratteri.",
+    "fieldTooLong": "{field, select, name {Il nome} summary {La descrizione breve} description {La descrizione lunga} address {L'indirizzo} city {La città} website {L'indirizzo del sito web} contact {Il contatto} practicalNote {Il testo “buono a sapersi”} openingNote {La nota sugli orari di apertura} statusNote {La nota sulla chiusura} productName {Il nome di un prodotto} productNote {La nota di un prodotto} productUnit {L'unità di un prodotto} productGroup {Un'intestazione di prodotto} proposalNote {La tua nota} reviewNote {Il motivo} other {Questo testo}} è troppo lungo. Usa al massimo {max} caratteri.",
     "openingHoursInvalid": "Gli orari di apertura non sono validi. Controllali.",
     "openingHoursEmpty": "Aggiungi almeno un orario di apertura oppure scegli un'altra opzione.",
     "openingHoursTooMany": "Ci sono troppi orari di apertura. Il limite è {max}.",
@@ -208,6 +208,7 @@
     "curatorEmailInvalid": "Scrivi un indirizzo e-mail valido.",
     "curatorNotFound": "Non abbiamo trovato un membro con quell'indirizzo e-mail.",
     "curatorAlready": "Questa persona è già un curatore o un amministratore.",
-    "curatorSaveFailed": "Non siamo riusciti a cambiare il ruolo. Riprova."
+    "curatorSaveFailed": "Non siamo riusciti a cambiare il ruolo. Riprova.",
+    "searchUnavailable": "La ricerca dei luoghi non risponde al momento. Riprova tra un minuto."
   }
 }

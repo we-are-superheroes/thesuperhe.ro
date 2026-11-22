@@ -183,7 +183,7 @@
     "positionRequired": "Поставьте метку на карте.",
     "countryInvalid": "Выберите страну из списка.",
     "websiteInvalid": "Адрес сайта выглядит неправильно. Он должен быть вида https://example.org.",
-    "fieldTooLong": "{field, select, name {Название} summary {Короткое описание} description {Подробное описание} address {Адрес} city {Город} website {Адрес сайта} contact {Контакт} practicalNote {Текст «полезно знать»} openingNote {Заметка о времени работы} statusNote {Заметка о закрытии} productName {Название товара} productNote {Заметка о товаре} productUnit {Единица товара} proposalNote {Ваша заметка} reviewNote {Причина} other {Этот текст}} слишком длинный. Используйте не более {max} символов.",
+    "fieldTooLong": "{field, select, name {Название} summary {Краткое описание} description {Подробное описание} address {Адрес} city {Город} website {Адрес сайта} contact {Контакт} practicalNote {Текст «полезно знать»} openingNote {Заметка о времени работы} statusNote {Заметка о закрытии} productName {Название продукта} productNote {Заметка о продукте} productUnit {Единица продукта} productGroup {Заголовок продукта} proposalNote {Ваша заметка} reviewNote {Причина} other {Этот текст}} слишком длинный. Используйте не более {max} символов.",
     "openingHoursInvalid": "Время работы указано неверно. Проверьте его.",
     "openingHoursEmpty": "Добавьте хотя бы одно время работы или выберите другой вариант.",
     "openingHoursTooMany": "Слишком много вариантов времени работы. Лимит — {max}.",
@@ -208,6 +208,7 @@
     "curatorEmailInvalid": "Укажите корректный адрес эл. почты.",
     "curatorNotFound": "Не удалось найти участника с таким адресом эл. почты.",
     "curatorAlready": "Этот человек уже является куратором или администратором.",
-    "curatorSaveFailed": "Не удалось изменить роль. Попробуйте ещё раз."
+    "curatorSaveFailed": "Не удалось изменить роль. Попробуйте ещё раз.",
+    "searchUnavailable": "Поиск мест сейчас не отвечает. Попробуйте ещё раз через минуту."
   }
 }

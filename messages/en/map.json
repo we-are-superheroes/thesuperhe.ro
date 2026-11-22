@@ -92,6 +92,14 @@
     "learn": {
       "one": "Learning",
       "many": "Learning"
+    },
+    "services": {
+      "one": "Service",
+      "many": "Services"
+    },
+    "other": {
+      "one": "Other",
+      "many": "Other"
     }
   },
   "card": {
@@ -105,12 +113,12 @@
     "viewProject": "View project",
     "directions": "Directions",
     "website": "Website",
-    "moreDetails": "More details",
-    "priceList": "Price list",
     "fineHero": "This project runs on The Superhero. Anyone can join.",
     "fineIndie": "Not run through The Superhero. Listed by the community.",
     "suggestEdit": "Suggest an edit",
-    "area": "Area around {place}"
+    "area": "Area around {place}",
+    "details": "Details",
+    "detailsAndPrices": "Details and prices"
   },
   "hours": {
     "title": "Opening times",
@@ -271,7 +279,10 @@
       "remove": "Remove {name}",
       "removeUnnamed": "Remove this product",
       "add": "Add a product",
-      "priceInvalid": "Write the price as a number, for example 3.50."
+      "priceInvalid": "Write the price as a number, for example 3.50.",
+      "group": "Heading",
+      "groupPlaceholder": "Vegetables",
+      "groupHelp": "Optional. Products with the same heading are shown together."
     },
     "noteLabel": "Your note",
     "noteHelpNew": "Tell us how you know this place and why it fits. A link helps.",
@@ -358,5 +369,24 @@
     "add": "Add to the map",
     "edit": "Edit map entry",
     "view": "View on the map"
+  },
+  "panel": {
+    "label": "Place details",
+    "back": "Back to results",
+    "loading": "Loading the details…",
+    "loadFailed": "We could not load the details. Please try again.",
+    "share": "Share",
+    "shareCopied": "Link copied",
+    "practicalTitle": "Practical information",
+    "productColumn": "Product",
+    "amountColumn": "Amount",
+    "priceColumn": "Price in {currency}",
+    "pricesNote": "Prices in {currency}. Last updated on {date}.",
+    "reportPrice": "Report a wrong price",
+    "stepsTitle": "Steps that need help",
+    "stepColumn": "Step",
+    "timeColumn": "Time needed",
+    "stepHours": "about {hours} h",
+    "stepsNote": "{count, plural, =0 {Nobody has joined yet.} one {# person has joined so far.} other {# people have joined so far.}} Open the project to claim a step."
   }
 }

@@ -4,7 +4,12 @@ import { headers } from 'next/headers'
 import { getLocale } from 'next-intl/server'
 import { tError } from '@/lib/errors'
 import { geocode, type GeocodeHit } from '@/lib/geocode'
-import { findPlacesNear, type PlaceResult } from '@/lib/places'
+import {
+  findPlacesNear,
+  getPlaceDetailView,
+  type PlaceDetailView,
+  type PlaceResult,
+} from '@/lib/places'
 import { MAX_RADIUS_KM, coarsen, isValidLatLng } from '@/lib/places-shared'
 import { rateLimit, rateLimitError } from '@/lib/rate-limit'
 import type { ServerActionResult } from '@/types'
@@ -33,6 +38,8 @@ export async function geocodeAction(
     locale,
     near: near && isValidLatLng(near.lat, near.lng) ? near : undefined,
   })
+  // null = no geocoder answered. Say so, rather than "we could not find it".
+  if (hits === null) return { success: false, error: await tError({ key: 'places.searchUnavailable' }) }
   return { success: true, data: hits }
 }
 
@@ -56,6 +63,28 @@ export async function loadPlacesNearAction(position: {
   try {
     const places = await findPlacesNear(centre, MAX_RADIUS_KM)
     return { success: true, data: { centre, places } }
+  } catch {
+    return { success: false, error: await tError({ key: 'common.somethingWrong' }) }
+  }
+}
+
+/**
+ * Everything about one place, for the details panel on the map. Reads
+ * through publicPlacesWhere() (inside getPlaceDetailView), so a hidden place
+ * or one whose project is no longer public is "not found" here too.
+ */
+export async function loadPlaceDetailAction(
+  slug: string,
+): Promise<ServerActionResult<PlaceDetailView>> {
+  const limited = rateLimit(`place-detail:${await clientIp()}`, 120, 60_000)
+  if (!limited.ok) return { success: false, error: await tError(rateLimitError(limited)) }
+  if (typeof slug !== 'string' || slug.length === 0 || slug.length > 120) {
+    return { success: false, error: await tError({ key: 'places.notFound' }) }
+  }
+  try {
+    const detail = await getPlaceDetailView(slug)
+    if (!detail) return { success: false, error: await tError({ key: 'places.notFound' }) }
+    return { success: true, data: detail }
   } catch {
     return { success: false, error: await tError({ key: 'common.somethingWrong' }) }
   }

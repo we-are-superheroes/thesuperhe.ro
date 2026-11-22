@@ -24,6 +24,10 @@ export const CATEGORY_ICON_PATHS: Record<PlaceCategory, string> = {
   garden:
     'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
   learn: 'M4 19V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h14',
+  // A service bell.
+  services: 'M3 18h18M5 18a7 7 0 0 1 14 0M12 11V8M10 8h4M4 21h16',
+  // Three dots in a circle.
+  other: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM8 12h.01M12 12h.01M16 12h.01',
 }
 
 /** The two-leaves mark drawn on Superhero pins (100 × 100 viewBox). */
@@ -53,7 +57,7 @@ export function CategoryIcon({
 }
 
 /** Category colours for the list thumbnails — fixed, the same in every theme. */
-const THUMB_CLASS: Record<PlaceCategory, string> = {
+export const THUMB_CLASS: Record<PlaceCategory, string> = {
   farm: 'from-[#5C3600] to-[#B86E00]',
   organic: 'from-[#1A5C40] to-[#2f8f65]',
   coop: 'from-[#1B3A6B] to-[#2E5FAA]',
@@ -61,6 +65,8 @@ const THUMB_CLASS: Record<PlaceCategory, string> = {
   repair: 'from-[#7A1A1A] to-[#b94444]',
   garden: 'from-[#3b5a1a] to-[#5f8a2a]',
   learn: 'from-[#2A3A52] to-[#3D5170]',
+  services: 'from-[#44296B] to-[#7650A8]',
+  other: 'from-[#3A4352] to-[#667284]',
 }
 
 export function CategoryThumb({

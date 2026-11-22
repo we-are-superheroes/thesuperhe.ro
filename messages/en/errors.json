@@ -183,7 +183,7 @@
     "positionRequired": "Place the pin on the map.",
     "countryInvalid": "Choose a country from the list.",
     "websiteInvalid": "The website address does not look right. It should look like https://example.org.",
-    "fieldTooLong": "{field, select, name {The name} summary {The short description} description {The long description} address {The address} city {The town} website {The website address} contact {The contact} practicalNote {The “good to know” text} openingNote {The note about opening times} statusNote {The note about the closure} productName {A product name} productNote {A product note} productUnit {A product unit} proposalNote {Your note} reviewNote {The reason} other {This text}} is too long. Use {max} characters or fewer.",
+    "fieldTooLong": "{field, select, name {The name} summary {The short description} description {The long description} address {The address} city {The town} website {The website address} contact {The contact} practicalNote {The “good to know” text} openingNote {The note about opening times} statusNote {The note about the closure} productName {A product name} productNote {A product note} productUnit {A product unit} productGroup {A product heading} proposalNote {Your note} reviewNote {The reason} other {This text}} is too long. Use {max} characters or fewer.",
     "openingHoursInvalid": "The opening times are not valid. Please check them.",
     "openingHoursEmpty": "Add at least one opening time, or choose another option.",
     "openingHoursTooMany": "That is too many opening times. The limit is {max}.",
@@ -208,6 +208,7 @@
     "curatorEmailInvalid": "Write a valid e-mail address.",
     "curatorNotFound": "We could not find a member with that e-mail address.",
     "curatorAlready": "This person is already a curator or an admin.",
-    "curatorSaveFailed": "We could not change the role. Please try again."
+    "curatorSaveFailed": "We could not change the role. Please try again.",
+    "searchUnavailable": "The place search is not answering at the moment. Please try again in a minute."
   }
 }

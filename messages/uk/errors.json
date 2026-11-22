@@ -183,7 +183,7 @@
     "positionRequired": "Поставте позначку на карті.",
     "countryInvalid": "Оберіть країну зі списку.",
     "websiteInvalid": "Адреса сайту виглядає неправильно. Вона має виглядати так: https://example.org.",
-    "fieldTooLong": "{field, select, name {Назва} summary {Короткий опис} description {Повний опис} address {Адреса} city {Місто} website {Адреса сайту} contact {Контакт} practicalNote {Текст «корисно знати»} openingNote {Примітка про час роботи} statusNote {Примітка про закриття} productName {Назва товару} productNote {Примітка до товару} productUnit {Одиниця товару} proposalNote {Ваша примітка} reviewNote {Причина} other {Цей текст}} задовга. Використайте не більше {max} символів.",
+    "fieldTooLong": "{field, select, name {Назва} summary {Короткий опис} description {Довгий опис} address {Адреса} city {Місто} website {Адреса сайту} contact {Контакт} practicalNote {Текст «корисно знати»} openingNote {Примітка про час роботи} statusNote {Примітка про закриття} productName {Назва продукту} productNote {Примітка до продукту} productUnit {Одиниця продукту} productGroup {Заголовок продукту} proposalNote {Ваша примітка} reviewNote {Причина} other {Цей текст}} задовгий. Використайте не більше ніж {max} символів.",
     "openingHoursInvalid": "Час роботи недійсний. Перевірте його.",
     "openingHoursEmpty": "Додайте хоча б один час роботи або оберіть інший варіант.",
     "openingHoursTooMany": "Забагато часів роботи. Максимум — {max}.",
@@ -208,6 +208,7 @@
     "curatorEmailInvalid": "Напишіть дійсну адресу електронної пошти.",
     "curatorNotFound": "Не вдалося знайти учасника з такою адресою електронної пошти.",
     "curatorAlready": "Ця особа вже є куратором або адміністратором.",
-    "curatorSaveFailed": "Не вдалося змінити роль. Спробуйте ще раз."
+    "curatorSaveFailed": "Не вдалося змінити роль. Спробуйте ще раз.",
+    "searchUnavailable": "Пошук місць зараз не відповідає. Спробуйте ще раз за хвилину."
   }
 }

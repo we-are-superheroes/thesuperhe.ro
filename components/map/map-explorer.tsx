@@ -6,13 +6,20 @@ import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
 import { Clock, Info, Loader2, MapPin, Plus, Search, Users, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { geocodeAction, loadPlacesNearAction } from '@/app/(public)/map/actions'
+import {
+  geocodeAction,
+  loadPlaceDetailAction,
+  loadPlacesNearAction,
+} from '@/app/(public)/map/actions'
 import type { GeocodeHit } from '@/lib/geocode'
-import type { PlaceResult } from '@/lib/places'
+import type { PlaceDetailView, PlaceResult } from '@/lib/places'
 import { openState } from '@/lib/opening-hours'
 import {
   DEFAULT_RADIUS_KM,
+  MAP_PLACE_COOKIE,
   PLACE_CATEGORIES,
+  encodeMapPlaceCookie,
+  haversineKm,
   RADIUS_OPTIONS_KM,
   coarsen,
   directionsUrl,
@@ -22,6 +29,7 @@ import {
 } from '@/lib/places-shared'
 import { MapView } from '@/components/map/map-loader'
 import { useMapLabels } from '@/components/map/use-map-labels'
+import { PlacePanel } from '@/components/map/place-panel'
 import type { MapPin as MapPinData } from '@/components/map/map-canvas'
 import {
   CategoryIcon,
@@ -64,7 +72,11 @@ export interface MapExplorerProps {
     source: SourceFilter
     sort: SortOrder
     selected: string | null
+    /** Place whose details panel is open. */
+    open: string | null
   }
+  /** Details of the open place, loaded with the page so a shared link shows them at once. */
+  initialDetail: PlaceDetailView | null
   /** Where the map looks before any search. */
   fallback: { centre: LatLng; zoom: number }
   /** Signed-in curators add directly; everyone else suggests. */
@@ -93,6 +105,7 @@ export function MapExplorer({
   centreInUrl,
   places: urlPlaces,
   initial,
+  initialDetail,
   fallback,
   canAddDirectly,
   signedIn,
@@ -108,7 +121,15 @@ export function MapExplorer({
   const [categories, setCategories] = useState<PlaceCategory[]>(initial.categories)
   const [source, setSource] = useState<SourceFilter>(initial.source)
   const [sort, setSort] = useState<SortOrder>(initial.sort)
-  const [selectedSlug, setSelectedSlug] = useState<string | null>(initial.selected)
+  const [selectedSlug, setSelectedSlug] = useState<string | null>(initial.selected ?? initial.open)
+
+  // The details panel: which place is open, and the details loaded so far.
+  const [openSlug, setOpenSlug] = useState<string | null>(initial.open)
+  const [details, setDetails] = useState<Record<string, PlaceDetailView>>(() =>
+    initialDetail ? { [initialDetail.slug]: initialDetail } : {},
+  )
+  const [detailError, setDetailError] = useState<string | null>(null)
+  const [loadingDetail, startDetail] = useTransition()
 
   // "Where" field and the town lookup.
   const [whereText, setWhereText] = useState(centreLabel ?? '')
@@ -173,7 +194,10 @@ export function MapExplorer({
     return out
   }, [places, radius, source, categories, q, sort, locale, t])
 
-  const selected = visible.find((p) => p.slug === selectedSlug) ?? null
+  // While the details panel is open it replaces the small card over the map.
+  const selected = openSlug ? null : (visible.find((p) => p.slug === selectedSlug) ?? null)
+  const openDetail = openSlug ? (details[openSlug] ?? null) : null
+  const openResult = openSlug ? (places.find((p) => p.slug === openSlug) ?? null) : null
 
   const pins: MapPinData[] = useMemo(
     () =>
@@ -199,6 +223,7 @@ export function MapExplorer({
     source: SourceFilter
     sort: SortOrder
     selected: string | null
+    open: string | null
   }
   const urlState = (): UrlState => ({
     // A position from the visitor's device never goes into the URL.
@@ -210,6 +235,7 @@ export function MapExplorer({
     source,
     sort,
     selected: selectedSlug,
+    open: openSlug,
   })
   const buildUrl = (state: UrlState): string => {
     const params = new URLSearchParams()
@@ -221,7 +247,8 @@ export function MapExplorer({
     if (state.categories.length > 0) params.set('cat', state.categories.join(','))
     if (state.source !== 'all') params.set('src', state.source)
     if (state.sort !== 'near') params.set('sort', state.sort)
-    if (state.selected) params.set('p', state.selected)
+    if (state.open) params.set('d', state.open)
+    else if (state.selected) params.set('p', state.selected)
     const query = params.toString()
     return query ? `/map?${query}` : '/map'
   }
@@ -266,6 +293,30 @@ export function MapExplorer({
         ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     }
   }
+  const openPlace = (slug: string) => {
+    setSelectedSlug(slug)
+    setOpenSlug(slug)
+    setDetailError(null)
+    syncUrl({ selected: slug, open: slug })
+    if (details[slug]) return
+    startDetail(async () => {
+      const result = await loadPlaceDetailAction(slug)
+      if (result.success) setDetails((known) => ({ ...known, [slug]: result.data }))
+      else setDetailError(result.error)
+    })
+  }
+  const closePlace = () => {
+    if (!openSlug) return
+    const slug = openSlug
+    setOpenSlug(null)
+    syncUrl({ open: null })
+    // Hand focus back to the "Details" button the visitor came from.
+    requestAnimationFrame(() => {
+      listRef.current
+        ?.querySelector<HTMLElement>(`[data-open="${CSS.escape(slug)}"]`)
+        ?.focus()
+    })
+  }
   const clearFilters = () => {
     const widest = RADIUS_OPTIONS_KM[RADIUS_OPTIONS_KM.length - 1]
     setQ('')
@@ -279,12 +330,19 @@ export function MapExplorer({
     setHits(null)
     setWhereError(null)
     setWhereText(hit.name)
+    // Remember the town on this device, so the map opens here next time.
+    document.cookie = `${MAP_PLACE_COOKIE}=${encodeMapPlaceCookie(
+      { lat: hit.lat, lng: hit.lng },
+      hit.name,
+    )}; path=/; max-age=31536000; samesite=lax`
+    setOpenSlug(null)
     router.push(
       buildUrl({
         ...urlState(),
         centre: { lat: hit.lat, lng: hit.lng },
         label: hit.name,
         selected: null,
+        open: null,
       }),
     )
   }
@@ -328,10 +386,11 @@ export function MapExplorer({
         setLocal(result.data)
         setWhereText(t('page.myLocation'))
         setSelectedSlug(null)
+        setOpenSlug(null)
         window.history.replaceState(
           null,
           '',
-          buildUrl({ ...urlState(), centre: null, label: null, selected: null }),
+          buildUrl({ ...urlState(), centre: null, label: null, selected: null, open: null }),
         )
       },
       () => {
@@ -377,6 +436,9 @@ export function MapExplorer({
 
   return (
     <div
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && openSlug) closePlace()
+      }}
       className={cn(
         'flex flex-col',
         signedIn
@@ -530,7 +592,7 @@ export function MapExplorer({
       <div className="flex flex-col lg:grid lg:min-h-0 lg:flex-1 lg:grid-cols-[440px_1fr]">
         <section
           aria-label={t('page.resultsLabel')}
-          className="flex flex-col lg:min-h-0 lg:border-r lg:border-border-subtle"
+          className="relative flex flex-col lg:min-h-0 lg:border-r lg:border-border-subtle"
         >
           {centre ? (
             <>
@@ -627,6 +689,15 @@ export function MapExplorer({
                                 (hours ?? closedLine(p)) && <span>{hours ?? closedLine(p)}</span>
                               )}
                             </div>
+                            <button
+                              type="button"
+                              data-open={p.slug}
+                              onClick={() => openPlace(p.slug)}
+                              className="relative z-[1] mt-2 cursor-pointer py-0.5 text-sm font-medium text-amber-500 hover:underline hover:underline-offset-4"
+                            >
+                              {p.hasProducts ? t('card.detailsAndPrices') : t('card.details')}{' '}
+                              <span aria-hidden>→</span>
+                            </button>
                           </div>
                         </article>
                       </li>
@@ -668,6 +739,43 @@ export function MapExplorer({
           <p className="mt-auto shrink-0 border-t border-border-subtle px-4 py-3 text-xs leading-relaxed text-fg-tertiary sm:px-6">
             {t('page.footnote')}
           </p>
+
+          {openSlug && (openDetail || openResult || loadingDetail || detailError) && (
+            <PlacePanel
+              key={openSlug}
+              preview={
+                openDetail
+                  ? {
+                      slug: openDetail.slug,
+                      name: openDetail.name,
+                      summary: openDetail.summary,
+                      category: openDetail.category,
+                      city: openDetail.city,
+                      hero: !!openDetail.project,
+                    }
+                  : {
+                      slug: openSlug,
+                      name: openResult?.name ?? '',
+                      summary: openResult?.summary ?? '',
+                      category: openResult?.category ?? 'other',
+                      city: openResult?.city ?? null,
+                      hero: !!openResult?.project,
+                    }
+              }
+              detail={openDetail}
+              distanceKm={
+                openResult
+                  ? openResult.distanceKm
+                  : openDetail && centre
+                    ? haversineKm(centre, openDetail)
+                    : null
+              }
+              loading={loadingDetail}
+              error={detailError}
+              nowMs={nowMs}
+              onBack={closePlace}
+            />
+          )}
         </section>
 
         <section
@@ -679,7 +787,8 @@ export function MapExplorer({
             view={centre ? { centre, radiusKm: radius } : null}
             fallback={fallback}
             pins={pins}
-            selectedId={selected?.slug ?? null}
+            // The open place stays highlighted while its details are shown.
+            selectedId={openSlug ?? selected?.slug ?? null}
             onSelect={(slug) => select(slug, true)}
             you={local?.centre ?? null}
             onLocate={useMyLocation}
@@ -769,13 +878,17 @@ export function MapExplorer({
                 </div>
 
                 <div className="flex flex-wrap gap-2">
-                  {selected.project ? (
-                    <Link href={`/projects/${selected.project.id}`} className={cn(BTN, BTN_PRIMARY)}>
+                  {/* The main button always opens the details, whatever the kind of entry. */}
+                  <button
+                    type="button"
+                    onClick={() => openPlace(selected.slug)}
+                    className={cn(BTN, BTN_PRIMARY, 'cursor-pointer')}
+                  >
+                    {selected.hasProducts ? t('card.detailsAndPrices') : t('card.details')}
+                  </button>
+                  {selected.project && (
+                    <Link href={`/projects/${selected.project.id}`} className={cn(BTN, BTN_SECONDARY)}>
                       {t('card.viewProject')}
-                    </Link>
-                  ) : (
-                    <Link href={`/map/${selected.slug}`} className={cn(BTN, BTN_PRIMARY)}>
-                      {selected.hasProducts ? t('card.priceList') : t('card.moreDetails')}
                     </Link>
                   )}
                   <a
@@ -786,21 +899,15 @@ export function MapExplorer({
                   >
                     {t('card.directions')}
                   </a>
-                  {selected.project ? (
-                    <Link href={`/map/${selected.slug}`} className={cn(BTN, BTN_SECONDARY)}>
-                      {t('card.moreDetails')}
-                    </Link>
-                  ) : (
-                    selected.website && (
-                      <a
-                        href={selected.website}
-                        target="_blank"
-                        rel="noopener noreferrer nofollow"
-                        className={cn(BTN, BTN_SECONDARY)}
-                      >
-                        {t('card.website')}
-                      </a>
-                    )
+                  {!selected.project && selected.website && (
+                    <a
+                      href={selected.website}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      className={cn(BTN, BTN_SECONDARY)}
+                    >
+                      {t('card.website')}
+                    </a>
                   )}
                 </div>
                 <p className="mt-3 text-xs text-fg-tertiary">

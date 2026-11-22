@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { auth } from '@clerk/nextjs/server'
 import { ArrowLeft, Clock, ExternalLink, Info, MapPin, Navigation, Pencil, Phone } from 'lucide-react'
 import { db } from '@/lib/db'
-import { languageLabel } from '@/lib/locales'
+import { LOCALE_NAMES, isSupportedLocale } from '@/lib/locale-shared'
 import {
   dateForMonth,
   openState,
@@ -13,7 +13,13 @@ import {
   weeklyTable,
 } from '@/lib/opening-hours'
 import { getPlaceBySlug, placeEditMode } from '@/lib/places'
-import { directionsUrl, formatPrice, isPlaceCategory } from '@/lib/places-shared'
+import {
+  PLACE_PAGES_ENABLED,
+  directionsUrl,
+  formatPrice,
+  isPlaceCategory,
+  placeUrl,
+} from '@/lib/places-shared'
 import { SITE_URL } from '@/lib/site'
 import { cn } from '@/lib/utils'
 import {
@@ -26,6 +32,10 @@ import {
 import { PlaceMiniMap } from '@/components/map/place-mini-map'
 
 /* ================================================================
+   SWITCHED OFF FOR NOW — see PLACE_PAGES_ENABLED in lib/places-shared.ts.
+   While it is off this route only redirects to the map with the place's
+   details open in the side bar; the page below is kept for later.
+
    /map/[slug] — everything we know about one place: description,
    opening times, open status, price list, where it is.
 
@@ -63,6 +73,15 @@ export default async function PlacePage({ params }: PlacePageParams) {
   const place = await getPlaceBySlug(slug)
   if (!place) notFound()
 
+  // Place pages are switched off for now (PLACE_PAGES_ENABLED): details open
+  // in the side bar of the map. Old links, notifications and the links in
+  // this codebase that still point here land on the map with the place open.
+  if (!PLACE_PAGES_ENABLED) {
+    redirect(
+      placeUrl({ slug: place.slug, lat: place.latitude, lng: place.longitude, city: place.city }),
+    )
+  }
+
   const [t, locale, { userId }] = await Promise.all([
     getTranslations('map'),
     getLocale(),
@@ -80,7 +99,7 @@ export default async function PlacePage({ params }: PlacePageParams) {
     canEdit = !!viewer && (await placeEditMode(viewer, place.projectId)) === 'direct'
   }
 
-  const category = isPlaceCategory(place.category) ? place.category : 'nature'
+  const category = isPlaceCategory(place.category) ? place.category : 'other'
   const parsedHours = parseOpeningHours(place.openingHours)
   const hours = parsedHours.ok ? parsedHours.value : null
   const table = weeklyTable(hours)
@@ -198,9 +217,9 @@ export default async function PlacePage({ params }: PlacePageParams) {
                     <p className="whitespace-pre-line text-sm leading-relaxed text-fg-secondary">
                       {place.description}
                     </p>
-                    {place.language && place.language !== locale && languageLabel(place.language) && (
+                    {isSupportedLocale(place.language) && place.language !== locale && (
                       <p className="mt-3 text-xs text-fg-tertiary">
-                        {t('place.writtenIn', { language: languageLabel(place.language) ?? '' })}
+                        {t('place.writtenIn', { language: LOCALE_NAMES[place.language] })}
                       </p>
                     )}
                   </>

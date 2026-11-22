@@ -12,14 +12,18 @@ import {
   boundingBox,
   coarsen,
   currencyForCountry,
+  decodeMapPlaceCookie,
   diffPlaceData,
+  encodeMapPlaceCookie,
   foldText,
   formatPrice,
+  groupProducts,
   haversineKm,
   looksLikeDuplicate,
   minorToInput,
   parsePriceToMinor,
   pickPlaceFields,
+  placeUrl,
   slugifyPlace,
   validatePlaceInput,
   validateProposalNote,
@@ -27,7 +31,7 @@ import {
   type PlaceData,
 } from '@/lib/places-shared'
 import { applyProposal, isCuratorRole, publicPlacesWhere } from '@/lib/places'
-import { parsePhotonResponse } from '@/lib/geocode'
+import { parseNominatimResponse, parsePhotonResponse } from '@/lib/geocode'
 
 const FROIDEVILLE = { lat: 46.6012, lng: 6.6816 }
 const LAUSANNE = { lat: 46.5197, lng: 6.6323 }
@@ -46,7 +50,7 @@ const valid = {
   practicalNote: 'Self-service. Pay by TWINT or cash.',
   openingHours: { mode: 'weekly', periods: [{ days: [1, 2, 3, 4, 5, 6, 7], from: '07:00', to: '20:00' }] },
   products: [
-    { name: 'Eggs', unit: '6 eggs', priceMinor: 450 },
+    { name: 'Eggs', group: ' From the farm ', unit: '6 eggs', priceMinor: 450 },
     { name: 'Apple juice', note: 'from the farm next door', priceMinor: null, available: false },
   ],
 }
@@ -80,8 +84,8 @@ describe('validatePlaceInput', () => {
       periods: [{ days: [1, 2, 3, 4, 5, 6, 7], from: '07:00', to: '20:00' }],
     })
     expect(d.products).toEqual([
-      { name: 'Eggs', note: null, priceMinor: 450, unit: '6 eggs', available: true },
-      { name: 'Apple juice', note: 'from the farm next door', priceMinor: null, unit: null, available: false },
+      { name: 'Eggs', group: 'From the farm', note: null, priceMinor: 450, unit: '6 eggs', available: true },
+      { name: 'Apple juice', group: null, note: 'from the farm next door', priceMinor: null, unit: null, available: false },
     ])
   })
 
@@ -117,9 +121,17 @@ describe('validatePlaceInput', () => {
     expect(errorKey({ ...valid, currency: 'francs' })).toBe('places.currencyInvalid')
   })
 
-  it('drops an unknown language instead of failing', () => {
+  it('keeps only the languages the site is offered in', () => {
     expect(data({ language: 'xx' }).language).toBeNull()
     expect(data({ language: 'FR' }).language).toBe('fr')
+    expect(data({ language: 'uk' }).language).toBe('uk')
+    // Dutch is a valid language, but not one of the site's.
+    expect(data({ language: 'nl' }).language).toBeNull()
+  })
+
+  it('accepts the Services and Other categories', () => {
+    expect(data({ category: 'services' }).category).toBe('services')
+    expect(data({ category: 'other' }).category).toBe('other')
   })
 
   it('needs a note for hours "described in words"', () => {
@@ -265,6 +277,54 @@ describe('diffPlaceData / pickPlaceFields', () => {
       summary: 'x',
     })
     expect(pickPlaceFields('nonsense')).toEqual({})
+  })
+})
+
+describe('groupProducts', () => {
+  it('groups consecutive products under their heading, keeping the order', () => {
+    const p = (name: string, group: string | null) => ({ name, group })
+    expect(
+      groupProducts([p('Potatoes', 'Vegetables'), p('Leeks', 'Vegetables'), p('Eggs', 'From the farm'), p('Bag', null)]),
+    ).toEqual([
+      { group: 'Vegetables', items: [p('Potatoes', 'Vegetables'), p('Leeks', 'Vegetables')] },
+      { group: 'From the farm', items: [p('Eggs', 'From the farm')] },
+      { group: null, items: [p('Bag', null)] },
+    ])
+    expect(groupProducts([])).toEqual([])
+  })
+})
+
+describe('placeUrl', () => {
+  it('opens the place on the map, centred on it', () => {
+    expect(placeUrl({ slug: 'bio-du-bourg-echallens', lat: 46.641, lng: 6.633, city: 'Echallens' })).toBe(
+      '/map?c=46.641%2C6.633&l=Echallens&d=bio-du-bourg-echallens',
+    )
+    expect(placeUrl({ slug: 'x', lat: 1, lng: 2, city: null })).toBe('/map?c=1%2C2&d=x')
+  })
+})
+
+describe('map place cookie', () => {
+  it('round-trips a town', () => {
+    const value = encodeMapPlaceCookie({ lat: 46.601243, lng: 6.681636 }, 'Froideville')
+    expect(decodeMapPlaceCookie(value)).toEqual({
+      centre: { lat: 46.601243, lng: 6.681636 },
+      label: 'Froideville',
+    })
+    expect(decodeMapPlaceCookie(encodeMapPlaceCookie({ lat: 1, lng: 2 }, 'São Paulo | centre'))?.label).toBe(
+      'São Paulo | centre',
+    )
+  })
+
+  it('ignores a missing or damaged cookie', () => {
+    expect(decodeMapPlaceCookie(undefined)).toBeNull()
+    expect(decodeMapPlaceCookie('')).toBeNull()
+    expect(decodeMapPlaceCookie('nonsense')).toBeNull()
+    expect(decodeMapPlaceCookie('%E0%A4%A')).toBeNull()
+    expect(decodeMapPlaceCookie(encodeURIComponent('95,6|Nowhere'))).toBeNull()
+    expect(decodeMapPlaceCookie(encodeURIComponent('46.6,6.6'))).toEqual({
+      centre: { lat: 46.6, lng: 6.6 },
+      label: null,
+    })
   })
 })
 
@@ -474,7 +534,7 @@ describe('applyProposal', () => {
     )
     expect(tx.placeProduct.deleteMany).toHaveBeenCalledWith({ where: { placeId: 'place-1' } })
     expect(tx.placeProduct.createMany.mock.calls[0][0].data).toEqual([
-      { placeId: 'place-1', sortOrder: 0, name: 'Honey', note: null, priceMinor: 900, unit: '500 g', available: true },
+      { placeId: 'place-1', sortOrder: 0, name: 'Honey', group: null, note: null, priceMinor: 900, unit: '500 g', available: true },
     ])
   })
 
@@ -567,6 +627,34 @@ describe('parsePhotonResponse', () => {
     ])
     expect(parsePhotonResponse(null)).toEqual([])
     expect(parsePhotonResponse({ features: 'no' })).toEqual([])
+  })
+})
+
+describe('parseNominatimResponse', () => {
+  it('reads the fallback geocoder’s answers', () => {
+    expect(
+      parseNominatimResponse([
+        {
+          lat: '46.6012433',
+          lon: '6.6816355',
+          name: 'Froideville',
+          address: { village: 'Froideville', state: 'Vaud', postcode: '1055', country: 'Switzerland', country_code: 'ch' },
+        },
+        { lat: 'x', lon: 'y', name: 'Broken' },
+      ]),
+    ).toEqual([
+      {
+        name: 'Froideville',
+        context: 'Vaud, Switzerland',
+        lat: 46.601243,
+        lng: 6.681636,
+        country: 'CH',
+        city: 'Froideville',
+        postcode: '1055',
+        street: null,
+      },
+    ])
+    expect(parseNominatimResponse({ error: 'nope' })).toEqual([])
   })
 })
 

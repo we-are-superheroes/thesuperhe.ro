@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next'
 import { db } from '@/lib/db'
 import { publicPlacesWhere } from '@/lib/places'
+import { PLACE_PAGES_ENABLED } from '@/lib/places-shared'
 import { SITE_URL } from '@/lib/site'
 
 // Request-time generation — reads the DB, so it must never run at build.
@@ -19,13 +20,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       orderBy: { updatedAt: 'desc' },
       take: 5000,
     }),
-    // Permanently closed places keep their page but leave the index.
-    db.place.findMany({
-      where: { AND: [publicPlacesWhere(), { operatingStatus: { not: 'permanently_closed' } }] },
-      select: { slug: true, updatedAt: true },
-      orderBy: { updatedAt: 'desc' },
-      take: 5000,
-    }),
+    // Place pages are only listed while they exist as pages of their own
+    // (PLACE_PAGES_ENABLED); permanently closed places leave the index.
+    !PLACE_PAGES_ENABLED
+      ? []
+      : db.place.findMany({
+          where: { AND: [publicPlacesWhere(), { operatingStatus: { not: 'permanently_closed' } }] },
+          select: { slug: true, updatedAt: true },
+          orderBy: { updatedAt: 'desc' },
+          take: 5000,
+        }),
   ])
 
   return [

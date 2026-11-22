@@ -92,6 +92,14 @@
     "learn": {
       "one": "Lernen",
       "many": "Lernen"
+    },
+    "services": {
+      "one": "Service",
+      "many": "Services"
+    },
+    "other": {
+      "one": "Sonstiges",
+      "many": "Sonstiges"
     }
   },
   "card": {
@@ -105,12 +113,12 @@
     "viewProject": "Projekt ansehen",
     "directions": "Route",
     "website": "Website",
-    "moreDetails": "Mehr Details",
-    "priceList": "Preisliste",
     "fineHero": "Dieses Projekt läuft über The Superhero. Alle können mitmachen.",
     "fineIndie": "Läuft nicht über The Superhero. Von der Community eingetragen.",
     "suggestEdit": "Änderung vorschlagen",
-    "area": "Gegend um {place}"
+    "area": "Gegend um {place}",
+    "details": "Details",
+    "detailsAndPrices": "Details und Preise"
   },
   "hours": {
     "title": "Öffnungszeiten",
@@ -271,7 +279,10 @@
       "remove": "{name} entfernen",
       "removeUnnamed": "Dieses Produkt entfernen",
       "add": "Produkt hinzufügen",
-      "priceInvalid": "Schreibe den Preis als Zahl, zum Beispiel 3.50."
+      "priceInvalid": "Schreibe den Preis als Zahl, zum Beispiel 3.50.",
+      "group": "Überschrift",
+      "groupPlaceholder": "Gemüse",
+      "groupHelp": "Optional. Produkte mit derselben Überschrift werden zusammen angezeigt."
     },
     "noteLabel": "Deine Notiz",
     "noteHelpNew": "Sag uns, woher du diesen Ort kennst und warum er passt. Ein Link hilft.",
@@ -358,5 +369,24 @@
     "add": "Zur Karte hinzufügen",
     "edit": "Karteneintrag bearbeiten",
     "view": "Auf der Karte ansehen"
+  },
+  "panel": {
+    "label": "Details zum Ort",
+    "back": "Zurück zu den Ergebnissen",
+    "loading": "Details werden geladen …",
+    "loadFailed": "Wir konnten die Details nicht laden. Bitte versuche es erneut.",
+    "share": "Teilen",
+    "shareCopied": "Link kopiert",
+    "practicalTitle": "Praktische Informationen",
+    "productColumn": "Produkt",
+    "amountColumn": "Menge",
+    "priceColumn": "Preis in {currency}",
+    "pricesNote": "Preise in {currency}. Zuletzt aktualisiert am {date}.",
+    "reportPrice": "Falschen Preis melden",
+    "stepsTitle": "Schritte, die Hilfe brauchen",
+    "stepColumn": "Schritt",
+    "timeColumn": "Benötigte Zeit",
+    "stepHours": "etwa {hours} h",
+    "stepsNote": "{count, plural, =0 {Noch niemand hat mitgemacht.} one {Bisher hat # Person mitgemacht.} other {Bisher haben # Personen mitgemacht.}} Öffne das Projekt, um einen Schritt zu übernehmen."
   }
 }

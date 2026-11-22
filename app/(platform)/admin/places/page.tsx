@@ -3,7 +3,8 @@ import { notFound } from 'next/navigation'
 import { getLocale, getTranslations } from 'next-intl/server'
 import { isCurrentUserCurator } from '@/lib/auth'
 import { db } from '@/lib/db'
-import { countryLabel, languageLabel } from '@/lib/locales'
+import { countryLabel } from '@/lib/locales'
+import { LOCALE_NAMES, isSupportedLocale } from '@/lib/locale-shared'
 import { parseOpeningHours, weeklyTable } from '@/lib/opening-hours'
 import { getEditablePlace } from '@/lib/places'
 import {
@@ -89,7 +90,7 @@ export default async function ReviewPlacesPage() {
     if (!Array.isArray(value) || value.length === 0) return [t('review.products', { count: 0 })]
     return (value as PlaceProductData[]).map((product) =>
       [
-        product.name,
+        product.group ? `${product.group}: ${product.name}` : product.name,
         typeof product.priceMinor === 'number' ? formatPrice(product.priceMinor, currency, locale) : null,
         product.unit,
         product.note,
@@ -114,7 +115,7 @@ export default async function ReviewPlacesPage() {
       ]
     }
     if (field === 'country') return [countryLabel(String(value)) ?? String(value)]
-    if (field === 'language') return [languageLabel(String(value)) ?? String(value)]
+    if (field === 'language') return [isSupportedLocale(value) ? LOCALE_NAMES[value] : String(value)]
     return [String(value)]
   }
 

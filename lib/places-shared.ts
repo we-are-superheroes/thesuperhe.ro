@@ -1,5 +1,6 @@
 import type { ErrorDescriptor } from '@/lib/validation'
-import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
+import { normaliseCountry } from '@/lib/locales'
+import { isSupportedLocale } from '@/lib/locale-shared'
 import { parseOpeningHours, type OpeningHours } from '@/lib/opening-hours'
 
 /* ================================================================
@@ -22,6 +23,8 @@ export const PLACE_CATEGORIES = [
   'repair',
   'garden',
   'learn',
+  'services',
+  'other',
 ] as const
 
 export type PlaceCategory = (typeof PLACE_CATEGORIES)[number]
@@ -32,6 +35,35 @@ export function isPlaceCategory(value: unknown): value is PlaceCategory {
 
 export const OPERATING_STATUSES = ['active', 'temporarily_closed', 'permanently_closed'] as const
 export type OperatingStatus = (typeof OPERATING_STATUSES)[number]
+
+/**
+ * Cookie that remembers the last town a visitor searched for on the map, so
+ * the map opens there next time. Value: "lat,lng|name" (URL-encoded). Set in
+ * the browser when a town is chosen; a position from "use my location" is
+ * never stored.
+ */
+export const MAP_PLACE_COOKIE = 'superhero-map-place'
+
+export function encodeMapPlaceCookie(centre: LatLng, label: string): string {
+  return encodeURIComponent(`${centre.lat},${centre.lng}|${label.slice(0, 80)}`)
+}
+
+export function decodeMapPlaceCookie(
+  value: string | undefined | null,
+): { centre: LatLng; label: string | null } | null {
+  if (!value) return null
+  let raw: string
+  try {
+    raw = decodeURIComponent(value)
+  } catch {
+    return null
+  }
+  const bar = raw.indexOf('|')
+  const [lat, lng] = (bar === -1 ? raw : raw.slice(0, bar)).split(',').map(Number)
+  if (!isValidLatLng(lat, lng)) return null
+  const label = bar === -1 ? '' : raw.slice(bar + 1).trim().slice(0, 80)
+  return { centre: { lat: roundCoordinate(lat), lng: roundCoordinate(lng) }, label: label || null }
+}
 
 /** Search distances offered on the map, in km. The server always loads the largest. */
 export const RADIUS_OPTIONS_KM = [5, 10, 25] as const
@@ -125,6 +157,40 @@ export function roundCoordinate(value: number): number {
 /* ================================================================
    Slugs
    ================================================================ */
+
+/**
+ * Whether each place has a page of its own at /map/[slug]. Off for now:
+ * details open in the side bar of /map instead, and /map/[slug] redirects
+ * there. The page itself is kept (app/(public)/map/[slug]/page.tsx) so it
+ * can be switched back on here.
+ */
+export const PLACE_PAGES_ENABLED = false
+
+/** The address that opens a place's details in the side bar of the map. */
+export function placeUrl(place: {
+  slug: string
+  lat: number
+  lng: number
+  city: string | null
+}): string {
+  const params = new URLSearchParams({ c: `${place.lat},${place.lng}` })
+  if (place.city) params.set('l', place.city)
+  params.set('d', place.slug)
+  return `/map?${params.toString()}`
+}
+
+/** Groups consecutive products that share a heading, keeping their order. */
+export function groupProducts<T extends { group: string | null }>(
+  products: T[],
+): Array<{ group: string | null; items: T[] }> {
+  const out: Array<{ group: string | null; items: T[] }> = []
+  for (const product of products) {
+    const last = out[out.length - 1]
+    if (last && last.group === product.group) last.items.push(product)
+    else out.push({ group: product.group, items: [product] })
+  }
+  return out
+}
 
 /** Path segments under /map that are pages, not places. */
 export const RESERVED_PLACE_SLUGS = new Set(['suggest', 'new', 'edit'])
@@ -244,6 +310,8 @@ export function formatPrice(minor: number, currency: string, locale: string): st
 
 export interface PlaceProductData {
   name: string
+  /** Heading the product is listed under ("Vegetables"); null = no heading. */
+  group: string | null
   note: string | null
   priceMinor: number | null
   unit: string | null
@@ -287,6 +355,7 @@ export const PLACE_LIMITS = {
   products: 60,
   productName: 80,
   productNote: 160,
+  productGroup: 60,
   productUnit: 24,
   proposalNote: 1000,
 } as const
@@ -368,16 +437,10 @@ export function validatePlaceInput(
     }
   }
 
-  // The language is only a hint for readers: an unknown code is dropped.
-  let language: string | null = null
-  const languageRaw = text(raw.language)
-  if (languageRaw) {
-    try {
-      language = normaliseLanguage(languageRaw)
-    } catch {
-      language = null
-    }
-  }
+  // The language the texts are written in: one of the site's own languages.
+  // It is only a hint for readers, so anything else is simply dropped.
+  const languageRaw = text(raw.language)?.toLowerCase() ?? null
+  const language = isSupportedLocale(languageRaw) ? languageRaw : null
 
   const website = normaliseWebsite(text(raw.website))
   if (website === undefined) return fail({ key: 'places.websiteInvalid' })
@@ -445,7 +508,9 @@ export function validatePlaceInput(
       }
       priceMinor = item.priceMinor
     }
-    products.push({ name: productName, note, priceMinor, unit, available: item.available !== false })
+    const group = text(item.group)
+    if (group && group.length > PLACE_LIMITS.productGroup) return fail(tooLong('productGroup', PLACE_LIMITS.productGroup))
+    products.push({ name: productName, group, note, priceMinor, unit, available: item.available !== false })
   }
 
   return {

@@ -13,7 +13,7 @@ import {
   submitPlaceAction,
 } from '@/app/(platform)/map/actions'
 import type { GeocodeHit } from '@/lib/geocode'
-import { LANGUAGES } from '@/lib/locales'
+import { LOCALE_NAMES, SUPPORTED_LOCALES } from '@/lib/locale-shared'
 import { dateForMonth, type OpeningHours, type Weekday } from '@/lib/opening-hours'
 import {
   COMMON_CURRENCIES,
@@ -97,6 +97,7 @@ interface PeriodRow {
 interface ProductRow {
   key: string
   name: string
+  group: string
   price: string
   unit: string
   note: string
@@ -180,6 +181,7 @@ export function PlaceForm({
     initial.products.map((product) => ({
       key: newKey(),
       name: product.name,
+      group: product.group ?? '',
       price: product.priceMinor !== null ? minorToInput(product.priceMinor, initial.currency) : '',
       unit: product.unit ?? '',
       note: product.note ?? '',
@@ -251,7 +253,7 @@ export function PlaceForm({
     const productData = []
     for (const row of products) {
       // A fully empty row is just an unused line.
-      if (!row.name.trim() && !row.price.trim() && !row.unit.trim() && !row.note.trim()) continue
+      if (!row.name.trim() && !row.price.trim() && !row.unit.trim() && !row.note.trim() && !row.group.trim()) continue
       let priceMinor: number | null = null
       if (row.price.trim()) {
         priceMinor = parsePriceToMinor(row.price, currency)
@@ -262,6 +264,7 @@ export function PlaceForm({
       }
       productData.push({
         name: row.name,
+        group: row.group,
         note: row.note,
         unit: row.unit,
         priceMinor,
@@ -482,9 +485,10 @@ export function PlaceForm({
             <Field label={t('fields.language')} htmlFor="pl-language">
               <SelectBox id="pl-language" value={language} onChange={(e) => setLanguage(e.target.value)}>
                 <option value="">{t('form.languageAny')}</option>
-                {LANGUAGES.map((option) => (
-                  <option key={option.code} value={option.code}>
-                    {option.label}
+                {/* The languages the site itself is offered in. */}
+                {SUPPORTED_LOCALES.map((code) => (
+                  <option key={code} value={code}>
+                    {LOCALE_NAMES[code]}
                   </option>
                 ))}
               </SelectBox>
@@ -944,13 +948,25 @@ export function PlaceForm({
               >
                 <Trash2 className="size-4" />
               </button>
-              <label className="col-span-2 flex flex-col gap-1 text-xs font-medium text-fg-secondary md:col-span-3">
+              <label className="col-span-2 flex flex-col gap-1 text-xs font-medium text-fg-secondary md:col-span-2">
                 {t('form.product.note')}
                 <input
                   type="text"
                   value={row.note}
                   onChange={(e) => updateProduct(row.key, { note: e.target.value })}
                   maxLength={PLACE_LIMITS.productNote}
+                  className={INPUT}
+                />
+              </label>
+              <label className="col-span-2 flex flex-col gap-1 text-xs font-medium text-fg-secondary md:col-span-2">
+                {t('form.product.group')}
+                <input
+                  type="text"
+                  value={row.group}
+                  onChange={(e) => updateProduct(row.key, { group: e.target.value })}
+                  placeholder={t('form.product.groupPlaceholder')}
+                  maxLength={PLACE_LIMITS.productGroup}
+                  title={t('form.product.groupHelp')}
                   className={INPUT}
                 />
               </label>
@@ -971,7 +987,16 @@ export function PlaceForm({
               onClick={() =>
                 setProducts((rows) => [
                   ...rows,
-                  { key: newKey(), name: '', price: '', unit: '', note: '', available: true },
+                  // A new row continues under the heading of the one above it.
+                  {
+                    key: newKey(),
+                    name: '',
+                    group: rows[rows.length - 1]?.group ?? '',
+                    price: '',
+                    unit: '',
+                    note: '',
+                    available: true,
+                  },
                 ])
               }
               className={cn(BTN, BTN_SECONDARY, 'self-start')}

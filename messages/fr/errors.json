@@ -183,7 +183,7 @@
     "positionRequired": "Place le repère sur la carte.",
     "countryInvalid": "Choisis un pays dans la liste.",
     "websiteInvalid": "L’adresse du site web ne semble pas correcte. Elle doit ressembler à https://example.org.",
-    "fieldTooLong": "{field, select, name {Le nom} summary {La courte description} description {La description longue} address {L’adresse} city {La ville} website {L’adresse du site web} contact {Le contact} practicalNote {Le texte « bon à savoir »} openingNote {La note sur les horaires} statusNote {La note sur la fermeture} productName {Un nom de produit} productNote {Une note de produit} productUnit {Une unité de produit} proposalNote {Ta note} reviewNote {Le motif} other {Ce texte}} est trop long. Utilise {max} caractères au maximum.",
+    "fieldTooLong": "{field, select, name {Le nom} summary {La courte description} description {La description longue} address {L’adresse} city {La ville} website {L’adresse du site web} contact {Le contact} practicalNote {Le texte « bon à savoir »} openingNote {La note sur les horaires d’ouverture} statusNote {La note sur la fermeture} productName {Un nom de produit} productNote {Une note de produit} productUnit {Une unité de produit} productGroup {Un titre de produit} proposalNote {Ta note} reviewNote {La raison} other {Ce texte}} est trop long. Utilise {max} caractères ou moins.",
     "openingHoursInvalid": "Les horaires d’ouverture ne sont pas valides. Vérifie-les.",
     "openingHoursEmpty": "Ajoute au moins un horaire d’ouverture, ou choisis une autre option.",
     "openingHoursTooMany": "Ça fait trop d’horaires d’ouverture. La limite est de {max}.",
@@ -208,6 +208,7 @@
     "curatorEmailInvalid": "Écris une adresse e-mail valide.",
     "curatorNotFound": "Nous n’avons pas trouvé de membre avec cette adresse e-mail.",
     "curatorAlready": "Cette personne est déjà curateur ou admin.",
-    "curatorSaveFailed": "Nous n’avons pas pu changer le rôle. Réessaie."
+    "curatorSaveFailed": "Nous n’avons pas pu changer le rôle. Réessaie.",
+    "searchUnavailable": "La recherche de lieux ne répond pas pour le moment. Réessaie dans une minute."
   }
 }

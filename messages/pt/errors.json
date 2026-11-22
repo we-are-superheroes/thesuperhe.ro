@@ -183,7 +183,7 @@
     "positionRequired": "Coloque o pino no mapa.",
     "countryInvalid": "Escolha um país da lista.",
     "websiteInvalid": "O endereço do site não parece correto. Deve ser algo como https://example.org.",
-    "fieldTooLong": "{field, select, name {O nome} summary {A descrição curta} description {A descrição longa} address {O endereço} city {A cidade} website {O endereço do site} contact {O contacto} practicalNote {O texto “bom saber”} openingNote {A nota sobre os horários} statusNote {A nota sobre o encerramento} productName {O nome de um produto} productNote {A nota de um produto} productUnit {A unidade de um produto} proposalNote {A sua nota} reviewNote {O motivo} other {Este texto}} é longo demais. Use {max} caracteres ou menos.",
+    "fieldTooLong": "{field, select, name {O nome} summary {A descrição curta} description {A descrição longa} address {O endereço} city {A localidade} website {O endereço do site} contact {O contacto} practicalNote {O texto “bom saber”} openingNote {A nota sobre os horários de abertura} statusNote {A nota sobre o encerramento} productName {Um nome de produto} productNote {Uma nota de produto} productUnit {Uma unidade de produto} productGroup {Um título de produto} proposalNote {A sua nota} reviewNote {O motivo} other {Este texto}} é longo demais. Use {max} caracteres ou menos.",
     "openingHoursInvalid": "Os horários não são válidos. Verifique-os.",
     "openingHoursEmpty": "Adicione pelo menos um horário, ou escolha outra opção.",
     "openingHoursTooMany": "São horários a mais. O limite é {max}.",
@@ -208,6 +208,7 @@
     "curatorEmailInvalid": "Escreva um endereço de e-mail válido.",
     "curatorNotFound": "Não conseguimos encontrar um membro com esse endereço de e-mail.",
     "curatorAlready": "Esta pessoa já é curador ou admin.",
-    "curatorSaveFailed": "Não conseguimos mudar o papel. Tente de novo."
+    "curatorSaveFailed": "Não conseguimos mudar o papel. Tente de novo.",
+    "searchUnavailable": "A pesquisa de locais não está a responder de momento. Tente de novo dentro de um minuto."
   }
 }

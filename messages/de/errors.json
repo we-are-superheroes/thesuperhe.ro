@@ -183,7 +183,7 @@
     "positionRequired": "Setz die Markierung auf die Karte.",
     "countryInvalid": "Wähle ein Land aus der Liste.",
     "websiteInvalid": "Die Webadresse sieht nicht richtig aus. Sie sollte so aussehen: https://example.org.",
-    "fieldTooLong": "{field, select, name {Der Name} summary {Die kurze Beschreibung} description {Die lange Beschreibung} address {Die Adresse} city {Der Ort} website {Die Webadresse} contact {Der Kontakt} practicalNote {Der Text „Gut zu wissen“} openingNote {Der Hinweis zu den Öffnungszeiten} statusNote {Der Hinweis zur Schließung} productName {Ein Produktname} productNote {Ein Produkthinweis} productUnit {Eine Produkteinheit} proposalNote {Dein Hinweis} reviewNote {Der Grund} other {Dieser Text}} ist zu lang. Nutze höchstens {max} Zeichen.",
+    "fieldTooLong": "{field, select, name {Der Name} summary {Die Kurzbeschreibung} description {Die ausführliche Beschreibung} address {Die Adresse} city {Der Ort} website {Die Webadresse} contact {Der Kontakt} practicalNote {Der „Gut zu wissen“-Text} openingNote {Der Hinweis zu den Öffnungszeiten} statusNote {Der Hinweis zur Schließung} productName {Ein Produktname} productNote {Eine Produktnotiz} productUnit {Eine Produkteinheit} productGroup {Eine Produktüberschrift} proposalNote {Deine Notiz} reviewNote {Der Grund} other {Dieser Text}} ist zu lang. Nutze höchstens {max} Zeichen.",
     "openingHoursInvalid": "Die Öffnungszeiten sind nicht gültig. Bitte prüfe sie.",
     "openingHoursEmpty": "Füge mindestens eine Öffnungszeit hinzu oder wähle eine andere Option.",
     "openingHoursTooMany": "Das sind zu viele Öffnungszeiten. Das Limit liegt bei {max}.",
@@ -208,6 +208,7 @@
     "curatorEmailInvalid": "Schreib eine gültige E-Mail-Adresse.",
     "curatorNotFound": "Wir konnten kein Mitglied mit dieser E-Mail-Adresse finden.",
     "curatorAlready": "Diese Person ist bereits Kurator oder Admin.",
-    "curatorSaveFailed": "Wir konnten die Rolle nicht ändern. Bitte versuch es noch einmal."
+    "curatorSaveFailed": "Wir konnten die Rolle nicht ändern. Bitte versuch es noch einmal.",
+    "searchUnavailable": "Die Ortssuche antwortet gerade nicht. Versuch es in einer Minute noch einmal."
   }
 }

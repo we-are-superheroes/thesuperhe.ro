@@ -183,7 +183,7 @@
     "positionRequired": "Coloca el marcador en el mapa.",
     "countryInvalid": "Elige un país de la lista.",
     "websiteInvalid": "La dirección del sitio web no parece correcta. Debería ser como https://example.org.",
-    "fieldTooLong": "{field, select, name {El nombre} summary {La descripción breve} description {La descripción larga} address {La dirección} city {La localidad} website {La dirección del sitio web} contact {El contacto} practicalNote {El texto de «información útil»} openingNote {La nota sobre los horarios} statusNote {La nota sobre el cierre} productName {Un nombre de producto} productNote {Una nota de producto} productUnit {Una unidad de producto} proposalNote {Tu nota} reviewNote {El motivo} other {Este texto}} es demasiado largo. Usa {max} caracteres o menos.",
+    "fieldTooLong": "{field, select, name {El nombre} summary {La descripción breve} description {La descripción larga} address {La dirección} city {La localidad} website {La dirección web} contact {El contacto} practicalNote {El texto «bueno saberlo»} openingNote {La nota sobre los horarios de apertura} statusNote {La nota sobre el cierre} productName {Un nombre de producto} productNote {Una nota de producto} productUnit {Una unidad de producto} productGroup {Un encabezado de producto} proposalNote {Tu nota} reviewNote {El motivo} other {Este texto}} es demasiado largo. Usa {max} caracteres o menos.",
     "openingHoursInvalid": "Los horarios no son válidos. Revísalos.",
     "openingHoursEmpty": "Añade al menos un horario, o elige otra opción.",
     "openingHoursTooMany": "Hay demasiados horarios. El límite es {max}.",
@@ -208,6 +208,7 @@
     "curatorEmailInvalid": "Escribe una dirección de correo electrónico válida.",
     "curatorNotFound": "No pudimos encontrar a ningún miembro con esa dirección de correo electrónico.",
     "curatorAlready": "Esta persona ya es curador o administrador.",
-    "curatorSaveFailed": "No pudimos cambiar el rol. Inténtalo de nuevo."
+    "curatorSaveFailed": "No pudimos cambiar el rol. Inténtalo de nuevo.",
+    "searchUnavailable": "La búsqueda de lugares no responde en este momento. Inténtalo de nuevo en un minuto."
   }
 }

@@ -468,6 +468,8 @@ model PlaceProduct {
   sortOrder Int    @default(0) @map("sort_order")
 
   name       String
+  // Optional heading the product is listed under ("Vegetables").
+  group      String? @map("group_name")
   note       String?
   // Whole minor units of the place's currency; null = no price given.
   priceMinor Int?    @map("price_minor")

@@ -131,7 +131,7 @@ function toResult(row: ResultRow, centre: LatLng): PlaceResult {
     slug: row.slug,
     name: row.name,
     summary: row.summary,
-    category: isPlaceCategory(row.category) ? row.category : 'nature',
+    category: isPlaceCategory(row.category) ? row.category : 'other',
     lat: row.latitude,
     lng: row.longitude,
     approximate: row.locationApproximate,
@@ -200,7 +200,7 @@ const DETAIL_SELECT = {
   updatedAt: true,
   projectId: true,
   products: {
-    select: { id: true, name: true, note: true, priceMinor: true, unit: true, available: true, updatedAt: true },
+    select: { id: true, name: true, group: true, note: true, priceMinor: true, unit: true, available: true, updatedAt: true },
     orderBy: { sortOrder: 'asc' },
   },
   project: {
@@ -208,6 +208,13 @@ const DETAIL_SELECT = {
       id: true,
       title: true,
       _count: RESULT_SELECT.project.select._count,
+      // The open steps themselves, for the "steps that need help" list.
+      steps: {
+        where: { helpWanted: true, status: { not: 'completed' } },
+        select: { title: true, estimatedHrs: true },
+        orderBy: { order: 'asc' },
+        take: 12,
+      },
     },
   },
 } satisfies Prisma.PlaceSelect
@@ -220,6 +227,102 @@ export async function getPlaceBySlug(slug: string): Promise<PlaceDetail | null> 
     where: { AND: [publicPlacesWhere(), { slug }] },
     select: DETAIL_SELECT,
   })
+}
+
+/** Everything the details panel shows for one place — plain data, safe to send to the browser. */
+export interface PlaceDetailView {
+  id: string
+  slug: string
+  name: string
+  summary: string
+  description: string | null
+  language: string | null
+  category: PlaceCategory
+  lat: number
+  lng: number
+  approximate: boolean
+  address: string | null
+  city: string | null
+  website: string | null
+  contact: string | null
+  practicalNote: string | null
+  openingHours: OpeningHours | null
+  openingNote: string | null
+  timezone: string | null
+  operatingStatus: OperatingStatus
+  statusNote: string | null
+  reopensOn: string | null
+  currency: string
+  products: Array<{
+    id: string
+    name: string
+    group: string | null
+    note: string | null
+    priceMinor: number | null
+    unit: string | null
+    available: boolean
+  }>
+  /** ISO date-times. */
+  pricesUpdatedAt: string | null
+  lastVerifiedAt: string | null
+  project: {
+    id: string
+    joined: number
+    helpSteps: Array<{ title: string; estimatedHrs: number | null }>
+  } | null
+}
+
+/** The place for the details panel; null when missing, hidden or no longer public. */
+export async function getPlaceDetailView(slug: string): Promise<PlaceDetailView | null> {
+  const row = await getPlaceBySlug(slug)
+  if (!row) return null
+  const pricesUpdated = row.products.reduce<Date | null>(
+    (latest, product) => (!latest || product.updatedAt > latest ? product.updatedAt : latest),
+    null,
+  )
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: row.name,
+    summary: row.summary,
+    description: row.description,
+    language: row.language,
+    category: isPlaceCategory(row.category) ? row.category : 'other',
+    lat: row.latitude,
+    lng: row.longitude,
+    approximate: row.locationApproximate,
+    // An approximate place has no public street address.
+    address: row.locationApproximate ? null : row.address,
+    city: row.city,
+    website: row.website,
+    contact: row.contact,
+    practicalNote: row.practicalNote,
+    openingHours: storedHours(row.openingHours),
+    openingNote: row.openingNote,
+    timezone: row.timezone,
+    operatingStatus: row.operatingStatus,
+    statusNote: row.statusNote,
+    reopensOn: isoDate(row.reopensOn),
+    currency: row.currency ?? 'EUR',
+    products: row.products.map((product) => ({
+      id: product.id,
+      name: product.name,
+      group: product.group,
+      note: product.note,
+      priceMinor: product.priceMinor,
+      unit: product.unit,
+      available: product.available,
+    })),
+    pricesUpdatedAt: pricesUpdated?.toISOString() ?? null,
+    lastVerifiedAt: row.lastVerifiedAt?.toISOString() ?? null,
+    project: row.project
+      ? {
+          id: row.project.id,
+          joined: row.project._count.contributions,
+          helpSteps: row.project.steps,
+        }
+      : null,
+  }
 }
 
 /* ================================================================
@@ -252,7 +355,7 @@ const DATA_SELECT = {
   reopensOn: true,
   currency: true,
   products: {
-    select: { name: true, note: true, priceMinor: true, unit: true, available: true },
+    select: { name: true, group: true, note: true, priceMinor: true, unit: true, available: true },
     orderBy: { sortOrder: 'asc' },
   },
 } satisfies Prisma.PlaceSelect
@@ -273,7 +376,7 @@ function rowToData(row: DataRow): PlaceData {
     summary: row.summary,
     description: row.description,
     language: row.language,
-    category: isPlaceCategory(row.category) ? row.category : 'nature',
+    category: isPlaceCategory(row.category) ? row.category : 'other',
     latitude: row.latitude,
     longitude: row.longitude,
     locationApproximate: row.locationApproximate,
@@ -411,6 +514,7 @@ function productRows(placeId: string, data: PlaceData) {
     placeId,
     sortOrder: index,
     name: product.name,
+    group: product.group,
     note: product.note,
     priceMinor: product.priceMinor,
     unit: product.unit,

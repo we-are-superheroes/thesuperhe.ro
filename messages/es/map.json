@@ -92,6 +92,14 @@
     "learn": {
       "one": "Aprendizaje",
       "many": "Aprendizaje"
+    },
+    "services": {
+      "one": "Servicio",
+      "many": "Servicios"
+    },
+    "other": {
+      "one": "Otro",
+      "many": "Otros"
     }
   },
   "card": {
@@ -105,12 +113,12 @@
     "viewProject": "Ver proyecto",
     "directions": "Cómo llegar",
     "website": "Sitio web",
-    "moreDetails": "Más detalles",
-    "priceList": "Lista de precios",
     "fineHero": "Este proyecto funciona en The Superhero. Cualquiera puede unirse.",
     "fineIndie": "No gestionado a través de The Superhero. Publicado por la comunidad.",
     "suggestEdit": "Sugerir un cambio",
-    "area": "Zona alrededor de {place}"
+    "area": "Zona alrededor de {place}",
+    "details": "Detalles",
+    "detailsAndPrices": "Detalles y precios"
   },
   "hours": {
     "title": "Horario de apertura",
@@ -271,7 +279,10 @@
       "remove": "Quitar {name}",
       "removeUnnamed": "Quitar este producto",
       "add": "Añadir un producto",
-      "priceInvalid": "Escribe el precio como número, por ejemplo 3.50."
+      "priceInvalid": "Escribe el precio como número, por ejemplo 3.50.",
+      "group": "Encabezado",
+      "groupPlaceholder": "Verduras",
+      "groupHelp": "Opcional. Los productos con el mismo encabezado se muestran juntos."
     },
     "noteLabel": "Tu nota",
     "noteHelpNew": "Cuéntanos cómo conoces este lugar y por qué encaja. Un enlace ayuda.",
@@ -358,5 +369,24 @@
     "add": "Añadir al mapa",
     "edit": "Editar entrada del mapa",
     "view": "Ver en el mapa"
+  },
+  "panel": {
+    "label": "Detalles del lugar",
+    "back": "Volver a los resultados",
+    "loading": "Cargando los detalles…",
+    "loadFailed": "No pudimos cargar los detalles. Inténtalo de nuevo.",
+    "share": "Compartir",
+    "shareCopied": "Enlace copiado",
+    "practicalTitle": "Información práctica",
+    "productColumn": "Producto",
+    "amountColumn": "Cantidad",
+    "priceColumn": "Precio en {currency}",
+    "pricesNote": "Precios en {currency}. Última actualización el {date}.",
+    "reportPrice": "Informar de un precio incorrecto",
+    "stepsTitle": "Pasos que necesitan ayuda",
+    "stepColumn": "Paso",
+    "timeColumn": "Tiempo necesario",
+    "stepHours": "unas {hours} h",
+    "stepsNote": "{count, plural, =0 {Aún no se ha unido nadie.} one {# persona se ha unido hasta ahora.} other {# personas se han unido hasta ahora.}} Abre el proyecto para encargarte de un paso."
   }
 }

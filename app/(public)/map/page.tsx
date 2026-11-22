@@ -3,10 +3,18 @@ import { getTranslations } from 'next-intl/server'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { FALLBACK_MAP_VIEW, roughLocation } from '@/lib/geo-headers'
-import { findPlacesNear, isCuratorRole, type PlaceResult } from '@/lib/places'
+import { cookies } from 'next/headers'
+import {
+  findPlacesNear,
+  getPlaceDetailView,
+  isCuratorRole,
+  type PlaceResult,
+} from '@/lib/places'
 import {
   DEFAULT_RADIUS_KM,
+  MAP_PLACE_COOKIE,
   MAX_RADIUS_KM,
+  decodeMapPlaceCookie,
   RADIUS_OPTIONS_KM,
   isPlaceCategory,
   isValidLatLng,
@@ -71,9 +79,18 @@ export default async function MapPage({
 
   const urlCentre = parseCentre(first(params.c))
   const urlLabel = first(params.l)?.trim().slice(0, 80) || null
-  const rough = urlCentre ? null : await roughLocation()
-  const centre = urlCentre ?? rough?.centre ?? null
-  const centreLabel = urlCentre ? urlLabel : (rough?.label ?? null)
+  // Without a centre in the URL: the last town this visitor searched for
+  // (remembered in a cookie on their device), else the host's rough guess.
+  const remembered = urlCentre
+    ? null
+    : decodeMapPlaceCookie((await cookies()).get(MAP_PLACE_COOKIE)?.value)
+  const rough = urlCentre || remembered ? null : await roughLocation()
+  const centre = urlCentre ?? remembered?.centre ?? rough?.centre ?? null
+  const centreLabel = urlCentre ? urlLabel : (remembered?.label ?? rough?.label ?? null)
+
+  // A shared link to one place (?d=slug): load its details with the page.
+  const openParam = first(params.d)?.slice(0, 120) || null
+  const initialDetail = openParam ? await getPlaceDetailView(openParam) : null
 
   const [places, viewer] = await Promise.all([
     centre ? findPlacesNear(centre, MAX_RADIUS_KM) : Promise.resolve<PlaceResult[]>([]),
@@ -105,7 +122,9 @@ export default async function MapPage({
         source,
         sort,
         selected: selected && places.some((p) => p.slug === selected) ? selected : null,
+        open: initialDetail?.slug ?? null,
       }}
+      initialDetail={initialDetail}
       fallback={FALLBACK_MAP_VIEW}
       canAddDirectly={isCuratorRole(viewer?.role)}
       signedIn={!!userId}

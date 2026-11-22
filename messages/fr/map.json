@@ -92,6 +92,14 @@
     "learn": {
       "one": "Apprentissage",
       "many": "Apprentissage"
+    },
+    "services": {
+      "one": "Service",
+      "many": "Services"
+    },
+    "other": {
+      "one": "Autre",
+      "many": "Autres"
     }
   },
   "card": {
@@ -105,12 +113,12 @@
     "viewProject": "Voir le projet",
     "directions": "Itinéraire",
     "website": "Site web",
-    "moreDetails": "Plus de détails",
-    "priceList": "Tarifs",
     "fineHero": "Ce projet fonctionne sur The Superhero. Tout le monde peut le rejoindre.",
     "fineIndie": "Pas géré via The Superhero. Référencé par la communauté.",
     "suggestEdit": "Suggérer une modification",
-    "area": "Zone autour de {place}"
+    "area": "Zone autour de {place}",
+    "details": "Détails",
+    "detailsAndPrices": "Détails et prix"
   },
   "hours": {
     "title": "Horaires d'ouverture",
@@ -271,7 +279,10 @@
       "remove": "Supprimer {name}",
       "removeUnnamed": "Supprimer ce produit",
       "add": "Ajouter un produit",
-      "priceInvalid": "Écris le prix sous forme de nombre, par exemple 3,50."
+      "priceInvalid": "Écris le prix sous forme de nombre, par exemple 3,50.",
+      "group": "Titre",
+      "groupPlaceholder": "Légumes",
+      "groupHelp": "Facultatif. Les produits qui ont le même titre sont affichés ensemble."
     },
     "noteLabel": "Ta note",
     "noteHelpNew": "Dis-nous comment tu connais ce lieu et pourquoi il convient. Un lien aide.",
@@ -358,5 +369,24 @@
     "add": "Ajouter à la carte",
     "edit": "Modifier l'entrée sur la carte",
     "view": "Voir sur la carte"
+  },
+  "panel": {
+    "label": "Détails du lieu",
+    "back": "Retour aux résultats",
+    "loading": "Chargement des détails…",
+    "loadFailed": "Nous n'avons pas pu charger les détails. Réessaie.",
+    "share": "Partager",
+    "shareCopied": "Lien copié",
+    "practicalTitle": "Informations pratiques",
+    "productColumn": "Produit",
+    "amountColumn": "Quantité",
+    "priceColumn": "Prix en {currency}",
+    "pricesNote": "Prix en {currency}. Dernière mise à jour le {date}.",
+    "reportPrice": "Signaler un prix erroné",
+    "stepsTitle": "Étapes qui ont besoin d'aide",
+    "stepColumn": "Étape",
+    "timeColumn": "Temps nécessaire",
+    "stepHours": "environ {hours} h",
+    "stepsNote": "{count, plural, =0 {Personne n'a encore rejoint.} one {# personne a rejoint jusqu'ici.} other {# personnes ont rejoint jusqu'ici.}} Ouvre le projet pour prendre une étape."
   }
 }

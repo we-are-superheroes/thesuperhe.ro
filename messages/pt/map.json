@@ -92,6 +92,14 @@
     "learn": {
       "one": "Aprender",
       "many": "Aprender"
+    },
+    "services": {
+      "one": "Serviço",
+      "many": "Serviços"
+    },
+    "other": {
+      "one": "Outro",
+      "many": "Outros"
     }
   },
   "card": {
@@ -105,12 +113,12 @@
     "viewProject": "Ver projeto",
     "directions": "Como chegar",
     "website": "Site",
-    "moreDetails": "Mais detalhes",
-    "priceList": "Lista de preços",
     "fineHero": "Este projeto funciona no The Superhero. Qualquer pessoa pode juntar-se.",
     "fineIndie": "Não é gerido através do The Superhero. Listado pela comunidade.",
     "suggestEdit": "Sugerir uma alteração",
-    "area": "Zona à volta de {place}"
+    "area": "Zona à volta de {place}",
+    "details": "Detalhes",
+    "detailsAndPrices": "Detalhes e preços"
   },
   "hours": {
     "title": "Horário de abertura",
@@ -271,7 +279,10 @@
       "remove": "Remover {name}",
       "removeUnnamed": "Remover este produto",
       "add": "Adicionar um produto",
-      "priceInvalid": "Escreva o preço como número, por exemplo 3,50."
+      "priceInvalid": "Escreva o preço como número, por exemplo 3,50.",
+      "group": "Título",
+      "groupPlaceholder": "Legumes",
+      "groupHelp": "Opcional. Os produtos com o mesmo título aparecem juntos."
     },
     "noteLabel": "A sua nota",
     "noteHelpNew": "Diga-nos como conhece este local e porque é que se enquadra. Um link ajuda.",
@@ -358,5 +369,24 @@
     "add": "Adicionar ao mapa",
     "edit": "Editar entrada no mapa",
     "view": "Ver no mapa"
+  },
+  "panel": {
+    "label": "Detalhes do local",
+    "back": "Voltar aos resultados",
+    "loading": "A carregar os detalhes…",
+    "loadFailed": "Não foi possível carregar os detalhes. Tente novamente.",
+    "share": "Partilhar",
+    "shareCopied": "Ligação copiada",
+    "practicalTitle": "Informações práticas",
+    "productColumn": "Produto",
+    "amountColumn": "Quantidade",
+    "priceColumn": "Preço em {currency}",
+    "pricesNote": "Preços em {currency}. Última atualização em {date}.",
+    "reportPrice": "Comunicar um preço errado",
+    "stepsTitle": "Etapas que precisam de ajuda",
+    "stepColumn": "Etapa",
+    "timeColumn": "Tempo necessário",
+    "stepHours": "cerca de {hours} h",
+    "stepsNote": "{count, plural, =0 {Ainda ninguém se juntou.} one {# pessoa já se juntou.} other {# pessoas já se juntaram.}} Abra o projeto para assumir uma etapa."
   }
 }
