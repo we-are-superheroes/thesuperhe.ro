@@ -136,6 +136,7 @@ describe('catalog coverage', () => {
       blueprintTitle: 'B',
       skillName: 'K',
       orgName: 'O',
+      placeName: 'L',
       count: 2,
     }
     for (const key of Object.keys(en.titles) as NotificationMessageKey[]) {

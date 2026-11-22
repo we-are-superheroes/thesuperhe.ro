@@ -2,6 +2,7 @@
   "nav": {
     "browseProjects": "Projekte durchstöbern",
     "browseBlueprints": "Blaupausen durchstöbern",
+    "map": "Karte",
     "howItWorks": "So funktioniert’s",
     "dashboard": "Dashboard",
     "signIn": "Anmelden",
@@ -151,6 +152,7 @@
     "copyright": "© {year} The Superhero · Zusammenarbeit für Klima & Nachhaltigkeit",
     "projects": "Projekte",
     "blueprints": "Blaupausen",
+    "map": "Karte",
     "privacy": "Datenschutz",
     "terms": "Nutzungsbedingungen",
     "createdIn": "Entstanden in der Schweiz",

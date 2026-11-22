@@ -24,6 +24,8 @@ export function PlatformShell({
   notificationsBadge,
   messagesBadge,
   isAdmin = false,
+  isCurator = false,
+  placeReviewBadge = 0,
 }: {
   children: React.ReactNode
   userName: string | null
@@ -34,6 +36,8 @@ export function PlatformShell({
   notificationsBadge: number
   messagesBadge: number
   isAdmin?: boolean
+  isCurator?: boolean
+  placeReviewBadge?: number
 }) {
   const [drawerOpen, setDrawerOpen] = useState(false)
   const pathname = usePathname()
@@ -109,6 +113,8 @@ export function PlatformShell({
         notificationsBadge={notificationsBadge}
         messagesBadge={messagesBadge}
         isAdmin={isAdmin}
+        isCurator={isCurator}
+        placeReviewBadge={placeReviewBadge}
         drawerOpen={drawerOpen}
         onDrawerClose={() => setDrawerOpen(false)}
       />

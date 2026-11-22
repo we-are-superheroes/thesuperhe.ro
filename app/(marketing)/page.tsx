@@ -151,6 +151,9 @@ async function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
           <Link href="/blueprints" className="transition-colors duration-fast hover:text-fg-primary">
             {t('nav.browseBlueprints')}
           </Link>
+          <Link href="/map" className="transition-colors duration-fast hover:text-fg-primary">
+            {t('nav.map')}
+          </Link>
           <Link href="#how" className="transition-colors duration-fast hover:text-fg-primary">
             {t('nav.howItWorks')}
           </Link>
@@ -829,6 +832,9 @@ async function Footer() {
           </Link>
           <Link href="/blueprints" className="hover:text-fg-primary">
             {t('footer.blueprints')}
+          </Link>
+          <Link href="/map" className="hover:text-fg-primary">
+            {t('footer.map')}
           </Link>
           <Link href="/privacy" className="hover:text-fg-primary">
             {t('footer.privacy')}

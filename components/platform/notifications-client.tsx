@@ -19,6 +19,7 @@ import {
   ArrowRight,
   Sparkles,
   MailOpen,
+  MapPin,
 } from 'lucide-react'
 import {
   markNotificationReadAction,
@@ -51,6 +52,8 @@ export type NotificationType =
   | 'invite_received'
   | 'project_milestone'
   | 'welcome'
+  | 'place_proposal_approved'
+  | 'place_proposal_rejected'
 
 export interface NotificationItem {
   id: string
@@ -386,6 +389,8 @@ const ICON_CLASS: Record<NotificationType, string> = {
   invite_received: 'bg-amber-500/[0.16] text-amber-500',
   project_milestone: 'bg-green-300/[0.15] text-green-300',
   welcome: 'bg-amber-500/[0.16] text-amber-500',
+  place_proposal_approved: 'bg-green-500/[0.16] text-green-300',
+  place_proposal_rejected: 'bg-bg-surface-3 text-fg-secondary',
 }
 
 const ICON_FOR: Record<NotificationType, React.ComponentType<{ className?: string }>> = {
@@ -408,6 +413,8 @@ const ICON_FOR: Record<NotificationType, React.ComponentType<{ className?: strin
   invite_received: MailOpen,
   project_milestone: Star,
   welcome: Sparkles,
+  place_proposal_approved: MapPin,
+  place_proposal_rejected: MapPin,
 }
 
 function NotificationRow({
@@ -563,6 +570,19 @@ function NotificationRow({
               </Link>
             )
           })()}
+
+        {/* An approved map suggestion links to the place it created or changed. */}
+        {item.type === 'place_proposal_approved' &&
+          typeof item.data?.placeSlug === 'string' && (
+            <Link
+              href={`/map/${item.data.placeSlug}`}
+              onClick={(e) => e.stopPropagation()}
+              className="inline-flex w-fit items-center gap-1 text-xs font-medium text-amber-500 hover:underline"
+            >
+              {t('ui.links.openPlace')}
+              <ArrowRight className="size-3" strokeWidth={2.5} />
+            </Link>
+          )}
 
         {/* Generic deep link for non-actionable rows when a project is attached */}
         {item.type !== 'message_received' && !ACTIONABLE_TYPES.has(item.type) && item.project && (

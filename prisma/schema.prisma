@@ -17,7 +17,35 @@ datasource db {
 
 enum UserRole {
   member
+  // Adds and edits map places directly and reviews proposals. Granted and
+  // revoked by an admin from /admin/curators. Admins count as curators.
+  curator
   admin
+}
+
+// Whether a map place itself is open. `active` shows nothing in the UI.
+enum PlaceOperatingStatus {
+  active
+  temporarily_closed
+  permanently_closed
+}
+
+// Moderation switch, separate from whether the place is open.
+enum PlaceListingStatus {
+  published
+  hidden // kill switch: gone from the map, the list and its own page
+}
+
+enum PlaceProposalKind {
+  new
+  edit
+  remove // "should not be listed" (duplicate, wrong, against the guidelines)
+}
+
+enum PlaceProposalStatus {
+  pending
+  approved
+  rejected
 }
 
 // Two org types, one product surface. Type is a billing/vetting attribute
@@ -136,6 +164,9 @@ model User {
   messagesSent    Message[]          @relation("MessageSender")
   projectUpdates  ProjectUpdate[]    @relation("UpdateAuthor")
   orgInvitesCreated OrganisationInvite[] @relation("InvitesCreated")
+  placesCreated     Place[]         @relation("PlaceCreator")
+  placeProposals    PlaceProposal[] @relation("PlaceProposer")
+  placeReviews      PlaceProposal[] @relation("PlaceReviewer")
 
   @@map("users")
 }
@@ -357,11 +388,130 @@ model Project {
   contributions Contribution[]
   notifications Notification[]
   updates       ProjectUpdate[]
+  // The project's pin on the public map, once its lead opts in.
+  place         Place?
 
   @@index([country])
   @@index([language])
   @@index([orgId, visibility])
   @@map("projects")
+}
+
+// =============================================================================
+// MAP PLACES
+// One row per pin on /map: an independent place (farm shop, toad patrol) or a
+// Superhero project whose lead opted in (projectId set). Every read path must
+// use publicPlacesWhere() from lib/places.ts — it hides unpublished rows and
+// places whose project is no longer public.
+// =============================================================================
+
+model Place {
+  id          String  @id @default(uuid())
+  slug        String  @unique
+  projectId   String? @unique @map("project_id")
+  createdById String? @map("created_by_id")
+
+  name        String
+  summary     String
+  description String?
+  // ISO 639-1 language the texts are written in.
+  language    String?
+  // Key from PLACE_CATEGORIES (lib/places-shared.ts).
+  category    String
+
+  latitude            Float
+  longitude           Float
+  // Activities without a fixed public address: shown as an area.
+  locationApproximate Boolean @default(false) @map("location_approximate")
+  address             String?
+  city                String?
+  country             String?
+  // IANA zone derived from the coordinates on save; needed for "open now".
+  timezone            String?
+
+  website       String?
+  contact       String?
+  practicalNote String? @map("practical_note")
+
+  // Versioned JSON validated in lib/opening-hours.ts.
+  openingHours Json?   @map("opening_hours")
+  openingNote  String? @map("opening_note")
+
+  operatingStatus PlaceOperatingStatus @default(active) @map("operating_status")
+  statusNote      String?   @map("status_note")
+  reopensOn       DateTime? @map("reopens_on") @db.Date
+  closedAt        DateTime? @map("closed_at")
+
+  // ISO 4217 code for the price list; one currency per place.
+  currency      String?
+  coverImageUrl String? @map("cover_image_url")
+
+  listingStatus  PlaceListingStatus @default(published) @map("listing_status")
+  lastVerifiedAt DateTime? @map("last_verified_at")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  createdBy User?    @relation("PlaceCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  products  PlaceProduct[]
+  proposals PlaceProposal[]
+
+  @@index([latitude, longitude])
+  @@index([country])
+  @@map("places")
+}
+
+// The price list of a place. Replaced as a whole by applyProposal().
+model PlaceProduct {
+  id        String @id @default(uuid())
+  placeId   String @map("place_id")
+  sortOrder Int    @default(0) @map("sort_order")
+
+  name       String
+  // Optional heading the product is listed under ("Vegetables").
+  group      String? @map("group_name")
+  note       String?
+  // Whole minor units of the place's currency; null = no price given.
+  priceMinor Int?    @map("price_minor")
+  unit       String?
+  available  Boolean @default(true)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@index([placeId, sortOrder])
+  @@map("place_products")
+}
+
+// Review queue and change history in one. A member's proposal waits as
+// `pending`; a curator's or project lead's direct change is written already
+// `approved`. Only applyProposal() (lib/places.ts) changes a place.
+model PlaceProposal {
+  id      String  @id @default(uuid())
+  kind    PlaceProposalKind
+  placeId String? @map("place_id")
+  // new: every field · edit: only the changed fields · remove: empty.
+  payload Json
+  note    String?
+  // The place's updatedAt when proposed — warns the reviewer about conflicts.
+  baseUpdatedAt DateTime? @map("base_updated_at")
+
+  status     PlaceProposalStatus @default(pending)
+  proposerId String?   @map("proposer_id")
+  reviewerId String?   @map("reviewer_id")
+  reviewedAt DateTime? @map("reviewed_at")
+  reviewNote String?   @map("review_note")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  place    Place? @relation(fields: [placeId], references: [id], onDelete: SetNull)
+  proposer User?  @relation("PlaceProposer", fields: [proposerId], references: [id], onDelete: SetNull)
+  reviewer User?  @relation("PlaceReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([placeId])
+  @@index([proposerId, status])
+  @@map("place_proposals")
 }
 
 // Lead-authored updates shown in the project's Updates tab. Public posts are
@@ -522,6 +672,9 @@ enum NotificationType {
   invite_received
   project_milestone
   welcome
+  // Map places: sent to the proposer once a curator has decided.
+  place_proposal_approved
+  place_proposal_rejected
 }
 
 model Notification {

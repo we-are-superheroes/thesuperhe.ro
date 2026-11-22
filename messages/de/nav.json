@@ -22,7 +22,10 @@
       "blueprints": "Blaupausen",
       "organisations": "Organisationen",
       "profile": "Profil",
-      "broadcast": "Rundnachricht senden"
+      "broadcast": "Rundnachricht senden",
+      "map": "Karte",
+      "reviewPlaces": "Orte prüfen",
+      "curators": "Kuratoren"
     },
     "accountMenuAriaLabel": "Kontomenü",
     "signOut": "Abmelden",
@@ -43,6 +46,7 @@
   "publicNav": {
     "browseProjects": "Projekte durchstöbern",
     "browseBlueprints": "Blaupausen durchstöbern",
+    "map": "Karte",
     "howItWorks": "So funktioniert’s",
     "signIn": "Anmelden",
     "getStarted": "Loslegen"

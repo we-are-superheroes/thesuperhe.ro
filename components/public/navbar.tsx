@@ -37,6 +37,9 @@ export async function PublicNavbar() {
           >
             {t('publicNav.browseBlueprints')}
           </Link>
+          <Link href="/map" className="transition-colors duration-fast hover:text-fg-primary">
+            {t('publicNav.map')}
+          </Link>
           <Link
             href="/#how"
             className="transition-colors duration-fast hover:text-fg-primary"

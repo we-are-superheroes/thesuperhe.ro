@@ -1,0 +1,392 @@
+{
+  "page": {
+    "heading": "Karte nachhaltiger Orte und Projekte in deiner Nähe",
+    "searchLabel": "Orte und Projekte suchen",
+    "searchPlaceholder": "Hofläden, Repair-Cafés, Krötenrettung …",
+    "whereLabel": "Ort oder Postleitzahl",
+    "wherePlaceholder": "Ort oder Postleitzahl",
+    "whereSearch": "Diesen Ort suchen",
+    "whereSearching": "Suche läuft …",
+    "whereNoMatch": "Diesen Ort haben wir nicht gefunden. Prüfe die Schreibweise oder versuche einen Ort in der Nähe.",
+    "whereChoose": "Welchen meinst du?",
+    "distanceLabel": "Entfernung",
+    "distanceOption": "{km} km",
+    "showLabel": "Anzeigen",
+    "source": {
+      "all": "Alles",
+      "hero": "Superhero-Projekte",
+      "indie": "Unabhängige Orte"
+    },
+    "suggest": "Ort vorschlagen",
+    "categoriesLabel": "Kategorien",
+    "allCategories": "Alle Kategorien",
+    "resultsLabel": "Ergebnisse",
+    "count": "{count, plural, =0 {Keine Ergebnisse} one {<strong># Ergebnis</strong>} other {<strong># Ergebnisse</strong>}} im Umkreis von {km} km um {place}",
+    "countNearYou": "{count, plural, =0 {Keine Ergebnisse} one {<strong># Ergebnis</strong>} other {<strong># Ergebnisse</strong>}} im Umkreis von {km} km um dich",
+    "sortLabel": "Sortieren",
+    "sort": {
+      "near": "Nächste zuerst",
+      "name": "Name A–Z"
+    },
+    "empty": {
+      "title": "Hier gibt es noch nichts",
+      "body": "Keine Orte oder Projekte passen. Versuche eine größere Entfernung oder weniger Filter, oder füge einen hinzu, den du kennst.",
+      "clear": "Filter zurücksetzen"
+    },
+    "start": {
+      "title": "Wo suchst du?",
+      "body": "Gib oben einen Ort oder eine Postleitzahl ein oder nutze deinen Standort, um nachhaltige Orte und Projekte in der Nähe zu sehen."
+    },
+    "footnote": "Unabhängige Orte werden von der Community vorgeschlagen und von unseren Kuratoren geprüft, bevor sie erscheinen.",
+    "mapLabel": "Karte",
+    "zoomIn": "Vergrößern",
+    "zoomOut": "Verkleinern",
+    "useMyLocation": "Meinen Standort verwenden",
+    "myLocation": "Mein Standort",
+    "locating": "Standort wird ermittelt …",
+    "locationFailed": "Wir konnten deinen Standort nicht ermitteln. Gib stattdessen einen Ort oder eine Postleitzahl ein.",
+    "loadFailed": "Wir konnten die Orte nicht laden. Bitte versuche es erneut.",
+    "mapUnavailable": "Die Karte konnte auf diesem Gerät nicht angezeigt werden. Du kannst trotzdem die Liste nutzen.",
+    "legend": {
+      "label": "Kartenlegende",
+      "hero": "Superhero-Projekt",
+      "indie": "Unabhängiger Ort"
+    },
+    "add": "Ort hinzufügen",
+    "gestureTouch": "Nutze zwei Finger, um die Karte zu bewegen",
+    "gestureCtrl": "Halte Strg gedrückt und scrolle, um die Karte zu zoomen",
+    "gestureCmd": "Halte ⌘ gedrückt und scrolle, um die Karte zu zoomen"
+  },
+  "badges": {
+    "hero": "Superhero-Projekt",
+    "indie": "Unabhängig",
+    "temporarilyClosed": "Vorübergehend geschlossen",
+    "permanentlyClosed": "Dauerhaft geschlossen",
+    "approximate": "Ungefährer Standort"
+  },
+  "categories": {
+    "farm": {
+      "one": "Hofladen",
+      "many": "Hofläden"
+    },
+    "organic": {
+      "one": "Bio- und Unverpacktladen",
+      "many": "Bio und unverpackt"
+    },
+    "coop": {
+      "one": "Genossenschaft",
+      "many": "Genossenschaften"
+    },
+    "nature": {
+      "one": "Natur und Tierwelt",
+      "many": "Natur und Tierwelt"
+    },
+    "repair": {
+      "one": "Reparieren und Wiederverwenden",
+      "many": "Reparieren und Wiederverwenden"
+    },
+    "garden": {
+      "one": "Gemeinschaftsgarten",
+      "many": "Gemeinschaftsgärten"
+    },
+    "learn": {
+      "one": "Lernen",
+      "many": "Lernen"
+    },
+    "services": {
+      "one": "Service",
+      "many": "Services"
+    },
+    "other": {
+      "one": "Sonstiges",
+      "many": "Sonstiges"
+    }
+  },
+  "card": {
+    "distance": "{km} km",
+    "kmAway": "{km} km entfernt",
+    "stepsNeedHelp": "{count, plural, one {# Schritt braucht Hilfe} other {# Schritte brauchen Hilfe}}",
+    "joined": "{count, plural, one {# Person ist dabei} other {# Personen sind dabei}}",
+    "pinHero": "{name}, Superhero-Projekt",
+    "pinIndie": "{name}, unabhängiger Ort",
+    "closeDetails": "Details schließen",
+    "viewProject": "Projekt ansehen",
+    "directions": "Route",
+    "website": "Website",
+    "fineHero": "Dieses Projekt läuft über The Superhero. Alle können mitmachen.",
+    "fineIndie": "Läuft nicht über The Superhero. Von der Community eingetragen.",
+    "suggestEdit": "Änderung vorschlagen",
+    "area": "Gegend um {place}",
+    "details": "Details",
+    "detailsAndPrices": "Details und Preise"
+  },
+  "hours": {
+    "title": "Öffnungszeiten",
+    "always": "24 Stunden geöffnet",
+    "openNow": "Jetzt geöffnet",
+    "openUntil": "Jetzt geöffnet · schließt um {time}",
+    "closedNow": "Jetzt geschlossen",
+    "opensToday": "Geschlossen · öffnet heute um {time}",
+    "opensTomorrow": "Geschlossen · öffnet morgen um {time}",
+    "opensDay": "Geschlossen · öffnet {day} um {time}",
+    "closedDay": "Geschlossen",
+    "range": "{from} bis {to}",
+    "onlyMonths": "nur im {months}",
+    "reopens": "Öffnet wieder am {date}",
+    "localTime": "Die Zeiten gelten in der Ortszeit."
+  },
+  "place": {
+    "back": "Zurück zur Karte",
+    "showOnMap": "Auf der Karte zeigen",
+    "aboutTitle": "Über diesen Ort",
+    "practicalTitle": "Gut zu wissen",
+    "contactTitle": "Kontakt",
+    "addressTitle": "Wo",
+    "approximateNote": "Diese Aktivität hat keine feste Adresse. Der Pin zeigt die Gegend.",
+    "priceListTitle": "Preisliste",
+    "priceListUpdated": "Preise zuletzt aktualisiert am {date}",
+    "priceListHint": "Preise können sich ändern. Prüfe sie vor Ort.",
+    "unavailable": "Zurzeit nicht verfügbar",
+    "closedPermanentlyTitle": "Dieser Ort ist dauerhaft geschlossen",
+    "closedPermanentlyBody": "Er wird nicht mehr auf der Karte gezeigt. Diese Seite bleibt, damit alte Links noch Sinn ergeben.",
+    "closedTemporarilyTitle": "Vorübergehend geschlossen",
+    "projectTitle": "Ein Superhero-Projekt",
+    "projectBody": "Dieser Ort wird als Projekt auf The Superhero betrieben. Alle können mitmachen und helfen.",
+    "indieNote": "Dieser Ort läuft nicht über The Superhero. Er wurde von der Community hinzugefügt und von einer Kuratorin oder einem Kurator geprüft.",
+    "edit": "Diesen Ort bearbeiten",
+    "suggestEdit": "Änderung vorschlagen",
+    "lastChecked": "Angaben zuletzt geprüft am {date}",
+    "writtenIn": "Dieser Text ist auf {language} geschrieben."
+  },
+  "fields": {
+    "name": "Name",
+    "summary": "Kurze Beschreibung",
+    "description": "Mehr über diesen Ort",
+    "language": "Sprache des Textes",
+    "category": "Kategorie",
+    "position": "Position auf der Karte",
+    "locationApproximate": "Keine feste Adresse",
+    "address": "Adresse",
+    "city": "Ort",
+    "country": "Land",
+    "website": "Website",
+    "contact": "Kontakt",
+    "practicalNote": "Gut zu wissen",
+    "openingHours": "Öffnungszeiten",
+    "openingNote": "Hinweis zu den Öffnungszeiten",
+    "operatingStatus": "Geöffnet-Status",
+    "statusNote": "Hinweis zur Schließung",
+    "reopensOn": "Öffnet wieder am",
+    "currency": "Währung",
+    "products": "Preisliste"
+  },
+  "status": {
+    "active": "Normal geöffnet",
+    "temporarily_closed": "Vorübergehend geschlossen",
+    "permanently_closed": "Dauerhaft geschlossen"
+  },
+  "form": {
+    "titleAdd": "Ort hinzufügen",
+    "titleSuggest": "Ort vorschlagen",
+    "titleEdit": "{name} bearbeiten",
+    "titleSuggestEdit": "Eine Änderung an {name} vorschlagen",
+    "titleProject": "{name} auf der Karte zeigen",
+    "titleReview": "Prüfen und freigeben",
+    "introSuggest": "Eine kuratierende Person prüft jeden Vorschlag, bevor er auf der Karte erscheint. Wir sagen dir Bescheid, sobald entschieden ist.",
+    "introDirect": "Deine Änderungen erscheinen auf der Karte, sobald du speicherst.",
+    "introProject": "Setze dein Projekt auf die öffentliche Karte, damit Menschen in der Nähe es finden. Du kannst den Eintrag jederzeit ändern oder entfernen.",
+    "introReview": "Korrigiere, was nötig ist, und gib dann frei. Der Ort erscheint sofort auf der Karte, und die Person, die ihn vorgeschlagen hat, wird benachrichtigt.",
+    "sections": {
+      "basics": {
+        "eyebrow": "Grundlagen",
+        "title": "Worum geht es?"
+      },
+      "where": {
+        "eyebrow": "Wo",
+        "title": "Wo ist es?",
+        "desc": "Suche nach der Adresse, klicke dann auf die Karte oder ziehe den Pin an die genaue Stelle."
+      },
+      "hours": {
+        "eyebrow": "Wann",
+        "title": "Wann ist geöffnet?"
+      },
+      "status": {
+        "eyebrow": "Status",
+        "title": "Ist es gerade geöffnet?"
+      },
+      "practical": {
+        "eyebrow": "Details",
+        "title": "Gut zu wissen"
+      },
+      "prices": {
+        "eyebrow": "Preise",
+        "title": "Preisliste",
+        "desc": "Optional. Liste auf, was der Ort anbietet, mit Preisen, falls du sie kennst."
+      },
+      "note": {
+        "eyebrow": "Für die kuratierende Person",
+        "title": "Warum passt dieser Ort?"
+      }
+    },
+    "namePlaceholder": "La Cabane à Légumes",
+    "summaryHelp": "Ein oder zwei Sätze. Das wird in der Liste und auf der Karte angezeigt.",
+    "descriptionHelp": "Optional. Alles Weitere, was Besuchende wissen möchten.",
+    "categoryPlaceholder": "Kategorie wählen",
+    "languageAny": "Nicht festgelegt",
+    "findAddressLabel": "Adresse finden",
+    "findAddressPlaceholder": "Straße, Ort oder Postleitzahl",
+    "find": "Finden",
+    "finding": "Suche …",
+    "findNoMatch": "Kein Treffer. Du kannst trotzdem auf die Karte klicken, um den Pin zu setzen.",
+    "pinHint": "Klicke auf die Karte oder ziehe den Pin an die genaue Stelle.",
+    "pinMissing": "Der Pin ist noch nicht gesetzt.",
+    "pinPlaced": "Pin gesetzt bei {lat}, {lng}",
+    "mapUnavailable": "Die Karte konnte auf diesem Gerät nicht angezeigt werden, deshalb kann der Pin hier nicht gesetzt werden.",
+    "addressHelp": "Straße und Nummer. Leer lassen, wenn es keine gibt.",
+    "approximateLabel": "Diese Aktivität hat keine feste Adresse",
+    "approximateHelp": "Die Karte zeigt nur die Gegend, keine genaue Adresse.",
+    "duplicateWarning": "Ein Ort ganz in der Nähe dieser Markierung ist schon auf der Karte: {name}. Bitte prüfe, ob es nicht derselbe Ort ist.",
+    "hoursMode": {
+      "none": "Nicht bekannt",
+      "always": "24 Stunden geöffnet",
+      "weekly": "Wöchentliche Öffnungszeiten",
+      "text": "In Worten beschrieben"
+    },
+    "periodLabel": "Öffnungszeit {number}",
+    "daysLabel": "Tage",
+    "fromLabel": "Von",
+    "toLabel": "Bis",
+    "overnightHint": "Endet am nächsten Tag.",
+    "seasonalLabel": "Nur in bestimmten Monaten",
+    "monthsLabel": "Monate",
+    "addPeriod": "Weitere Öffnungszeit hinzufügen",
+    "removePeriod": "Diese Öffnungszeit entfernen",
+    "openingNoteHelp": "Zum Beispiel: „Erster Samstag im Monat“ oder „An Feiertagen geschlossen“.",
+    "openingNoteRequiredHelp": "Beschreibe, wann der Ort geöffnet ist.",
+    "statusNoteHelp": "Zum Beispiel: „Im Winter geschlossen“.",
+    "reopensOnHelp": "Optional. Leer lassen, wenn du es nicht weißt.",
+    "practicalNotePlaceholder": "Selbstbedienung. Zahlung mit Karte oder bar.",
+    "websitePlaceholder": "https://",
+    "contactHelp": "Eine Telefonnummer oder E-Mail-Adresse, die der Ort öffentlich macht.",
+    "currencyHelp": "Alle Preise dieses Ortes nutzen diese Währung.",
+    "product": {
+      "name": "Produkt",
+      "price": "Preis",
+      "unit": "Einheit",
+      "unitPlaceholder": "pro kg",
+      "note": "Notiz",
+      "available": "Verfügbar",
+      "remove": "{name} entfernen",
+      "removeUnnamed": "Dieses Produkt entfernen",
+      "add": "Produkt hinzufügen",
+      "priceInvalid": "Schreibe den Preis als Zahl, zum Beispiel 3.50.",
+      "group": "Überschrift",
+      "groupPlaceholder": "Gemüse",
+      "groupHelp": "Optional. Produkte mit derselben Überschrift werden zusammen angezeigt."
+    },
+    "noteLabel": "Deine Notiz",
+    "noteHelpNew": "Sag uns, woher du diesen Ort kennst und warum er passt. Ein Link hilft.",
+    "noteHelpEdit": "Sag uns, was sich geändert hat und woher du es weißt.",
+    "submitPublish": "Veröffentlichen",
+    "submitSave": "Änderungen speichern",
+    "submitSuggest": "Vorschlag senden",
+    "submitApprove": "Genehmigen und veröffentlichen",
+    "submitting": "Speichern…",
+    "cancel": "Abbrechen",
+    "unchanged": "Du hast noch nichts geändert.",
+    "pending": {
+      "title": "Danke. Dein Vorschlag liegt bei unseren Kuratoren.",
+      "body": "Wir prüfen jeden Vorschlag von Hand. Du bekommst eine Nachricht, sobald entschieden ist.",
+      "another": "Weiteren Ort vorschlagen",
+      "back": "Zurück zur Karte"
+    },
+    "remove": {
+      "open": "Von der Karte entfernen",
+      "openSuggest": "Entfernen dieses Ortes vorschlagen",
+      "title": "Diesen Ort von der Karte entfernen?",
+      "titleSuggest": "Entfernen dieses Ortes vorschlagen",
+      "body": "Nutze das für ein Duplikat, einen Fehler oder einen Ort, der nicht auf die Karte gehört. Wenn der Ort geschlossen hat, ändere stattdessen seinen Öffnungsstatus.",
+      "reasonLabel": "Grund",
+      "confirm": "Entfernen",
+      "confirmSuggest": "Anfrage senden",
+      "pending": "Danke. Ein Kurator sieht sich deine Anfrage an."
+    }
+  },
+  "review": {
+    "title": "Orte prüfen",
+    "subtitle": "Vorschläge von Mitgliedern warten hier, bis ein Kurator entscheidet.",
+    "waiting": "{count, plural, =0 {Nichts wartet} one {# Vorschlag wartet} other {# Vorschläge warten}}",
+    "empty": "Nichts zu prüfen. Über jeden Vorschlag wurde entschieden.",
+    "kindNew": "Neuer Ort",
+    "kindEdit": "Änderung an {name}",
+    "kindRemove": "{name} entfernen",
+    "placeGone": "ein Ort, der nicht mehr existiert",
+    "by": "Vorgeschlagen von {name} am {date}",
+    "byUnknown": "Vorgeschlagen am {date}",
+    "noteLabel": "Hinweis des Mitglieds",
+    "conflict": "Dieser Ort wurde seit dem Vorschlag geändert. Prüfe die aktuellen Werte genau.",
+    "fieldColumn": "Feld",
+    "nowColumn": "Jetzt",
+    "suggestedColumn": "Vorgeschlagen",
+    "empty_value": "Leer",
+    "yes": "Ja",
+    "no": "Nein",
+    "products": "{count, plural, =0 {Keine Produkte} one {# Produkt} other {# Produkte}}",
+    "viewPlace": "Aktuelle Seite ansehen",
+    "approve": "Annehmen",
+    "approving": "Wird angenommen …",
+    "editFirst": "Vor dem Annehmen bearbeiten",
+    "reject": "Ablehnen",
+    "rejectTitle": "Diesen Vorschlag ablehnen?",
+    "rejectReasonLabel": "Grund",
+    "rejectReasonHelp": "Das Mitglied sieht dies, damit es die Entscheidung versteht.",
+    "rejectConfirm": "Vorschlag ablehnen",
+    "cancel": "Abbrechen",
+    "approved": "Angenommen. Der Ort ist jetzt auf der Karte.",
+    "removed": "Angenommen. Der Ort wurde von der Karte entfernt.",
+    "rejected": "Abgelehnt. Das Mitglied wurde über den Grund informiert."
+  },
+  "curators": {
+    "title": "Kuratoren",
+    "subtitle": "Kuratoren fügen Orte auf der Karte direkt hinzu, bearbeiten sie und prüfen Vorschläge anderer Mitglieder. Admins sind immer Kuratoren.",
+    "emailLabel": "E-Mail-Adresse des Mitglieds",
+    "emailPlaceholder": "name@example.org",
+    "add": "Zum Kurator machen",
+    "adding": "Wird gespeichert …",
+    "added": "{name} ist jetzt Kurator.",
+    "listTitle": "Aktuelle Kuratoren",
+    "empty": "Es gibt noch keine Kuratoren. Admins prüfen Vorschläge, bis du eine Person hinzufügst.",
+    "remove": "Entfernen",
+    "removeAria": "{name} als Kurator entfernen",
+    "removed": "{name} ist nicht mehr Kurator."
+  },
+  "projectCard": {
+    "eyebrow": "Karte",
+    "title": "Dieses Projekt auf der Karte zeigen",
+    "body": "Hat dein Projekt begonnen? Setze es auf die öffentliche Karte, damit Menschen in der Nähe es finden und mitmachen können.",
+    "bodyOnMap": "Dieses Projekt ist auf der öffentlichen Karte.",
+    "membersOnly": "Nur öffentliche Projekte können auf der Karte gezeigt werden.",
+    "add": "Zur Karte hinzufügen",
+    "edit": "Karteneintrag bearbeiten",
+    "view": "Auf der Karte ansehen"
+  },
+  "panel": {
+    "label": "Details zum Ort",
+    "back": "Zurück zu den Ergebnissen",
+    "loading": "Details werden geladen …",
+    "loadFailed": "Wir konnten die Details nicht laden. Bitte versuche es erneut.",
+    "share": "Teilen",
+    "shareCopied": "Link kopiert",
+    "practicalTitle": "Praktische Informationen",
+    "productColumn": "Produkt",
+    "amountColumn": "Menge",
+    "priceColumn": "Preis in {currency}",
+    "pricesNote": "Preise in {currency}. Zuletzt aktualisiert am {date}.",
+    "reportPrice": "Falschen Preis melden",
+    "stepsTitle": "Schritte, die Hilfe brauchen",
+    "stepColumn": "Schritt",
+    "timeColumn": "Benötigte Zeit",
+    "stepHours": "etwa {hours} h",
+    "stepsNote": "{count, plural, =0 {Noch niemand hat mitgemacht.} one {Bisher hat # Person mitgemacht.} other {Bisher haben # Personen mitgemacht.}} Öffne das Projekt, um einen Schritt zu übernehmen."
+  }
+}

@@ -1,12 +1,14 @@
 import type { MetadataRoute } from 'next'
 import { db } from '@/lib/db'
+import { publicPlacesWhere } from '@/lib/places'
+import { PLACE_PAGES_ENABLED } from '@/lib/places-shared'
 import { SITE_URL } from '@/lib/site'
 
 // Request-time generation — reads the DB, so it must never run at build.
 export const dynamic = 'force-dynamic'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [projects, blueprints] = await Promise.all([
+  const [projects, blueprints, places] = await Promise.all([
     db.project.findMany({
       where: { visibility: 'public' },
       select: { id: true, updatedAt: true },
@@ -18,12 +20,23 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       orderBy: { updatedAt: 'desc' },
       take: 5000,
     }),
+    // Place pages are only listed while they exist as pages of their own
+    // (PLACE_PAGES_ENABLED); permanently closed places leave the index.
+    !PLACE_PAGES_ENABLED
+      ? []
+      : db.place.findMany({
+          where: { AND: [publicPlacesWhere(), { operatingStatus: { not: 'permanently_closed' } }] },
+          select: { slug: true, updatedAt: true },
+          orderBy: { updatedAt: 'desc' },
+          take: 5000,
+        }),
   ])
 
   return [
     { url: SITE_URL, changeFrequency: 'weekly', priority: 1 },
     { url: `${SITE_URL}/projects`, changeFrequency: 'daily', priority: 0.9 },
     { url: `${SITE_URL}/blueprints`, changeFrequency: 'daily', priority: 0.8 },
+    { url: `${SITE_URL}/map`, changeFrequency: 'daily', priority: 0.8 },
     { url: `${SITE_URL}/privacy`, changeFrequency: 'yearly', priority: 0.2 },
     { url: `${SITE_URL}/terms`, changeFrequency: 'yearly', priority: 0.2 },
     ...projects.map((p) => ({
@@ -35,6 +48,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...blueprints.map((b) => ({
       url: `${SITE_URL}/blueprints/${b.id}`,
       lastModified: b.updatedAt,
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    })),
+    ...places.map((p) => ({
+      url: `${SITE_URL}/map/${p.slug}`,
+      lastModified: p.updatedAt,
       changeFrequency: 'weekly' as const,
       priority: 0.6,
     })),

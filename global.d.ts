@@ -16,6 +16,7 @@ import type myProjects from './messages/en/myProjects.json'
 import type skillMatches from './messages/en/skillMatches.json'
 import type messagesInbox from './messages/en/messagesInbox.json'
 import type admin from './messages/en/admin.json'
+import type map from './messages/en/map.json'
 import type meta from './messages/en/meta.json'
 import type marketing from './messages/en/marketing.json'
 import type auth from './messages/en/auth.json'
@@ -51,6 +52,7 @@ declare module 'next-intl' {
       skillMatches: typeof skillMatches
       messagesInbox: typeof messagesInbox
       admin: typeof admin
+      map: typeof map
       meta: typeof meta
       marketing: typeof marketing
       auth: typeof auth

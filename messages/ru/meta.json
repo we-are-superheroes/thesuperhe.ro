@@ -37,5 +37,23 @@
   "terms": {
     "title": "Условия использования — The Superhero",
     "description": "Правила использования The Superhero: ваш аккаунт, ваш контент, допустимое использование и за что мы отвечаем (а за что нет)."
+  },
+  "map": {
+    "title": "Карта экологичных мест — The Superhero",
+    "description": "Найдите фермерские магазины, органические и кооперативные лавки, ремонт-кафе, общественные сады и климатические проекты рядом с вами — на карте."
+  },
+  "place": {
+    "title": "{name} — The Superhero",
+    "description": "{summary}",
+    "notFound": "Место не найдено — The Superhero"
+  },
+  "mapSuggest": {
+    "title": "Предложить место — The Superhero"
+  },
+  "reviewPlaces": {
+    "title": "Проверка мест — The Superhero"
+  },
+  "curators": {
+    "title": "Кураторы — The Superhero"
   }
 }

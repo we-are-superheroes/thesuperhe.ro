@@ -22,7 +22,10 @@
       "blueprints": "Шаблони",
       "organisations": "Організації",
       "profile": "Профіль",
-      "broadcast": "Запустити розсилку"
+      "broadcast": "Запустити розсилку",
+      "map": "Карта",
+      "reviewPlaces": "Переглянути місця",
+      "curators": "Куратори"
     },
     "accountMenuAriaLabel": "Меню облікового запису",
     "signOut": "Вийти",
@@ -43,6 +46,7 @@
   "publicNav": {
     "browseProjects": "Переглядати проєкти",
     "browseBlueprints": "Переглядати шаблони",
+    "map": "Карта",
     "howItWorks": "Як це працює",
     "signIn": "Увійти",
     "getStarted": "Почати"

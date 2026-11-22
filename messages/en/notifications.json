@@ -15,7 +15,9 @@
     "blueprintForked": "{actorName} forked your “{blueprintTitle}” blueprint as “{projectTitle}”.",
     "skillMatch": "New project “{projectTitle}” needs {skillName}.",
     "inviteReceived": "{actorName} invited you to join {orgName}.",
-    "messageReceived": "{count, plural, one {{senderName} sent you a message.} other {# new messages from {senderName}.}}"
+    "messageReceived": "{count, plural, one {{senderName} sent you a message.} other {# new messages from {senderName}.}}",
+    "placeProposalApproved": "Your suggestion for {placeName} was approved",
+    "placeProposalRejected": "Your suggestion for {placeName} was not accepted"
   },
   "bodies": {
     "projectJoinDeclined": "Thanks for offering to help — the team cannot take this one forward right now. Plenty of other projects need your skills.",
@@ -60,7 +62,8 @@
     "links": {
       "openConversation": "Open conversation",
       "openOrgPage": "Open the organisation page",
-      "openProject": "Open {name}"
+      "openProject": "Open {name}",
+      "openPlace": "View it on the map"
     }
   },
   "email": {

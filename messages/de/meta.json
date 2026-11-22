@@ -37,5 +37,23 @@
   "terms": {
     "title": "Nutzungsbedingungen — The Superhero",
     "description": "Die Regeln für die Nutzung von The Superhero: dein Konto, deine Inhalte, zulässige Nutzung und wofür wir verantwortlich sind (und wofür nicht)."
+  },
+  "map": {
+    "title": "Karte nachhaltiger Orte — The Superhero",
+    "description": "Finde Hofläden, Bio- und Genossenschaftsläden, Repair Cafés, Gemeinschaftsgärten und Klimaprojekte in deiner Nähe — auf einer Karte."
+  },
+  "place": {
+    "title": "{name} — The Superhero",
+    "description": "{summary}",
+    "notFound": "Ort nicht gefunden — The Superhero"
+  },
+  "mapSuggest": {
+    "title": "Ort vorschlagen — The Superhero"
+  },
+  "reviewPlaces": {
+    "title": "Orte prüfen — The Superhero"
+  },
+  "curators": {
+    "title": "Kuratoren — The Superhero"
   }
 }

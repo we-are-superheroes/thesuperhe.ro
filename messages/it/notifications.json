@@ -15,7 +15,9 @@
     "blueprintForked": "{actorName} ha adattato il tuo modello “{blueprintTitle}” come “{projectTitle}”.",
     "skillMatch": "Il nuovo progetto “{projectTitle}” cerca {skillName}.",
     "inviteReceived": "{actorName} ti ha invitato a unirti a {orgName}.",
-    "messageReceived": "{count, plural, one {{senderName} ti ha inviato un messaggio.} other {# nuovi messaggi da {senderName}.}}"
+    "messageReceived": "{count, plural, one {{senderName} ti ha inviato un messaggio.} other {# nuovi messaggi da {senderName}.}}",
+    "placeProposalApproved": "Il tuo suggerimento per {placeName} è stato approvato",
+    "placeProposalRejected": "Il tuo suggerimento per {placeName} non è stato accettato"
   },
   "bodies": {
     "projectJoinDeclined": "Grazie per esserti offerto di aiutare — la squadra al momento non può portare avanti questa richiesta. Tanti altri progetti hanno bisogno delle tue competenze.",
@@ -60,7 +62,8 @@
     "links": {
       "openConversation": "Apri la conversazione",
       "openOrgPage": "Apri la pagina dell'organizzazione",
-      "openProject": "Apri {name}"
+      "openProject": "Apri {name}",
+      "openPlace": "Vedilo sulla mappa"
     }
   },
   "email": {

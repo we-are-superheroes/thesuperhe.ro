@@ -32,6 +32,10 @@ const isPublicRoute = createRouteMatcher([
   '/blueprints',
   '/blueprints/(.*)',
   '/orgs/(.*)',
+  // Public map of sustainable places. Suggesting or editing a place needs
+  // an account (isProtectedMapSubroute below).
+  '/map',
+  '/map/(.*)',
 ])
 
 const isProtectedOrgSubroute = createRouteMatcher(['/orgs/request'])
@@ -45,11 +49,14 @@ const isProtectedProjectSubroute = createRouteMatcher([
   '/projects/(.*)/edit',
 ])
 
+const isProtectedMapSubroute = createRouteMatcher(['/map/suggest', '/map/(.*)/suggest'])
+
 export default clerkMiddleware(async (auth, req) => {
   if (
     isProtectedProjectSubroute(req) ||
     isProtectedBlueprintSubroute(req) ||
-    isProtectedOrgSubroute(req)
+    isProtectedOrgSubroute(req) ||
+    isProtectedMapSubroute(req)
   ) {
     await auth.protect()
     return

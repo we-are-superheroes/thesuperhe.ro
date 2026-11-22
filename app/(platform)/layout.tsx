@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { db } from '@/lib/db'
 import { countUnreadConversations } from '@/lib/messages'
 import { PlatformShell } from '@/components/platform/platform-shell'
+import { isCuratorRole } from '@/lib/places'
 import { GroupIntlProvider } from '@/i18n/provider'
 
 export default async function PlatformLayout({
@@ -43,6 +44,11 @@ export default async function PlatformLayout({
 
   const name = user?.name ?? null
   const isAdmin = user?.role === 'admin'
+  const isCurator = isCuratorRole(user?.role)
+  // Map suggestions waiting for a curator — only counted for people who can decide them.
+  const placeReviewBadge = isCurator
+    ? await db.placeProposal.count({ where: { status: 'pending' } })
+    : 0
   const initials = name
     ? name
         .split(' ')
@@ -73,6 +79,8 @@ export default async function PlatformLayout({
         notificationsBadge={unreadNotifications}
         messagesBadge={messagesBadge}
         isAdmin={isAdmin}
+        isCurator={isCurator}
+        placeReviewBadge={placeReviewBadge}
       >
         {children}
       </PlatformShell>

@@ -30,6 +30,8 @@ import en from '@/messages/en/notifications.json'
      titles.skillMatch           { projectTitle, skillName }
      titles.inviteReceived       { actorName, orgName }
      titles.messageReceived      { senderName, count: number }
+     titles.placeProposalApproved { placeName }
+     titles.placeProposalRejected { placeName }
 
      bodies.projectJoinDeclined  (no params)
      bodies.inviteReceived       { code }

@@ -31,6 +31,7 @@
     "clsx": "^2.1.1",
     "intl-messageformat": "^11.2.11",
     "lucide-react": "^1.14.0",
+    "maplibre-gl": "^5.24.1",
     "next": "16.2.4",
     "next-intl": "^4.13.2",
     "pg": "^8.20.0",
@@ -38,7 +39,8 @@
     "react-dom": "19.2.4",
     "resend": "^6.12.2",
     "svix": "^1.92.2",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "tz-lookup": "^6.1.25"
   },
   "devDependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
@@ -49,6 +51,7 @@
     "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/tz-lookup": "^6.1.2",
     "@vitest/coverage-v8": "^4.1.9",
     "dotenv": "^17.4.2",
     "eslint": "^9",

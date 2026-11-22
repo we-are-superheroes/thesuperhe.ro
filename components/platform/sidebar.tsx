@@ -22,6 +22,9 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   X,
+  Map as MapIcon,
+  MapPinCheck,
+  ShieldCheck,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { LeavesMark } from '@/components/ui/logo'
@@ -60,6 +63,8 @@ export function Sidebar({
   notificationsBadge = 0,
   messagesBadge = 0,
   isAdmin = false,
+  isCurator = false,
+  placeReviewBadge = 0,
   drawerOpen = false,
   onDrawerClose,
 }: {
@@ -71,6 +76,10 @@ export function Sidebar({
   notificationsBadge?: number
   messagesBadge?: number
   isAdmin?: boolean
+  /** Curators (and admins) review map suggestions. */
+  isCurator?: boolean
+  /** Map suggestions waiting for a decision. */
+  placeReviewBadge?: number
   drawerOpen?: boolean
   onDrawerClose?: () => void
 }) {
@@ -200,6 +209,7 @@ export function Sidebar({
       label: t('sidebar.groups.discover'),
       items: [
         { label: t('sidebar.items.browseProjects'), icon: Search, href: '/projects' },
+        { label: t('sidebar.items.map'), icon: MapIcon, href: '/map' },
         { label: t('sidebar.items.skillMatches'), icon: Star, href: '/skill-matches' },
         { label: t('sidebar.items.blueprints'), icon: FileText, href: '/blueprints' },
         { label: t('sidebar.items.organisations'), icon: Building2, href: '/organisations' },
@@ -209,12 +219,24 @@ export function Sidebar({
       label: t('sidebar.groups.account'),
       items: [{ label: t('sidebar.items.profile'), icon: UserIcon, href: '/profile' }],
     },
-    ...(isAdmin
+    // Curators see the review queue; admins also get the admin-only pages.
+    ...(isAdmin || isCurator
       ? [
           {
             label: t('sidebar.groups.admin'),
             items: [
-              { label: t('sidebar.items.broadcast'), icon: Megaphone, href: '/admin/broadcast' },
+              {
+                label: t('sidebar.items.reviewPlaces'),
+                icon: MapPinCheck,
+                href: '/admin/places',
+                badge: placeReviewBadge || undefined,
+              },
+              ...(isAdmin
+                ? [
+                    { label: t('sidebar.items.curators'), icon: ShieldCheck, href: '/admin/curators' },
+                    { label: t('sidebar.items.broadcast'), icon: Megaphone, href: '/admin/broadcast' },
+                  ]
+                : []),
             ],
           },
         ]

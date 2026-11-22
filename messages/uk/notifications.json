@@ -15,7 +15,9 @@
     "blueprintForked": "{actorName} адаптував(-ла) ваш шаблон «{blueprintTitle}» як «{projectTitle}».",
     "skillMatch": "Новому проєкту «{projectTitle}» потрібна навичка: {skillName}.",
     "inviteReceived": "{actorName} запросив(-ла) вас приєднатися до {orgName}.",
-    "messageReceived": "{count, plural, one {{senderName} надіслав(-ла) вам повідомлення.} few {# нові повідомлення від {senderName}.} many {# нових повідомлень від {senderName}.} other {# нового повідомлення від {senderName}.}}"
+    "messageReceived": "{count, plural, one {{senderName} надіслав(-ла) вам повідомлення.} few {# нові повідомлення від {senderName}.} many {# нових повідомлень від {senderName}.} other {# нового повідомлення від {senderName}.}}",
+    "placeProposalApproved": "Вашу пропозицію щодо {placeName} схвалено.",
+    "placeProposalRejected": "Вашу пропозицію щодо {placeName} не прийняли."
   },
   "bodies": {
     "projectJoinDeclined": "Дякуємо, що запропонували допомогу — команда зараз не може взяти цю заявку. Багато інших проєктів потребують ваших навичок.",
@@ -60,7 +62,8 @@
     "links": {
       "openConversation": "Відкрити розмову",
       "openOrgPage": "Відкрити сторінку організації",
-      "openProject": "Відкрити {name}"
+      "openProject": "Відкрити {name}",
+      "openPlace": "Переглянути на карті"
     }
   },
   "email": {
