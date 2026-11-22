@@ -22,7 +22,10 @@
       "blueprints": "Modelos",
       "organisations": "Organizações",
       "profile": "Perfil",
-      "broadcast": "Iniciar transmissão"
+      "broadcast": "Iniciar transmissão",
+      "map": "Mapa",
+      "reviewPlaces": "Rever locais",
+      "curators": "Curadores"
     },
     "accountMenuAriaLabel": "Menu da conta",
     "signOut": "Sair",
@@ -43,6 +46,7 @@
   "publicNav": {
     "browseProjects": "Explorar projetos",
     "browseBlueprints": "Explorar modelos",
+    "map": "Mapa",
     "howItWorks": "Como funciona",
     "signIn": "Entrar",
     "getStarted": "Começar"

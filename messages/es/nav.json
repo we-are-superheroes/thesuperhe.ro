@@ -22,7 +22,10 @@
       "blueprints": "Plantillas",
       "organisations": "Organizaciones",
       "profile": "Perfil",
-      "broadcast": "Enviar difusión"
+      "broadcast": "Enviar difusión",
+      "map": "Mapa",
+      "reviewPlaces": "Revisar lugares",
+      "curators": "Curadores"
     },
     "accountMenuAriaLabel": "Menú de cuenta",
     "signOut": "Cerrar sesión",
@@ -43,6 +46,7 @@
   "publicNav": {
     "browseProjects": "Explorar proyectos",
     "browseBlueprints": "Explorar plantillas",
+    "map": "Mapa",
     "howItWorks": "Cómo funciona",
     "signIn": "Iniciar sesión",
     "getStarted": "Empezar"

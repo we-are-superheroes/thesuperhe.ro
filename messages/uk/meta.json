@@ -37,5 +37,23 @@
   "terms": {
     "title": "Умови користування — The Superhero",
     "description": "Правила користування The Superhero: ваш обліковий запис, ваш контент, прийнятне використання і те, за що ми відповідаємо (а за що — ні)."
+  },
+  "map": {
+    "title": "Мапа сталих місць — The Superhero",
+    "description": "Знайдіть фермерські крамниці, органічні та кооперативні магазини, repair café, громадські сади і кліматичні проєкти поруч із вами — на мапі."
+  },
+  "place": {
+    "title": "{name} — The Superhero",
+    "description": "{summary}",
+    "notFound": "Місце не знайдено — The Superhero"
+  },
+  "mapSuggest": {
+    "title": "Запропонувати місце — The Superhero"
+  },
+  "reviewPlaces": {
+    "title": "Перевірка місць — The Superhero"
+  },
+  "curators": {
+    "title": "Куратори — The Superhero"
   }
 }

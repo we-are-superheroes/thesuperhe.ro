@@ -48,4 +48,27 @@ export async function requireAdmin(): Promise<string | null> {
   return user?.role === 'admin' ? user.id : null
 }
 
+/**
+ * Returns the caller's id and role when they are a curator (or an admin —
+ * admins count as curators), else null. Like requireAdmin(), the role is
+ * read from the DB on every call. Use at the top of curator-only server
+ * actions and pages:
+ *   const curator = await requireCurator()
+ *   if (!curator) return { success: false, error: t('admin.notAuthorised') }
+ */
+export async function requireCurator(): Promise<{ id: string; role: 'curator' | 'admin' } | null> {
+  const { userId } = await auth()
+  if (!userId) return null
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    select: { id: true, role: true },
+  })
+  if (user?.role === 'curator' || user?.role === 'admin') return { id: user.id, role: user.role }
+  return null
+}
+
+export async function isCurrentUserCurator(): Promise<boolean> {
+  return (await requireCurator()) !== null
+}
+
 export { auth, currentUser }

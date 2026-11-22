@@ -15,7 +15,9 @@
     "blueprintForked": "{actorName} hat deine Blaupause „{blueprintTitle}“ als „{projectTitle}“ übernommen.",
     "skillMatch": "Das neue Projekt „{projectTitle}“ braucht {skillName}.",
     "inviteReceived": "{actorName} hat dich eingeladen, {orgName} beizutreten.",
-    "messageReceived": "{count, plural, one {{senderName} hat dir eine Nachricht geschickt.} other {# neue Nachrichten von {senderName}.}}"
+    "messageReceived": "{count, plural, one {{senderName} hat dir eine Nachricht geschickt.} other {# neue Nachrichten von {senderName}.}}",
+    "placeProposalApproved": "Dein Vorschlag für {placeName} wurde angenommen",
+    "placeProposalRejected": "Dein Vorschlag für {placeName} wurde nicht angenommen"
   },
   "bodies": {
     "projectJoinDeclined": "Danke, dass du Hilfe angeboten hast — das Team kann das gerade nicht annehmen. Viele andere Projekte brauchen deine Fähigkeiten.",
@@ -60,7 +62,8 @@
     "links": {
       "openConversation": "Unterhaltung öffnen",
       "openOrgPage": "Organisationsseite öffnen",
-      "openProject": "{name} öffnen"
+      "openProject": "{name} öffnen",
+      "openPlace": "Auf der Karte ansehen"
     }
   },
   "email": {

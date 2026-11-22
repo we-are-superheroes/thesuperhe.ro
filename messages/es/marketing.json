@@ -2,6 +2,7 @@
   "nav": {
     "browseProjects": "Explorar proyectos",
     "browseBlueprints": "Explorar plantillas",
+    "map": "Mapa",
     "howItWorks": "Cómo funciona",
     "dashboard": "Panel",
     "signIn": "Iniciar sesión",
@@ -151,6 +152,7 @@
     "copyright": "© {year} The Superhero · colaboración por el clima y la sostenibilidad",
     "projects": "Proyectos",
     "blueprints": "Plantillas",
+    "map": "Mapa",
     "privacy": "Privacidad",
     "terms": "Condiciones",
     "createdIn": "Creado en Suiza",

@@ -22,7 +22,10 @@
       "blueprints": "Blueprints",
       "organisations": "Organisations",
       "profile": "Profile",
-      "broadcast": "Launch broadcast"
+      "broadcast": "Launch broadcast",
+      "map": "Map",
+      "reviewPlaces": "Review places",
+      "curators": "Curators"
     },
     "accountMenuAriaLabel": "Account menu",
     "signOut": "Sign out",
@@ -43,6 +46,7 @@
   "publicNav": {
     "browseProjects": "Browse projects",
     "browseBlueprints": "Browse blueprints",
+    "map": "Map",
     "howItWorks": "How it works",
     "signIn": "Sign in",
     "getStarted": "Get started"

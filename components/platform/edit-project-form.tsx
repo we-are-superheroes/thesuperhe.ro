@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { ArrowRight, FileText, ChevronLeft, Upload, ImageIcon } from 'lucide-react'
+import { ArrowRight, FileText, ChevronLeft, Upload, ImageIcon, MapPin } from 'lucide-react'
 import type { ProjectStatus } from '@prisma/client'
 import { cn } from '@/lib/utils'
 import {
@@ -57,6 +57,15 @@ export interface EditProjectInitial {
   }>
 }
 
+/**
+ * The project's entry on the public map (/map), for the card that links to
+ * it. Null hides the card (the viewer may edit the project but not its pin).
+ */
+export type ProjectMapEntry =
+  | { state: 'add' }
+  | { state: 'onMap'; slug: string }
+  | { state: 'membersOnly' }
+
 /** Labels come from `project.status.<value>`; descriptions from
  *  `project.form.statusCard.descriptions.<value>`. */
 const STATUS_VALUES: ProjectStatus[] = [
@@ -82,12 +91,15 @@ const TOC_SECTIONS = [
 export function EditProjectForm({
   initial,
   skills,
+  mapEntry = null,
 }: {
   initial: EditProjectInitial
   skills: SkillOption[]
+  mapEntry?: ProjectMapEntry | null
 }) {
   const t = useTranslations('project')
   const tCommon = useTranslations('common')
+  const tMap = useTranslations('map')
   const router = useRouter()
 
   const [title, setTitle] = useState(initial.title)
@@ -598,6 +610,49 @@ export function EditProjectForm({
             </Field>
           </div>
         </Card>
+
+        {/* Public map entry — leads of the project (and curators) only */}
+        {mapEntry && (
+          <Card id="sec-map">
+            <CardHead
+              eyebrow={tMap('projectCard.eyebrow')}
+              title={tMap('projectCard.title')}
+              desc={
+                mapEntry.state === 'onMap'
+                  ? tMap('projectCard.bodyOnMap')
+                  : mapEntry.state === 'membersOnly'
+                    ? tMap('projectCard.membersOnly')
+                    : tMap('projectCard.body')
+              }
+            />
+            {mapEntry.state === 'add' && (
+              <Link
+                href={`/map/suggest?project=${initial.id}`}
+                className="inline-flex items-center gap-2 rounded-lg border border-amber-500 bg-amber-500 px-4 py-2.5 text-sm font-medium text-blue-900 transition-colors duration-fast hover:bg-amber-400"
+              >
+                <MapPin className="size-4" aria-hidden />
+                {tMap('projectCard.add')}
+              </Link>
+            )}
+            {mapEntry.state === 'onMap' && (
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={`/map/${mapEntry.slug}/suggest`}
+                  className="inline-flex items-center gap-2 rounded-lg border border-amber-500 bg-amber-500 px-4 py-2.5 text-sm font-medium text-blue-900 transition-colors duration-fast hover:bg-amber-400"
+                >
+                  <MapPin className="size-4" aria-hidden />
+                  {tMap('projectCard.edit')}
+                </Link>
+                <Link
+                  href={`/map/${mapEntry.slug}`}
+                  className="inline-flex items-center gap-2 rounded-lg border border-border-default bg-bg-surface-2 px-4 py-2.5 text-sm font-medium text-fg-primary transition-colors duration-fast hover:border-border-strong hover:bg-bg-surface-3"
+                >
+                  {tMap('projectCard.view')}
+                </Link>
+              </div>
+            )}
+          </Card>
+        )}
 
         {/* Steps */}
         <Card id="sec-steps">

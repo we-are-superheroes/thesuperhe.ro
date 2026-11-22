@@ -32,6 +32,7 @@ export const NAMESPACES = [
   'skillMatches',
   'messagesInbox',
   'admin',
+  'map',
   'meta',
   'marketing',
   'auth',
@@ -68,8 +69,9 @@ export const GROUP_NAMESPACES = {
     'profile',
     'users',
     'admin',
+    'map',
   ],
-  public: ['common', 'nav', 'errors', 'browse', 'project', 'steps', 'blueprints', 'orgs', 'users', 'search'],
+  public: ['common', 'nav', 'errors', 'browse', 'project', 'steps', 'blueprints', 'orgs', 'users', 'search', 'map'],
   marketing: ['common', 'nav', 'marketing'],
   auth: ['common', 'auth'],
   // Legal pages are fully server-rendered; the shared chrome (navbar

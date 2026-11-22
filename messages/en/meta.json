@@ -37,5 +37,23 @@
   "terms": {
     "title": "Terms of service — The Superhero",
     "description": "The rules for using The Superhero: your account, your content, acceptable use, and what we are (and aren’t) responsible for."
+  },
+  "map": {
+    "title": "Map of sustainable places — The Superhero",
+    "description": "Find farm shops, organic and cooperative shops, repair cafés, community gardens and climate projects near you, on a map."
+  },
+  "place": {
+    "title": "{name} — The Superhero",
+    "description": "{summary}",
+    "notFound": "Place not found — The Superhero"
+  },
+  "mapSuggest": {
+    "title": "Suggest a place — The Superhero"
+  },
+  "reviewPlaces": {
+    "title": "Review places — The Superhero"
+  },
+  "curators": {
+    "title": "Curators — The Superhero"
   }
 }

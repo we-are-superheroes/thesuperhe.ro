@@ -3,9 +3,11 @@ import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { isOrgAdminOfProject } from '@/lib/orgs'
 import { COUNTRIES } from '@/lib/locales'
+import { isCuratorRole } from '@/lib/places'
 import {
   EditProjectForm,
   type EditProjectInitial,
+  type ProjectMapEntry,
 } from '@/components/platform/edit-project-form'
 
 interface EditProjectParams {
@@ -62,6 +64,8 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       coverImageUrl: true,
       joinPolicy: true,
       status: true,
+      visibility: true,
+      place: { select: { slug: true } },
       contributions: {
         where: {
           userId,
@@ -69,7 +73,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
           role: 'lead',
           status: { in: ['active', 'pending'] },
         },
-        select: { id: true },
+        select: { id: true, status: true },
       },
       steps: {
         orderBy: { order: 'asc' },
@@ -124,5 +128,19 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
     })),
   }
 
-  return <EditProjectForm initial={initial} skills={skills} />
+  // The public-map card: only for people who may change the pin directly —
+  // an active lead of the project, or a curator. (An org admin who can edit
+  // the project but is neither would be refused by submitPlaceAction.)
+  const viewer = await db.user.findUnique({ where: { id: userId }, select: { role: true } })
+  const mayPin =
+    project.contributions.some((c) => c.status === 'active') || isCuratorRole(viewer?.role)
+  const mapEntry: ProjectMapEntry | null = !mayPin
+    ? null
+    : project.visibility !== 'public'
+      ? { state: 'membersOnly' }
+      : project.place
+        ? { state: 'onMap', slug: project.place.slug }
+        : { state: 'add' }
+
+  return <EditProjectForm initial={initial} skills={skills} mapEntry={mapEntry} />
 }

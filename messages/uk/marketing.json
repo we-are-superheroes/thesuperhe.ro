@@ -2,6 +2,7 @@
   "nav": {
     "browseProjects": "Переглядати проєкти",
     "browseBlueprints": "Переглядати шаблони",
+    "map": "Карта",
     "howItWorks": "Як це працює",
     "dashboard": "Панель",
     "signIn": "Увійти",
@@ -151,6 +152,7 @@
     "copyright": "© {year} The Superhero · співпраця заради клімату і сталості",
     "projects": "Проєкти",
     "blueprints": "Шаблони",
+    "map": "Карта",
     "privacy": "Конфіденційність",
     "terms": "Умови",
     "createdIn": "Створено у Швейцарії",
