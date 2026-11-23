@@ -216,8 +216,23 @@
       "uploading": "Envoi…",
       "replace": "Remplacer",
       "upload": "Envoyer une couverture",
+      "search": "Chercher des photos",
       "remove": "Retirer",
-      "hint": "Une image large marche le mieux — au moins 1200×600. PNG, JPG, WebP ou GIF, jusqu’à 8 Mo."
+      "hint": "Une image large marche le mieux — au moins 1200×600. PNG, JPG, WebP ou GIF, jusqu’à 8 Mo.",
+      "picker": {
+        "title": "Trouver une photo",
+        "desc": "Cherche parmi des photos gratuites et choisis-en une pour ta couverture.",
+        "placeholder": "Par exemple : jardin, vélo, panneaux solaires",
+        "submit": "Chercher",
+        "searching": "Recherche…",
+        "start": "Écris un ou deux mots sur ton projet, puis appuie sur Chercher.",
+        "empty": "Aucune photo trouvée. Essaie d’autres mots.",
+        "saving": "Enregistrement de la photo…",
+        "by": "Photo de {name}",
+        "usePhoto": "Utiliser la photo de {name}",
+        "credit": "Photos de <link>Pixabay</link>.",
+        "notice": "Évite les photos qui montrent des visages ou des logos de marques."
+      }
     },
     "location": {
       "eyebrow": "Où ça se passe",

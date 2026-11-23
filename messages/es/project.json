@@ -216,8 +216,23 @@
       "uploading": "Subiendo…",
       "replace": "Reemplazar",
       "upload": "Subir portada",
+      "search": "Buscar fotos",
       "remove": "Quitar",
-      "hint": "Mejor una imagen ancha — de al menos 1200×600. PNG, JPG, WebP o GIF, hasta 8 MB."
+      "hint": "Mejor una imagen ancha — de al menos 1200×600. PNG, JPG, WebP o GIF, hasta 8 MB.",
+      "picker": {
+        "title": "Encuentra una foto",
+        "desc": "Busca entre fotos gratuitas y elige una para tu portada.",
+        "placeholder": "Por ejemplo: huerto, bicicleta, paneles solares",
+        "submit": "Buscar",
+        "searching": "Buscando…",
+        "start": "Escribe una o dos palabras sobre tu proyecto y pulsa Buscar.",
+        "empty": "No se encontraron fotos. Prueba con otras palabras.",
+        "saving": "Guardando la foto…",
+        "by": "Foto de {name}",
+        "usePhoto": "Usar la foto de {name}",
+        "credit": "Fotos de <link>Pixabay</link>.",
+        "notice": "Evita las fotos en las que se vean caras de personas o logotipos de marcas."
+      }
     },
     "location": {
       "eyebrow": "Dónde sucede",

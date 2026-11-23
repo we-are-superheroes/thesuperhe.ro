@@ -216,8 +216,23 @@
       "uploading": "Wird hochgeladen…",
       "replace": "Ersetzen",
       "upload": "Titelbild hochladen",
+      "search": "Fotos suchen",
       "remove": "Entfernen",
-      "hint": "Breites Bild passt am besten — mindestens 1200×600. PNG, JPG, WebP oder GIF, bis 8 MB."
+      "hint": "Breites Bild passt am besten — mindestens 1200×600. PNG, JPG, WebP oder GIF, bis 8 MB.",
+      "picker": {
+        "title": "Ein Foto finden",
+        "desc": "Suche in kostenlosen Fotos und wähle eines als Titelbild.",
+        "placeholder": "Zum Beispiel: Garten, Fahrrad, Solaranlage",
+        "submit": "Suchen",
+        "searching": "Suche läuft…",
+        "start": "Schreib ein oder zwei Wörter zu deinem Projekt und klicke dann auf Suchen.",
+        "empty": "Keine Fotos gefunden. Versuche es mit anderen Wörtern.",
+        "saving": "Foto wird gespeichert…",
+        "by": "Foto von {name}",
+        "usePhoto": "Das Foto von {name} verwenden",
+        "credit": "Fotos von <link>Pixabay</link>.",
+        "notice": "Bitte vermeide Fotos, auf denen Gesichter oder Markenlogos zu sehen sind."
+      }
     },
     "location": {
       "eyebrow": "Wo es stattfindet",

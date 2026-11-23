@@ -29,6 +29,8 @@
     "noFileProvided": "Keine Datei ausgewählt.",
     "uploadFailed": "Das Bild konnte nicht hochgeladen werden.",
     "coverSaveFailed": "Das Titelbild konnte nicht gespeichert werden.",
+    "photoSearchFailed": "Die Fotosuche hat nicht funktioniert. Bitte versuche es noch einmal.",
+    "photoImportFailed": "Dieses Foto konnte nicht gespeichert werden. Bitte versuche ein anderes.",
     "coverClearFailed": "Das Titelbild konnte nicht entfernt werden."
   },
   "projectJoin": {

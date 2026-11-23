@@ -216,8 +216,23 @@
       "uploading": "Enviando…",
       "replace": "Substituir",
       "upload": "Enviar capa",
+      "search": "Procurar fotos",
       "remove": "Remover",
-      "hint": "Uma imagem larga funciona melhor — pelo menos 1200×600. PNG, JPG, WebP ou GIF, até 8 MB."
+      "hint": "Uma imagem larga funciona melhor — pelo menos 1200×600. PNG, JPG, WebP ou GIF, até 8 MB.",
+      "picker": {
+        "title": "Encontrar uma foto",
+        "desc": "Procure entre fotos gratuitas e escolha uma para a sua capa.",
+        "placeholder": "Por exemplo: horta, bicicleta, painéis solares",
+        "submit": "Procurar",
+        "searching": "Procurando…",
+        "start": "Escreva uma ou duas palavras sobre o seu projeto e clique em Procurar.",
+        "empty": "Nenhuma foto encontrada. Tente outras palavras.",
+        "saving": "Guardando a foto…",
+        "by": "Foto de {name}",
+        "usePhoto": "Usar a foto de {name}",
+        "credit": "Fotos de <link>Pixabay</link>.",
+        "notice": "Evite fotos que mostrem rostos de pessoas ou logótipos de marcas."
+      }
     },
     "location": {
       "eyebrow": "Onde acontece",

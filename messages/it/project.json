@@ -216,8 +216,23 @@
       "uploading": "Caricamento…",
       "replace": "Sostituisci",
       "upload": "Carica la copertina",
+      "search": "Cerca foto",
       "remove": "Rimuovi",
-      "hint": "Meglio un'immagine larga — almeno 1200×600. PNG, JPG, WebP o GIF, fino a 8 MB."
+      "hint": "Meglio un'immagine larga — almeno 1200×600. PNG, JPG, WebP o GIF, fino a 8 MB.",
+      "picker": {
+        "title": "Trova una foto",
+        "desc": "Cerca tra foto gratuite e scegline una per la tua copertina.",
+        "placeholder": "Per esempio: orto, bicicletta, pannelli solari",
+        "submit": "Cerca",
+        "searching": "Ricerca…",
+        "start": "Scrivi una o due parole sul tuo progetto, poi premi Cerca.",
+        "empty": "Nessuna foto trovata. Prova con altre parole.",
+        "saving": "Salvataggio della foto…",
+        "by": "Foto di {name}",
+        "usePhoto": "Usa la foto di {name}",
+        "credit": "Foto di <link>Pixabay</link>.",
+        "notice": "Evita le foto in cui si vedono volti di persone o loghi di marchi."
+      }
     },
     "location": {
       "eyebrow": "Dove succede",

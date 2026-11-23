@@ -14,6 +14,16 @@ import { normaliseCountry, normaliseLanguage } from '@/lib/locales'
 import { validateProjectFields, validateProjectStatus } from '@/lib/validation'
 import type { ErrorDescriptor } from '@/lib/validation'
 import { isOrgAdminOfProject } from '@/lib/orgs'
+import { resolveLocale } from '@/lib/locale'
+import { log } from '@/lib/log'
+import { rateLimit, rateLimitError } from '@/lib/rate-limit'
+import {
+  isPixabayConfigured,
+  searchStockPhotos,
+  downloadStockPhoto,
+  PIXABAY_MAX_QUERY_LENGTH,
+  type StockPhoto,
+} from '@/lib/pixabay'
 import type { ServerActionResult } from '@/types'
 
 /**
@@ -318,6 +328,19 @@ export async function uploadProjectCoverAction(
     return { success: false, error: t('projectEdit.noFileProvided') }
   }
 
+  return saveProjectCover(projectId, file)
+}
+
+/**
+ * Store `file` as the project's cover and drop the previous one, both in
+ * the DB and in storage. The caller has already checked auth and lead.
+ */
+async function saveProjectCover(
+  projectId: string,
+  file: File,
+): Promise<ServerActionResult<{ url: string }>> {
+  const t = await getTranslations('errors')
+
   const existing = await db.project.findUnique({
     where: { id: projectId },
     select: { coverImageUrl: true },
@@ -331,6 +354,10 @@ export async function uploadProjectCoverAction(
     if (e instanceof StorageError) {
       return { success: false, error: await tError(e.descriptor) }
     }
+    log.error('project.cover_upload_failed', {
+      projectId,
+      message: e instanceof Error ? e.message : String(e),
+    })
     return { success: false, error: t('projectEdit.uploadFailed') }
   }
 
@@ -354,6 +381,75 @@ export async function uploadProjectCoverAction(
   revalidatePath('/my-projects')
   revalidatePath('/dashboard')
   return { success: true, data: { url } }
+}
+
+/**
+ * Search free stock photos (Pixabay) for a cover. Lead-only, so the shared
+ * API quota is spent only by people who can actually set a cover.
+ */
+export async function searchCoverPhotosAction(
+  projectId: string,
+  query: string,
+): Promise<ServerActionResult<{ photos: StockPhoto[] }>> {
+  const t = await getTranslations('errors')
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
+
+  const lead = await requireLead(userId, projectId)
+  if (!lead.success) return { success: false, error: lead.error }
+
+  const q = typeof query === 'string' ? query.trim().slice(0, PIXABAY_MAX_QUERY_LENGTH) : ''
+  if (q.length < 2 || !isPixabayConfigured()) {
+    return { success: false, error: t('projectEdit.photoSearchFailed') }
+  }
+
+  const rl = rateLimit(`${userId}:cover-photo-search`, 30, 60_000)
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
+
+  try {
+    const photos = await searchStockPhotos(q, await resolveLocale())
+    return { success: true, data: { photos } }
+  } catch (e) {
+    log.error('pixabay.search_failed', { message: e instanceof Error ? e.message : String(e) })
+    return { success: false, error: t('projectEdit.photoSearchFailed') }
+  }
+}
+
+/**
+ * Use a stock photo as the project's cover. The photo is copied into our
+ * own storage (Pixabay does not allow hotlinking), so from here on it
+ * behaves exactly like an uploaded cover.
+ */
+export async function setCoverFromStockPhotoAction(
+  projectId: string,
+  photoId: number,
+): Promise<ServerActionResult<{ url: string }>> {
+  const t = await getTranslations('errors')
+  const { userId } = await auth()
+  if (!userId) return { success: false, error: t('common.notSignedIn') }
+
+  const lead = await requireLead(userId, projectId)
+  if (!lead.success) return { success: false, error: lead.error }
+
+  if (!Number.isSafeInteger(photoId) || photoId <= 0 || !isPixabayConfigured()) {
+    return { success: false, error: t('projectEdit.photoImportFailed') }
+  }
+
+  const rl = rateLimit(`${userId}:cover-photo-import`, 10, 60_000)
+  if (!rl.ok) return { success: false, error: await tError(rateLimitError(rl)) }
+
+  let file: File
+  try {
+    file = await downloadStockPhoto(photoId)
+  } catch (e) {
+    log.error('pixabay.download_failed', {
+      photoId,
+      message: e instanceof Error ? e.message : String(e),
+    })
+    return { success: false, error: t('projectEdit.photoImportFailed') }
+  }
+
+  return saveProjectCover(projectId, file)
 }
 
 /**

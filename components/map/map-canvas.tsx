@@ -11,7 +11,7 @@ import { LocateFixed, Loader2, Minus, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { boundingBox, type LatLng, type PlaceCategory } from '@/lib/places-shared'
 import { toMidnightStyle } from '@/lib/map-style'
-import { CATEGORY_ICON_PATHS, LEAF_PATH } from '@/components/map/place-bits'
+import { CATEGORY_ICON_PATHS, LEAF_PATH, PIN_BORDER_CLASS } from '@/components/map/place-bits'
 
 type MapLibre = maplibregl.Map
 type Marker = maplibregl.Marker
@@ -179,10 +179,11 @@ function leafSvg(): SVGSVGElement {
 }
 
 // Fixed pin colours (not theme tokens): a pin must stand out on any map style.
+// An independent pin's border takes its category's colour (PIN_BORDER_CLASS).
 const PIN_SHAPE_BASE =
   'flex size-[30px] items-center justify-center shadow-[0_3px_10px_rgba(0,0,0,0.45)] transition-transform duration-fast group-hover:scale-110 group-data-[selected=true]:scale-125 group-data-[selected=true]:outline group-data-[selected=true]:outline-[3px] group-data-[selected=true]:outline-offset-[3px]'
 const PIN_SHAPE_INDIE =
-  'rounded-full border-2 border-[#152236] bg-[#F5F8FB] text-[#152236] group-data-[selected=true]:outline-amber-500'
+  'rounded-full border-2 bg-[#F5F8FB] text-[#152236] group-data-[selected=true]:outline-amber-500'
 const PIN_SHAPE_HERO =
   'rotate-45 rounded-lg border-2 border-amber-900 bg-amber-500 group-data-[selected=true]:outline-white'
 
@@ -201,7 +202,7 @@ function buildPinElement(pin: MapPin, onClick: (id: string) => void): HTMLButton
   const shape = document.createElement('span')
   shape.className = cn(
     PIN_SHAPE_BASE,
-    pin.hero ? PIN_SHAPE_HERO : PIN_SHAPE_INDIE,
+    pin.hero ? PIN_SHAPE_HERO : cn(PIN_SHAPE_INDIE, PIN_BORDER_CLASS[pin.category]),
     pin.approximate && 'border-dashed',
   )
   shape.appendChild(pin.hero ? leafSvg() : categorySvg(pin.category))

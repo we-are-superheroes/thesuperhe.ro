@@ -29,6 +29,8 @@
     "noFileProvided": "Nenhum arquivo enviado.",
     "uploadFailed": "Não foi possível enviar a imagem.",
     "coverSaveFailed": "Não foi possível guardar a capa.",
+    "photoSearchFailed": "Não foi possível procurar fotos. Tente novamente.",
+    "photoImportFailed": "Não foi possível guardar esta foto. Tente outra.",
     "coverClearFailed": "Não foi possível remover a capa."
   },
   "projectJoin": {

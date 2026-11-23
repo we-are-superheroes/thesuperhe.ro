@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { ArrowRight, FileText, ChevronLeft, Upload, ImageIcon, MapPin } from 'lucide-react'
+import { ArrowRight, FileText, ChevronLeft, Upload, ImageIcon, MapPin, Search } from 'lucide-react'
 import type { ProjectStatus } from '@prisma/client'
 import { cn } from '@/lib/utils'
 import {
@@ -29,6 +29,7 @@ import {
   type ProjectTypeOption,
   type SkillOption,
 } from '@/components/platform/project-form-bits'
+import { CoverPhotoPicker } from '@/components/platform/cover-photo-picker'
 import { LANGUAGES as ISO_LANGUAGES } from '@/lib/locales'
 
 /* ================================================================
@@ -97,11 +98,14 @@ export function EditProjectForm({
   skills,
   projectTypes,
   mapEntry = null,
+  photoSearchEnabled = false,
 }: {
   initial: EditProjectInitial
   skills: SkillOption[]
   projectTypes: ProjectTypeOption[]
   mapEntry?: ProjectMapEntry | null
+  /** Stock-photo search is offered only where its API key is configured. */
+  photoSearchEnabled?: boolean
 }) {
   const t = useTranslations('project')
   const tCommon = useTranslations('common')
@@ -122,6 +126,7 @@ export function EditProjectForm({
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(initial.coverImageUrl)
   const coverFileRef = useRef<HTMLInputElement>(null)
   const [pendingCover, startCoverTransition] = useTransition()
+  const [photoPickerOpen, setPhotoPickerOpen] = useState(false)
   const [steps, setSteps] = useState<FormStep[]>(
     initial.steps.length > 0
       ? initial.steps.map((s) => ({
@@ -472,6 +477,17 @@ export function EditProjectForm({
                       ? t('form.cover.replace')
                       : t('form.cover.upload')}
                 </button>
+                {photoSearchEnabled && (
+                  <button
+                    type="button"
+                    onClick={() => setPhotoPickerOpen(true)}
+                    disabled={pendingCover}
+                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-fg-primary transition-colors hover:border-neutral-600 disabled:cursor-wait disabled:opacity-60"
+                  >
+                    <Search className="size-3.5" />
+                    {t('form.cover.search')}
+                  </button>
+                )}
                 {coverImageUrl && (
                   <button
                     type="button"
@@ -488,6 +504,16 @@ export function EditProjectForm({
               </span>
             </div>
           </div>
+          {photoPickerOpen && (
+            <CoverPhotoPicker
+              projectId={initial.id}
+              onPicked={(url) => {
+                setCoverImageUrl(url)
+                setPhotoPickerOpen(false)
+              }}
+              onClose={() => setPhotoPickerOpen(false)}
+            />
+          )}
         </Card>
 
         {/* Where */}
