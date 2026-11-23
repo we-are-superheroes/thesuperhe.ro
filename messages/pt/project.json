@@ -203,7 +203,10 @@
       "titlePlaceholder": "ex.: Mini-floresta, Hackney Wick",
       "descriptionLabel": "Descrição",
       "descriptionHelp": "O primeiro parágrafo é o que aparece no cartão do projeto.",
-      "descriptionPlaceholder": "O que você quer fazer acontecer, e por que isso importa?"
+      "descriptionPlaceholder": "O que você quer fazer acontecer, e por que isso importa?",
+      "typeLabel": "Tipo de projeto (opcional)",
+      "typeHelp": "Usado pelo filtro de tipo da página Explorar.",
+      "typeNone": "— nenhum —"
     },
     "cover": {
       "eyebrow": "Imagem de capa",

@@ -203,7 +203,10 @@
       "titlePlaceholder": "z. B. Mini-Wald, Hackney Wick",
       "descriptionLabel": "Beschreibung",
       "descriptionHelp": "Der erste Absatz erscheint auf der Projektkarte.",
-      "descriptionPlaceholder": "Was willst du erreichen, und warum ist es wichtig?"
+      "descriptionPlaceholder": "Was willst du erreichen, und warum ist es wichtig?",
+      "typeLabel": "Projekttyp (optional)",
+      "typeHelp": "Wird vom Typfilter der Durchstöbern-Seite genutzt.",
+      "typeNone": "— keiner —"
     },
     "cover": {
       "eyebrow": "Titelbild",

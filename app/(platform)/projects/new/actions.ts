@@ -73,6 +73,18 @@ export async function launchProjectAction(
     return { success: false, error: t('common.localeCodeInvalid') }
   }
 
+  // The type must be a real entry in the taxonomy.
+  if (data.projectTypeId !== null) {
+    const type =
+      typeof data.projectTypeId === 'string'
+        ? await db.projectType.findUnique({
+            where: { id: data.projectTypeId },
+            select: { id: true },
+          })
+        : null
+    if (!type) return { success: false, error: t('common.somethingWrong') }
+  }
+
   // Org ownership: the creator must be an active member of an active org
   // (spec invariant 2), and members-only visibility requires an org.
   let orgId: string | null = null

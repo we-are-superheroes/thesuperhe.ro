@@ -126,6 +126,51 @@ export function SelectBox(props: React.SelectHTMLAttributes<HTMLSelectElement>) 
 }
 
 /* ================================================================
+   ProjectTypeField — the optional project type (project_types
+   taxonomy), shared by the create and edit project forms. Powers the
+   browse-page type filter.
+   ================================================================ */
+
+export interface ProjectTypeOption {
+  id: string
+  name: string
+}
+
+export function ProjectTypeField({
+  projectTypes,
+  value,
+  onChange,
+}: {
+  projectTypes: ProjectTypeOption[]
+  value: string | null
+  onChange: (id: string | null) => void
+}) {
+  const t = useTranslations('project')
+  return (
+    <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+      <Field
+        label={t('form.basics.typeLabel')}
+        htmlFor="fld-type"
+        help={t('form.basics.typeHelp')}
+      >
+        <SelectBox
+          id="fld-type"
+          value={value ?? ''}
+          onChange={(e) => onChange(e.target.value || null)}
+        >
+          <option value="">{t('form.basics.typeNone')}</option>
+          {projectTypes.map((type) => (
+            <option key={type.id} value={type.id}>
+              {type.name}
+            </option>
+          ))}
+        </SelectBox>
+      </Field>
+    </div>
+  )
+}
+
+/* ================================================================
    CountrySelect — searchable single-select over the full ISO country
    list. One field both builds the "City, Country" display string and
    powers the browse-page country filter.

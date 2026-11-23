@@ -203,7 +203,10 @@
       "titlePlaceholder": "p. ej. Bosque de bolsillo, Hackney Wick",
       "descriptionLabel": "Descripción",
       "descriptionHelp": "El primer párrafo es lo que aparece en la tarjeta del proyecto.",
-      "descriptionPlaceholder": "¿Qué quieres hacer realidad y por qué importa?"
+      "descriptionPlaceholder": "¿Qué quieres hacer realidad y por qué importa?",
+      "typeLabel": "Tipo de proyecto (opcional)",
+      "typeHelp": "Lo usa el filtro de tipo de la página de exploración.",
+      "typeNone": "— ninguno —"
     },
     "cover": {
       "eyebrow": "Imagen de portada",

@@ -56,6 +56,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       id: true,
       title: true,
       description: true,
+      projectTypeId: true,
       location: true,
       address: true,
       country: true,
@@ -98,10 +99,16 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
     redirect(`/projects/${id}`)
   }
 
-  const skills = await db.skill.findMany({
-    orderBy: [{ category: 'asc' }, { name: 'asc' }],
-    select: { id: true, name: true, category: true },
-  })
+  const [skills, projectTypes] = await Promise.all([
+    db.skill.findMany({
+      orderBy: [{ category: 'asc' }, { name: 'asc' }],
+      select: { id: true, name: true, category: true },
+    }),
+    db.projectType.findMany({
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true },
+    }),
+  ])
 
   const { city, countryCode } = splitLocation(project.location, project.country)
 
@@ -109,6 +116,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
     id: project.id,
     title: project.title,
     description: project.description,
+    projectTypeId: project.projectTypeId,
     city,
     // remoteOk → yes; off → no. We can't distinguish "some" once saved, so
     // default the toggle to "yes" when remote is allowed and "no" otherwise.
@@ -142,5 +150,12 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
         ? { state: 'onMap', slug: project.place.slug }
         : { state: 'add' }
 
-  return <EditProjectForm initial={initial} skills={skills} mapEntry={mapEntry} />
+  return (
+    <EditProjectForm
+      initial={initial}
+      skills={skills}
+      projectTypes={projectTypes}
+      mapEntry={mapEntry}
+    />
+  )
 }

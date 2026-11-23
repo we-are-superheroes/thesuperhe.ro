@@ -203,7 +203,10 @@
       "titlePlaceholder": "p. ex. Micro-forêt, Hackney Wick",
       "descriptionLabel": "Description",
       "descriptionHelp": "Le premier paragraphe est ce qui apparaît sur la carte du projet.",
-      "descriptionPlaceholder": "Qu’est-ce que tu veux faire arriver, et pourquoi c’est important ?"
+      "descriptionPlaceholder": "Qu’est-ce que tu veux faire arriver, et pourquoi c’est important ?",
+      "typeLabel": "Type de projet (facultatif)",
+      "typeHelp": "Utilisé par le filtre type de la page Explorer.",
+      "typeNone": "— aucun —"
     },
     "cover": {
       "eyebrow": "Image de couverture",

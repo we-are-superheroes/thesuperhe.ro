@@ -203,7 +203,10 @@
       "titlePlaceholder": "e.g. Pocket Forest, Hackney Wick",
       "descriptionLabel": "Description",
       "descriptionHelp": "The first paragraph is what shows up on the project card.",
-      "descriptionPlaceholder": "What are you trying to make happen, and why does it matter?"
+      "descriptionPlaceholder": "What are you trying to make happen, and why does it matter?",
+      "typeLabel": "Project type (optional)",
+      "typeHelp": "Used by the browse-page type filter.",
+      "typeNone": "— none —"
     },
     "cover": {
       "eyebrow": "Cover image",

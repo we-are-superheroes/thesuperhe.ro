@@ -203,7 +203,10 @@
       "titlePlaceholder": "es. Micro-foresta, Hackney Wick",
       "descriptionLabel": "Descrizione",
       "descriptionHelp": "Il primo paragrafo è quello che compare sulla scheda del progetto.",
-      "descriptionPlaceholder": "Cosa vuoi far succedere, e perché è importante?"
+      "descriptionPlaceholder": "Cosa vuoi far succedere, e perché è importante?",
+      "typeLabel": "Tipo di progetto (facoltativo)",
+      "typeHelp": "Usato dal filtro per tipo della pagina Esplora.",
+      "typeNone": "— nessuno —"
     },
     "cover": {
       "eyebrow": "Immagine di copertina",
