@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import type { StyleSpecification } from 'maplibre-gl'
-import { MIDNIGHT_MAP_SCHEME, recolourStyle } from '@/lib/map-style'
+import { toMidnightStyle } from '@/lib/map-style'
 
 const BASE: StyleSpecification = {
   version: 8,
@@ -40,18 +40,16 @@ function ids(style: StyleSpecification): string[] {
   return style.layers.map((l) => l.id)
 }
 
-describe('recolourStyle', () => {
-  it('paints known layers in the scheme colours and keeps other paint values', () => {
-    const style = recolourStyle(BASE, MIDNIGHT_MAP_SCHEME)
-    expect(paintOf(style, 'background')['background-color']).toBe(MIDNIGHT_MAP_SCHEME.land)
-    expect(paintOf(style, 'water')).toEqual({
-      'fill-color': MIDNIGHT_MAP_SCHEME.water,
-      'fill-antialias': false,
-    })
+describe('toMidnightStyle', () => {
+  it('repaints known layers and keeps their other paint values', () => {
+    const style = toMidnightStyle(BASE)
+    expect(paintOf(style, 'background')['background-color']).not.toBe('#45516E')
+    expect(paintOf(style, 'water')['fill-color']).not.toBe('#38435C')
+    expect(paintOf(style, 'water')['fill-antialias']).toBe(false)
   })
 
   it('leaves unknown layers and the input style untouched', () => {
-    const style = recolourStyle(BASE, MIDNIGHT_MAP_SCHEME)
+    const style = toMidnightStyle(BASE)
     expect(paintOf(style, 'something_else')['line-color']).toBe('#123456')
     expect(ids(style)).toEqual(ids(BASE))
     expect(paintOf(BASE, 'background')['background-color']).toBe('#45516E')

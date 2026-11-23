@@ -10,7 +10,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { LocateFixed, Loader2, Minus, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { boundingBox, type LatLng, type PlaceCategory } from '@/lib/places-shared'
-import { MIDNIGHT_MAP_SCHEME, recolourStyle } from '@/lib/map-style'
+import { toMidnightStyle } from '@/lib/map-style'
 import { CATEGORY_ICON_PATHS, LEAF_PATH } from '@/components/map/place-bits'
 
 type MapLibre = maplibregl.Map
@@ -36,18 +36,18 @@ type Marker = maplibregl.Marker
    does not serve — the map stays blank with "Worker failed to load".
    Version 5 ships the worker inside its single file.
 
-   Tiles: OpenFreeMap by default (OpenStreetMap data, no key). The
-   style URLs come from NEXT_PUBLIC_MAP_STYLE_LIGHT / _DARK so the
-   tile host can be changed without a code change. The light themes
-   show their style as it comes; Midnight's is repainted in clearer
-   colours by lib/map-style.ts, which expects the layer names of
-   OpenFreeMap's "fiord".
+   Tiles: OpenFreeMap's "positron" style by default (OpenStreetMap
+   data, no key). The style URLs come from NEXT_PUBLIC_MAP_STYLE_LIGHT
+   / _DARK so the tile host can be changed without a code change. The
+   light themes show their style as it comes; Midnight's is repainted
+   in dark colours by lib/map-style.ts, which expects positron's
+   layer names.
    ================================================================ */
 
 const STYLE_LIGHT =
   process.env.NEXT_PUBLIC_MAP_STYLE_LIGHT ?? 'https://tiles.openfreemap.org/styles/positron'
 const STYLE_DARK =
-  process.env.NEXT_PUBLIC_MAP_STYLE_DARK ?? 'https://tiles.openfreemap.org/styles/fiord'
+  process.env.NEXT_PUBLIC_MAP_STYLE_DARK ?? 'https://tiles.openfreemap.org/styles/positron'
 
 /** The three light themes add a class to <html>; Midnight (the default) adds none. */
 const LIGHT_THEME_CLASSES = ['theme-daylight', 'theme-paper', 'theme-contrast']
@@ -68,8 +68,7 @@ function applyStyle(map: maplibregl.Map, light: boolean) {
   }
   map.setStyle(STYLE_DARK, {
     diff: false,
-    transformStyle: (_previous, next): StyleSpecification =>
-      recolourStyle(next, MIDNIGHT_MAP_SCHEME),
+    transformStyle: (_previous, next): StyleSpecification => toMidnightStyle(next),
   })
 }
 

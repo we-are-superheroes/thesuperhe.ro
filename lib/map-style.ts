@@ -3,150 +3,123 @@ import type { LayerSpecification, StyleSpecification } from 'maplibre-gl'
 /* ================================================================
    Map colours for the Midnight theme.
 
-   Midnight's base map is OpenFreeMap's "fiord" style. On its own it
-   is a muted grey-blue where land, water and roads are nearly the
-   same tone, so `recolourStyle` repaints its layers to pull the
-   tones apart. Layers are matched by fiord's layer ids; a layer this
-   file does not know is left as it is. The light themes use another
-   style as it comes and are not repainted.
+   Every theme draws OpenFreeMap's "positron" style. The light themes
+   show it as it comes; for Midnight `toMidnightStyle` repaints its
+   layers in the theme's navy tones, keeping positron's quiet look:
+   roads a little lighter than the land, water darker, soft greens.
+   Layers are matched by positron's layer ids; a layer this file does
+   not know is left as it is.
 
    Amber is kept for pins and the search ring: nothing on the base
    map uses it.
    ================================================================ */
 
-export interface MapScheme {
-  land: string
+const C = {
+  land: '#22334C',
   /** Built-up areas. */
-  built: string
-  water: string
-  /** Woodland and parks. */
-  forest: string
-  roadMajor: string
-  roadMinor: string
-  boundary: string
-  /** Town and city names. */
-  label: string
-  /** Village, suburb and street names. */
-  labelMinor: string
-  /** Thin outline around names so they stay readable over roads and water. */
-  halo: string
-  waterLabel: string
-}
-
-export const MIDNIGHT_MAP_SCHEME: MapScheme = {
-  land: '#2A3F5C',
-  built: '#35506F',
-  water: '#0A1422',
-  forest: '#1F6048',
-  roadMajor: '#A8BCCE',
-  roadMinor: '#5F7696',
-  boundary: '#CDDAE8',
+  built: '#27394F',
+  building: '#2D4059',
+  buildingEdge: '#394F6C',
+  water: '#0E1826',
+  park: '#22403F',
+  wood: '#234541',
+  ice: '#3B5374',
+  /** Main roads and motorways. */
+  roadMajor: '#566D8E',
+  roadMinor: '#3B506E',
+  path: '#33465F',
+  /** Thin dark edge around main roads. */
+  roadEdge: '#172436',
+  rail: '#3F5473',
+  boundary: '#7388A6',
+  /** Town, city and country names. */
   label: '#EBF1F7',
+  /** Smaller place names. */
   labelMinor: '#CDDAE8',
-  halo: '#0E1A2B',
+  roadLabel: '#9DB0C7',
   waterLabel: '#7AAEE8',
-}
+  /** Outline around names so they stay readable over roads and water. */
+  halo: 'rgba(14, 26, 43, 0.85)',
+} as const
 
 type Paint = Record<string, unknown>
 
-function nameHalo(c: MapScheme, colour: string): Paint {
-  return {
-    'text-color': colour,
-    'text-halo-color': c.halo,
-    'text-halo-width': 1.5,
-    'text-halo-blur': 0,
-    'text-opacity': 1,
-  }
+function name(colour: string): Paint {
+  return { 'text-color': colour, 'text-halo-color': C.halo, 'text-halo-width': 1.5 }
 }
 
-/** New paint values per fiord layer id. */
-function paintOverrides(c: MapScheme): Record<string, Paint> {
-  const rail = { 'line-color': c.roadMinor }
-  const railDash = { 'line-color': c.land }
-  const majorName = nameHalo(c, c.label)
-  const minorName = nameHalo(c, c.labelMinor)
-  return {
-    background: { 'background-color': c.land },
-    water: { 'fill-color': c.water },
-    waterway: { 'line-color': c.water, 'line-opacity': 1 },
-    landcover_ice_shelf: { 'fill-color': c.built },
-    landuse_residential: { 'fill-color': c.built, 'fill-opacity': 1 },
-    landcover_wood: { 'fill-color': c.forest },
-    park: { 'fill-color': c.forest, 'fill-opacity': 0.4 },
-    park_outline: { 'line-color': c.forest },
-    building: { 'fill-color': c.roadMinor, 'fill-opacity': 0.3 },
+const rail: Paint = { 'line-color': C.rail }
+const railDash: Paint = { 'line-color': C.land }
+const motorwayEdge: Paint = { 'line-color': C.roadEdge }
+const motorway: Paint = { 'line-color': C.roadMajor }
 
-    tunnel_motorway_casing: { 'line-color': c.roadMinor },
-    tunnel_motorway_inner: { 'line-color': c.built },
-    'aeroway-taxiway': { 'line-color': c.roadMinor },
-    'aeroway-runway-casing': { 'line-color': c.roadMinor },
-    'aeroway-area': { 'fill-color': c.built },
-    'aeroway-runway': { 'line-color': c.built },
-    road_area_pier: { 'fill-color': c.land },
-    road_pier: { 'line-color': c.land },
+/** New paint values per positron layer id. */
+const MIDNIGHT_PAINT: Record<string, Paint> = {
+  background: { 'background-color': C.land },
+  park: { 'fill-color': C.park },
+  water: { 'fill-color': C.water },
+  landcover_ice_shelf: { 'fill-color': C.ice },
+  landcover_glacier: { 'fill-color': C.ice },
+  landuse_residential: { 'fill-color': C.built },
+  landcover_wood: { 'fill-color': C.wood },
+  waterway: { 'line-color': C.water },
+  building: { 'fill-color': C.building, 'fill-outline-color': C.buildingEdge },
 
-    highway_path: { 'line-color': c.roadMinor },
-    highway_minor: { 'line-color': c.roadMinor, 'line-opacity': 1 },
-    highway_major_casing: { 'line-color': c.halo },
-    highway_major_inner: { 'line-color': c.roadMajor },
-    highway_major_subtle: { 'line-color': c.roadMajor, 'line-opacity': 0.8, 'line-width': 1.5 },
-    highway_motorway_casing: { 'line-color': c.halo },
-    highway_motorway_inner: { 'line-color': c.roadMajor },
-    highway_motorway_subtle: { 'line-color': c.roadMajor, 'line-opacity': 0.6 },
+  tunnel_motorway_casing: { 'line-color': C.roadEdge },
+  tunnel_motorway_inner: { 'line-color': C.roadMinor },
+  'aeroway-taxiway': { 'line-color': C.roadMinor },
+  'aeroway-runway-casing': { 'line-color': C.roadMinor },
+  'aeroway-area': { 'fill-color': C.built },
+  'aeroway-runway': { 'line-color': C.roadMajor },
+  road_area_pier: { 'fill-color': C.land },
+  road_pier: { 'line-color': C.land },
 
-    railway_transit: rail,
-    railway_transit_dashline: railDash,
-    railway_service: rail,
-    railway_service_dashline: railDash,
-    railway: rail,
-    railway_dashline: railDash,
+  highway_path: { 'line-color': C.path },
+  highway_minor: { 'line-color': C.roadMinor },
+  highway_major_casing: { 'line-color': C.roadEdge },
+  highway_major_inner: { 'line-color': C.roadMajor },
+  highway_major_subtle: { 'line-color': C.roadMajor },
+  highway_motorway_casing: motorwayEdge,
+  highway_motorway_inner: motorway,
+  highway_motorway_subtle: motorway,
+  highway_motorway_bridge_casing: motorwayEdge,
+  highway_motorway_bridge_inner: motorway,
 
-    boundary_state: { 'line-color': c.boundary, 'line-opacity': 0.45, 'line-blur': 0 },
-    'boundary_country_z0-4': { 'line-color': c.boundary, 'line-opacity': 0.8, 'line-blur': 0 },
-    'boundary_country_z5-': { 'line-color': c.boundary, 'line-opacity': 0.8, 'line-blur': 0 },
+  railway_transit: rail,
+  railway_transit_dashline: railDash,
+  railway_service: rail,
+  railway_service_dashline: railDash,
+  railway: rail,
+  railway_dashline: railDash,
 
-    water_name: {
-      'text-color': c.waterLabel,
-      'text-halo-color': c.water,
-      'text-halo-width': 1,
-      'text-halo-blur': 0,
-    },
-    highway_name_other: minorName,
-    place_other: minorName,
-    place_suburb: minorName,
-    place_village: minorName,
-    place_state: minorName,
-    place_town: majorName,
-    place_city: majorName,
-    place_city_large: majorName,
-    place_country_other: majorName,
-    place_country_minor: majorName,
-    place_country_major: majorName,
-    place_continent: { 'text-color': c.label, 'text-halo-color': c.halo },
-  }
+  boundary_3: { 'line-color': C.boundary },
+  boundary_2: { 'line-color': C.boundary },
+  boundary_disputed: { 'line-color': C.boundary },
+
+  waterway_line_label: name(C.waterLabel),
+  water_name_point_label: name(C.waterLabel),
+  water_name_line_label: name(C.waterLabel),
+  'highway-name-path': name(C.roadLabel),
+  'highway-name-minor': name(C.roadLabel),
+  'highway-name-major': name(C.roadLabel),
+  airport: name(C.labelMinor),
+  label_other: name(C.labelMinor),
+  label_state: name(C.labelMinor),
+  label_village: name(C.label),
+  label_town: name(C.label),
+  label_city: name(C.label),
+  label_city_capital: name(C.label),
+  label_country_3: name(C.label),
+  label_country_2: name(C.label),
+  label_country_1: name(C.label),
 }
 
-/**
- * fiord looks for a `subclass` the map data does not carry on built-up
- * areas, so it never draws them. Match on `class` instead.
- */
-const BUILT_UP_FILTER = [
-  'all',
-  ['match', ['geometry-type'], ['MultiPolygon', 'Polygon'], true, false],
-  ['match', ['get', 'class'], ['residential', 'commercial', 'industrial', 'retail'], true, false],
-]
-
-/** A copy of `style` (OpenFreeMap fiord) painted in `scheme`'s colours. */
-export function recolourStyle(style: StyleSpecification, scheme: MapScheme): StyleSpecification {
-  const overrides = paintOverrides(scheme)
+/** A copy of `style` (OpenFreeMap positron) painted in Midnight's colours. */
+export function toMidnightStyle(style: StyleSpecification): StyleSpecification {
   const layers = style.layers.map((layer) => {
-    const override = overrides[layer.id]
+    const override = MIDNIGHT_PAINT[layer.id]
     if (!override) return layer
-    return {
-      ...layer,
-      paint: { ...layer.paint, ...override },
-      ...(layer.id === 'landuse_residential' && { filter: BUILT_UP_FILTER }),
-    } as LayerSpecification
+    return { ...layer, paint: { ...layer.paint, ...override } } as LayerSpecification
   })
   return { ...style, layers }
 }
