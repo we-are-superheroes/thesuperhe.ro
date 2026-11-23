@@ -69,6 +69,22 @@ export const THUMB_CLASS: Record<PlaceCategory, string> = {
   other: 'from-[#3A4352] to-[#667284]',
 }
 
+/**
+ * The border of an independent place's map pin: the lighter end of the
+ * category's thumbnail colour, so a pin can be matched to its result.
+ */
+export const PIN_BORDER_CLASS: Record<PlaceCategory, string> = {
+  farm: 'border-[#B86E00]',
+  organic: 'border-[#2f8f65]',
+  coop: 'border-[#2E5FAA]',
+  nature: 'border-[#3d7a5c]',
+  repair: 'border-[#b94444]',
+  garden: 'border-[#5f8a2a]',
+  learn: 'border-[#3D5170]',
+  services: 'border-[#7650A8]',
+  other: 'border-[#667284]',
+}
+
 export function CategoryThumb({
   category,
   className,
