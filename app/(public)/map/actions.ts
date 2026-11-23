@@ -61,7 +61,7 @@ export async function loadPlacesNearAction(position: {
 
   const centre = { lat: coarsen(position.lat), lng: coarsen(position.lng) }
   try {
-    const places = await findPlacesNear(centre, MAX_RADIUS_KM)
+    const places = await findPlacesNear(centre, MAX_RADIUS_KM, await getLocale())
     return { success: true, data: { centre, places } }
   } catch {
     return { success: false, error: await tError({ key: 'common.somethingWrong' }) }
@@ -82,7 +82,7 @@ export async function loadPlaceDetailAction(
     return { success: false, error: await tError({ key: 'places.notFound' }) }
   }
   try {
-    const detail = await getPlaceDetailView(slug)
+    const detail = await getPlaceDetailView(slug, await getLocale())
     if (!detail) return { success: false, error: await tError({ key: 'places.notFound' }) }
     return { success: true, data: detail }
   } catch {

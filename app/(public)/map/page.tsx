@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getTranslations } from 'next-intl/server'
+import { getLocale, getTranslations } from 'next-intl/server'
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { FALLBACK_MAP_VIEW, roughLocation } from '@/lib/geo-headers'
@@ -90,10 +90,11 @@ export default async function MapPage({
 
   // A shared link to one place (?d=slug): load its details with the page.
   const openParam = first(params.d)?.slice(0, 120) || null
-  const initialDetail = openParam ? await getPlaceDetailView(openParam) : null
+  const locale = await getLocale()
+  const initialDetail = openParam ? await getPlaceDetailView(openParam, locale) : null
 
   const [places, viewer] = await Promise.all([
-    centre ? findPlacesNear(centre, MAX_RADIUS_KM) : Promise.resolve<PlaceResult[]>([]),
+    centre ? findPlacesNear(centre, MAX_RADIUS_KM, locale) : Promise.resolve<PlaceResult[]>([]),
     userId ? db.user.findUnique({ where: { id: userId }, select: { role: true } }) : null,
   ])
 
