@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
@@ -40,6 +41,7 @@ async function getRecentProjects() {
       location: true,
       remoteOk: true,
       timeCommitmentHrs: true,
+      coverImageUrl: true,
       createdAt: true,
       projectType: { select: { name: true } },
       steps: {
@@ -58,6 +60,7 @@ async function getRecentProjects() {
     location: p.location,
     remoteOk: p.remoteOk,
     timeCommitmentHrs: p.timeCommitmentHrs,
+    coverImageUrl: p.coverImageUrl,
     createdAt: p.createdAt,
     projectType: p.projectType?.name ?? null,
     needsHelpCount: p.steps.filter(stepNeedsHelp).length,
@@ -345,9 +348,23 @@ async function Hero({
           {collageProjects[0] && (
             <div className="absolute right-0 top-0 z-[3] w-[62%] rotate-[2.5deg] rounded-2xl border border-white/[0.13] bg-bg-surface p-5 shadow-lg backdrop-blur-xl">
               <div
-                className="mb-3 aspect-[16/10] overflow-hidden rounded-md"
-                style={{ background: COLLAGE_GRADIENTS[0] }}
-              />
+                className="relative mb-3 aspect-[16/10] overflow-hidden rounded-md"
+                style={
+                  collageProjects[0].coverImageUrl
+                    ? undefined
+                    : { background: COLLAGE_GRADIENTS[0] }
+                }
+              >
+                {collageProjects[0].coverImageUrl && (
+                  <Image
+                    src={collageProjects[0].coverImageUrl}
+                    alt=""
+                    fill
+                    sizes="400px"
+                    className="object-cover"
+                  />
+                )}
+              </div>
               <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-neutral-400">
                 {collageProjects[0].projectType}
                 {collageProjects[0].location
@@ -387,9 +404,23 @@ async function Hero({
           {collageProjects[1] && (
             <div className="absolute bottom-[14%] left-0 z-[2] w-[64%] -rotate-3 rounded-2xl border border-white/[0.13] bg-bg-surface p-5 shadow-lg backdrop-blur-xl">
               <div
-                className="mb-3 aspect-[16/10] overflow-hidden rounded-md"
-                style={{ background: COLLAGE_GRADIENTS[1] }}
-              />
+                className="relative mb-3 aspect-[16/10] overflow-hidden rounded-md"
+                style={
+                  collageProjects[1].coverImageUrl
+                    ? undefined
+                    : { background: COLLAGE_GRADIENTS[1] }
+                }
+              >
+                {collageProjects[1].coverImageUrl && (
+                  <Image
+                    src={collageProjects[1].coverImageUrl}
+                    alt=""
+                    fill
+                    sizes="400px"
+                    className="object-cover"
+                  />
+                )}
+              </div>
               <div className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-neutral-400">
                 {collageProjects[1].projectType}
                 {collageProjects[1].location
@@ -594,8 +625,17 @@ async function ProjectCard({
       {/* Image area */}
       <div
         className="relative aspect-[16/10] overflow-hidden"
-        style={{ background: gradient }}
+        style={project.coverImageUrl ? undefined : { background: gradient }}
       >
+        {project.coverImageUrl && (
+          <Image
+            src={project.coverImageUrl}
+            alt=""
+            fill
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
+        )}
         {project.needsHelpCount > 0 && (
           <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-full border border-white/[0.13] bg-blue-900/[0.85] px-2.5 py-1 text-xs font-semibold tracking-tight text-amber-500 backdrop-blur-lg">
             <span className="size-1.5 rounded-full bg-amber-500 shadow-[0_0_6px_var(--color-amber-500)]" />
