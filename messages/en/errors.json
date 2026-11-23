@@ -29,6 +29,8 @@
     "noFileProvided": "No file provided.",
     "uploadFailed": "Could not upload image.",
     "coverSaveFailed": "Could not save cover.",
+    "photoSearchFailed": "Could not search for photos. Please try again.",
+    "photoImportFailed": "Could not save this photo. Please try another one.",
     "coverClearFailed": "Could not clear cover."
   },
   "projectJoin": {

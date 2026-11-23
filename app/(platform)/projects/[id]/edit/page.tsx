@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { isOrgAdminOfProject } from '@/lib/orgs'
 import { COUNTRIES } from '@/lib/locales'
 import { isCuratorRole } from '@/lib/places'
+import { isPixabayConfigured } from '@/lib/pixabay'
 import {
   EditProjectForm,
   type EditProjectInitial,
@@ -156,6 +157,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       skills={skills}
       projectTypes={projectTypes}
       mapEntry={mapEntry}
+      photoSearchEnabled={isPixabayConfigured()}
     />
   )
 }

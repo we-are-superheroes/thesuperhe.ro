@@ -29,6 +29,8 @@
     "noFileProvided": "Nessun file fornito.",
     "uploadFailed": "Non è stato possibile caricare l'immagine.",
     "coverSaveFailed": "Non è stato possibile salvare la copertina.",
+    "photoSearchFailed": "Non è stato possibile cercare le foto. Riprova.",
+    "photoImportFailed": "Non è stato possibile salvare questa foto. Provane un'altra.",
     "coverClearFailed": "Non è stato possibile rimuovere la copertina."
   },
   "projectJoin": {

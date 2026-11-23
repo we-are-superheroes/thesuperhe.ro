@@ -216,8 +216,23 @@
       "uploading": "Uploading…",
       "replace": "Replace",
       "upload": "Upload cover",
+      "search": "Search photos",
       "remove": "Remove",
-      "hint": "Wide image works best — at least 1200×600. PNG, JPG, WebP or GIF, up to 8 MB."
+      "hint": "Wide image works best — at least 1200×600. PNG, JPG, WebP or GIF, up to 8 MB.",
+      "picker": {
+        "title": "Find a photo",
+        "desc": "Search free photos and pick one for your cover.",
+        "placeholder": "For example: garden, bicycle, solar panels",
+        "submit": "Search",
+        "searching": "Searching…",
+        "start": "Type one or two words about your project, then press Search.",
+        "empty": "No photos found. Try other words.",
+        "saving": "Saving photo…",
+        "by": "Photo by {name}",
+        "usePhoto": "Use the photo by {name}",
+        "credit": "Photos from <link>Pixabay</link>.",
+        "notice": "Please avoid photos that show people’s faces or brand logos."
+      }
     },
     "location": {
       "eyebrow": "Where it happens",
