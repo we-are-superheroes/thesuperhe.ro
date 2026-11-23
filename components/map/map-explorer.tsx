@@ -793,7 +793,9 @@ export function MapExplorer({
             pins={pins}
             // The open place stays highlighted while its details are shown.
             selectedId={openSlug ?? selected?.slug ?? null}
-            onSelect={(slug) => select(slug, true)}
+            // With the details panel open, clicking another pin switches the
+            // panel to that place; otherwise it just selects it.
+            onSelect={(slug) => (openSlug ? openPlace(slug) : select(slug, true))}
             you={local?.centre ?? null}
             onLocate={useMyLocation}
             locating={locating}
