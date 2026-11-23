@@ -4,29 +4,25 @@ import { useEffect, useRef, useState, useTransition, type FormEvent } from 'reac
 import { useTranslations } from 'next-intl'
 import { Search, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import {
-  searchCoverPhotosAction,
-  setCoverFromStockPhotoAction,
-} from '@/app/(platform)/projects/[id]/edit/actions'
+import { searchCoverPhotosAction } from '@/app/(platform)/projects/[id]/edit/actions'
 import type { StockPhoto } from '@/lib/pixabay'
 
 /* ================================================================
    "Search photos" dialog for the project cover card. Searches free
-   stock photos (Pixabay) through a server action; picking one copies
-   it into our own storage and sets it as the cover.
+   stock photos (Pixabay) through a server action and hands the chosen
+   photo to the form, which decides when it is saved.
 
    Pixabay asks that search results say where they come from — the
    "Photos from Pixabay" line and the per-photo author links do that.
    ================================================================ */
 
 export function CoverPhotoPicker({
-  projectId,
-  onPicked,
+  onChoose,
   onClose,
 }: {
-  projectId: string
-  /** Called with the new cover's URL once the photo is saved. */
-  onPicked: (url: string) => void
+  /** Take the chosen photo. Resolves to an error message, or null when it
+   *  was accepted (the caller then closes the dialog). */
+  onChoose: (photo: StockPhoto) => Promise<string | null>
   onClose: () => void
 }) {
   const t = useTranslations('project')
@@ -63,7 +59,7 @@ export function CoverPhotoPicker({
     if (!canSearch) return
     setError(null)
     startSearch(async () => {
-      const result = await searchCoverPhotosAction(projectId, query)
+      const result = await searchCoverPhotosAction(query)
       if (!result.success) setError(result.error)
       else setPhotos(result.data.photos)
     })
@@ -74,10 +70,9 @@ export function CoverPhotoPicker({
     setError(null)
     setSavingId(photo.id)
     startSave(async () => {
-      const result = await setCoverFromStockPhotoAction(projectId, photo.id)
+      const problem = await onChoose(photo)
       setSavingId(null)
-      if (!result.success) setError(result.error)
-      else onPicked(result.data.url)
+      if (problem) setError(problem)
     })
   }
 

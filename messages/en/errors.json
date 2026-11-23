@@ -31,6 +31,7 @@
     "coverSaveFailed": "Could not save cover.",
     "photoSearchFailed": "Could not search for photos. Please try again.",
     "photoImportFailed": "Could not save this photo. Please try another one.",
+    "coverNotSavedAfterCreate": "Your project was created, but the cover image could not be saved. Please try again here.",
     "coverClearFailed": "Could not clear cover."
   },
   "projectJoin": {

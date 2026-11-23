@@ -31,6 +31,7 @@
     "coverSaveFailed": "No se pudo guardar la portada.",
     "photoSearchFailed": "No se pudieron buscar fotos. Inténtalo de nuevo.",
     "photoImportFailed": "No se pudo guardar esta foto. Prueba con otra.",
+    "coverNotSavedAfterCreate": "Tu proyecto se ha creado, pero no se pudo guardar la imagen de portada. Inténtalo de nuevo aquí.",
     "coverClearFailed": "No se pudo quitar la portada."
   },
   "projectJoin": {

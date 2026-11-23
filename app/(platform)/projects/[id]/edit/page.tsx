@@ -1,5 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import { auth } from '@clerk/nextjs/server'
+import { getTranslations } from 'next-intl/server'
 import { db } from '@/lib/db'
 import { isOrgAdminOfProject } from '@/lib/orgs'
 import { COUNTRIES } from '@/lib/locales'
@@ -13,6 +14,7 @@ import {
 
 interface EditProjectParams {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ cover?: string }>
 }
 
 // Reverse lookup so legacy locations whose trailing segment is a country
@@ -46,8 +48,9 @@ function splitLocation(
   return { city: loc, countryCode: storedCode }
 }
 
-export default async function EditProjectPage({ params }: EditProjectParams) {
+export default async function EditProjectPage({ params, searchParams }: EditProjectParams) {
   const { id } = await params
+  const { cover } = await searchParams
   const { userId } = await auth()
   if (!userId) redirect('/sign-in')
 
@@ -151,6 +154,12 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
         ? { state: 'onMap', slug: project.place.slug }
         : { state: 'add' }
 
+  // Set when the create form made the project but could not save its cover.
+  const coverError =
+    cover === 'failed'
+      ? (await getTranslations('errors'))('projectEdit.coverNotSavedAfterCreate')
+      : null
+
   return (
     <EditProjectForm
       initial={initial}
@@ -158,6 +167,7 @@ export default async function EditProjectPage({ params }: EditProjectParams) {
       projectTypes={projectTypes}
       mapEntry={mapEntry}
       photoSearchEnabled={isPixabayConfigured()}
+      initialError={coverError}
     />
   )
 }

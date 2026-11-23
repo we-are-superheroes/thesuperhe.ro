@@ -31,6 +31,7 @@
     "coverSaveFailed": "Das Titelbild konnte nicht gespeichert werden.",
     "photoSearchFailed": "Die Fotosuche hat nicht funktioniert. Bitte versuche es noch einmal.",
     "photoImportFailed": "Dieses Foto konnte nicht gespeichert werden. Bitte versuche ein anderes.",
+    "coverNotSavedAfterCreate": "Dein Projekt wurde erstellt, aber das Titelbild konnte nicht gespeichert werden. Bitte versuche es hier noch einmal.",
     "coverClearFailed": "Das Titelbild konnte nicht entfernt werden."
   },
   "projectJoin": {
