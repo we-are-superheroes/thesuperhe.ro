@@ -31,6 +31,7 @@
     "coverSaveFailed": "Não foi possível guardar a capa.",
     "photoSearchFailed": "Não foi possível procurar fotos. Tente novamente.",
     "photoImportFailed": "Não foi possível guardar esta foto. Tente outra.",
+    "coverNotSavedAfterCreate": "O seu projeto foi criado, mas não foi possível guardar a imagem de capa. Tente novamente aqui.",
     "coverClearFailed": "Não foi possível remover a capa."
   },
   "projectJoin": {

@@ -384,19 +384,16 @@ async function saveProjectCover(
 }
 
 /**
- * Search free stock photos (Pixabay) for a cover. Lead-only, so the shared
- * API quota is spent only by people who can actually set a cover.
+ * Search free stock photos (Pixabay) for a cover. Open to any signed-in
+ * user, because the create-project form searches before a project exists;
+ * the per-user rate limit protects the shared API quota.
  */
 export async function searchCoverPhotosAction(
-  projectId: string,
   query: string,
 ): Promise<ServerActionResult<{ photos: StockPhoto[] }>> {
   const t = await getTranslations('errors')
   const { userId } = await auth()
   if (!userId) return { success: false, error: t('common.notSignedIn') }
-
-  const lead = await requireLead(userId, projectId)
-  if (!lead.success) return { success: false, error: lead.error }
 
   const q = typeof query === 'string' ? query.trim().slice(0, PIXABAY_MAX_QUERY_LENGTH) : ''
   if (q.length < 2 || !isPixabayConfigured()) {

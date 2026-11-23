@@ -1,6 +1,7 @@
 import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/db'
 import { getUserActiveOrgs } from '@/lib/orgs'
+import { isPixabayConfigured } from '@/lib/pixabay'
 import {
   CreateProjectForm,
   type BlueprintOption,
@@ -111,6 +112,7 @@ export default async function CreateProjectPage({ searchParams }: SearchParams) 
       projectTypes={projectTypes}
       myOrgs={myOrgs}
       initialOrgSlug={params.org?.trim() || null}
+      photoSearchEnabled={isPixabayConfigured()}
     />
   )
 }

@@ -31,6 +31,7 @@
     "coverSaveFailed": "Impossible d’enregistrer la couverture.",
     "photoSearchFailed": "Impossible de chercher des photos. Réessaie.",
     "photoImportFailed": "Impossible d’enregistrer cette photo. Essaies-en une autre.",
+    "coverNotSavedAfterCreate": "Ton projet a été créé, mais l’image de couverture n’a pas pu être enregistrée. Réessaie ici.",
     "coverClearFailed": "Impossible de retirer la couverture."
   },
   "projectJoin": {

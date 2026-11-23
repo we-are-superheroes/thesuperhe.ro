@@ -1,16 +1,16 @@
 'use client'
 
-import { useState, useTransition, useRef, useEffect } from 'react'
+import { useState, useTransition, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
-import Image from 'next/image'
-import { ArrowRight, FileText, ChevronLeft, Upload, ImageIcon, MapPin, Search } from 'lucide-react'
+import { ArrowRight, FileText, ChevronLeft, MapPin } from 'lucide-react'
 import type { ProjectStatus } from '@prisma/client'
 import { cn } from '@/lib/utils'
 import {
   updateProjectAction,
   uploadProjectCoverAction,
+  setCoverFromStockPhotoAction,
   clearProjectCoverAction,
 } from '@/app/(platform)/projects/[id]/edit/actions'
 import { saveBlueprintAction } from '@/app/(platform)/projects/new/actions'
@@ -29,7 +29,7 @@ import {
   type ProjectTypeOption,
   type SkillOption,
 } from '@/components/platform/project-form-bits'
-import { CoverPhotoPicker } from '@/components/platform/cover-photo-picker'
+import { ProjectCoverCard } from '@/components/platform/project-cover-card'
 import { LANGUAGES as ISO_LANGUAGES } from '@/lib/locales'
 
 /* ================================================================
@@ -99,6 +99,7 @@ export function EditProjectForm({
   projectTypes,
   mapEntry = null,
   photoSearchEnabled = false,
+  initialError = null,
 }: {
   initial: EditProjectInitial
   skills: SkillOption[]
@@ -106,6 +107,8 @@ export function EditProjectForm({
   mapEntry?: ProjectMapEntry | null
   /** Stock-photo search is offered only where its API key is configured. */
   photoSearchEnabled?: boolean
+  /** A problem to show on arrival (the cover could not be saved after creating). */
+  initialError?: string | null
 }) {
   const t = useTranslations('project')
   const tCommon = useTranslations('common')
@@ -124,9 +127,7 @@ export function EditProjectForm({
   const [status, setStatus] = useState<ProjectStatus>(initial.status)
   const [activeSection, setActiveSection] = useState<string>(TOC_SECTIONS[0].id)
   const [coverImageUrl, setCoverImageUrl] = useState<string | null>(initial.coverImageUrl)
-  const coverFileRef = useRef<HTMLInputElement>(null)
   const [pendingCover, startCoverTransition] = useTransition()
-  const [photoPickerOpen, setPhotoPickerOpen] = useState(false)
   const [steps, setSteps] = useState<FormStep[]>(
     initial.steps.length > 0
       ? initial.steps.map((s) => ({
@@ -149,7 +150,7 @@ export function EditProjectForm({
         ],
   )
 
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(initialError)
   const [pendingSave, startSave] = useTransition()
   const [pendingBlueprint, startBlueprintSave] = useTransition()
   const [savedBlueprintAt, setSavedBlueprintAt] = useState<Date | null>(null)
@@ -203,8 +204,7 @@ export function EditProjectForm({
     })
   }
 
-  const onCoverFile = (file: File | null) => {
-    if (!file) return
+  const onCoverFile = (file: File) => {
     setError(null)
     const fd = new FormData()
     fd.append('file', file)
@@ -213,7 +213,14 @@ export function EditProjectForm({
       if (!result.success) setError(result.error)
       else setCoverImageUrl(result.data.url)
     })
-    if (coverFileRef.current) coverFileRef.current.value = ''
+  }
+
+  const onStockPhoto = async (photoId: number): Promise<string | null> => {
+    const result = await setCoverFromStockPhotoAction(initial.id, photoId)
+    if (!result.success) return result.error
+    setError(null)
+    setCoverImageUrl(result.data.url)
+    return null
   }
 
   const onClearCover = () => {
@@ -433,88 +440,15 @@ export function EditProjectForm({
         </Card>
 
         {/* Cover image */}
-        <Card id="sec-cover">
-          <CardHead
-            eyebrow={t('form.cover.eyebrow')}
-            title={t('form.cover.title')}
-            desc={t('form.cover.desc')}
-          />
-          <input
-            ref={coverFileRef}
-            type="file"
-            accept="image/png,image/jpeg,image/webp,image/gif"
-            className="hidden"
-            onChange={(e) => onCoverFile(e.target.files?.[0] ?? null)}
-          />
-          <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-            <div className="relative aspect-[16/8] w-full max-w-[260px] shrink-0 overflow-hidden rounded-xl border border-white/[0.08] bg-bg-base">
-              {coverImageUrl ? (
-                <Image
-                  src={coverImageUrl}
-                  alt={t('form.cover.alt')}
-                  fill
-                  sizes="260px"
-                  className="object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center text-fg-tertiary">
-                  <ImageIcon className="size-8" strokeWidth={1.5} />
-                </div>
-              )}
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => coverFileRef.current?.click()}
-                  disabled={pendingCover}
-                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-fg-primary transition-colors hover:border-neutral-600 disabled:cursor-wait disabled:opacity-60"
-                >
-                  <Upload className="size-3.5" />
-                  {pendingCover
-                    ? t('form.cover.uploading')
-                    : coverImageUrl
-                      ? t('form.cover.replace')
-                      : t('form.cover.upload')}
-                </button>
-                {photoSearchEnabled && (
-                  <button
-                    type="button"
-                    onClick={() => setPhotoPickerOpen(true)}
-                    disabled={pendingCover}
-                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-fg-primary transition-colors hover:border-neutral-600 disabled:cursor-wait disabled:opacity-60"
-                  >
-                    <Search className="size-3.5" />
-                    {t('form.cover.search')}
-                  </button>
-                )}
-                {coverImageUrl && (
-                  <button
-                    type="button"
-                    onClick={onClearCover}
-                    disabled={pendingCover}
-                    className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2 text-sm text-red-300 transition-colors hover:border-red-500 hover:text-red-500 disabled:opacity-60"
-                  >
-                    {t('form.cover.remove')}
-                  </button>
-                )}
-              </div>
-              <span className="max-w-[320px] text-xs leading-relaxed text-fg-tertiary">
-                {t('form.cover.hint')}
-              </span>
-            </div>
-          </div>
-          {photoPickerOpen && (
-            <CoverPhotoPicker
-              projectId={initial.id}
-              onPicked={(url) => {
-                setCoverImageUrl(url)
-                setPhotoPickerOpen(false)
-              }}
-              onClose={() => setPhotoPickerOpen(false)}
-            />
-          )}
-        </Card>
+        <ProjectCoverCard
+          id="sec-cover"
+          previewUrl={coverImageUrl}
+          pending={pendingCover}
+          photoSearchEnabled={photoSearchEnabled}
+          onFile={onCoverFile}
+          onStockPhoto={(photo) => onStockPhoto(photo.id)}
+          onRemove={onClearCover}
+        />
 
         {/* Where */}
         <Card id="sec-location">

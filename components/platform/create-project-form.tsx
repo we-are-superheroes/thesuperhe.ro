@@ -18,6 +18,12 @@ import {
   type CreateProjectInput,
 } from '@/app/(platform)/projects/new/actions'
 import {
+  uploadProjectCoverAction,
+  setCoverFromStockPhotoAction,
+} from '@/app/(platform)/projects/[id]/edit/actions'
+import { ProjectCoverCard } from '@/components/platform/project-cover-card'
+import type { StockPhoto } from '@/lib/pixabay'
+import {
   Card,
   CardHead,
   Field,
@@ -55,6 +61,19 @@ export interface BlueprintOption {
 
 export type SkillOption = SharedSkillOption
 
+/**
+ * The cover chosen before the project exists. It is saved right after the
+ * project is created, because a cover needs a project to belong to.
+ */
+type PendingCover =
+  | { kind: 'file'; file: File; previewUrl: string }
+  | { kind: 'stock'; photo: StockPhoto }
+
+/** Mirrors the cover rules in lib/storage.ts, so a bad file is refused
+ *  before the project is created rather than after. */
+const COVER_MAX_MB = 8
+const COVER_TYPES = ['image/png', 'image/jpeg', 'image/webp', 'image/gif']
+
 function blankSteps(): FormStep[] {
   return [
     { id: `s-${Date.now()}-1`, title: '', description: '', skillIds: [], estimatedHrs: null },
@@ -86,6 +105,7 @@ export function CreateProjectForm({
   projectTypes,
   myOrgs,
   initialOrgSlug,
+  photoSearchEnabled = false,
 }: {
   /** The blueprint the editor was opened from (via ?blueprint=), or null. */
   sourceBlueprint: BlueprintOption | null
@@ -101,8 +121,11 @@ export function CreateProjectForm({
   myOrgs: Array<{ id: string; slug: string; name: string }>
   /** Pre-selected org when arriving via "+ New organisation project". */
   initialOrgSlug: string | null
+  /** Stock-photo search is offered only where its API key is configured. */
+  photoSearchEnabled?: boolean
 }) {
   const t = useTranslations('project')
+  const tErrors = useTranslations('errors')
   const tCommon = useTranslations('common')
   const router = useRouter()
 
@@ -144,10 +167,35 @@ export function CreateProjectForm({
   )
   const [steps, setSteps] = useState<FormStep[]>(() => stepsFromBlueprint(sourceBlueprint))
 
+  const [cover, setCover] = useState<PendingCover | null>(null)
+
   const [error, setError] = useState<string | null>(null)
   const [pendingLaunch, startLaunch] = useTransition()
   const [pendingBlueprint, startBlueprintSave] = useTransition()
   const [savedBlueprintAt, setSavedBlueprintAt] = useState<'variant' | 'new' | null>(null)
+
+  /* ── Cover ────────────────────────────────────────── */
+
+  // Free the browser's copy of a local file preview when it is replaced.
+  const changeCover = (next: PendingCover | null) => {
+    setCover((prev) => {
+      if (prev?.kind === 'file') URL.revokeObjectURL(prev.previewUrl)
+      return next
+    })
+  }
+
+  const onCoverFile = (file: File) => {
+    if (!COVER_TYPES.includes(file.type)) {
+      setError(tErrors('common.imageUnsupportedType'))
+      return
+    }
+    if (file.size > COVER_MAX_MB * 1024 * 1024) {
+      setError(tErrors('common.imageTooLarge', { max: COVER_MAX_MB }))
+      return
+    }
+    setError(null)
+    changeCover({ kind: 'file', file, previewUrl: URL.createObjectURL(file) })
+  }
 
   /* ── Phase transitions ───────────────────────────── */
 
@@ -163,6 +211,7 @@ export function CreateProjectForm({
     setJoinPolicy('open')
     setProjectTypeId(null)
     setSteps(blankSteps())
+    changeCover(null)
     setError(null)
     setPhase('edit')
     window.scrollTo({ top: 0, behavior: 'instant' })
@@ -227,7 +276,24 @@ export function CreateProjectForm({
         setError(result.error)
         return
       }
-      router.push(`/projects/${result.data.projectId}`)
+      const projectId = result.data.projectId
+      if (cover) {
+        let saved
+        if (cover.kind === 'file') {
+          const fd = new FormData()
+          fd.append('file', cover.file)
+          saved = await uploadProjectCoverAction(projectId, fd)
+        } else {
+          saved = await setCoverFromStockPhotoAction(projectId, cover.photo.id)
+        }
+        if (!saved.success) {
+          // The project exists; send the lead to the place where they can
+          // try the cover again, with a message saying what happened.
+          router.push(`/projects/${projectId}/edit?cover=failed#sec-cover`)
+          return
+        }
+      }
+      router.push(`/projects/${projectId}`)
     })
   }
 
@@ -317,6 +383,25 @@ export function CreateProjectForm({
             pendingBlueprint={pendingBlueprint}
             savedBlueprintAt={savedBlueprintAt}
             titleForPreview={titleForPreview}
+            coverCard={
+              <ProjectCoverCard
+                previewUrl={
+                  cover?.kind === 'file'
+                    ? cover.previewUrl
+                    : (cover?.photo.thumbUrl ?? null)
+                }
+                plainPreview
+                pending={pendingLaunch}
+                photoSearchEnabled={photoSearchEnabled}
+                onFile={onCoverFile}
+                onStockPhoto={async (photo) => {
+                  setError(null)
+                  changeCover({ kind: 'stock', photo })
+                  return null
+                }}
+                onRemove={() => changeCover(null)}
+              />
+            }
             setTitle={setTitle}
             setDescription={setDescription}
             setCity={setCity}
@@ -567,6 +652,7 @@ function EditorPhase({
   pendingBlueprint,
   savedBlueprintAt,
   titleForPreview,
+  coverCard,
   setTitle,
   setDescription,
   setCity,
@@ -609,6 +695,8 @@ function EditorPhase({
   pendingBlueprint: boolean
   savedBlueprintAt: 'variant' | 'new' | null
   titleForPreview: string
+  /** The shared cover-image card, wired up by the form above. */
+  coverCard: React.ReactNode
   setTitle: (v: string) => void
   setDescription: (v: string) => void
   setCity: (v: string) => void
@@ -696,6 +784,9 @@ function EditorPhase({
           />
         </div>
       </Card>
+
+      {/* Cover image */}
+      {coverCard}
 
       {/* Where */}
       <Card>
