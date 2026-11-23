@@ -455,6 +455,7 @@ model Place {
   createdBy User?    @relation("PlaceCreator", fields: [createdById], references: [id], onDelete: SetNull)
   products  PlaceProduct[]
   proposals PlaceProposal[]
+  translations PlaceTranslation[]
 
   @@index([latitude, longitude])
   @@index([country])
@@ -482,6 +483,34 @@ model PlaceProduct {
 
   @@index([placeId, sortOrder])
   @@map("place_products")
+}
+
+// A machine translation of one place's texts into one platform language.
+// Written only by lib/place-translator.ts; shown only while `sourceHash`
+// still matches the place's texts (lib/place-translation.ts).
+model PlaceTranslation {
+  id      String @id @default(uuid())
+  placeId String @map("place_id")
+  // Target language: one of SUPPORTED_LOCALES (lib/locale-shared.ts).
+  locale  String
+
+  // sha1 of the source texts this translation was made from.
+  sourceHash     String  @map("source_hash")
+  // ISO 639 code of the source texts: the place's own, else detected.
+  sourceLanguage String? @map("source_language")
+  // { fields: { summary, … }, terms: { "<source text>": "<translation>" } }.
+  // Empty when the place is already written in this language.
+  texts          Json
+  // Model that produced the translation.
+  model          String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  place Place @relation(fields: [placeId], references: [id], onDelete: Cascade)
+
+  @@unique([placeId, locale])
+  @@map("place_translations")
 }
 
 // Review queue and change history in one. A member's proposal waits as

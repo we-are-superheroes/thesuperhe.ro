@@ -156,7 +156,11 @@
     "edit": "Редактировать это место",
     "suggestEdit": "Предложить правку",
     "lastChecked": "Информация проверена {date}",
-    "writtenIn": "Этот текст написан на языке: {language}."
+    "writtenIn": "Этот текст написан на языке: {language}.",
+    "translatedFrom": "Переведено автоматически. Язык оригинала: {language}.",
+    "translated": "Переведено автоматически.",
+    "showOriginal": "Показать оригинал",
+    "showTranslation": "Показать перевод"
   },
   "fields": {
     "name": "Название",

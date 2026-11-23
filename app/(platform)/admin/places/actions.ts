@@ -8,6 +8,7 @@ import { tError } from '@/lib/errors'
 import { log } from '@/lib/log'
 import { notify } from '@/lib/notifications'
 import { ApplyError, applyProposal } from '@/lib/places'
+import { translatePlaceLater } from '@/lib/place-translator'
 import { PLACE_LIMITS } from '@/lib/places-shared'
 import type { ServerActionResult } from '@/types'
 
@@ -68,6 +69,7 @@ export async function approveProposalAction(
       placeId: applied.placeId,
       kind: proposal.kind,
     })
+    if (proposal.kind !== 'remove') translatePlaceLater(applied.placeId)
     revalidatePath('/admin/places')
     revalidatePath('/map')
     revalidatePath(`/map/${applied.slug}`)

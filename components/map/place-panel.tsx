@@ -54,6 +54,16 @@ const BTN_GHOST = 'border-border-default bg-transparent text-fg-primary hover:bo
 const SECTION_TITLE = 'mb-2 mt-6 border-t border-border-subtle pt-5 font-display text-xl'
 const CELL = 'border-b border-border-subtle py-2'
 
+/** "French" for "fr", in the visitor's language; null when the code is not known. */
+function languageName(code: string, locale: string): string | null {
+  try {
+    const name = new Intl.DisplayNames([locale], { type: 'language' }).of(code)
+    return name && name !== code ? name : null
+  } catch {
+    return null
+  }
+}
+
 function Row({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="grid grid-cols-[18px_1fr] items-start gap-3">
@@ -86,6 +96,22 @@ export function PlacePanel({
   const t = useTranslations('map')
   const locale = useLocale()
   const [copied, setCopied] = useState(false)
+  const [showOriginal, setShowOriginal] = useState(false)
+
+  // An automatic translation is shown by default; the visitor can switch
+  // to the texts as they were written.
+  const translation = detail?.translation ?? null
+  const original = translation && showOriginal ? translation.original : null
+  const summary = original?.summary ?? detail?.summary ?? preview.summary
+  const description = original ? original.description : (detail?.description ?? null)
+  const practicalNote = original ? original.practicalNote : (detail?.practicalNote ?? null)
+  const openingNote = original ? original.openingNote : (detail?.openingNote ?? null)
+  const statusNote = original ? original.statusNote : (detail?.statusNote ?? null)
+  const products = (detail?.products ?? []).map((product, index) => ({
+    ...product,
+    ...(original?.products[index] ?? {}),
+  }))
+  const fromLanguage = translation?.from ? languageName(translation.from, locale) : null
 
   const hero = detail ? !!detail.project : preview.hero
   const closedForGood = detail?.operatingStatus === 'permanently_closed'
@@ -169,17 +195,35 @@ export function PlacePanel({
       <p className="mt-1 text-sm text-fg-tertiary">
         {[preview.city, kmText].filter(Boolean).join(' · ')}
       </p>
-      <p className="mt-3 text-sm leading-relaxed text-fg-secondary">{preview.summary}</p>
-      {detail?.description && (
+      <p className="mt-3 text-sm leading-relaxed text-fg-secondary">{summary}</p>
+      {description && (
         <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-fg-secondary">
-          {detail.description}
+          {description}
         </p>
       )}
-      {detail?.description && isSupportedLocale(detail.language) && detail.language !== locale && (
+      {translation && (
         <p className="mt-2 text-xs text-fg-tertiary">
-          {t('place.writtenIn', { language: LOCALE_NAMES[detail.language] })}
+          {fromLanguage
+            ? t('place.translatedFrom', { language: fromLanguage })
+            : t('place.translated')}{' '}
+          <button
+            type="button"
+            onClick={() => setShowOriginal((value) => !value)}
+            aria-pressed={showOriginal}
+            className="cursor-pointer text-fg-secondary underline underline-offset-2 hover:text-fg-primary"
+          >
+            {showOriginal ? t('place.showTranslation') : t('place.showOriginal')}
+          </button>
         </p>
       )}
+      {!translation &&
+        detail?.description &&
+        isSupportedLocale(detail.language) &&
+        detail.language !== locale && (
+          <p className="mt-2 text-xs text-fg-tertiary">
+            {t('place.writtenIn', { language: LOCALE_NAMES[detail.language] })}
+          </p>
+        )}
 
       {loading && !detail && (
         <p role="status" className="mt-6 flex items-center gap-2 text-sm text-fg-secondary">
@@ -198,13 +242,13 @@ export function PlacePanel({
           {closedForGood && (
             <div className="mt-4 rounded-xl border border-red-500/40 bg-red-500/[0.08] p-4">
               <h3 className="font-medium text-fg-primary">{t('place.closedPermanentlyTitle')}</h3>
-              {detail.statusNote && <p className="mt-1 text-sm text-fg-secondary">{detail.statusNote}</p>}
+              {statusNote && <p className="mt-1 text-sm text-fg-secondary">{statusNote}</p>}
             </div>
           )}
           {closedForNow && (
             <div className="mt-4 rounded-xl border border-amber-500/40 bg-amber-500/[0.08] p-4">
               <h3 className="font-medium text-fg-primary">{t('place.closedTemporarilyTitle')}</h3>
-              {detail.statusNote && <p className="mt-1 text-sm text-fg-primary">{detail.statusNote}</p>}
+              {statusNote && <p className="mt-1 text-sm text-fg-primary">{statusNote}</p>}
               {detail.reopensOn && (
                 <p className="mt-1 text-sm text-fg-secondary">
                   {t('hours.reopens', {
@@ -249,17 +293,17 @@ export function PlacePanel({
           <h3 className={SECTION_TITLE}>{t('panel.practicalTitle')}</h3>
           <div className="grid gap-2 text-sm text-fg-secondary">
             {addressLine && <Row icon={<MapPin className="size-4" />}>{addressLine}</Row>}
-            {!closedForGood && (openLabel || detail.openingNote) && (
+            {!closedForGood && (openLabel || openingNote) && (
               <Row icon={<Clock className="size-4" />}>
-                {openLabel ?? detail.openingNote}
-                {openLabel && detail.openingNote && (
-                  <span className="block text-fg-tertiary">{detail.openingNote}</span>
+                {openLabel ?? openingNote}
+                {openLabel && openingNote && (
+                  <span className="block text-fg-tertiary">{openingNote}</span>
                 )}
               </Row>
             )}
-            {detail.practicalNote && (
+            {practicalNote && (
               <Row icon={<Info className="size-4" />}>
-                <span className="whitespace-pre-line">{detail.practicalNote}</span>
+                <span className="whitespace-pre-line">{practicalNote}</span>
               </Row>
             )}
             {detail.contact && <Row icon={<Phone className="size-4" />}>{detail.contact}</Row>}
@@ -308,10 +352,10 @@ export function PlacePanel({
           )}
 
           {/* ── Price list ────────────────────────────────────────── */}
-          {detail.products.length > 0 && (
+          {products.length > 0 && (
             <>
               <h3 className={SECTION_TITLE}>{t('place.priceListTitle')}</h3>
-              {groupProducts(detail.products).map((group, index) => (
+              {groupProducts(products).map((group, index) => (
                 <div key={`${group.group ?? ''}-${index}`}>
                   {group.group && (
                     <h4 className="mb-0.5 mt-4 text-xs font-semibold uppercase tracking-widest text-fg-tertiary">

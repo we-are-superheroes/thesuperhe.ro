@@ -156,7 +156,11 @@
     "edit": "Редагувати це місце",
     "suggestEdit": "Запропонувати зміну",
     "lastChecked": "Інформацію востаннє перевірено {date}",
-    "writtenIn": "Цей текст написано мовою {language}."
+    "writtenIn": "Цей текст написано мовою {language}.",
+    "translatedFrom": "Перекладено автоматично. Мова оригіналу: {language}.",
+    "translated": "Перекладено автоматично.",
+    "showOriginal": "Показати оригінал",
+    "showTranslation": "Показати переклад"
   },
   "fields": {
     "name": "Назва",

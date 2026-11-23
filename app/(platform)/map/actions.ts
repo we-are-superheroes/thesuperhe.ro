@@ -18,6 +18,7 @@ import {
   isCuratorRole,
   placeEditMode,
 } from '@/lib/places'
+import { translatePlaceLater } from '@/lib/place-translator'
 import {
   diffPlaceData,
   isValidLatLng,
@@ -188,6 +189,7 @@ export async function submitPlaceAction(
       return result
     })
     log.info('places.direct_change', { userId: user.id, placeId: applied.placeId, kind })
+    translatePlaceLater(applied.placeId)
     revalidatePlace(applied.slug, projectId)
     return { success: true, data: { outcome: 'published', slug: applied.slug } }
   } catch (e) {
@@ -246,6 +248,7 @@ async function approveWithData(
       return result
     })
     log.info('places.proposal_approved', { curatorId, proposalId, placeId: applied.placeId, edited: true })
+    translatePlaceLater(applied.placeId)
     revalidatePlace(applied.slug)
     revalidatePath('/notifications')
     return { success: true, data: { outcome: 'published', slug: applied.slug } }

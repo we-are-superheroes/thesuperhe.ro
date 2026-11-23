@@ -156,7 +156,11 @@
     "edit": "Modifica questo luogo",
     "suggestEdit": "Proponi una modifica",
     "lastChecked": "Informazioni verificate l'ultima volta il {date}",
-    "writtenIn": "Questo testo è scritto in {language}."
+    "writtenIn": "Questo testo è scritto in {language}.",
+    "translatedFrom": "Tradotto automaticamente. Lingua originale: {language}.",
+    "translated": "Tradotto automaticamente.",
+    "showOriginal": "Mostra originale",
+    "showTranslation": "Mostra traduzione"
   },
   "fields": {
     "name": "Nome",

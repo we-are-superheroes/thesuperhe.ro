@@ -15,12 +15,14 @@
     "db:generate": "prisma generate",
     "test": "vitest run",
     "translate": "tsx -r dotenv/config scripts/translate.ts",
-    "translate:check": "tsx scripts/translate-check.ts"
+    "translate:check": "tsx scripts/translate-check.ts",
+    "translate:places": "tsx --conditions=react-server scripts/translate-places.ts"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
     "@clerk/localizations": "^4.13.2",
     "@clerk/nextjs": "^7.3.0",
     "@clerk/themes": "^2.4.57",
@@ -43,7 +45,6 @@
     "tz-lookup": "^6.1.25"
   },
   "devDependencies": {
-    "@anthropic-ai/sdk": "^0.111.0",
     "@formatjs/icu-messageformat-parser": "^3.5.14",
     "@swc/helpers": "^0.5.23",
     "@tailwindcss/postcss": "^4",

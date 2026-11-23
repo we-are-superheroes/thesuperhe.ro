@@ -5,6 +5,15 @@ import type { PlaceProposalKind, UserRole } from '@prisma/client'
 import { db } from '@/lib/db'
 import type { ErrorDescriptor } from '@/lib/validation'
 import { parseOpeningHours, type OpeningHours } from '@/lib/opening-hours'
+import { isSupportedLocale } from '@/lib/locale-shared'
+import {
+  hasTranslatedText,
+  placeSourceHash,
+  readStoredTranslation,
+  translatePlaceTexts,
+  type PlaceTexts,
+  type StoredPlaceTranslation,
+} from '@/lib/place-translation'
 import {
   RESERVED_PLACE_SLUGS,
   boundingBox,
@@ -85,6 +94,8 @@ const RESULT_SELECT = {
   slug: true,
   name: true,
   summary: true,
+  // Read for the translation check only; not part of a list result.
+  description: true,
   category: true,
   latitude: true,
   longitude: true,
@@ -100,7 +111,10 @@ const RESULT_SELECT = {
   operatingStatus: true,
   statusNote: true,
   reopensOn: true,
-  products: { select: { name: true }, orderBy: { sortOrder: 'asc' } },
+  products: {
+    select: { name: true, group: true, note: true, unit: true },
+    orderBy: { sortOrder: 'asc' },
+  },
   project: {
     select: {
       id: true,
@@ -125,12 +139,78 @@ function isoDate(date: Date | null): string | null {
   return date ? date.toISOString().slice(0, 10) : null
 }
 
-function toResult(row: ResultRow, centre: LatLng): PlaceResult {
+/* ---------------- automatic translations ---------------- */
+
+type TextsRow = Pick<
+  ResultRow,
+  'summary' | 'description' | 'practicalNote' | 'openingNote' | 'statusNote' | 'products'
+>
+
+function sourceTexts(row: TextsRow): PlaceTexts {
+  return {
+    summary: row.summary,
+    description: row.description,
+    practicalNote: row.practicalNote,
+    openingNote: row.openingNote,
+    statusNote: row.statusNote,
+    products: row.products.map((p) => ({ name: p.name, group: p.group, note: p.note, unit: p.unit })),
+  }
+}
+
+interface LoadedTranslation {
+  sourceHash: string
+  sourceLanguage: string | null
+  stored: StoredPlaceTranslation
+}
+
+/**
+ * Stored translations into `locale` for these places, by place id. Only
+ * called with ids that already came through publicPlacesWhere(). A failed
+ * read (or a locale we do not translate into) gives no translations: the
+ * map then shows the original texts, it never breaks.
+ */
+async function loadTranslations(
+  placeIds: string[],
+  locale: string | undefined,
+): Promise<Map<string, LoadedTranslation>> {
+  const found = new Map<string, LoadedTranslation>()
+  if (!isSupportedLocale(locale) || placeIds.length === 0) return found
+  try {
+    const rows = await db.placeTranslation.findMany({
+      where: { placeId: { in: placeIds }, locale },
+      select: { placeId: true, sourceHash: true, sourceLanguage: true, texts: true },
+    })
+    for (const row of rows) {
+      const stored = readStoredTranslation(row.texts)
+      if (stored && hasTranslatedText(stored)) {
+        found.set(row.placeId, { sourceHash: row.sourceHash, sourceLanguage: row.sourceLanguage, stored })
+      }
+    }
+  } catch {
+    // Fall through with what we have.
+  }
+  return found
+}
+
+/** The translation to show for a place, or null when there is none or it was made from older text. */
+function currentTranslation(
+  texts: PlaceTexts,
+  translation: LoadedTranslation | undefined,
+): LoadedTranslation | null {
+  return translation && translation.sourceHash === placeSourceHash(texts) ? translation : null
+}
+
+function toResult(row: ResultRow, centre: LatLng, translation?: LoadedTranslation): PlaceResult {
+  const original = sourceTexts(row)
+  const current = currentTranslation(original, translation)
+  const shown = current ? translatePlaceTexts(original, current.stored) : original
+  // Names in both languages, so a search finds the stall either way.
+  const productNames = [...new Set([...shown.products, ...original.products].map((p) => p.name))]
   return {
     id: row.id,
     slug: row.slug,
     name: row.name,
-    summary: row.summary,
+    summary: shown.summary,
     category: isPlaceCategory(row.category) ? row.category : 'other',
     lat: row.latitude,
     lng: row.longitude,
@@ -141,15 +221,15 @@ function toResult(row: ResultRow, centre: LatLng): PlaceResult {
     country: row.country,
     distanceKm: haversineKm(centre, { lat: row.latitude, lng: row.longitude }),
     website: row.website,
-    practicalNote: row.practicalNote,
+    practicalNote: shown.practicalNote,
     openingHours: storedHours(row.openingHours),
-    openingNote: row.openingNote,
+    openingNote: shown.openingNote,
     timezone: row.timezone,
     operatingStatus: row.operatingStatus,
-    statusNote: row.statusNote,
+    statusNote: shown.statusNote,
     reopensOn: isoDate(row.reopensOn),
     hasProducts: row.products.length > 0,
-    productNames: row.products.map((p) => p.name),
+    productNames,
     project: row.project
       ? {
           id: row.project.id,
@@ -167,9 +247,14 @@ const MAX_RESULTS = 500
  * Published places within `radiusKm` of `centre`, nearest first.
  * Permanently closed places are left out (their own page still explains).
  * An indexed bounding-box query does the first pass; the exact distance
- * is checked here.
+ * is checked here. With a `locale`, texts are shown in that language where
+ * an up-to-date automatic translation exists.
  */
-export async function findPlacesNear(centre: LatLng, radiusKm: number): Promise<PlaceResult[]> {
+export async function findPlacesNear(
+  centre: LatLng,
+  radiusKm: number,
+  locale?: string,
+): Promise<PlaceResult[]> {
   const box = boundingBox(centre, radiusKm)
   const rows = await db.place.findMany({
     where: {
@@ -183,15 +268,18 @@ export async function findPlacesNear(centre: LatLng, radiusKm: number): Promise<
     select: RESULT_SELECT,
     take: MAX_RESULTS,
   })
+  const translations = await loadTranslations(
+    rows.map((row) => row.id),
+    locale,
+  )
   return rows
-    .map((row) => toResult(row, centre))
+    .map((row) => toResult(row, centre, translations.get(row.id)))
     .filter((place) => place.distanceKm <= radiusKm)
     .sort((a, b) => a.distanceKm - b.distanceKm)
 }
 
 const DETAIL_SELECT = {
   ...RESULT_SELECT,
-  description: true,
   language: true,
   contact: true,
   currency: true,
@@ -270,12 +358,31 @@ export interface PlaceDetailView {
     joined: number
     helpSteps: Array<{ title: string; estimatedHrs: number | null }>
   } | null
+  /**
+   * Set when the texts above are an automatic translation: the language
+   * they were translated from (ISO code, null if unknown) and the texts as
+   * written, for "Show original". `original.products` lines up with `products`.
+   */
+  translation: { from: string | null; original: PlaceTexts } | null
 }
 
-/** The place for the details panel; null when missing, hidden or no longer public. */
-export async function getPlaceDetailView(slug: string): Promise<PlaceDetailView | null> {
+/**
+ * The place for the details panel; null when missing, hidden or no longer
+ * public. With a `locale`, texts are shown in that language where an
+ * up-to-date automatic translation exists.
+ */
+export async function getPlaceDetailView(
+  slug: string,
+  locale?: string,
+): Promise<PlaceDetailView | null> {
   const row = await getPlaceBySlug(slug)
   if (!row) return null
+  const original = sourceTexts(row)
+  const current = currentTranslation(
+    original,
+    (await loadTranslations([row.id], locale)).get(row.id),
+  )
+  const shown = current ? translatePlaceTexts(original, current.stored) : original
   const pricesUpdated = row.products.reduce<Date | null>(
     (latest, product) => (!latest || product.updatedAt > latest ? product.updatedAt : latest),
     null,
@@ -284,8 +391,8 @@ export async function getPlaceDetailView(slug: string): Promise<PlaceDetailView 
     id: row.id,
     slug: row.slug,
     name: row.name,
-    summary: row.summary,
-    description: row.description,
+    summary: shown.summary,
+    description: shown.description,
     language: row.language,
     category: isPlaceCategory(row.category) ? row.category : 'other',
     lat: row.latitude,
@@ -296,21 +403,18 @@ export async function getPlaceDetailView(slug: string): Promise<PlaceDetailView 
     city: row.city,
     website: row.website,
     contact: row.contact,
-    practicalNote: row.practicalNote,
+    practicalNote: shown.practicalNote,
     openingHours: storedHours(row.openingHours),
-    openingNote: row.openingNote,
+    openingNote: shown.openingNote,
     timezone: row.timezone,
     operatingStatus: row.operatingStatus,
-    statusNote: row.statusNote,
+    statusNote: shown.statusNote,
     reopensOn: isoDate(row.reopensOn),
     currency: row.currency ?? 'EUR',
-    products: row.products.map((product) => ({
+    products: row.products.map((product, index) => ({
       id: product.id,
-      name: product.name,
-      group: product.group,
-      note: product.note,
+      ...shown.products[index],
       priceMinor: product.priceMinor,
-      unit: product.unit,
       available: product.available,
     })),
     pricesUpdatedAt: pricesUpdated?.toISOString() ?? null,
@@ -322,6 +426,7 @@ export async function getPlaceDetailView(slug: string): Promise<PlaceDetailView 
           helpSteps: row.project.steps,
         }
       : null,
+    translation: current ? { from: row.language ?? current.sourceLanguage, original } : null,
   }
 }
 
