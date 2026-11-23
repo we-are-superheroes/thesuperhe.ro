@@ -89,8 +89,12 @@ export interface MapExplorerProps {
 
 const FIELD =
   'flex h-[42px] items-center gap-2 rounded-lg border border-border-default bg-bg-input px-3 transition-colors duration-fast focus-within:border-amber-500 focus-within:shadow-[0_0_0_3px_var(--focus-ring)]'
+// The whole field lights up when its text box has focus (FIELD's
+// focus-within styles), so the text box must not draw a ring of its own.
+// `!` is needed: the site-wide `:focus-visible` outline in globals.css is
+// outside Tailwind's layers and would otherwise win over `outline-none`.
 const FIELD_INPUT =
-  'h-full min-w-0 bg-transparent text-sm text-fg-primary outline-none placeholder:text-fg-tertiary'
+  'h-full min-w-0 bg-transparent text-sm text-fg-primary outline-none! placeholder:text-fg-tertiary'
 const CHIP =
   'inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-border-default bg-bg-surface px-3 py-1.5 text-sm text-fg-secondary transition-colors duration-fast hover:border-border-strong hover:text-fg-primary aria-pressed:border-brand-accent aria-pressed:bg-brand-accent aria-pressed:font-medium aria-pressed:text-fg-on-accent'
 const BTN =
