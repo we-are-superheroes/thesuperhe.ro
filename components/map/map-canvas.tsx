@@ -10,7 +10,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { LocateFixed, Loader2, Minus, Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { boundingBox, type LatLng, type PlaceCategory } from '@/lib/places-shared'
-import { MAP_SCHEMES, recolourStyle, type MapSchemeId } from '@/lib/map-style'
+import { MIDNIGHT_MAP_SCHEME, recolourStyle } from '@/lib/map-style'
 import { CATEGORY_ICON_PATHS, LEAF_PATH } from '@/components/map/place-bits'
 
 type MapLibre = maplibregl.Map
@@ -36,33 +36,40 @@ type Marker = maplibregl.Marker
    does not serve — the map stays blank with "Worker failed to load".
    Version 5 ships the worker inside its single file.
 
-   Tiles: OpenFreeMap's "fiord" style (OpenStreetMap data, no key),
-   repainted in the active theme's colours by lib/map-style.ts. The
-   style URL comes from NEXT_PUBLIC_MAP_STYLE so the tile host can be
-   changed without a code change; the repainting expects fiord's
-   layer names.
+   Tiles: OpenFreeMap by default (OpenStreetMap data, no key). The
+   style URLs come from NEXT_PUBLIC_MAP_STYLE_LIGHT / _DARK so the
+   tile host can be changed without a code change. The light themes
+   show their style as it comes; Midnight's is repainted in clearer
+   colours by lib/map-style.ts, which expects the layer names of
+   OpenFreeMap's "fiord".
    ================================================================ */
 
-const STYLE_URL = process.env.NEXT_PUBLIC_MAP_STYLE ?? 'https://tiles.openfreemap.org/styles/fiord'
+const STYLE_LIGHT =
+  process.env.NEXT_PUBLIC_MAP_STYLE_LIGHT ?? 'https://tiles.openfreemap.org/styles/positron'
+const STYLE_DARK =
+  process.env.NEXT_PUBLIC_MAP_STYLE_DARK ?? 'https://tiles.openfreemap.org/styles/fiord'
 
 /** The three light themes add a class to <html>; Midnight (the default) adds none. */
-function currentScheme(): MapSchemeId {
+const LIGHT_THEME_CLASSES = ['theme-daylight', 'theme-paper', 'theme-contrast']
+
+function isLightTheme(): boolean {
   const classes = document.documentElement.classList
-  if (classes.contains('theme-daylight')) return 'daylight'
-  if (classes.contains('theme-paper')) return 'paper'
-  if (classes.contains('theme-contrast')) return 'contrast'
-  return 'midnight'
+  return LIGHT_THEME_CLASSES.some((c) => classes.contains(c))
 }
 
 /**
- * Load the base style painted in `scheme`'s colours. A full reload (no
+ * Load the base style for a light theme or for Midnight. A full reload (no
  * diffing) so `style.load` fires every time and the search ring is re-added.
  */
-function applyScheme(map: maplibregl.Map, scheme: MapSchemeId) {
-  map.setStyle(STYLE_URL, {
+function applyStyle(map: maplibregl.Map, light: boolean) {
+  if (light) {
+    map.setStyle(STYLE_LIGHT, { diff: false })
+    return
+  }
+  map.setStyle(STYLE_DARK, {
     diff: false,
     transformStyle: (_previous, next): StyleSpecification =>
-      recolourStyle(next, MAP_SCHEMES[scheme]),
+      recolourStyle(next, MIDNIGHT_MAP_SCHEME),
   })
 }
 
@@ -363,7 +370,7 @@ export function MapCanvas({
     map.touchZoomRotate.disableRotation()
     map.keyboard.disableRotation()
     mapRef.current = map
-    let scheme = currentScheme()
+    let light = isLightTheme()
 
     // The ring lives in the style, so it is re-added whenever a style loads
     // (first load and every theme switch).
@@ -384,12 +391,12 @@ export function MapCanvas({
     })
 
     // Follow the theme picker: it swaps a class on <html>.
-    applyScheme(map, scheme)
+    applyStyle(map, light)
     const observer = new MutationObserver(() => {
-      const next = currentScheme()
-      if (next !== scheme) {
-        scheme = next
-        applyScheme(map, next)
+      const next = isLightTheme()
+      if (next !== light) {
+        light = next
+        applyStyle(map, next)
       }
     })
     observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })

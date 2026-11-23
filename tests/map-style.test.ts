@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest'
 import type { StyleSpecification } from 'maplibre-gl'
-import { MAP_SCHEMES, recolourStyle } from '@/lib/map-style'
+import { MIDNIGHT_MAP_SCHEME, recolourStyle } from '@/lib/map-style'
 
 const BASE: StyleSpecification = {
   version: 8,
@@ -42,29 +42,18 @@ function ids(style: StyleSpecification): string[] {
 
 describe('recolourStyle', () => {
   it('paints known layers in the scheme colours and keeps other paint values', () => {
-    const style = recolourStyle(BASE, MAP_SCHEMES.midnight)
-    expect(paintOf(style, 'background')['background-color']).toBe(MAP_SCHEMES.midnight.land)
+    const style = recolourStyle(BASE, MIDNIGHT_MAP_SCHEME)
+    expect(paintOf(style, 'background')['background-color']).toBe(MIDNIGHT_MAP_SCHEME.land)
     expect(paintOf(style, 'water')).toEqual({
-      'fill-color': MAP_SCHEMES.midnight.water,
+      'fill-color': MIDNIGHT_MAP_SCHEME.water,
       'fill-antialias': false,
     })
   })
 
   it('leaves unknown layers and the input style untouched', () => {
-    const style = recolourStyle(BASE, MAP_SCHEMES.paper)
+    const style = recolourStyle(BASE, MIDNIGHT_MAP_SCHEME)
     expect(paintOf(style, 'something_else')['line-color']).toBe('#123456')
+    expect(ids(style)).toEqual(ids(BASE))
     expect(paintOf(BASE, 'background')['background-color']).toBe('#45516E')
-  })
-
-  it('adds water and woodland outlines only for High Contrast', () => {
-    expect(ids(recolourStyle(BASE, MAP_SCHEMES.daylight))).toEqual(ids(BASE))
-    expect(ids(recolourStyle(BASE, MAP_SCHEMES.contrast))).toEqual([
-      'background',
-      'water',
-      'water_outline',
-      'landcover_wood',
-      'landcover_wood_outline',
-      'something_else',
-    ])
   })
 })
