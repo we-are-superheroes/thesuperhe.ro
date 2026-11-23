@@ -33,7 +33,7 @@ export default async function CreateProjectPage({ searchParams }: SearchParams) 
   const variantIntent = params.variant === '1'
   const { userId } = await auth()
 
-  const [source, skills, orgRows] = await Promise.all([
+  const [source, skills, projectTypes, orgRows] = await Promise.all([
     blueprintId
       ? db.blueprint.findUnique({
           where: { id: blueprintId },
@@ -60,6 +60,10 @@ export default async function CreateProjectPage({ searchParams }: SearchParams) 
     db.skill.findMany({
       orderBy: [{ category: 'asc' }, { name: 'asc' }],
       select: { id: true, name: true, category: true },
+    }),
+    db.projectType.findMany({
+      orderBy: { name: 'asc' },
+      select: { id: true, name: true },
     }),
     userId ? getUserActiveOrgs(userId) : Promise.resolve([]),
   ])
@@ -104,6 +108,7 @@ export default async function CreateProjectPage({ searchParams }: SearchParams) 
       variantIntent={variantIntent}
       variantParentId={variantParentId}
       skills={skillOptions}
+      projectTypes={projectTypes}
       myOrgs={myOrgs}
       initialOrgSlug={params.org?.trim() || null}
     />

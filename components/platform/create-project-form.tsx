@@ -25,9 +25,11 @@ import {
   AddStepButton,
   CountrySelect,
   SelectBox,
+  ProjectTypeField,
   REMOTE_OPTIONS,
   JOIN_POLICY_OPTIONS,
   type FormStep,
+  type ProjectTypeOption,
   type SkillOption as SharedSkillOption,
 } from '@/components/platform/project-form-bits'
 import { LANGUAGES as ISO_LANGUAGES } from '@/lib/locales'
@@ -81,6 +83,7 @@ export function CreateProjectForm({
   variantIntent,
   variantParentId,
   skills,
+  projectTypes,
   myOrgs,
   initialOrgSlug,
 }: {
@@ -92,6 +95,8 @@ export function CreateProjectForm({
   /** Family root to parent a saved variant under (resolved server-side). */
   variantParentId: string | null
   skills: SkillOption[]
+  /** The project type taxonomy, for the optional type picker. */
+  projectTypes: ProjectTypeOption[]
   /** Active organisations the user belongs to (empty for most users). */
   myOrgs: Array<{ id: string; slug: string; name: string }>
   /** Pre-selected org when arriving via "+ New organisation project". */
@@ -298,6 +303,8 @@ export function CreateProjectForm({
             address={address}
             countryCode={countryCode}
             languageCode={languageCode}
+            projectTypes={projectTypes}
+            projectTypeId={projectTypeId}
             remote={remote}
             joinPolicy={joinPolicy}
             myOrgs={myOrgs}
@@ -316,6 +323,7 @@ export function CreateProjectForm({
             setAddress={setAddress}
             setCountryCode={setCountryCode}
             setLanguageCode={setLanguageCode}
+            setProjectTypeId={setProjectTypeId}
             setRemote={setRemote}
             setJoinPolicy={setJoinPolicy}
             setOrgId={setOrgId}
@@ -545,6 +553,8 @@ function EditorPhase({
   address,
   countryCode,
   languageCode,
+  projectTypes,
+  projectTypeId,
   remote,
   joinPolicy,
   myOrgs,
@@ -563,6 +573,7 @@ function EditorPhase({
   setAddress,
   setCountryCode,
   setLanguageCode,
+  setProjectTypeId,
   setRemote,
   setJoinPolicy,
   setOrgId,
@@ -584,6 +595,8 @@ function EditorPhase({
   address: string
   countryCode: string | null
   languageCode: string | null
+  projectTypes: ProjectTypeOption[]
+  projectTypeId: string | null
   remote: 'yes' | 'some' | 'no'
   joinPolicy: 'open' | 'approval_required'
   myOrgs: Array<{ id: string; slug: string; name: string }>
@@ -602,6 +615,7 @@ function EditorPhase({
   setAddress: (v: string) => void
   setCountryCode: (v: string | null) => void
   setLanguageCode: (v: string | null) => void
+  setProjectTypeId: (v: string | null) => void
   setRemote: (v: 'yes' | 'some' | 'no') => void
   setJoinPolicy: (v: 'open' | 'approval_required') => void
   setOrgId: (v: string | null) => void
@@ -675,6 +689,11 @@ function EditorPhase({
               className="min-h-[130px] w-full resize-y rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm leading-relaxed text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
             />
           </Field>
+          <ProjectTypeField
+            projectTypes={projectTypes}
+            value={projectTypeId}
+            onChange={setProjectTypeId}
+          />
         </div>
       </Card>
 

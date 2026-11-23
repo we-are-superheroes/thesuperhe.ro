@@ -57,6 +57,8 @@ export interface UpdateProjectStepInput {
 export interface UpdateProjectInput {
   title: string
   description: string
+  /** Entry in the project_types taxonomy (or null to clear). Browse-page filter. */
+  projectTypeId: string | null
   city: string
   /** Optional precise street address or place name. */
   address: string
@@ -110,6 +112,18 @@ export async function updateProjectAction(
   // Authz: caller must be the project's lead or an owning-org admin.
   const gate = await requireLead(userId, projectId)
   if (!gate.success) return { success: false, error: gate.error }
+
+  // The type must be a real entry in the taxonomy.
+  if (data.projectTypeId !== null) {
+    const type =
+      typeof data.projectTypeId === 'string'
+        ? await db.projectType.findUnique({
+            where: { id: data.projectTypeId },
+            select: { id: true },
+          })
+        : null
+    if (!type) return { success: false, error: t('common.somethingWrong') }
+  }
 
   // Verify the requested skill ids exist (across every step's skillIds).
   const requestedSkillIds = Array.from(
@@ -178,6 +192,7 @@ export async function updateProjectAction(
         data: {
           title: data.title.trim(),
           description: data.description.trim(),
+          projectTypeId: data.projectTypeId,
           location: buildLocation(data.city, countryCode),
           address: data.address.trim() || null,
           country: countryCode,

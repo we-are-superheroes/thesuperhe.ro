@@ -22,9 +22,11 @@ import {
   AddStepButton,
   CountrySelect,
   SelectBox,
+  ProjectTypeField,
   REMOTE_OPTIONS,
   JOIN_POLICY_OPTIONS,
   type FormStep,
+  type ProjectTypeOption,
   type SkillOption,
 } from '@/components/platform/project-form-bits'
 import { LANGUAGES as ISO_LANGUAGES } from '@/lib/locales'
@@ -37,6 +39,8 @@ export interface EditProjectInitial {
   id: string
   title: string
   description: string
+  /** Entry in the project_types taxonomy, or null for none. */
+  projectTypeId: string | null
   city: string
   remote: 'yes' | 'some' | 'no'
   /** Optional precise street address or place name. */
@@ -91,10 +95,12 @@ const TOC_SECTIONS = [
 export function EditProjectForm({
   initial,
   skills,
+  projectTypes,
   mapEntry = null,
 }: {
   initial: EditProjectInitial
   skills: SkillOption[]
+  projectTypes: ProjectTypeOption[]
   mapEntry?: ProjectMapEntry | null
 }) {
   const t = useTranslations('project')
@@ -104,6 +110,7 @@ export function EditProjectForm({
 
   const [title, setTitle] = useState(initial.title)
   const [description, setDescription] = useState(initial.description)
+  const [projectTypeId, setProjectTypeId] = useState<string | null>(initial.projectTypeId)
   const [city, setCity] = useState(initial.city)
   const [remote, setRemote] = useState<'yes' | 'some' | 'no'>(initial.remote)
   const [address, setAddress] = useState(initial.address)
@@ -167,6 +174,7 @@ export function EditProjectForm({
       const result = await updateProjectAction(initial.id, {
         title,
         description,
+        projectTypeId,
         city,
         address,
         countryCode,
@@ -237,7 +245,9 @@ export function EditProjectForm({
         // later feature) — these only exist to satisfy the shared input type.
         orgId: null,
         visibility: 'public',
-        projectTypeId: null,
+        // The template keeps the project's type, so projects started from it
+        // land in the same browse filter.
+        projectTypeId,
         blueprintId: null,
         parentBlueprintId: null,
         steps: steps.map((s) => ({
@@ -409,6 +419,11 @@ export function EditProjectForm({
                 className="min-h-[130px] w-full resize-y rounded-lg border border-neutral-700 bg-bg-surface-2 px-3.5 py-2.5 font-sans text-sm leading-relaxed text-fg-primary outline-none transition-all duration-fast placeholder:text-fg-tertiary focus:border-amber-500 focus:shadow-[0_0_0_3px_rgba(244,165,53,0.18)]"
               />
             </Field>
+            <ProjectTypeField
+              projectTypes={projectTypes}
+              value={projectTypeId}
+              onChange={setProjectTypeId}
+            />
           </div>
         </Card>
 
