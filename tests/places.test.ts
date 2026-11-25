@@ -20,6 +20,7 @@ import {
   groupProducts,
   haversineKm,
   looksLikeDuplicate,
+  samePlaceMatch,
   minorToInput,
   parsePriceToMinor,
   pickPlaceFields,
@@ -391,6 +392,26 @@ describe('search helpers', () => {
     expect(looksLikeDuplicate(cabane, { name: 'Bio du Bourg', lat: 46.6039, lng: 6.6816 })).toBe(false)
     // Same name in another town.
     expect(looksLikeDuplicate(cabane, { ...cabane, ...LAUSANNE })).toBe(false)
+  })
+
+  it('treats two places as the same only when the names match', () => {
+    const cabane = { name: 'La Cabane à Légumes', lat: 46.6012, lng: 6.6816 }
+    // Same name, written differently, at the same spot and 300 m away.
+    expect(samePlaceMatch(cabane, { ...cabane, name: 'la cabane a legumes' })).toBe('same')
+    expect(samePlaceMatch(cabane, { name: 'La Cabane à Légumes', lat: 46.6039, lng: 6.6816 })).toBe('same')
+    // One name inside the other: for a person to decide.
+    expect(samePlaceMatch(cabane, { ...cabane, name: 'Cabane à Légumes' })).toBe('maybe')
+    const meyrinroule = { name: 'Meyrinroule', lat: 46.22923, lng: 6.071387 }
+    expect(
+      samePlaceMatch(meyrinroule, { ...meyrinroule, name: 'La Manivelle - Point relais Meyrinroule' }),
+    ).toBe('maybe')
+    // Two different shops in one building share the very same point.
+    expect(samePlaceMatch(cabane, { ...cabane, name: 'Atelier vélo du Verger' })).toBeNull()
+    // A short name that happens to be part of a longer one.
+    expect(samePlaceMatch({ ...cabane, name: 'Alna Diététique et Bio' }, { ...cabane, name: 'Bio' })).toBeNull()
+    // Same name in another town, and names with nothing to compare.
+    expect(samePlaceMatch(cabane, { ...cabane, ...LAUSANNE })).toBeNull()
+    expect(samePlaceMatch({ ...cabane, name: '…' }, { ...cabane, name: '!' })).toBeNull()
   })
 })
 

@@ -26,8 +26,10 @@ import { parseResearchRecord, type ResearchRecord } from '../lib/places-import'
    .env — locally that is staging). `--as` is the e-mail of a curator
    or admin in that database; the places are recorded under that name.
 
-   Safe to run again: a record that matches a place already on the map,
-   or a proposal already made (waiting or rejected), is skipped. Every
+   Safe to run again: a record with the same name as a place close by that
+   is already on the map, or a proposal already made (waiting or rejected),
+   is skipped. A similar name close by sends the record to the review
+   queue. A different name is never held back, however close it is. Every
    place still goes in through applyProposal(), like any other change.
    ================================================================ */
 
@@ -89,7 +91,7 @@ async function main() {
   // Imported after the env is loaded: lib/db reads DATABASE_URL on import.
   const { db } = await import('../lib/db')
   const { applyProposal, ApplyError, isCuratorRole } = await import('../lib/places')
-  const { PLACE_LIMITS, isValidLatLng, looksLikeDuplicate, validatePlaceInput } = await import(
+  const { PLACE_LIMITS, isValidLatLng, samePlaceMatch, validatePlaceInput } = await import(
     '../lib/places-shared'
   )
 
@@ -159,16 +161,20 @@ async function main() {
     }
     const data = checked.data
     const here = { name: data.name, lat: data.latitude, lng: data.longitude }
-    const duplicate = known.find((other) => looksLikeDuplicate(here, other))
+    const duplicate = known.find((other) => samePlaceMatch(here, other) === 'same')
     if (duplicate) {
       counts.skipped++
       console.log(`  skip      ${data.name}: looks like "${duplicate.name}" (${duplicate.what})`)
       continue
     }
 
-    const publish = record.status === 'verified'
+    // A similar name close by may be the same place or a neighbour: a
+    // curator decides, so the record is never published straight away.
+    const similar = known.find((other) => samePlaceMatch(here, other) === 'maybe')
+    const publish = record.status === 'verified' && !similar
     const note = [
       `Map research${record.city ? `, ${record.city}` : ''}${record.checkedOn ? `, checked ${record.checkedOn}` : ''}.`,
+      similar ? `May be the same place as "${similar.name}" (${similar.what}).` : null,
       record.flags.length > 0 ? `Needs a check: ${record.flags.join('; ')}.` : null,
       record.sources.length > 0 ? `Sources: ${record.sources.join(' ')}` : null,
     ]
@@ -201,7 +207,10 @@ async function main() {
     known.push({ ...here, what: 'earlier in this import' })
     if (publish) counts.published++
     else counts.queued++
-    console.log(`  ${publish ? 'publish  ' : 'queue    '} ${data.name}${data.city ? ` (${data.city})` : ''}`)
+    console.log(
+      `  ${publish ? 'publish  ' : 'queue    '} ${data.name}${data.city ? ` (${data.city})` : ''}` +
+        (similar ? `: may be the same as "${similar.name}" (${similar.what})` : ''),
+    )
   }
 
   const verb = write ? '' : 'would be '
