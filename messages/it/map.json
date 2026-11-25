@@ -20,6 +20,8 @@
     "suggest": "Suggerisci un luogo",
     "categoriesLabel": "Categorie",
     "allCategories": "Tutte le categorie",
+    "operatorsLabel": "Gestito da",
+    "allOperators": "Tutti",
     "resultsLabel": "Risultati",
     "count": "{count, plural, =0 {Nessun risultato} one {<strong># risultato</strong>} other {<strong># risultati</strong>}} entro {km} km da {place}",
     "countNearYou": "{count, plural, =0 {Nessun risultato} one {<strong># risultato</strong>} other {<strong># risultati</strong>}} entro {km} km da te",
@@ -62,7 +64,8 @@
     "indie": "Indipendente",
     "temporarilyClosed": "Chiuso temporaneamente",
     "permanentlyClosed": "Chiuso definitivamente",
-    "approximate": "Posizione approssimativa"
+    "approximate": "Posizione approssimativa",
+    "runBy": "Gestito da: {operator}"
   },
   "categories": {
     "farm": {
@@ -81,9 +84,25 @@
       "one": "Natura e fauna selvatica",
       "many": "Natura e fauna selvatica"
     },
+    "secondhand": {
+      "one": "Negozio dell'usato",
+      "many": "Negozi dell'usato"
+    },
+    "mending": {
+      "one": "Riparazione di abiti e scarpe",
+      "many": "Riparazione di abiti e scarpe"
+    },
     "repair": {
-      "one": "Riparazione e riuso",
-      "many": "Riparazione e riuso"
+      "one": "Laboratorio di riparazione",
+      "many": "Laboratori di riparazione"
+    },
+    "bike": {
+      "one": "Ciclofficina",
+      "many": "Ciclofficine"
+    },
+    "share": {
+      "one": "Prestito e riuso",
+      "many": "Prestito e riuso"
     },
     "garden": {
       "one": "Orto comunitario",
@@ -101,6 +120,12 @@
       "one": "Altro",
       "many": "Altro"
     }
+  },
+  "operators": {
+    "nonprofit": "Non profit",
+    "cooperative": "Cooperativa",
+    "public": "Ente pubblico",
+    "business": "Impresa"
   },
   "card": {
     "distance": "{km} km",
@@ -168,6 +193,7 @@
     "description": "Altro su questo luogo",
     "language": "Lingua del testo",
     "category": "Categoria",
+    "operator": "Gestito da",
     "position": "Posizione sulla mappa",
     "locationApproximate": "Nessun indirizzo fisso",
     "address": "Indirizzo",
@@ -236,6 +262,7 @@
     "summaryHelp": "Una o due frasi. Questo appare nell'elenco e sulla mappa.",
     "descriptionHelp": "Facoltativo. Qualsiasi altra cosa che un visitatore vorrebbe sapere.",
     "categoryPlaceholder": "Scegli una categoria",
+    "operatorUnknown": "Non noto",
     "languageAny": "Non impostato",
     "findAddressLabel": "Trova l'indirizzo",
     "findAddressPlaceholder": "Via, città o codice postale",

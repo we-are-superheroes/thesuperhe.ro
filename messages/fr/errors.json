@@ -183,6 +183,7 @@
     "nameRequired": "Donne un nom à ce lieu.",
     "summaryRequired": "Ajoute une courte description.",
     "categoryRequired": "Choisis une catégorie.",
+    "operatorInvalid": "Choisis dans la liste qui gère ce lieu.",
     "positionRequired": "Place le repère sur la carte.",
     "countryInvalid": "Choisis un pays dans la liste.",
     "websiteInvalid": "L’adresse du site web ne semble pas correcte. Elle doit ressembler à https://example.org.",

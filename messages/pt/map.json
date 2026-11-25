@@ -20,6 +20,8 @@
     "suggest": "Sugerir um local",
     "categoriesLabel": "Categorias",
     "allCategories": "Todas as categorias",
+    "operatorsLabel": "Gerido por",
+    "allOperators": "Todos",
     "resultsLabel": "Resultados",
     "count": "{count, plural, =0 {Nenhum resultado} one {<strong># resultado</strong>} other {<strong># resultados</strong>}} a {km} km de {place}",
     "countNearYou": "{count, plural, =0 {Nenhum resultado} one {<strong># resultado</strong>} other {<strong># resultados</strong>}} a {km} km de si",
@@ -62,7 +64,8 @@
     "indie": "Independente",
     "temporarilyClosed": "Encerrado temporariamente",
     "permanentlyClosed": "Encerrado definitivamente",
-    "approximate": "Localização aproximada"
+    "approximate": "Localização aproximada",
+    "runBy": "Gerido por: {operator}"
   },
   "categories": {
     "farm": {
@@ -81,9 +84,25 @@
       "one": "Natureza e vida selvagem",
       "many": "Natureza e vida selvagem"
     },
+    "secondhand": {
+      "one": "Loja de segunda mão",
+      "many": "Lojas de segunda mão"
+    },
+    "mending": {
+      "one": "Arranjos de roupa e calçado",
+      "many": "Arranjos de roupa e calçado"
+    },
     "repair": {
-      "one": "Reparação e reutilização",
-      "many": "Reparar e reutilizar"
+      "one": "Oficina de reparação",
+      "many": "Oficinas de reparação"
+    },
+    "bike": {
+      "one": "Oficina de bicicletas",
+      "many": "Oficinas de bicicletas"
+    },
+    "share": {
+      "one": "Empréstimo e reutilização",
+      "many": "Empréstimo e reutilização"
     },
     "garden": {
       "one": "Horta comunitária",
@@ -101,6 +120,12 @@
       "one": "Outro",
       "many": "Outros"
     }
+  },
+  "operators": {
+    "nonprofit": "Sem fins lucrativos",
+    "cooperative": "Cooperativa",
+    "public": "Setor público",
+    "business": "Empresa"
   },
   "card": {
     "distance": "{km} km",
@@ -168,6 +193,7 @@
     "description": "Mais sobre este local",
     "language": "Idioma do texto",
     "category": "Categoria",
+    "operator": "Gerido por",
     "position": "Posição no mapa",
     "locationApproximate": "Sem morada fixa",
     "address": "Morada",
@@ -236,6 +262,7 @@
     "summaryHelp": "Uma ou duas frases. Isto aparece na lista e no mapa.",
     "descriptionHelp": "Opcional. Tudo o mais que um visitante queira saber.",
     "categoryPlaceholder": "Escolha uma categoria",
+    "operatorUnknown": "Desconhecido",
     "languageAny": "Não definido",
     "findAddressLabel": "Encontrar a morada",
     "findAddressPlaceholder": "Rua, localidade ou código postal",

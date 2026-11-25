@@ -20,6 +20,8 @@
     "suggest": "Proposer un lieu",
     "categoriesLabel": "Catégories",
     "allCategories": "Toutes les catégories",
+    "operatorsLabel": "Géré par",
+    "allOperators": "Tous",
     "resultsLabel": "Résultats",
     "count": "{count, plural, =0 {Aucun résultat} one {<strong># résultat</strong>} other {<strong># résultats</strong>}} dans un rayon de {km} km de {place}",
     "countNearYou": "{count, plural, =0 {Aucun résultat} one {<strong># résultat</strong>} other {<strong># résultats</strong>}} dans un rayon de {km} km de toi",
@@ -62,7 +64,8 @@
     "indie": "Indépendant",
     "temporarilyClosed": "Fermé temporairement",
     "permanentlyClosed": "Fermé définitivement",
-    "approximate": "Emplacement approximatif"
+    "approximate": "Emplacement approximatif",
+    "runBy": "Géré par : {operator}"
   },
   "categories": {
     "farm": {
@@ -81,9 +84,25 @@
       "one": "Nature et faune",
       "many": "Nature et faune"
     },
+    "secondhand": {
+      "one": "Boutique de seconde main",
+      "many": "Boutiques de seconde main"
+    },
+    "mending": {
+      "one": "Retouches et cordonnerie",
+      "many": "Retouches et cordonnerie"
+    },
     "repair": {
-      "one": "Réparation et réemploi",
-      "many": "Réparer et réutiliser"
+      "one": "Atelier de réparation",
+      "many": "Ateliers de réparation"
+    },
+    "bike": {
+      "one": "Atelier vélo",
+      "many": "Ateliers vélo"
+    },
+    "share": {
+      "one": "Emprunt et réemploi",
+      "many": "Emprunter et réutiliser"
     },
     "garden": {
       "one": "Jardin communautaire",
@@ -101,6 +120,12 @@
       "one": "Autre",
       "many": "Autres"
     }
+  },
+  "operators": {
+    "nonprofit": "Sans but lucratif",
+    "cooperative": "Coopérative",
+    "public": "Secteur public",
+    "business": "Entreprise"
   },
   "card": {
     "distance": "{km} km",
@@ -168,6 +193,7 @@
     "description": "En savoir plus sur ce lieu",
     "language": "Langue du texte",
     "category": "Catégorie",
+    "operator": "Géré par",
     "position": "Position sur la carte",
     "locationApproximate": "Pas d'adresse fixe",
     "address": "Adresse",
@@ -236,6 +262,7 @@
     "summaryHelp": "Une ou deux phrases. Ce texte s'affiche dans la liste et sur la carte.",
     "descriptionHelp": "Facultatif. Tout ce qu'un visiteur aimerait savoir d'autre.",
     "categoryPlaceholder": "Choisis une catégorie",
+    "operatorUnknown": "Inconnu",
     "languageAny": "Non défini",
     "findAddressLabel": "Trouver l'adresse",
     "findAddressPlaceholder": "Rue, ville ou code postal",

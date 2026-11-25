@@ -19,6 +19,7 @@ import {
   boundingBox,
   haversineKm,
   isPlaceCategory,
+  isPlaceOperator,
   pickPlaceFields,
   slugifyPlace,
   validatePlaceInput,
@@ -26,6 +27,7 @@ import {
   type OperatingStatus,
   type PlaceCategory,
   type PlaceData,
+  type PlaceOperator,
 } from '@/lib/places-shared'
 
 /* ================================================================
@@ -67,6 +69,8 @@ export interface PlaceResult {
   name: string
   summary: string
   category: PlaceCategory
+  /** Who runs the place; null when not known. */
+  operator: PlaceOperator | null
   lat: number
   lng: number
   approximate: boolean
@@ -97,6 +101,7 @@ const RESULT_SELECT = {
   // Read for the translation check only; not part of a list result.
   description: true,
   category: true,
+  operator: true,
   latitude: true,
   longitude: true,
   locationApproximate: true,
@@ -212,6 +217,7 @@ function toResult(row: ResultRow, centre: LatLng, translation?: LoadedTranslatio
     name: row.name,
     summary: shown.summary,
     category: isPlaceCategory(row.category) ? row.category : 'other',
+    operator: isPlaceOperator(row.operator) ? row.operator : null,
     lat: row.latitude,
     lng: row.longitude,
     approximate: row.locationApproximate,
@@ -326,6 +332,8 @@ export interface PlaceDetailView {
   description: string | null
   language: string | null
   category: PlaceCategory
+  /** Who runs the place; null when not known. */
+  operator: PlaceOperator | null
   lat: number
   lng: number
   approximate: boolean
@@ -395,6 +403,7 @@ export async function getPlaceDetailView(
     description: shown.description,
     language: row.language,
     category: isPlaceCategory(row.category) ? row.category : 'other',
+    operator: isPlaceOperator(row.operator) ? row.operator : null,
     lat: row.latitude,
     lng: row.longitude,
     approximate: row.locationApproximate,
@@ -444,6 +453,7 @@ const DATA_SELECT = {
   description: true,
   language: true,
   category: true,
+  operator: true,
   latitude: true,
   longitude: true,
   locationApproximate: true,
@@ -482,6 +492,7 @@ function rowToData(row: DataRow): PlaceData {
     description: row.description,
     language: row.language,
     category: isPlaceCategory(row.category) ? row.category : 'other',
+    operator: isPlaceOperator(row.operator) ? row.operator : null,
     latitude: row.latitude,
     longitude: row.longitude,
     locationApproximate: row.locationApproximate,
@@ -591,6 +602,7 @@ function dataToColumns(data: PlaceData, now: Date, previousClosedAt: Date | null
     description: data.description,
     language: data.language,
     category: data.category,
+    operator: data.operator,
     latitude: data.latitude,
     longitude: data.longitude,
     locationApproximate: data.locationApproximate,

@@ -17,10 +17,12 @@ import {
   decodeMapPlaceCookie,
   RADIUS_OPTIONS_KM,
   isPlaceCategory,
+  isPlaceOperator,
   isValidLatLng,
   roundCoordinate,
   type LatLng,
   type PlaceCategory,
+  type PlaceOperator,
 } from '@/lib/places-shared'
 import {
   MapExplorer,
@@ -105,6 +107,9 @@ export default async function MapPage({
   const categories = (first(params.cat) ?? '')
     .split(',')
     .filter((value): value is PlaceCategory => isPlaceCategory(value))
+  const operators = (first(params.op) ?? '')
+    .split(',')
+    .filter((value): value is PlaceOperator => isPlaceOperator(value))
   const srcParam = first(params.src)
   const source: SourceFilter = srcParam === 'hero' || srcParam === 'indie' ? srcParam : 'all'
   const sort: SortOrder = first(params.sort) === 'name' ? 'name' : 'near'
@@ -120,6 +125,7 @@ export default async function MapPage({
         radius,
         q: (first(params.q) ?? '').slice(0, 100),
         categories,
+        operators,
         source,
         sort,
         selected: selected && places.some((p) => p.slug === selected) ? selected : null,

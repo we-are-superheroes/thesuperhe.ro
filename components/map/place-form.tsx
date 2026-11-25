@@ -20,6 +20,7 @@ import {
   OPERATING_STATUSES,
   PLACE_CATEGORIES,
   PLACE_LIMITS,
+  PLACE_OPERATORS,
   currencyForCountry,
   looksLikeDuplicate,
   minorToInput,
@@ -29,6 +30,7 @@ import {
   type OperatingStatus,
   type PlaceCategory,
   type PlaceFormValues,
+  type PlaceOperator,
 } from '@/lib/places-shared'
 import {
   Card,
@@ -149,6 +151,7 @@ export function PlaceForm({
   const [summary, setSummary] = useState(initial.summary)
   const [description, setDescription] = useState(initial.description ?? '')
   const [category, setCategory] = useState<PlaceCategory | ''>(initial.category)
+  const [operator, setOperator] = useState<PlaceOperator | ''>(initial.operator ?? '')
   const [language, setLanguage] = useState(initial.language ?? '')
 
   const [position, setPosition] = useState<LatLng | null>(
@@ -293,6 +296,7 @@ export function PlaceForm({
       description,
       language,
       category,
+      operator: operator || null,
       latitude: position.lat,
       longitude: position.lng,
       locationApproximate: approximate,
@@ -478,6 +482,20 @@ export function PlaceForm({
                 {PLACE_CATEGORIES.map((value) => (
                   <option key={value} value={value}>
                     {t(`categories.${value}.one`)}
+                  </option>
+                ))}
+              </SelectBox>
+            </Field>
+            <Field label={t('fields.operator')} htmlFor="pl-operator">
+              <SelectBox
+                id="pl-operator"
+                value={operator}
+                onChange={(e) => setOperator(e.target.value as PlaceOperator | '')}
+              >
+                <option value="">{t('form.operatorUnknown')}</option>
+                {PLACE_OPERATORS.map((value) => (
+                  <option key={value} value={value}>
+                    {t(`operators.${value}`)}
                   </option>
                 ))}
               </SelectBox>

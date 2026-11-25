@@ -20,6 +20,8 @@
     "suggest": "Sugerir un lugar",
     "categoriesLabel": "Categorías",
     "allCategories": "Todas las categorías",
+    "operatorsLabel": "Gestionado por",
+    "allOperators": "Todos",
     "resultsLabel": "Resultados",
     "count": "{count, plural, =0 {Sin resultados} one {<strong># resultado</strong>} other {<strong># resultados</strong>}} a menos de {km} km de {place}",
     "countNearYou": "{count, plural, =0 {Sin resultados} one {<strong># resultado</strong>} other {<strong># resultados</strong>}} a menos de {km} km de ti",
@@ -62,7 +64,8 @@
     "indie": "Independiente",
     "temporarilyClosed": "Cerrado temporalmente",
     "permanentlyClosed": "Cerrado de forma permanente",
-    "approximate": "Ubicación aproximada"
+    "approximate": "Ubicación aproximada",
+    "runBy": "Gestionado por: {operator}"
   },
   "categories": {
     "farm": {
@@ -81,9 +84,25 @@
       "one": "Naturaleza y fauna",
       "many": "Naturaleza y fauna"
     },
+    "secondhand": {
+      "one": "Tienda de segunda mano",
+      "many": "Tiendas de segunda mano"
+    },
+    "mending": {
+      "one": "Arreglos de ropa y calzado",
+      "many": "Arreglos de ropa y calzado"
+    },
     "repair": {
-      "one": "Reparación y reutilización",
-      "many": "Reparar y reutilizar"
+      "one": "Taller de reparación",
+      "many": "Talleres de reparación"
+    },
+    "bike": {
+      "one": "Taller de bicicletas",
+      "many": "Talleres de bicicletas"
+    },
+    "share": {
+      "one": "Préstamo y reutilización",
+      "many": "Préstamo y reutilización"
     },
     "garden": {
       "one": "Huerto comunitario",
@@ -101,6 +120,12 @@
       "one": "Otro",
       "many": "Otros"
     }
+  },
+  "operators": {
+    "nonprofit": "Sin ánimo de lucro",
+    "cooperative": "Cooperativa",
+    "public": "Sector público",
+    "business": "Empresa"
   },
   "card": {
     "distance": "{km} km",
@@ -168,6 +193,7 @@
     "description": "Más sobre este lugar",
     "language": "Idioma del texto",
     "category": "Categoría",
+    "operator": "Gestionado por",
     "position": "Posición en el mapa",
     "locationApproximate": "Sin dirección fija",
     "address": "Dirección",
@@ -236,6 +262,7 @@
     "summaryHelp": "Una o dos frases. Se muestra en la lista y en el mapa.",
     "descriptionHelp": "Opcional. Cualquier otra cosa que una persona visitante quiera saber.",
     "categoryPlaceholder": "Elige una categoría",
+    "operatorUnknown": "Se desconoce",
     "languageAny": "Sin definir",
     "findAddressLabel": "Busca la dirección",
     "findAddressPlaceholder": "Calle, localidad o código postal",

@@ -27,9 +27,12 @@ import {
   slugifyPlace,
   validatePlaceInput,
   validateProposalNote,
+  PLACE_CATEGORIES,
   PLACE_LIMITS,
+  PLACE_OPERATORS,
   type PlaceData,
 } from '@/lib/places-shared'
+import { parseResearchRecord } from '@/lib/places-import'
 import { applyProposal, isCuratorRole, publicPlacesWhere } from '@/lib/places'
 import { parseNominatimResponse, parsePhotonResponse } from '@/lib/geocode'
 
@@ -132,6 +135,45 @@ describe('validatePlaceInput', () => {
   it('accepts the Services and Other categories', () => {
     expect(data({ category: 'services' }).category).toBe('services')
     expect(data({ category: 'other' }).category).toBe('other')
+  })
+
+  it('accepts the categories that "repair and reuse" was split into', () => {
+    for (const category of ['secondhand', 'mending', 'repair', 'bike', 'share']) {
+      expect(data({ category }).category).toBe(category)
+    }
+    // The full list, in the order the filter shows it.
+    expect([...PLACE_CATEGORIES]).toEqual([
+      'farm',
+      'organic',
+      'coop',
+      'nature',
+      'secondhand',
+      'mending',
+      'repair',
+      'bike',
+      'share',
+      'garden',
+      'learn',
+      'services',
+      'other',
+    ])
+  })
+
+  it('accepts who runs the place, or nothing', () => {
+    for (const operator of PLACE_OPERATORS) {
+      expect(data({ operator }).operator).toBe(operator)
+    }
+    expect([...PLACE_OPERATORS]).toEqual(['nonprofit', 'cooperative', 'public', 'business'])
+    // Not known: null, an empty form field, or a payload from before the field existed.
+    expect(data({ operator: null }).operator).toBeNull()
+    expect(data({ operator: '' }).operator).toBeNull()
+    expect(data().operator).toBeNull()
+  })
+
+  it('rejects an operator that is not on the list', () => {
+    expect(errorKey({ ...valid, operator: 'charity' })).toBe('places.operatorInvalid')
+    expect(errorKey({ ...valid, operator: 'Business' })).toBe('places.operatorInvalid')
+    expect(errorKey({ ...valid, operator: 3 })).toBe('places.operatorInvalid')
   })
 
   it('needs a note for hours "described in words"', () => {
@@ -270,6 +312,12 @@ describe('diffPlaceData / pickPlaceFields', () => {
     const diff = diffPlaceData(before, after)
     expect(Object.keys(diff).sort()).toEqual(['products', 'summary'])
     expect(diffPlaceData(before, data())).toEqual({})
+  })
+
+  it('treats the operator as a field of its own', () => {
+    expect(diffPlaceData(data(), data({ operator: 'cooperative' }))).toEqual({ operator: 'cooperative' })
+    expect(diffPlaceData(data({ operator: 'public' }), data())).toEqual({ operator: null })
+    expect(pickPlaceFields({ operator: 'public', owner: 'x' })).toEqual({ operator: 'public' })
   })
 
   it('ignores unknown keys in a stored payload', () => {
@@ -437,6 +485,8 @@ describe('applyProposal', () => {
     expect(created.projectId).toBeNull()
     expect(created.timezone).toBe('Europe/Zurich')
     expect(created.currency).toBe('CHF')
+    // Not given in the payload, so stored as "not known".
+    expect(created.operator).toBeNull()
     expect(created.closedAt).toBeNull()
     expect(created.lastVerifiedAt).toBe(NOW)
     // Moderation state is never taken from the payload.
@@ -452,6 +502,48 @@ describe('applyProposal', () => {
       where: { id: 'prop-1' },
       data: { placeId: 'place-1' },
     })
+  })
+
+  it('stores the category and who runs the place', async () => {
+    await apply(
+      tx,
+      {
+        id: 'prop-1',
+        kind: 'new',
+        placeId: null,
+        payload: { ...valid, category: 'bike', operator: 'nonprofit' },
+      },
+      'curator-1',
+      { now: NOW },
+    )
+    const created = tx.place.create.mock.calls[0][0].data
+    expect(created.category).toBe('bike')
+    expect(created.operator).toBe('nonprofit')
+  })
+
+  it('changes and clears the operator through an edit', async () => {
+    tx.place.findFirst.mockResolvedValue(storedRow({ category: 'repair', operator: 'business' }))
+    await apply(
+      tx,
+      { id: 'prop-1', kind: 'edit', placeId: 'place-1', payload: { operator: null, category: 'mending' } },
+      'curator-1',
+      { now: NOW },
+    )
+    const updated = tx.place.update.mock.calls[0][0].data
+    expect(updated.operator).toBeNull()
+    expect(updated.category).toBe('mending')
+
+    // A stored value that is no longer a known key reads as "not known".
+    tx = makeTx()
+    tx.place.findFirst.mockResolvedValue(storedRow({ operator: 'charity' }))
+    const result = await apply(
+      tx,
+      { id: 'prop-2', kind: 'edit', placeId: 'place-1', payload: { summary: 'New summary.' } },
+      'curator-1',
+      { now: NOW },
+    )
+    expect(result.ok).toBe(true)
+    expect(tx.place.update.mock.calls[0][0].data.operator).toBeNull()
   })
 
   it('links a new place to a project only through the option, never the payload', async () => {
@@ -655,6 +747,97 @@ describe('parseNominatimResponse', () => {
       },
     ])
     expect(parseNominatimResponse({ error: 'nope' })).toEqual([])
+  })
+})
+
+/* ── Research records (npm run places:import) ────────────────────────── */
+
+describe('parseResearchRecord', () => {
+  /** A record as the map research writes it (see that repository's README). */
+  const record = (place: Record<string, unknown> = {}, rest: Record<string, unknown> = {}) => ({
+    status: 'verified',
+    flags: [],
+    place: {
+      name: 'Péclôt 13',
+      summary: 'Self-repair bike workshop run by an association.',
+      description: 'Members repair their own bikes with shared tools and advice.',
+      language: 'en',
+      category: 'bike',
+      operator: 'nonprofit',
+      latitude: 46.19722,
+      longitude: 6.13694,
+      locationApproximate: false,
+      address: 'Rue des Voisins 13',
+      city: 'Genève',
+      country: 'CH',
+      website: 'https://example.org',
+      contact: null,
+      practicalNote: null,
+      openingHours: { v: 1, mode: 'weekly', periods: [{ days: [2, 4], from: '17:00', to: '20:00' }] },
+      openingNote: null,
+      operatingStatus: 'active',
+      currency: 'CHF',
+      products: [],
+      ...place,
+    },
+    research: {
+      city: 'Genève',
+      checkedOn: '2026-11-25',
+      sources: ['https://example.org', ''],
+      notes: 'Own site and Google agree.',
+    },
+    ...rest,
+  })
+
+  const importKey = (raw: unknown): string | null => {
+    const parsed = parseResearchRecord(raw)
+    if (typeof parsed === 'string') return parsed
+    const checked = validatePlaceInput(parsed.place)
+    return checked.ok ? null : checked.error.key
+  }
+
+  it('reads the status, flags and sources', () => {
+    const parsed = parseResearchRecord(record({}, { status: 'flagged', flags: ['Address differs.', 7] }))
+    expect(parsed).toMatchObject({
+      status: 'flagged',
+      flags: ['Address differs.'],
+      sources: ['https://example.org'],
+      city: 'Genève',
+      checkedOn: '2026-11-25',
+    })
+  })
+
+  it('refuses what is not a record', () => {
+    expect(parseResearchRecord([])).toBe('not a research record')
+    expect(parseResearchRecord(record({}, { status: 'done' }))).toBe(
+      'status must be verified, flagged or rejected',
+    )
+  })
+
+  it('hands over a place with a new category and an operator that passes validation', () => {
+    const parsed = parseResearchRecord(record())
+    if (typeof parsed === 'string') throw new Error(parsed)
+    const checked = validatePlaceInput(parsed.place)
+    if (!checked.ok) throw new Error(checked.error.key)
+    expect(checked.data.category).toBe('bike')
+    expect(checked.data.operator).toBe('nonprofit')
+    // The proposal payload is this data as JSON: the operator must survive.
+    expect(JSON.parse(JSON.stringify(checked.data)).operator).toBe('nonprofit')
+  })
+
+  it('accepts every new category key and a null operator', () => {
+    for (const category of ['secondhand', 'mending', 'repair', 'bike', 'share']) {
+      expect(importKey(record({ category, operator: null }))).toBeNull()
+    }
+    // A record written before the field existed.
+    const older: Record<string, unknown> = { ...record().place }
+    delete older.operator
+    expect(importKey({ ...record(), place: older })).toBeNull()
+  })
+
+  it('reports an unknown category or operator as a problem', () => {
+    expect(importKey(record({ category: 'reuse' }))).toBe('places.categoryRequired')
+    expect(importKey(record({ operator: 'association' }))).toBe('places.operatorInvalid')
   })
 })
 

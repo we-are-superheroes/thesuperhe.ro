@@ -14,13 +14,22 @@ import { parseOpeningHours, type OpeningHours } from '@/lib/opening-hours'
  * filter labels live in the `map` catalog under `categories.<key>`;
  * adding a category is a change here plus its translations, with no
  * database migration.
+ *
+ * `repair` once meant all of "repair and reuse". It now means repair
+ * workshops for objects only; second-hand shops, clothes and shoe repair,
+ * bike workshops and borrowing have their own keys. Places saved under the
+ * old meaning keep the key until someone re-sorts them by hand.
  */
 export const PLACE_CATEGORIES = [
   'farm',
   'organic',
   'coop',
   'nature',
+  'secondhand',
+  'mending',
   'repair',
+  'bike',
+  'share',
   'garden',
   'learn',
   'services',
@@ -31,6 +40,18 @@ export type PlaceCategory = (typeof PLACE_CATEGORIES)[number]
 
 export function isPlaceCategory(value: unknown): value is PlaceCategory {
   return typeof value === 'string' && (PLACE_CATEGORIES as readonly string[]).includes(value)
+}
+
+/**
+ * Who runs a place (optional; null = not known). Labels live in the `map`
+ * catalog under `operators.<key>`. Stored as plain text, like the category.
+ */
+export const PLACE_OPERATORS = ['nonprofit', 'cooperative', 'public', 'business'] as const
+
+export type PlaceOperator = (typeof PLACE_OPERATORS)[number]
+
+export function isPlaceOperator(value: unknown): value is PlaceOperator {
+  return typeof value === 'string' && (PLACE_OPERATORS as readonly string[]).includes(value)
 }
 
 export const OPERATING_STATUSES = ['active', 'temporarily_closed', 'permanently_closed'] as const
@@ -324,6 +345,8 @@ export interface PlaceData {
   description: string | null
   language: string | null
   category: PlaceCategory
+  /** Who runs the place; null when not known. */
+  operator: PlaceOperator | null
   latitude: number
   longitude: number
   locationApproximate: boolean
@@ -414,6 +437,11 @@ export function validatePlaceInput(
   }
 
   if (!isPlaceCategory(raw.category)) return fail({ key: 'places.categoryRequired' })
+
+  // Optional: missing, null and "" all mean "not known". Anything else must
+  // be one of the known keys, so a typo is caught, not silently dropped.
+  const operator = raw.operator === undefined || raw.operator === '' ? null : raw.operator
+  if (operator !== null && !isPlaceOperator(operator)) return fail({ key: 'places.operatorInvalid' })
 
   if (!isValidLatLng(raw.latitude, raw.longitude)) return fail({ key: 'places.positionRequired' })
   const latitude = roundCoordinate(raw.latitude as number)
@@ -521,6 +549,7 @@ export function validatePlaceInput(
       description,
       language,
       category: raw.category,
+      operator,
       latitude,
       longitude,
       locationApproximate: raw.locationApproximate === true,
@@ -564,6 +593,7 @@ export const PLACE_FIELDS: PlaceField[] = [
   'description',
   'language',
   'category',
+  'operator',
   'latitude',
   'longitude',
   'locationApproximate',
@@ -649,6 +679,7 @@ export function emptyPlaceForm(prefill: Partial<PlaceFormValues> = {}): PlaceFor
     description: null,
     language: null,
     category: '',
+    operator: null,
     latitude: null,
     longitude: null,
     locationApproximate: false,

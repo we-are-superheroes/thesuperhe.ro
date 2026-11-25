@@ -183,6 +183,7 @@
     "nameRequired": "Dê um nome ao lugar.",
     "summaryRequired": "Adicione uma descrição curta.",
     "categoryRequired": "Escolha uma categoria.",
+    "operatorInvalid": "Escolha na lista quem gere o local.",
     "positionRequired": "Coloque o pino no mapa.",
     "countryInvalid": "Escolha um país da lista.",
     "websiteInvalid": "O endereço do site não parece correto. Deve ser algo como https://example.org.",

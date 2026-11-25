@@ -18,6 +18,7 @@ import {
   directionsUrl,
   formatPrice,
   isPlaceCategory,
+  isPlaceOperator,
   placeUrl,
 } from '@/lib/places-shared'
 import { SITE_URL } from '@/lib/site'
@@ -25,6 +26,7 @@ import { cn } from '@/lib/utils'
 import {
   CategoryThumb,
   ClosedBadge,
+  OperatorBadge,
   SourceBadge,
   openStateLabel,
   weekdayName,
@@ -100,6 +102,7 @@ export default async function PlacePage({ params }: PlacePageParams) {
   }
 
   const category = isPlaceCategory(place.category) ? place.category : 'other'
+  const operator = isPlaceOperator(place.operator) ? place.operator : null
   const parsedHours = parseOpeningHours(place.openingHours)
   const hours = parsedHours.ok ? parsedHours.value : null
   const table = weeklyTable(hours)
@@ -176,6 +179,9 @@ export default async function PlacePage({ params }: PlacePageParams) {
               {closedForNow && <ClosedBadge label={t('badges.temporarilyClosed')} />}
               {closedForGood && <ClosedBadge label={t('badges.permanentlyClosed')} />}
               <span className="text-xs text-fg-tertiary">{t(`categories.${category}.one`)}</span>
+              {operator && (
+                <OperatorBadge label={t('badges.runBy', { operator: t(`operators.${operator}`) })} />
+              )}
             </div>
             <h1 className="font-display text-3xl leading-tight tracking-tight sm:text-4xl">
               {place.name}

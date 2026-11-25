@@ -16,7 +16,8 @@
     "test": "vitest run",
     "translate": "tsx -r dotenv/config scripts/translate.ts",
     "translate:check": "tsx scripts/translate-check.ts",
-    "translate:places": "tsx --conditions=react-server scripts/translate-places.ts"
+    "translate:places": "tsx --conditions=react-server scripts/translate-places.ts",
+    "places:import": "tsx --conditions=react-server scripts/places-import.ts"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
