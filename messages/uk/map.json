@@ -20,6 +20,8 @@
     "suggest": "Запропонувати місце",
     "categoriesLabel": "Категорії",
     "allCategories": "Усі категорії",
+    "operatorsLabel": "Хто керує",
+    "allOperators": "Усі",
     "resultsLabel": "Результати",
     "count": "{count, plural, =0 {Немає результатів} one {<strong># результат</strong>} few {<strong># результати</strong>} many {<strong># результатів</strong>} other {<strong># результату</strong>}} у межах {km} км від {place}",
     "countNearYou": "{count, plural, =0 {Немає результатів} one {<strong># результат</strong>} few {<strong># результати</strong>} many {<strong># результатів</strong>} other {<strong># результату</strong>}} у межах {km} км від вас",
@@ -62,7 +64,8 @@
     "indie": "Незалежне",
     "temporarilyClosed": "Тимчасово зачинено",
     "permanentlyClosed": "Зачинено назавжди",
-    "approximate": "Приблизне місцезнаходження"
+    "approximate": "Приблизне місцезнаходження",
+    "runBy": "Керує: {operator}"
   },
   "categories": {
     "farm": {
@@ -81,9 +84,25 @@
       "one": "Природа та дика фауна",
       "many": "Природа та дика фауна"
     },
+    "secondhand": {
+      "one": "Секонд-хенд",
+      "many": "Секонд-хенди"
+    },
+    "mending": {
+      "one": "Ремонт одягу та взуття",
+      "many": "Ремонт одягу та взуття"
+    },
     "repair": {
-      "one": "Ремонт і повторне використання",
-      "many": "Ремонт і повторне використання"
+      "one": "Ремонтна майстерня",
+      "many": "Ремонтні майстерні"
+    },
+    "bike": {
+      "one": "Веломайстерня",
+      "many": "Веломайстерні"
+    },
+    "share": {
+      "one": "Прокат і повторне використання",
+      "many": "Прокат і повторне використання"
     },
     "garden": {
       "one": "Громадський сад",
@@ -101,6 +120,12 @@
       "one": "Інше",
       "many": "Інше"
     }
+  },
+  "operators": {
+    "nonprofit": "Неприбуткова організація",
+    "cooperative": "Кооператив",
+    "public": "Держава або громада",
+    "business": "Приватний бізнес"
   },
   "card": {
     "distance": "{km} км",
@@ -168,6 +193,7 @@
     "description": "Докладніше про це місце",
     "language": "Мова тексту",
     "category": "Категорія",
+    "operator": "Хто керує",
     "position": "Розташування на мапі",
     "locationApproximate": "Немає точної адреси",
     "address": "Адреса",
@@ -236,6 +262,7 @@
     "summaryHelp": "Одне-два речення. Це показано в списку та на мапі.",
     "descriptionHelp": "Необов’язково. Усе інше, що хотів би знати відвідувач.",
     "categoryPlaceholder": "Оберіть категорію",
+    "operatorUnknown": "Невідомо",
     "languageAny": "Не задано",
     "findAddressLabel": "Знайти адресу",
     "findAddressPlaceholder": "Вулиця, місто або індекс",

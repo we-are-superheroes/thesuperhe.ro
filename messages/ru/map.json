@@ -20,6 +20,8 @@
     "suggest": "Предложить место",
     "categoriesLabel": "Категории",
     "allCategories": "Все категории",
+    "operatorsLabel": "Кто управляет",
+    "allOperators": "Все",
     "resultsLabel": "Результаты",
     "count": "{count, plural, =0 {Нет результатов} one {<strong># результат</strong>} few {<strong># результата</strong>} many {<strong># результатов</strong>} other {<strong># результата</strong>}} в пределах {km} км от города {place}",
     "countNearYou": "{count, plural, =0 {Нет результатов} one {<strong># результат</strong>} few {<strong># результата</strong>} many {<strong># результатов</strong>} other {<strong># результата</strong>}} в пределах {km} км от вас",
@@ -62,7 +64,8 @@
     "indie": "Независимое",
     "temporarilyClosed": "Временно закрыто",
     "permanentlyClosed": "Закрыто навсегда",
-    "approximate": "Примерное местоположение"
+    "approximate": "Примерное местоположение",
+    "runBy": "Управляет: {operator}"
   },
   "categories": {
     "farm": {
@@ -81,9 +84,25 @@
       "one": "Природа и дикие животные",
       "many": "Природа и дикие животные"
     },
+    "secondhand": {
+      "one": "Секонд-хенд",
+      "many": "Секонд-хенды"
+    },
+    "mending": {
+      "one": "Ремонт одежды и обуви",
+      "many": "Ремонт одежды и обуви"
+    },
     "repair": {
-      "one": "Ремонт и повторное использование",
-      "many": "Ремонт и повторное использование"
+      "one": "Ремонтная мастерская",
+      "many": "Ремонтные мастерские"
+    },
+    "bike": {
+      "one": "Веломастерская",
+      "many": "Веломастерские"
+    },
+    "share": {
+      "one": "Прокат и повторное использование",
+      "many": "Прокат и повторное использование"
     },
     "garden": {
       "one": "Общественный сад",
@@ -101,6 +120,12 @@
       "one": "Другое",
       "many": "Другое"
     }
+  },
+  "operators": {
+    "nonprofit": "Некоммерческая организация",
+    "cooperative": "Кооператив",
+    "public": "Государство или муниципалитет",
+    "business": "Частный бизнес"
   },
   "card": {
     "distance": "{km} км",
@@ -168,6 +193,7 @@
     "description": "Подробнее об этом месте",
     "language": "Язык текста",
     "category": "Категория",
+    "operator": "Кто управляет",
     "position": "Положение на карте",
     "locationApproximate": "Нет постоянного адреса",
     "address": "Адрес",
@@ -236,6 +262,7 @@
     "summaryHelp": "Одно или два предложения. Это показывается в списке и на карте.",
     "descriptionHelp": "Необязательно. Всё остальное, что было бы полезно знать посетителю.",
     "categoryPlaceholder": "Выберите категорию",
+    "operatorUnknown": "Неизвестно",
     "languageAny": "Не задано",
     "findAddressLabel": "Найти адрес",
     "findAddressPlaceholder": "Улица, город или индекс",

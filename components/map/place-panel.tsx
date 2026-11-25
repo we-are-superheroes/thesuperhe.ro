@@ -14,10 +14,12 @@ import {
   groupProducts,
   placeUrl,
   type PlaceCategory,
+  type PlaceOperator,
 } from '@/lib/places-shared'
 import {
   CategoryIcon,
   ClosedBadge,
+  OperatorBadge,
   SourceBadge,
   THUMB_CLASS,
   openStateLabel,
@@ -40,6 +42,7 @@ export interface PlacePanelPreview {
   name: string
   summary: string
   category: PlaceCategory
+  operator: PlaceOperator | null
   city: string | null
   hero: boolean
 }
@@ -190,6 +193,9 @@ export function PlacePanel({
         {closedForNow && <ClosedBadge label={t('badges.temporarilyClosed')} />}
         {closedForGood && <ClosedBadge label={t('badges.permanentlyClosed')} />}
         <span className="text-xs text-fg-tertiary">{t(`categories.${preview.category}.one`)}</span>
+        {preview.operator && (
+          <OperatorBadge label={t('badges.runBy', { operator: t(`operators.${preview.operator}`) })} />
+        )}
       </div>
       <h2 className="mt-2 font-display text-3xl leading-tight">{preview.name}</h2>
       <p className="mt-1 text-sm text-fg-tertiary">

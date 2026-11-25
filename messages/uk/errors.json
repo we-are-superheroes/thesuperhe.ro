@@ -183,6 +183,7 @@
     "nameRequired": "Дайте місцю назву.",
     "summaryRequired": "Додайте короткий опис.",
     "categoryRequired": "Оберіть категорію.",
+    "operatorInvalid": "Оберіть зі списку, хто керує цим місцем.",
     "positionRequired": "Поставте позначку на карті.",
     "countryInvalid": "Оберіть країну зі списку.",
     "websiteInvalid": "Адреса сайту виглядає неправильно. Вона має виглядати так: https://example.org.",

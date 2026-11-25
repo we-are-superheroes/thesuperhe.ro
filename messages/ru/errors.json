@@ -183,6 +183,7 @@
     "nameRequired": "Укажите название места.",
     "summaryRequired": "Добавьте короткое описание.",
     "categoryRequired": "Выберите категорию.",
+    "operatorInvalid": "Выберите из списка, кто управляет этим местом.",
     "positionRequired": "Поставьте метку на карте.",
     "countryInvalid": "Выберите страну из списка.",
     "websiteInvalid": "Адрес сайта выглядит неправильно. Он должен быть вида https://example.org.",

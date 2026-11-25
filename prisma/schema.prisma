@@ -418,6 +418,8 @@ model Place {
   language    String?
   // Key from PLACE_CATEGORIES (lib/places-shared.ts).
   category    String
+  // Who runs it: key from PLACE_OPERATORS (lib/places-shared.ts); null = not known.
+  operator    String?
 
   latitude            Float
   longitude           Float

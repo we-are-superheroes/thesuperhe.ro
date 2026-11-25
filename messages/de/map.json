@@ -20,6 +20,8 @@
     "suggest": "Ort vorschlagen",
     "categoriesLabel": "Kategorien",
     "allCategories": "Alle Kategorien",
+    "operatorsLabel": "Träger",
+    "allOperators": "Alle",
     "resultsLabel": "Ergebnisse",
     "count": "{count, plural, =0 {Keine Ergebnisse} one {<strong># Ergebnis</strong>} other {<strong># Ergebnisse</strong>}} im Umkreis von {km} km um {place}",
     "countNearYou": "{count, plural, =0 {Keine Ergebnisse} one {<strong># Ergebnis</strong>} other {<strong># Ergebnisse</strong>}} im Umkreis von {km} km um dich",
@@ -62,7 +64,8 @@
     "indie": "Unabhängig",
     "temporarilyClosed": "Vorübergehend geschlossen",
     "permanentlyClosed": "Dauerhaft geschlossen",
-    "approximate": "Ungefährer Standort"
+    "approximate": "Ungefährer Standort",
+    "runBy": "Träger: {operator}"
   },
   "categories": {
     "farm": {
@@ -81,9 +84,25 @@
       "one": "Natur und Tierwelt",
       "many": "Natur und Tierwelt"
     },
+    "secondhand": {
+      "one": "Secondhand-Laden",
+      "many": "Secondhand-Läden"
+    },
+    "mending": {
+      "one": "Kleider- und Schuhreparatur",
+      "many": "Kleider- und Schuhreparatur"
+    },
     "repair": {
-      "one": "Reparieren und Wiederverwenden",
-      "many": "Reparieren und Wiederverwenden"
+      "one": "Reparaturwerkstatt",
+      "many": "Reparaturwerkstätten"
+    },
+    "bike": {
+      "one": "Fahrradwerkstatt",
+      "many": "Fahrradwerkstätten"
+    },
+    "share": {
+      "one": "Leihen und Wiederverwenden",
+      "many": "Leihen und Wiederverwenden"
     },
     "garden": {
       "one": "Gemeinschaftsgarten",
@@ -101,6 +120,12 @@
       "one": "Sonstiges",
       "many": "Sonstiges"
     }
+  },
+  "operators": {
+    "nonprofit": "Gemeinnützig",
+    "cooperative": "Genossenschaft",
+    "public": "Öffentliche Hand",
+    "business": "Unternehmen"
   },
   "card": {
     "distance": "{km} km",
@@ -168,6 +193,7 @@
     "description": "Mehr über diesen Ort",
     "language": "Sprache des Textes",
     "category": "Kategorie",
+    "operator": "Träger",
     "position": "Position auf der Karte",
     "locationApproximate": "Keine feste Adresse",
     "address": "Adresse",
@@ -236,6 +262,7 @@
     "summaryHelp": "Ein oder zwei Sätze. Das wird in der Liste und auf der Karte angezeigt.",
     "descriptionHelp": "Optional. Alles Weitere, was Besuchende wissen möchten.",
     "categoryPlaceholder": "Kategorie wählen",
+    "operatorUnknown": "Nicht bekannt",
     "languageAny": "Nicht festgelegt",
     "findAddressLabel": "Adresse finden",
     "findAddressPlaceholder": "Straße, Ort oder Postleitzahl",

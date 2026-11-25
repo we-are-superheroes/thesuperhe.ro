@@ -183,6 +183,7 @@
     "nameRequired": "Dai un nome al luogo.",
     "summaryRequired": "Aggiungi una breve descrizione.",
     "categoryRequired": "Scegli una categoria.",
+    "operatorInvalid": "Scegli dall'elenco chi gestisce il luogo.",
     "positionRequired": "Posiziona il segnaposto sulla mappa.",
     "countryInvalid": "Scegli un paese dall'elenco.",
     "websiteInvalid": "L'indirizzo del sito web non sembra corretto. Dovrebbe essere simile a https://example.org.",

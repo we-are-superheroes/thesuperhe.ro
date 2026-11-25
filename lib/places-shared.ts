@@ -14,13 +14,22 @@ import { parseOpeningHours, type OpeningHours } from '@/lib/opening-hours'
  * filter labels live in the `map` catalog under `categories.<key>`;
  * adding a category is a change here plus its translations, with no
  * database migration.
+ *
+ * `repair` once meant all of "repair and reuse". It now means repair
+ * workshops for objects only; second-hand shops, clothes and shoe repair,
+ * bike workshops and borrowing have their own keys. Places saved under the
+ * old meaning keep the key until someone re-sorts them by hand.
  */
 export const PLACE_CATEGORIES = [
   'farm',
   'organic',
   'coop',
   'nature',
+  'secondhand',
+  'mending',
   'repair',
+  'bike',
+  'share',
   'garden',
   'learn',
   'services',
@@ -31,6 +40,18 @@ export type PlaceCategory = (typeof PLACE_CATEGORIES)[number]
 
 export function isPlaceCategory(value: unknown): value is PlaceCategory {
   return typeof value === 'string' && (PLACE_CATEGORIES as readonly string[]).includes(value)
+}
+
+/**
+ * Who runs a place (optional; null = not known). Labels live in the `map`
+ * catalog under `operators.<key>`. Stored as plain text, like the category.
+ */
+export const PLACE_OPERATORS = ['nonprofit', 'cooperative', 'public', 'business'] as const
+
+export type PlaceOperator = (typeof PLACE_OPERATORS)[number]
+
+export function isPlaceOperator(value: unknown): value is PlaceOperator {
+  return typeof value === 'string' && (PLACE_OPERATORS as readonly string[]).includes(value)
 }
 
 export const OPERATING_STATUSES = ['active', 'temporarily_closed', 'permanently_closed'] as const
@@ -324,6 +345,8 @@ export interface PlaceData {
   description: string | null
   language: string | null
   category: PlaceCategory
+  /** Who runs the place; null when not known. */
+  operator: PlaceOperator | null
   latitude: number
   longitude: number
   locationApproximate: boolean
@@ -414,6 +437,11 @@ export function validatePlaceInput(
   }
 
   if (!isPlaceCategory(raw.category)) return fail({ key: 'places.categoryRequired' })
+
+  // Optional: missing, null and "" all mean "not known". Anything else must
+  // be one of the known keys, so a typo is caught, not silently dropped.
+  const operator = raw.operator === undefined || raw.operator === '' ? null : raw.operator
+  if (operator !== null && !isPlaceOperator(operator)) return fail({ key: 'places.operatorInvalid' })
 
   if (!isValidLatLng(raw.latitude, raw.longitude)) return fail({ key: 'places.positionRequired' })
   const latitude = roundCoordinate(raw.latitude as number)
@@ -521,6 +549,7 @@ export function validatePlaceInput(
       description,
       language,
       category: raw.category,
+      operator,
       latitude,
       longitude,
       locationApproximate: raw.locationApproximate === true,
@@ -564,6 +593,7 @@ export const PLACE_FIELDS: PlaceField[] = [
   'description',
   'language',
   'category',
+  'operator',
   'latitude',
   'longitude',
   'locationApproximate',
@@ -615,7 +645,45 @@ export function foldText(value: string): string {
     .toLowerCase()
 }
 
-/** Could this be the same place? Very close by, or close and similarly named. */
+/** Names reduced to letters and digits, for comparing ("L'Heure Vive" → "lheurevive"). */
+function nameKey(name: string): string {
+  return foldText(name).replace(/[^a-z0-9]/g, '')
+}
+
+/** Shortest name that may match by being part of a longer one ("Bio" is in too many names). */
+const MIN_CONTAINED_NAME = 5
+
+/**
+ * Is this the same place? For the import (scripts/places-import.ts):
+ *
+ *   'same'  — within 500 m under the same name. The record is skipped
+ *             without anyone looking at it, so nothing weaker counts.
+ *   'maybe' — within 500 m and one name is inside the other ("Caritas" /
+ *             "Boutique Caritas"). Often the same place, but not always: a
+ *             pick-up point "at Meyrinroule" is not Meyrinroule. The record
+ *             goes to the review queue.
+ *   null    — anything else. Distance alone never counts: two shops can
+ *             share a building, and a geocoded address gives them the very
+ *             same point.
+ */
+export function samePlaceMatch(
+  a: { name: string; lat: number; lng: number },
+  b: { name: string; lat: number; lng: number },
+): 'same' | 'maybe' | null {
+  if (haversineKm(a, b) > 0.5) return null
+  const nameA = nameKey(a.name)
+  const nameB = nameKey(b.name)
+  if (!nameA || !nameB) return null
+  if (nameA === nameB) return 'same'
+  const [shorter, longer] = nameA.length <= nameB.length ? [nameA, nameB] : [nameB, nameA]
+  return shorter.length >= MIN_CONTAINED_NAME && longer.includes(shorter) ? 'maybe' : null
+}
+
+/**
+ * Could this be the same place? Very close by, or close and similarly named.
+ * Deliberately generous: it only makes the form show a "please check"
+ * warning. Do not use it to drop anything — see samePlaceMatch().
+ */
 export function looksLikeDuplicate(
   a: { name: string; lat: number; lng: number },
   b: { name: string; lat: number; lng: number },
@@ -623,8 +691,8 @@ export function looksLikeDuplicate(
   const km = haversineKm(a, b)
   if (km <= 0.05) return true
   if (km > 0.5) return false
-  const nameA = foldText(a.name).replace(/[^a-z0-9]/g, '')
-  const nameB = foldText(b.name).replace(/[^a-z0-9]/g, '')
+  const nameA = nameKey(a.name)
+  const nameB = nameKey(b.name)
   if (!nameA || !nameB) return false
   return nameA === nameB || nameA.includes(nameB) || nameB.includes(nameA) || km <= 0.15
 }
@@ -649,6 +717,7 @@ export function emptyPlaceForm(prefill: Partial<PlaceFormValues> = {}): PlaceFor
     description: null,
     language: null,
     category: '',
+    operator: null,
     latitude: null,
     longitude: null,
     locationApproximate: false,

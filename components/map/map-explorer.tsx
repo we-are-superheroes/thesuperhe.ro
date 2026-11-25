@@ -18,6 +18,7 @@ import {
   DEFAULT_RADIUS_KM,
   MAP_PLACE_COOKIE,
   PLACE_CATEGORIES,
+  PLACE_OPERATORS,
   encodeMapPlaceCookie,
   haversineKm,
   RADIUS_OPTIONS_KM,
@@ -26,6 +27,7 @@ import {
   foldText,
   type LatLng,
   type PlaceCategory,
+  type PlaceOperator,
 } from '@/lib/places-shared'
 import { MapView } from '@/components/map/map-loader'
 import { useMapLabels } from '@/components/map/use-map-labels'
@@ -35,6 +37,7 @@ import {
   CategoryIcon,
   CategoryThumb,
   ClosedBadge,
+  OperatorBadge,
   SourceBadge,
   openStateLabel,
 } from '@/components/map/place-bits'
@@ -69,6 +72,8 @@ export interface MapExplorerProps {
     radius: number
     q: string
     categories: PlaceCategory[]
+    /** Who runs the place; empty = no filter. */
+    operators: PlaceOperator[]
     source: SourceFilter
     sort: SortOrder
     selected: string | null
@@ -123,6 +128,7 @@ export function MapExplorer({
   const [radius, setRadius] = useState(initial.radius)
   const [q, setQ] = useState(initial.q)
   const [categories, setCategories] = useState<PlaceCategory[]>(initial.categories)
+  const [operators, setOperators] = useState<PlaceOperator[]>(initial.operators)
   const [source, setSource] = useState<SourceFilter>(initial.source)
   const [sort, setSort] = useState<SortOrder>(initial.sort)
   const [selectedSlug, setSelectedSlug] = useState<string | null>(initial.selected ?? initial.open)
@@ -178,6 +184,8 @@ export function MapExplorer({
       if (source === 'hero' && !p.project) return false
       if (source === 'indie' && p.project) return false
       if (categories.length > 0 && !categories.includes(p.category)) return false
+      // A place whose operator is not known matches no "run by" filter.
+      if (operators.length > 0 && (!p.operator || !operators.includes(p.operator))) return false
       if (needle) {
         const haystack = foldText(
           [
@@ -186,6 +194,7 @@ export function MapExplorer({
             p.city ?? '',
             t(`categories.${p.category}.one`),
             t(`categories.${p.category}.many`),
+            p.operator ? t(`operators.${p.operator}`) : '',
             ...p.productNames,
           ].join(' '),
         )
@@ -196,7 +205,7 @@ export function MapExplorer({
     if (sort === 'name') out.sort((a, b) => a.name.localeCompare(b.name, locale))
     else out.sort((a, b) => a.distanceKm - b.distanceKm)
     return out
-  }, [places, radius, source, categories, q, sort, locale, t])
+  }, [places, radius, source, categories, operators, q, sort, locale, t])
 
   // While the details panel is open it replaces the small card over the map.
   const selected = openSlug ? null : (visible.find((p) => p.slug === selectedSlug) ?? null)
@@ -224,6 +233,7 @@ export function MapExplorer({
     radius: number
     q: string
     categories: PlaceCategory[]
+    operators: PlaceOperator[]
     source: SourceFilter
     sort: SortOrder
     selected: string | null
@@ -236,6 +246,7 @@ export function MapExplorer({
     radius,
     q,
     categories,
+    operators,
     source,
     sort,
     selected: selectedSlug,
@@ -249,6 +260,7 @@ export function MapExplorer({
     if (state.radius !== DEFAULT_RADIUS_KM) params.set('r', String(state.radius))
     if (state.q.trim()) params.set('q', state.q.trim())
     if (state.categories.length > 0) params.set('cat', state.categories.join(','))
+    if (state.operators.length > 0) params.set('op', state.operators.join(','))
     if (state.source !== 'all') params.set('src', state.source)
     if (state.sort !== 'near') params.set('sort', state.sort)
     if (state.open) params.set('d', state.open)
@@ -288,6 +300,16 @@ export function MapExplorer({
     setCategories(next)
     syncUrl({ categories: next })
   }
+  const toggleOperator = (operator: PlaceOperator | null) => {
+    const next =
+      operator === null
+        ? []
+        : operators.includes(operator)
+          ? operators.filter((o) => o !== operator)
+          : [...operators, operator]
+    setOperators(next)
+    syncUrl({ operators: next })
+  }
   const select = (slug: string | null, fromMap = false) => {
     setSelectedSlug(slug)
     syncUrl({ selected: slug })
@@ -325,9 +347,10 @@ export function MapExplorer({
     const widest = RADIUS_OPTIONS_KM[RADIUS_OPTIONS_KM.length - 1]
     setQ('')
     setCategories([])
+    setOperators([])
     setSource('all')
     setRadius(widest)
-    syncUrl({ q: '', categories: [], source: 'all', radius: widest })
+    syncUrl({ q: '', categories: [], operators: [], source: 'all', radius: widest })
   }
 
   const goToHit = (hit: GeocodeHit) => {
@@ -590,6 +613,36 @@ export function MapExplorer({
             </button>
           ))}
         </div>
+
+        {/* Who runs the place. The visible label doubles as the group's name. */}
+        <div
+          role="group"
+          aria-labelledby="map-operators-label"
+          className="mt-2 flex flex-wrap items-center gap-2"
+        >
+          <span id="map-operators-label" className="text-sm text-fg-tertiary">
+            {t('page.operatorsLabel')}
+          </span>
+          <button
+            type="button"
+            aria-pressed={operators.length === 0}
+            onClick={() => toggleOperator(null)}
+            className={CHIP}
+          >
+            {t('page.allOperators')}
+          </button>
+          {PLACE_OPERATORS.map((operator) => (
+            <button
+              key={operator}
+              type="button"
+              aria-pressed={operators.includes(operator)}
+              onClick={() => toggleOperator(operator)}
+              className={CHIP}
+            >
+              {t(`operators.${operator}`)}
+            </button>
+          ))}
+        </div>
       </section>
 
       {/* ── List + map ──────────────────────────────────────────────── */}
@@ -668,6 +721,13 @@ export function MapExplorer({
                               <span className="text-xs text-fg-tertiary">
                                 {t(`categories.${p.category}.one`)}
                               </span>
+                              {p.operator && (
+                                <OperatorBadge
+                                  label={t('badges.runBy', {
+                                    operator: t(`operators.${p.operator}`),
+                                  })}
+                                />
+                              )}
                             </div>
                             <h2 className="font-display text-lg leading-tight">
                               <button
@@ -754,6 +814,7 @@ export function MapExplorer({
                       name: openDetail.name,
                       summary: openDetail.summary,
                       category: openDetail.category,
+                      operator: openDetail.operator,
                       city: openDetail.city,
                       hero: !!openDetail.project,
                     }
@@ -762,6 +823,7 @@ export function MapExplorer({
                       name: openResult?.name ?? '',
                       summary: openResult?.summary ?? '',
                       category: openResult?.category ?? 'other',
+                      operator: openResult?.operator ?? null,
                       city: openResult?.city ?? null,
                       hero: !!openResult?.project,
                     }
@@ -840,6 +902,11 @@ export function MapExplorer({
                   <span className="text-xs text-fg-tertiary">
                     {t(`categories.${selected.category}.one`)}
                   </span>
+                  {selected.operator && (
+                    <OperatorBadge
+                      label={t('badges.runBy', { operator: t(`operators.${selected.operator}`) })}
+                    />
+                  )}
                 </div>
                 <h2 className="my-2 pr-7 font-display text-2xl leading-tight">{selected.name}</h2>
                 <p className="text-sm leading-relaxed text-fg-secondary">{selected.summary}</p>

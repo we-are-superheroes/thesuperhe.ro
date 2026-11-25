@@ -183,6 +183,7 @@
     "nameRequired": "Give the place a name.",
     "summaryRequired": "Add a short description.",
     "categoryRequired": "Choose a category.",
+    "operatorInvalid": "Choose who runs the place from the list.",
     "positionRequired": "Place the pin on the map.",
     "countryInvalid": "Choose a country from the list.",
     "websiteInvalid": "The website address does not look right. It should look like https://example.org.",

@@ -20,6 +20,8 @@
     "suggest": "Suggest a place",
     "categoriesLabel": "Categories",
     "allCategories": "All categories",
+    "operatorsLabel": "Run by",
+    "allOperators": "Anyone",
     "resultsLabel": "Results",
     "count": "{count, plural, =0 {No results} one {<strong># result</strong>} other {<strong># results</strong>}} within {km} km of {place}",
     "countNearYou": "{count, plural, =0 {No results} one {<strong># result</strong>} other {<strong># results</strong>}} within {km} km of you",
@@ -62,7 +64,8 @@
     "indie": "Independent",
     "temporarilyClosed": "Temporarily closed",
     "permanentlyClosed": "Permanently closed",
-    "approximate": "Approximate location"
+    "approximate": "Approximate location",
+    "runBy": "Run by: {operator}"
   },
   "categories": {
     "farm": {
@@ -81,9 +84,25 @@
       "one": "Nature and wildlife",
       "many": "Nature and wildlife"
     },
+    "secondhand": {
+      "one": "Second-hand shop",
+      "many": "Second-hand shops"
+    },
+    "mending": {
+      "one": "Clothes and shoe repair",
+      "many": "Clothes and shoe repair"
+    },
     "repair": {
-      "one": "Repair and reuse",
-      "many": "Repair and reuse"
+      "one": "Repair workshop",
+      "many": "Repair workshops"
+    },
+    "bike": {
+      "one": "Bike workshop",
+      "many": "Bike workshops"
+    },
+    "share": {
+      "one": "Borrow and reuse",
+      "many": "Borrow and reuse"
     },
     "garden": {
       "one": "Community garden",
@@ -101,6 +120,12 @@
       "one": "Other",
       "many": "Other"
     }
+  },
+  "operators": {
+    "nonprofit": "Non-profit",
+    "cooperative": "Cooperative",
+    "public": "Public",
+    "business": "Business"
   },
   "card": {
     "distance": "{km} km",
@@ -168,6 +193,7 @@
     "description": "More about this place",
     "language": "Language of the text",
     "category": "Category",
+    "operator": "Run by",
     "position": "Position on the map",
     "locationApproximate": "No fixed address",
     "address": "Address",
@@ -236,6 +262,7 @@
     "summaryHelp": "One or two sentences. This is shown in the list and on the map.",
     "descriptionHelp": "Optional. Anything else a visitor would like to know.",
     "categoryPlaceholder": "Choose a category",
+    "operatorUnknown": "Not known",
     "languageAny": "Not set",
     "findAddressLabel": "Find the address",
     "findAddressPlaceholder": "Street, town or postcode",

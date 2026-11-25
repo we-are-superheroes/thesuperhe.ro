@@ -11,6 +11,7 @@ import {
   PLACE_FIELDS,
   formatPrice,
   isPlaceCategory,
+  isPlaceOperator,
   pickPlaceFields,
   type PlaceData,
   type PlaceField,
@@ -107,6 +108,7 @@ export default async function ReviewPlacesPage() {
     if (field === 'locationApproximate') return [value === true ? t('review.yes') : t('review.no')]
     if (value === null || value === undefined || value === '') return [empty]
     if (field === 'category') return [isPlaceCategory(value) ? t(`categories.${value}.one`) : String(value)]
+    if (field === 'operator') return [isPlaceOperator(value) ? t(`operators.${value}`) : String(value)]
     if (field === 'operatingStatus') {
       return [
         value === 'active' || value === 'temporarily_closed' || value === 'permanently_closed'
