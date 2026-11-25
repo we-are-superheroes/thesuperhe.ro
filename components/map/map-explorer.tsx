@@ -4,7 +4,7 @@ import { useMemo, useRef, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { Clock, Info, Loader2, MapPin, Plus, Search, Users, X } from 'lucide-react'
+import { Building2, Clock, Info, Loader2, MapPin, Plus, Search, Users, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   geocodeAction,
@@ -34,13 +34,14 @@ import { useMapLabels } from '@/components/map/use-map-labels'
 import { PlacePanel } from '@/components/map/place-panel'
 import type { MapPin as MapPinData } from '@/components/map/map-canvas'
 import {
+  CATEGORY_SQUARE_CLASS,
   CategoryIcon,
   CategoryThumb,
   ClosedBadge,
-  OperatorBadge,
   SourceBadge,
   openStateLabel,
 } from '@/components/map/place-bits'
+import { CARD_SHELL, CardFooter, CardHeader, FactList, FactRow } from '@/components/ui/card-bits'
 
 /* ================================================================
    MapExplorer — the public /map page: search, filters, result list
@@ -107,6 +108,10 @@ const BTN =
 const BTN_PRIMARY = 'border-brand-accent bg-brand-accent text-fg-on-accent hover:bg-brand-accent-hover'
 const BTN_SECONDARY =
   'border-border-default bg-bg-surface-2 text-fg-primary hover:border-border-strong hover:bg-bg-surface-3'
+// The pop-up card sits on bg-surface-2, the usual secondary fill, so its
+// secondary buttons take the surface below to stay visible.
+const BTN_SECONDARY_ON_POPUP =
+  'border-border-default bg-bg-surface text-fg-primary hover:border-border-strong hover:bg-bg-surface-3'
 
 export function MapExplorer({
   centre: urlCentre,
@@ -121,6 +126,7 @@ export function MapExplorer({
   nowMs,
 }: MapExplorerProps) {
   const t = useTranslations('map')
+  const tc = useTranslations('common')
   const locale = useLocale()
   const router = useRouter()
   const mapLabels = useMapLabels()
@@ -313,9 +319,14 @@ export function MapExplorer({
   const select = (slug: string | null, fromMap = false) => {
     setSelectedSlug(slug)
     syncUrl({ selected: slug })
-    if (slug && fromMap) {
-      listRef.current
-        ?.querySelector(`[data-slug="${CSS.escape(slug)}"]`)
+    // Bring the place's card into view, but only where the list scrolls on
+    // its own beside the map (wide screens). On a phone the list sits below
+    // the map in the page, and scrolling to the card would take the map,
+    // and the pop-up just opened on it, out of view.
+    const list = listRef.current
+    if (slug && fromMap && list && getComputedStyle(list).overflowY === 'auto') {
+      list
+        .querySelector(`[data-slug="${CSS.escape(slug)}"]`)
         ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     }
   }
@@ -696,73 +707,79 @@ export function MapExplorer({
                 >
                   {visible.map((p) => {
                     const isSelected = p.slug === selectedSlug
-                    const hours = hoursLine(p)
+                    const hours = hoursLine(p) ?? closedLine(p)
                     return (
                       <li key={p.id}>
                         <article
                           data-slug={p.slug}
                           className={cn(
-                            'relative grid grid-cols-[56px_1fr] gap-4 rounded-xl border bg-bg-surface p-4 transition-colors duration-fast',
+                            CARD_SHELL,
+                            'relative transition-colors duration-fast',
                             isSelected
                               ? 'border-amber-500 bg-bg-surface-2'
-                              : 'border-border-subtle hover:border-border-strong',
+                              : 'border-border-subtle bg-bg-surface hover:border-border-strong',
                           )}
                         >
-                          <CategoryThumb category={p.category} />
-                          <div className="min-w-0">
-                            <div className="mb-1 flex flex-wrap items-center gap-2">
-                              <SourceBadge
-                                hero={!!p.project}
-                                label={p.project ? t('badges.hero') : t('badges.indie')}
-                              />
-                              {p.operatingStatus === 'temporarily_closed' && (
-                                <ClosedBadge label={t('badges.temporarilyClosed')} />
-                              )}
-                              <span className="text-xs text-fg-tertiary">
-                                {t(`categories.${p.category}.one`)}
-                              </span>
-                              {p.operator && (
-                                <OperatorBadge
-                                  label={t('badges.runBy', {
-                                    operator: t(`operators.${p.operator}`),
-                                  })}
-                                />
-                              )}
+                          <CardHeader
+                            squareClassName={CATEGORY_SQUARE_CLASS[p.category]}
+                            label={t(`categories.${p.category}.one`)}
+                            right={t('card.distance', { km: km(p.distanceKm) })}
+                          />
+                          <div className="grid grid-cols-[56px_1fr] gap-3.5 px-4 pt-1">
+                            <CategoryThumb category={p.category} />
+                            <div className="min-w-0">
+                              <h2 className="font-display text-lg leading-tight">
+                                <button
+                                  type="button"
+                                  aria-pressed={isSelected}
+                                  onClick={() => select(p.slug)}
+                                  className="cursor-pointer text-left after:absolute after:inset-0 after:rounded-2xl"
+                                >
+                                  {p.name}
+                                </button>
+                              </h2>
+                              <p className="mt-1 text-sm leading-snug text-fg-secondary">{p.summary}</p>
                             </div>
-                            <h2 className="font-display text-lg leading-tight">
-                              <button
-                                type="button"
-                                aria-pressed={isSelected}
-                                onClick={() => select(p.slug)}
-                                className="cursor-pointer text-left after:absolute after:inset-0 after:rounded-xl"
-                              >
-                                {p.name}
-                              </button>
-                            </h2>
-                            <p className="mt-1 text-sm leading-snug text-fg-secondary">{p.summary}</p>
-                            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-fg-tertiary">
-                              <span className="font-medium text-fg-secondary">
-                                {t('card.distance', { km: km(p.distanceKm) })}
+                          </div>
+                          <FactList className="mx-4 mb-1.5 mt-2">
+                            {p.city && (
+                              <FactRow icon={MapPin} label={tc('facts.where')}>
+                                {p.city}
+                              </FactRow>
+                            )}
+                            {hours && (
+                              <FactRow icon={Clock} label={tc('facts.openingHours')}>
+                                {hours}
+                              </FactRow>
+                            )}
+                            {p.operator && (
+                              <FactRow icon={Building2} label={tc('facts.runBy')}>
+                                {t(`operators.${p.operator}`)}
+                              </FactRow>
+                            )}
+                          </FactList>
+                          <CardFooter className="mt-auto flex-wrap gap-y-1.5">
+                            <SourceBadge
+                              hero={!!p.project}
+                              label={p.project ? t('badges.hero') : t('badges.indie')}
+                            />
+                            {p.operatingStatus === 'temporarily_closed' && (
+                              <ClosedBadge label={t('badges.temporarilyClosed')} />
+                            )}
+                            {p.project && p.project.stepsNeedingHelp > 0 && (
+                              <span className="font-semibold text-amber-500">
+                                {t('card.needsHelp')}
                               </span>
-                              {p.city && <span>{p.city}</span>}
-                              {p.project && p.project.stepsNeedingHelp > 0 ? (
-                                <span className="font-semibold text-amber-500">
-                                  {t('card.stepsNeedHelp', { count: p.project.stepsNeedingHelp })}
-                                </span>
-                              ) : (
-                                (hours ?? closedLine(p)) && <span>{hours ?? closedLine(p)}</span>
-                              )}
-                            </div>
+                            )}
                             <button
                               type="button"
                               data-open={p.slug}
                               onClick={() => openPlace(p.slug)}
-                              className="relative z-[1] mt-2 cursor-pointer py-0.5 text-sm font-medium text-amber-500 hover:underline hover:underline-offset-4"
+                              className="relative z-[1] ml-auto cursor-pointer py-0.5 text-[13px] font-medium text-amber-500 hover:underline hover:underline-offset-4"
                             >
-                              {p.hasProducts ? t('card.detailsAndPrices') : t('card.details')}{' '}
-                              <span aria-hidden>→</span>
+                              {p.hasProducts ? t('card.detailsAndPrices') : t('card.details')}
                             </button>
-                          </div>
+                          </CardFooter>
                         </article>
                       </li>
                     )
@@ -881,76 +898,68 @@ export function MapExplorer({
             {selected && (
               <aside
                 aria-live="polite"
-                className="absolute bottom-4 left-4 z-[11] max-h-[calc(100%-2rem)] w-[min(380px,calc(100%-2rem))] overflow-y-auto rounded-2xl border border-border-strong bg-bg-surface-2 p-5 shadow-lg"
+                className={cn(
+                  CARD_SHELL,
+                  'absolute bottom-4 left-4 z-[11] max-h-[calc(100%-2rem)] w-[min(380px,calc(100%-2rem))] overflow-y-auto border-border-strong bg-bg-surface-2 shadow-lg',
+                )}
               >
-                <button
-                  type="button"
-                  onClick={() => select(null)}
-                  aria-label={t('card.closeDetails')}
-                  className="absolute right-2.5 top-2.5 flex size-[30px] cursor-pointer items-center justify-center rounded-full text-fg-secondary transition-colors hover:bg-hover-overlay-strong hover:text-fg-primary"
+                <CardHeader
+                  squareClassName={CATEGORY_SQUARE_CLASS[selected.category]}
+                  label={t(`categories.${selected.category}.one`)}
+                  right={t('card.distance', { km: km(selected.distanceKm) })}
+                  className="shrink-0 pb-1.5 pt-3"
                 >
-                  <X className="size-4" strokeWidth={2.5} />
-                </button>
-                <div className="flex flex-wrap items-center gap-2 pr-8">
-                  <SourceBadge
-                    hero={!!selected.project}
-                    label={selected.project ? t('badges.hero') : t('badges.indie')}
-                  />
-                  {selected.operatingStatus === 'temporarily_closed' && (
-                    <ClosedBadge label={t('badges.temporarilyClosed')} />
-                  )}
-                  <span className="text-xs text-fg-tertiary">
-                    {t(`categories.${selected.category}.one`)}
-                  </span>
-                  {selected.operator && (
-                    <OperatorBadge
-                      label={t('badges.runBy', { operator: t(`operators.${selected.operator}`) })}
-                    />
-                  )}
+                  <button
+                    type="button"
+                    onClick={() => select(null)}
+                    aria-label={t('card.closeDetails')}
+                    className="-my-1.5 -mr-2 ml-1 flex size-[30px] shrink-0 cursor-pointer items-center justify-center rounded-full text-fg-secondary transition-colors hover:bg-hover-overlay-strong hover:text-fg-primary"
+                  >
+                    <X className="size-4" strokeWidth={2.5} />
+                  </button>
+                </CardHeader>
+                <div className="shrink-0 px-4 pt-1">
+                  <h2 className="font-display text-2xl leading-tight">{selected.name}</h2>
+                  <p className="mt-2 text-sm leading-normal text-fg-secondary">{selected.summary}</p>
                 </div>
-                <h2 className="my-2 pr-7 font-display text-2xl leading-tight">{selected.name}</h2>
-                <p className="text-sm leading-relaxed text-fg-secondary">{selected.summary}</p>
 
-                <div className="my-4 grid gap-2 text-sm text-fg-secondary">
-                  <DetailRow icon={<MapPin className="size-4" />}>
-                    {[
-                      selected.approximate
-                        ? t('card.area', { place: selected.city ?? selected.name })
-                        : [selected.address, selected.city].filter(Boolean).join(', '),
-                      t('card.kmAway', { km: km(selected.distanceKm) }),
-                    ]
-                      .filter(Boolean)
-                      .join(' · ')}
-                  </DetailRow>
+                <FactList className="mx-4 mt-2.5 shrink-0">
+                  <FactRow icon={MapPin} label={tc('facts.where')}>
+                    {selected.approximate
+                      ? t('card.area', { place: selected.city ?? selected.name })
+                      : [selected.address, selected.city].filter(Boolean).join(', ')}
+                  </FactRow>
                   {closedLine(selected) && (
-                    <DetailRow icon={<Clock className="size-4" />}>{closedLine(selected)}</DetailRow>
+                    <FactRow icon={Clock} label={tc('facts.openingHours')}>
+                      {closedLine(selected)}
+                    </FactRow>
                   )}
                   {hoursLine(selected) && (
-                    <DetailRow icon={<Clock className="size-4" />}>
+                    <FactRow icon={Clock} label={tc('facts.openingHours')}>
                       {hoursLine(selected)}
                       {selected.openingNote && hoursLine(selected) !== selected.openingNote && (
                         <span className="block text-fg-tertiary">{selected.openingNote}</span>
                       )}
-                    </DetailRow>
+                    </FactRow>
+                  )}
+                  {selected.operator && (
+                    <FactRow icon={Building2} label={tc('facts.runBy')}>
+                      {t(`operators.${selected.operator}`)}
+                    </FactRow>
                   )}
                   {selected.practicalNote && (
-                    <DetailRow icon={<Info className="size-4" />}>{selected.practicalNote}</DetailRow>
+                    <FactRow icon={Info} label={tc('facts.goodToKnow')}>
+                      {selected.practicalNote}
+                    </FactRow>
                   )}
                   {selected.project && (
-                    <DetailRow icon={<Users className="size-4" />}>
-                      {[
-                        t('card.joined', { count: selected.project.joined }),
-                        selected.project.stepsNeedingHelp > 0
-                          ? t('card.stepsNeedHelp', { count: selected.project.stepsNeedingHelp })
-                          : null,
-                      ]
-                        .filter(Boolean)
-                        .join(' · ')}
-                    </DetailRow>
+                    <FactRow icon={Users} label={tc('facts.people')}>
+                      {t('card.joined', { count: selected.project.joined })}
+                    </FactRow>
                   )}
-                </div>
+                </FactList>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex shrink-0 flex-wrap gap-2 px-4 pb-3.5 pt-1.5">
                   {/* The main button always opens the details, whatever the kind of entry. */}
                   <button
                     type="button"
@@ -960,7 +969,10 @@ export function MapExplorer({
                     {selected.hasProducts ? t('card.detailsAndPrices') : t('card.details')}
                   </button>
                   {selected.project && (
-                    <Link href={`/projects/${selected.project.id}`} className={cn(BTN, BTN_SECONDARY)}>
+                    <Link
+                      href={`/projects/${selected.project.id}`}
+                      className={cn(BTN, BTN_SECONDARY_ON_POPUP)}
+                    >
                       {t('card.viewProject')}
                     </Link>
                   )}
@@ -968,46 +980,48 @@ export function MapExplorer({
                     href={directionsUrl(selected)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={cn(BTN, BTN_SECONDARY)}
+                    className={cn(BTN, BTN_SECONDARY_ON_POPUP)}
                   >
                     {t('card.directions')}
                   </a>
-                  {!selected.project && selected.website && (
+                  {selected.website && (
                     <a
                       href={selected.website}
                       target="_blank"
                       rel="noopener noreferrer nofollow"
-                      className={cn(BTN, BTN_SECONDARY)}
+                      className={cn(BTN, BTN_SECONDARY_ON_POPUP)}
                     >
                       {t('card.website')}
                     </a>
                   )}
                 </div>
-                <p className="mt-3 text-xs text-fg-tertiary">
-                  {selected.project ? t('card.fineHero') : t('card.fineIndie')}{' '}
+                <CardFooter className="shrink-0 flex-wrap gap-y-1.5">
+                  <SourceBadge
+                    hero={!!selected.project}
+                    label={selected.project ? t('badges.hero') : t('badges.indie')}
+                  />
+                  {selected.operatingStatus === 'temporarily_closed' && (
+                    <ClosedBadge label={t('badges.temporarilyClosed')} />
+                  )}
+                  {selected.project ? (
+                    selected.project.stepsNeedingHelp > 0 && (
+                      <span className="font-semibold text-amber-500">{t('card.needsHelp')}</span>
+                    )
+                  ) : (
+                    <span>{t('card.fineIndieShort')}</span>
+                  )}
                   <Link
                     href={`/map/${selected.slug}/suggest`}
-                    className="text-fg-secondary underline underline-offset-2"
+                    className="ml-auto text-fg-secondary underline underline-offset-2"
                   >
                     {t('card.suggestEdit')}
                   </Link>
-                </p>
+                </CardFooter>
               </aside>
             )}
           </MapView>
         </section>
       </div>
-    </div>
-  )
-}
-
-function DetailRow({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
-  return (
-    <div className="grid grid-cols-[18px_1fr] items-start gap-3">
-      <span className="mt-0.5 text-fg-tertiary" aria-hidden>
-        {icon}
-      </span>
-      <span>{children}</span>
     </div>
   )
 }

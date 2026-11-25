@@ -13,5 +13,14 @@
     "loading": "Cargando…",
     "saving": "Guardando…",
     "sending": "Enviando…"
+  },
+  "facts": {
+    "where": "Dónde",
+    "onlineFor": "En línea desde hace",
+    "skillsNeeded": "Habilidades necesarias",
+    "openingHours": "Horario de apertura",
+    "runBy": "Gestionado por",
+    "goodToKnow": "Bueno saber",
+    "people": "Personas"
   }
 }

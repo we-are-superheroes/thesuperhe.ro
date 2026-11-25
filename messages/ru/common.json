@@ -13,5 +13,14 @@
     "loading": "Загрузка…",
     "saving": "Сохранение…",
     "sending": "Отправка…"
+  },
+  "facts": {
+    "where": "Где",
+    "onlineFor": "Онлайн уже",
+    "skillsNeeded": "Нужные навыки",
+    "openingHours": "Часы работы",
+    "runBy": "Ведёт",
+    "goodToKnow": "Полезно знать",
+    "people": "Люди"
   }
 }

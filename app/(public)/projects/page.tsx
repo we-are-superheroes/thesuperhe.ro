@@ -101,6 +101,17 @@ async function getBrowseData(userId: string | null): Promise<{
       : n < 7
         ? t('posted.daysAgo', { n })
         : t('posted.weeksAgo', { n: Math.floor(n / 7) })
+  // How long a project has been listed: "3 weeks", "2 months". Null on its first day.
+  const onlineDuration = (n: number) =>
+    n <= 0
+      ? null
+      : n < 7
+        ? t('duration.days', { n })
+        : n < 60
+          ? t('duration.weeks', { n: Math.floor(n / 7) })
+          : n < 365
+            ? t('duration.months', { n: Math.floor(n / 30) })
+            : t('duration.years', { n: Math.floor(n / 365) })
 
   // Shape projects for the client
   const browseProjects: BrowseProject[] = projects.map((p) => {
@@ -135,10 +146,13 @@ async function getBrowseData(userId: string | null): Promise<{
       skillIds: Array.from(skillIdSet),
       needs,
       progress,
+      stepsDone: doneSteps,
+      stepsTotal: totalSteps,
       contributors: p.contributions.length,
       org: p.organisation ? { slug: p.organisation.slug, name: p.organisation.name } : null,
       membersOnly: p.visibility === 'org_members',
       posted: postedLabel(daysAgo(p.createdAt)),
+      onlineDuration: onlineDuration(daysAgo(p.createdAt)),
       sortRecent: daysAgo(p.createdAt),
       sortNeeds: needs,
       sortProgress: progress,

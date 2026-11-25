@@ -13,5 +13,14 @@
     "loading": "Chargement…",
     "saving": "Enregistrement…",
     "sending": "Envoi…"
+  },
+  "facts": {
+    "where": "Où",
+    "onlineFor": "En ligne depuis",
+    "skillsNeeded": "Compétences recherchées",
+    "openingHours": "Horaires d'ouverture",
+    "runBy": "Géré par",
+    "goodToKnow": "Bon à savoir",
+    "people": "Personnes"
   }
 }

@@ -105,6 +105,26 @@ export const PIN_BORDER_CLASS: Record<PlaceCategory, string> = {
   other: 'border-[#667284]',
 }
 
+/**
+ * The same colours as a flat fill, for the square in a card's header row.
+ * Keep in step with PIN_BORDER_CLASS.
+ */
+export const CATEGORY_SQUARE_CLASS: Record<PlaceCategory, string> = {
+  farm: 'bg-[#B86E00]',
+  organic: 'bg-[#2f8f65]',
+  coop: 'bg-[#2E5FAA]',
+  nature: 'bg-[#3d7a5c]',
+  secondhand: 'bg-[#C2478A]',
+  mending: 'bg-[#1F9AA3]',
+  repair: 'bg-[#b94444]',
+  bike: 'bg-[#B8961F]',
+  share: 'bg-[#5F58C8]',
+  garden: 'bg-[#5f8a2a]',
+  learn: 'bg-[#3D5170]',
+  services: 'bg-[#7650A8]',
+  other: 'bg-[#667284]',
+}
+
 export function CategoryThumb({
   category,
   className,

@@ -10,6 +10,9 @@ import {
   Plus,
   X,
   MapPin,
+  CalendarDays,
+  Puzzle,
+  Building2,
   LayoutGrid,
   List,
   Lock,
@@ -18,6 +21,7 @@ import {
 import { cn } from '@/lib/utils'
 import { SelectBox } from '@/components/platform/project-form-bits'
 import { ProjectStatusBadge } from '@/components/platform/project-status-badge'
+import { CARD_SHELL, CardFooter, CardHeader, FactList, FactRow } from '@/components/ui/card-bits'
 
 /* ================================================================
    Types
@@ -39,10 +43,14 @@ export interface BrowseProject {
   skillIds: string[]
   needs: number
   progress: number
+  stepsDone: number
+  stepsTotal: number
   contributors: number
   org: { slug: string; name: string } | null
   membersOnly: boolean
   posted: string
+  /** How long the project has been listed ("3 weeks"); null on its first day. */
+  onlineDuration: string | null
   sortRecent: number
   sortNeeds: number
   sortProgress: number
@@ -82,6 +90,25 @@ const IMG_CLASS: Record<string, string> = {
   water: '[background:radial-gradient(circle_at_30%_50%,#7AAEE8_0%,transparent_65%),linear-gradient(135deg,#060D18,#1B3A6B)]',
   education: '[background:radial-gradient(circle_at_60%_50%,#F7BD64_0%,transparent_60%),linear-gradient(135deg,#2A3A52,#5A7090)]',
 }
+
+/**
+ * One flat colour per image key, for the square in the card header:
+ * taken from the gradient above. Decoration only — the type name
+ * beside it carries the meaning.
+ */
+const TYPE_SQUARE_CLASS: Record<string, string> = {
+  energy: 'bg-[#4A7FD4]',
+  rewild: 'bg-[#6b9d7e]',
+  circular: 'bg-[#B86E00]',
+  policy: 'bg-[#B2D0F5]',
+  food: 'bg-[#3DAF7C]',
+  mobility: 'bg-[#8A5200]',
+  water: 'bg-[#7AAEE8]',
+  education: 'bg-[#5A7090]',
+}
+
+/** Skills named on a card before the rest are counted as "+N". */
+const CARD_SKILLS_SHOWN = 4
 
 /* ================================================================
    Component
@@ -600,13 +627,25 @@ function CheckList({
 
 function ProjectCard({ project: p }: { project: BrowseProject }) {
   const t = useTranslations('browse')
+  const tc = useTranslations('common')
   const imgClass = IMG_CLASS[p.imgKey] ?? IMG_CLASS.rewild
+  const squareClass = TYPE_SQUARE_CLASS[p.imgKey] ?? TYPE_SQUARE_CLASS.rewild
+  const shownSkills = p.skills.slice(0, CARD_SKILLS_SHOWN).join(', ')
+  const moreSkills = p.skills.length - CARD_SKILLS_SHOWN
   return (
     <Link
       href={`/projects/${p.id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-bg-surface transition-all duration-standard hover:-translate-y-0.5 hover:border-neutral-600 hover:shadow-md"
+      className={cn(
+        CARD_SHELL,
+        'group border-white/[0.08] bg-bg-surface transition-all duration-standard hover:-translate-y-0.5 hover:border-neutral-600 hover:shadow-md',
+      )}
     >
-      <div className={cn('relative aspect-[16/8] overflow-hidden', !p.coverImageUrl && imgClass)}>
+      <CardHeader
+        squareClassName={squareClass}
+        label={p.type}
+        right={t('card.contributorsPlain', { n: p.contributors })}
+      />
+      <div className={cn('relative aspect-[16/7] overflow-hidden', !p.coverImageUrl && imgClass)}>
         {p.coverImageUrl && (
           <Image
             src={p.coverImageUrl}
@@ -616,18 +655,6 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
             className="object-cover"
           />
         )}
-        <span className="absolute left-3 top-3 flex flex-wrap items-center gap-1.5">
-          <span className="rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-fg-primary backdrop-blur-sm">
-            {p.type}
-          </span>
-          <ProjectStatusBadge status={p.status} className="bg-blue-900/85 backdrop-blur-sm" />
-        </span>
-        {p.needs > 0 && (
-          <span className="absolute right-3 top-3 flex items-center gap-[5px] rounded-full border border-neutral-700 bg-blue-900/85 px-2.5 py-1 text-[11px] font-semibold text-amber-500 backdrop-blur-sm">
-            <span className="size-[5px] rounded-full bg-amber-500 shadow-[0_0_5px_var(--color-amber-500)]" />
-            {t('card.needsHelp', { n: p.needs })}
-          </span>
-        )}
         {p.membersOnly && (
           <span className="absolute bottom-3 right-3 flex items-center gap-1 rounded-full border border-amber-500/35 bg-blue-900/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-amber-400 backdrop-blur-sm">
             <Lock className="size-2.5" />
@@ -635,58 +662,57 @@ function ProjectCard({ project: p }: { project: BrowseProject }) {
           </span>
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-3 p-5">
-        <div className="flex items-center gap-2 text-xs text-fg-tertiary">
-          <MapPin className="size-3 shrink-0" />
-          {p.location}
-          <span className="mx-1 text-neutral-600">·</span>
-          {t('card.posted', { when: p.posted })}
-          {p.org && (
-            <>
-              <span className="mx-1 text-neutral-600">·</span>
-              <span className="truncate text-fg-secondary">{p.org.name}</span>
-            </>
-          )}
-        </div>
+      <div className="flex flex-1 flex-col gap-2 px-4 pb-2.5 pt-4">
         <h3 className="font-display text-xl leading-snug">{p.title}</h3>
         <p className="line-clamp-2 text-sm leading-normal text-fg-secondary">{p.description}</p>
-        {p.skills.length > 0 && (
-          <div className="mt-auto flex flex-wrap gap-1.5">
-            {p.skills.slice(0, 4).map((s) => (
-              <span
-                key={s}
-                className="rounded-full border border-white/[0.08] bg-bg-surface-2 px-2.5 py-[3px] text-[11px] text-fg-secondary"
-              >
-                {s}
-              </span>
-            ))}
-          </div>
-        )}
-        <div className="flex items-center justify-between gap-3 border-t border-white/[0.08] pt-3 text-xs text-fg-tertiary">
-          <span>
-            {t.rich('card.contributors', {
-              n: p.contributors,
-              strong: (chunks) => (
-                <strong className="font-semibold text-fg-primary">{chunks}</strong>
-              ),
-            })}
-          </span>
-          <div className="mx-3 h-[3px] max-w-[120px] flex-1 overflow-hidden rounded-sm bg-bg-surface-2">
-            <div
-              className="h-full bg-gradient-to-r from-amber-500 to-amber-400"
-              style={{ width: `${p.progress}%` }}
-            />
-          </div>
-          <span>
-            {t.rich('card.percentComplete', {
-              pct: p.progress,
-              strong: (chunks) => (
-                <strong className="font-semibold text-fg-primary">{chunks}</strong>
-              ),
-            })}
-          </span>
-        </div>
+        <FactList className="mt-0.5">
+          <FactRow icon={MapPin} label={tc('facts.where')}>
+            {p.location}
+          </FactRow>
+          <FactRow icon={CalendarDays} label={tc('facts.onlineFor')}>
+            {p.onlineDuration
+              ? t('card.onlineFor', { duration: p.onlineDuration })
+              : t('card.onlineToday')}
+          </FactRow>
+          {p.skills.length > 0 && (
+            <FactRow icon={Puzzle} label={tc('facts.skillsNeeded')}>
+              {moreSkills > 0
+                ? t('card.moreSkills', { skills: shownSkills, n: moreSkills })
+                : shownSkills}
+            </FactRow>
+          )}
+          {p.org && (
+            <FactRow icon={Building2} label={tc('facts.runBy')}>
+              {p.org.name}
+            </FactRow>
+          )}
+        </FactList>
       </div>
+      <CardFooter>
+        <ProjectStatusBadge status={p.status} />
+        {p.stepsTotal > 0 && (
+          <>
+            <div
+              className="ml-auto h-[3px] max-w-[110px] flex-1 overflow-hidden rounded-sm bg-bg-surface-2"
+              aria-hidden
+            >
+              <div
+                className="h-full bg-gradient-to-r from-amber-500 to-amber-400"
+                style={{ width: `${p.progress}%` }}
+              />
+            </div>
+            <span className="whitespace-nowrap">
+              {t.rich('card.stepsDone', {
+                done: p.stepsDone,
+                total: p.stepsTotal,
+                strong: (chunks) => (
+                  <strong className="font-semibold text-fg-primary">{chunks}</strong>
+                ),
+              })}
+            </span>
+          </>
+        )}
+      </CardFooter>
     </Link>
   )
 }

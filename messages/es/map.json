@@ -143,7 +143,9 @@
     "suggestEdit": "Sugerir un cambio",
     "area": "Zona alrededor de {place}",
     "details": "Detalles",
-    "detailsAndPrices": "Detalles y precios"
+    "detailsAndPrices": "Detalles y precios",
+    "needsHelp": "Necesita ayuda",
+    "fineIndieShort": "Añadido por la comunidad."
   },
   "hours": {
     "title": "Horario de apertura",

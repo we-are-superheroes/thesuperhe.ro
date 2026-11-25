@@ -13,5 +13,14 @@
     "loading": "Loading…",
     "saving": "Saving…",
     "sending": "Sending…"
+  },
+  "facts": {
+    "where": "Where",
+    "onlineFor": "Online for",
+    "skillsNeeded": "Skills needed",
+    "openingHours": "Opening hours",
+    "runBy": "Run by",
+    "goodToKnow": "Good to know",
+    "people": "People"
   }
 }
