@@ -13,5 +13,14 @@
     "loading": "Caricamento…",
     "saving": "Salvataggio…",
     "sending": "Invio…"
+  },
+  "facts": {
+    "where": "Dove",
+    "onlineFor": "Online da",
+    "skillsNeeded": "Competenze richieste",
+    "openingHours": "Orari di apertura",
+    "runBy": "Gestito da",
+    "goodToKnow": "Da sapere",
+    "people": "Persone"
   }
 }

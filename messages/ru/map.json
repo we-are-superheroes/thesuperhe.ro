@@ -143,7 +143,9 @@
     "suggestEdit": "Предложить правку",
     "area": "Район рядом с {place}",
     "details": "Подробнее",
-    "detailsAndPrices": "Подробности и цены"
+    "detailsAndPrices": "Подробности и цены",
+    "needsHelp": "Нужна помощь",
+    "fineIndieShort": "Добавлено сообществом."
   },
   "hours": {
     "title": "Часы работы",

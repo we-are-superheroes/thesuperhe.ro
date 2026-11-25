@@ -54,7 +54,11 @@
     "posted": "Опубліковано {when}",
     "contributors": "{n, plural, one {<strong>#</strong> учасник} few {<strong>#</strong> учасники} many {<strong>#</strong> учасників} other {<strong>#</strong> учасника}}",
     "contributorsPlain": "{n, plural, one {# учасник} few {# учасники} many {# учасників} other {# учасника}}",
-    "percentComplete": "<strong>{pct}%</strong> виконано"
+    "percentComplete": "<strong>{pct}%</strong> виконано",
+    "onlineFor": "Онлайн уже {duration}",
+    "onlineToday": "Онлайн від сьогодні",
+    "moreSkills": "{skills} +{n}",
+    "stepsDone": "<strong>{done}</strong> з {total, plural, one {# кроку} few {# кроків} many {# кроків} other {# кроку}}"
   },
   "posted": {
     "today": "сьогодні",
@@ -64,5 +68,11 @@
   "fallback": {
     "remoteLocation": "Дистанційно",
     "otherType": "Інше"
+  },
+  "duration": {
+    "days": "{n, plural, one {# день} few {# дні} many {# днів} other {# дня}}",
+    "weeks": "{n, plural, one {# тиждень} few {# тижні} many {# тижнів} other {# тижня}}",
+    "months": "{n, plural, one {# місяць} few {# місяці} many {# місяців} other {# місяця}}",
+    "years": "{n, plural, one {# рік} few {# роки} many {# років} other {# року}}"
   }
 }

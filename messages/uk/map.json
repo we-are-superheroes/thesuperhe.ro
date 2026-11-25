@@ -143,7 +143,9 @@
     "suggestEdit": "Запропонувати зміну",
     "area": "Район біля {place}",
     "details": "Деталі",
-    "detailsAndPrices": "Деталі та ціни"
+    "detailsAndPrices": "Деталі та ціни",
+    "needsHelp": "Потрібна допомога",
+    "fineIndieShort": "Додано спільнотою."
   },
   "hours": {
     "title": "Години роботи",

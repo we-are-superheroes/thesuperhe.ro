@@ -143,7 +143,9 @@
     "suggestEdit": "Suggest an edit",
     "area": "Area around {place}",
     "details": "Details",
-    "detailsAndPrices": "Details and prices"
+    "detailsAndPrices": "Details and prices",
+    "needsHelp": "Needs help",
+    "fineIndieShort": "Listed by the community."
   },
   "hours": {
     "title": "Opening times",

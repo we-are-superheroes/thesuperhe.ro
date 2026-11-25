@@ -54,7 +54,11 @@
     "posted": "Publié {when}",
     "contributors": "{n, plural, one {<strong>#</strong> contributeur} other {<strong>#</strong> contributeurs}}",
     "contributorsPlain": "{n, plural, one {# contributeur} other {# contributeurs}}",
-    "percentComplete": "<strong>{pct}%</strong> terminé"
+    "percentComplete": "<strong>{pct}%</strong> terminé",
+    "onlineFor": "En ligne depuis {duration}",
+    "onlineToday": "En ligne depuis aujourd’hui",
+    "moreSkills": "{skills} +{n}",
+    "stepsDone": "<strong>{done}</strong> sur {total, plural, one {# étape} other {# étapes}}"
   },
   "posted": {
     "today": "aujourd’hui",
@@ -64,5 +68,11 @@
   "fallback": {
     "remoteLocation": "À distance",
     "otherType": "Autre"
+  },
+  "duration": {
+    "days": "{n, plural, one {# jour} other {# jours}}",
+    "weeks": "{n, plural, one {# semaine} other {# semaines}}",
+    "months": "{n, plural, one {# mois} other {# mois}}",
+    "years": "{n, plural, one {# an} other {# ans}}"
   }
 }
