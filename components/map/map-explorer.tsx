@@ -319,9 +319,14 @@ export function MapExplorer({
   const select = (slug: string | null, fromMap = false) => {
     setSelectedSlug(slug)
     syncUrl({ selected: slug })
-    if (slug && fromMap) {
-      listRef.current
-        ?.querySelector(`[data-slug="${CSS.escape(slug)}"]`)
+    // Bring the place's card into view, but only where the list scrolls on
+    // its own beside the map (wide screens). On a phone the list sits below
+    // the map in the page, and scrolling to the card would take the map,
+    // and the pop-up just opened on it, out of view.
+    const list = listRef.current
+    if (slug && fromMap && list && getComputedStyle(list).overflowY === 'auto') {
+      list
+        .querySelector(`[data-slug="${CSS.escape(slug)}"]`)
         ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     }
   }
