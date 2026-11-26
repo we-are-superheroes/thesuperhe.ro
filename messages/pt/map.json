@@ -18,10 +18,26 @@
       "indie": "Locais independentes"
     },
     "suggest": "Sugerir um local",
-    "categoriesLabel": "Categorias",
-    "allCategories": "Todas as categorias",
     "operatorsLabel": "Gerido por",
-    "allOperators": "Todos",
+    "filters": {
+      "show": "Mostrar: {source}",
+      "done": "Concluído",
+      "clear": "Limpar",
+      "clearCategories": "Limpar categorias",
+      "clearAll": "Limpar tudo",
+      "remove": "Remover filtro: {name}",
+      "title": "Filtros",
+      "close": "Fechar filtros",
+      "area": "Zona",
+      "showResults": "{count, plural, one {Mostrar # resultado} other {Mostrar # resultados}}",
+      "noResults": "Sem resultados. Altere os filtros",
+      "groups": {
+        "food": "Alimentação",
+        "reuse": "Reparação e reutilização",
+        "community": "Natureza e comunidade",
+        "other": "Tudo o resto"
+      }
+    },
     "resultsLabel": "Resultados",
     "count": "{count, plural, =0 {Nenhum resultado} one {<strong># resultado</strong>} other {<strong># resultados</strong>}} a {km} km de {place}",
     "countNearYou": "{count, plural, =0 {Nenhum resultado} one {<strong># resultado</strong>} other {<strong># resultados</strong>}} a {km} km de si",
@@ -77,8 +93,8 @@
       "many": "Biológico e a granel"
     },
     "coop": {
-      "one": "Cooperativa",
-      "many": "Cooperativas"
+      "one": "Loja cooperativa",
+      "many": "Lojas cooperativas"
     },
     "nature": {
       "one": "Natureza e vida selvagem",

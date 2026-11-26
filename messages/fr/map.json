@@ -18,10 +18,26 @@
       "indie": "Lieux indépendants"
     },
     "suggest": "Proposer un lieu",
-    "categoriesLabel": "Catégories",
-    "allCategories": "Toutes les catégories",
     "operatorsLabel": "Géré par",
-    "allOperators": "Tous",
+    "filters": {
+      "show": "Afficher : {source}",
+      "done": "Terminé",
+      "clear": "Effacer",
+      "clearCategories": "Effacer les catégories",
+      "clearAll": "Tout effacer",
+      "remove": "Retirer le filtre : {name}",
+      "title": "Filtres",
+      "close": "Fermer les filtres",
+      "area": "Zone",
+      "showResults": "{count, plural, one {Afficher # résultat} other {Afficher # résultats}}",
+      "noResults": "Aucun résultat. Modifie les filtres",
+      "groups": {
+        "food": "Alimentation",
+        "reuse": "Réparation et réemploi",
+        "community": "Nature et communauté",
+        "other": "Tout le reste"
+      }
+    },
     "resultsLabel": "Résultats",
     "count": "{count, plural, =0 {Aucun résultat} one {<strong># résultat</strong>} other {<strong># résultats</strong>}} dans un rayon de {km} km de {place}",
     "countNearYou": "{count, plural, =0 {Aucun résultat} one {<strong># résultat</strong>} other {<strong># résultats</strong>}} dans un rayon de {km} km de toi",
@@ -77,8 +93,8 @@
       "many": "Bio et vrac"
     },
     "coop": {
-      "one": "Coopérative",
-      "many": "Coopératives"
+      "one": "Magasin coopératif",
+      "many": "Magasins coopératifs"
     },
     "nature": {
       "one": "Nature et faune",

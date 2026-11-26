@@ -18,10 +18,26 @@
       "indie": "Unabhängige Orte"
     },
     "suggest": "Ort vorschlagen",
-    "categoriesLabel": "Kategorien",
-    "allCategories": "Alle Kategorien",
     "operatorsLabel": "Träger",
-    "allOperators": "Alle",
+    "filters": {
+      "show": "Anzeigen: {source}",
+      "done": "Fertig",
+      "clear": "Zurücksetzen",
+      "clearCategories": "Kategorien zurücksetzen",
+      "clearAll": "Alle zurücksetzen",
+      "remove": "Filter entfernen: {name}",
+      "title": "Filter",
+      "close": "Filter schließen",
+      "area": "Gebiet",
+      "showResults": "{count, plural, one {# Ergebnis anzeigen} other {# Ergebnisse anzeigen}}",
+      "noResults": "Keine Ergebnisse. Ändere die Filter",
+      "groups": {
+        "food": "Lebensmittel",
+        "reuse": "Reparieren und Wiederverwenden",
+        "community": "Natur und Gemeinschaft",
+        "other": "Alles andere"
+      }
+    },
     "resultsLabel": "Ergebnisse",
     "count": "{count, plural, =0 {Keine Ergebnisse} one {<strong># Ergebnis</strong>} other {<strong># Ergebnisse</strong>}} im Umkreis von {km} km um {place}",
     "countNearYou": "{count, plural, =0 {Keine Ergebnisse} one {<strong># Ergebnis</strong>} other {<strong># Ergebnisse</strong>}} im Umkreis von {km} km um dich",
@@ -77,8 +93,8 @@
       "many": "Bio und unverpackt"
     },
     "coop": {
-      "one": "Genossenschaft",
-      "many": "Genossenschaften"
+      "one": "Genossenschaftsladen",
+      "many": "Genossenschaftsläden"
     },
     "nature": {
       "one": "Natur und Tierwelt",

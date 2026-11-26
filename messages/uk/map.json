@@ -18,10 +18,26 @@
       "indie": "Незалежні місця"
     },
     "suggest": "Запропонувати місце",
-    "categoriesLabel": "Категорії",
-    "allCategories": "Усі категорії",
     "operatorsLabel": "Хто керує",
-    "allOperators": "Усі",
+    "filters": {
+      "show": "Показати: {source}",
+      "done": "Готово",
+      "clear": "Очистити",
+      "clearCategories": "Очистити категорії",
+      "clearAll": "Очистити все",
+      "remove": "Прибрати фільтр: {name}",
+      "title": "Фільтри",
+      "close": "Закрити фільтри",
+      "area": "Район",
+      "showResults": "{count, plural, one {Показати # результат} few {Показати # результати} many {Показати # результатів} other {Показати # результату}}",
+      "noResults": "Немає результатів. Змініть фільтри",
+      "groups": {
+        "food": "Їжа",
+        "reuse": "Ремонт і повторне використання",
+        "community": "Природа і спільнота",
+        "other": "Усе інше"
+      }
+    },
     "resultsLabel": "Результати",
     "count": "{count, plural, =0 {Немає результатів} one {<strong># результат</strong>} few {<strong># результати</strong>} many {<strong># результатів</strong>} other {<strong># результату</strong>}} у межах {km} км від {place}",
     "countNearYou": "{count, plural, =0 {Немає результатів} one {<strong># результат</strong>} few {<strong># результати</strong>} many {<strong># результатів</strong>} other {<strong># результату</strong>}} у межах {km} км від вас",
@@ -77,8 +93,8 @@
       "many": "Органіка та товари на вагу"
     },
     "coop": {
-      "one": "Кооператив",
-      "many": "Кооперативи"
+      "one": "Кооперативна крамниця",
+      "many": "Кооперативні крамниці"
     },
     "nature": {
       "one": "Природа та дика фауна",

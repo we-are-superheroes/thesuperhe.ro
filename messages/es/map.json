@@ -18,10 +18,26 @@
       "indie": "Lugares independientes"
     },
     "suggest": "Sugerir un lugar",
-    "categoriesLabel": "Categorías",
-    "allCategories": "Todas las categorías",
     "operatorsLabel": "Gestionado por",
-    "allOperators": "Todos",
+    "filters": {
+      "show": "Mostrar: {source}",
+      "done": "Listo",
+      "clear": "Borrar",
+      "clearCategories": "Borrar categorías",
+      "clearAll": "Borrar todo",
+      "remove": "Quitar filtro: {name}",
+      "title": "Filtros",
+      "close": "Cerrar filtros",
+      "area": "Zona",
+      "showResults": "{count, plural, one {Mostrar # resultado} other {Mostrar # resultados}}",
+      "noResults": "Sin resultados. Cambia los filtros",
+      "groups": {
+        "food": "Alimentación",
+        "reuse": "Reparación y reutilización",
+        "community": "Naturaleza y comunidad",
+        "other": "Todo lo demás"
+      }
+    },
     "resultsLabel": "Resultados",
     "count": "{count, plural, =0 {Sin resultados} one {<strong># resultado</strong>} other {<strong># resultados</strong>}} a menos de {km} km de {place}",
     "countNearYou": "{count, plural, =0 {Sin resultados} one {<strong># resultado</strong>} other {<strong># resultados</strong>}} a menos de {km} km de ti",
@@ -77,8 +93,8 @@
       "many": "Ecológico y a granel"
     },
     "coop": {
-      "one": "Cooperativa",
-      "many": "Cooperativas"
+      "one": "Tienda cooperativa",
+      "many": "Tiendas cooperativas"
     },
     "nature": {
       "one": "Naturaleza y fauna",

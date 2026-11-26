@@ -1,10 +1,21 @@
 'use client'
 
-import { useMemo, useRef, useState, useTransition } from 'react'
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useLocale, useTranslations } from 'next-intl'
-import { Building2, Clock, Info, Loader2, MapPin, Plus, Search, Users, X } from 'lucide-react'
+import {
+  Building2,
+  Clock,
+  Info,
+  ListFilter,
+  Loader2,
+  MapPin,
+  Plus,
+  Search,
+  Users,
+  X,
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
 import {
   geocodeAction,
@@ -17,8 +28,6 @@ import { openState } from '@/lib/opening-hours'
 import {
   DEFAULT_RADIUS_KM,
   MAP_PLACE_COOKIE,
-  PLACE_CATEGORIES,
-  PLACE_OPERATORS,
   encodeMapPlaceCookie,
   haversineKm,
   RADIUS_OPTIONS_KM,
@@ -32,10 +41,25 @@ import {
 import { MapView } from '@/components/map/map-loader'
 import { useMapLabels } from '@/components/map/use-map-labels'
 import { PlacePanel } from '@/components/map/place-panel'
+import {
+  CategoryOptions,
+  FIELD,
+  FIELD_INPUT,
+  FILTER_BUTTON,
+  FilterCount,
+  FilterMenu,
+  FilterTag,
+  OperatorOptions,
+  QUIET_BUTTON,
+  RadiusOptions,
+  SourceOptions,
+  WhereFeedback,
+  WhereField,
+  type SourceFilter,
+} from '@/components/map/map-filters'
 import type { MapPin as MapPinData } from '@/components/map/map-canvas'
 import {
   CATEGORY_SQUARE_CLASS,
-  CategoryIcon,
   CategoryThumb,
   ClosedBadge,
   SourceBadge,
@@ -46,6 +70,11 @@ import { CARD_SHELL, CardFooter, CardHeader, FactList, FactRow } from '@/compone
 /* ================================================================
    MapExplorer — the public /map page: search, filters, result list
    and map, kept in step with each other.
+
+   The filter bar has two rows on wide screens: finding a place (search,
+   town, distance), then three buttons that open small menus. On a phone
+   the town, the distance and every filter live in one sheet that slides
+   up from the bottom, so the map and the results get the screen.
 
    The server sends every place within the largest search radius of
    the chosen centre. Category, source, text, distance and sorting
@@ -58,7 +87,7 @@ import { CARD_SHELL, CardFooter, CardHeader, FactList, FactRow } from '@/compone
    WebGL and for screen readers.
    ================================================================ */
 
-export type SourceFilter = 'all' | 'hero' | 'indie'
+export type { SourceFilter }
 export type SortOrder = 'near' | 'name'
 
 export interface MapExplorerProps {
@@ -93,16 +122,7 @@ export interface MapExplorerProps {
   nowMs: number
 }
 
-const FIELD =
-  'flex h-[42px] items-center gap-2 rounded-lg border border-border-default bg-bg-input px-3 transition-colors duration-fast focus-within:border-amber-500 focus-within:shadow-[0_0_0_3px_var(--focus-ring)]'
-// The whole field lights up when its text box has focus (FIELD's
-// focus-within styles), so the text box must not draw a ring of its own.
-// `!` is needed: the site-wide `:focus-visible` outline in globals.css is
-// outside Tailwind's layers and would otherwise win over `outline-none`.
-const FIELD_INPUT =
-  'h-full min-w-0 bg-transparent text-sm text-fg-primary outline-none! placeholder:text-fg-tertiary'
-const CHIP =
-  'inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-border-default bg-bg-surface px-3 py-1.5 text-sm text-fg-secondary transition-colors duration-fast hover:border-border-strong hover:text-fg-primary aria-pressed:border-brand-accent aria-pressed:bg-brand-accent aria-pressed:font-medium aria-pressed:text-fg-on-accent'
+const SHEET_HEADING = 'mb-3 mt-5 font-display text-lg'
 const BTN =
   'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg border px-4 py-2 text-sm font-medium transition-colors duration-fast'
 const BTN_PRIMARY = 'border-brand-accent bg-brand-accent text-fg-on-accent hover:bg-brand-accent-hover'
@@ -157,6 +177,22 @@ export function MapExplorer({
   // until another town is chosen. Never written to the URL.
   const [local, setLocal] = useState<{ centre: LatLng; places: PlaceResult[] } | null>(null)
   const [locating, setLocating] = useState(false)
+
+  // The filter menu that is open (wide screens), and the sheet (phones):
+  // opened at the top from the area button, or at the filters.
+  const [menu, setMenu] = useState<'source' | 'category' | 'operator' | null>(null)
+  const [sheet, setSheet] = useState<'area' | 'filters' | null>(null)
+  // A click anywhere outside the filter menus closes the open one.
+  useEffect(() => {
+    if (!menu) return
+    const onPointerDown = (event: PointerEvent) => {
+      if (!(event.target instanceof Element) || !event.target.closest('[data-filter-menu]')) {
+        setMenu(null)
+      }
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    return () => document.removeEventListener('pointerdown', onPointerDown)
+  }, [menu])
 
   // A new centre from the server (the visitor picked a town, or went back):
   // drop the local override and show the new name. Adjusted during render,
@@ -354,6 +390,13 @@ export function MapExplorer({
         ?.focus()
     })
   }
+  /** Take away the chosen filters; the search text and the distance stay. */
+  const clearChosen = () => {
+    setCategories([])
+    setOperators([])
+    setSource('all')
+    syncUrl({ categories: [], operators: [], source: 'all' })
+  }
   const clearFilters = () => {
     const widest = RADIUS_OPTIONS_KM[RADIUS_OPTIONS_KM.length - 1]
     setQ('')
@@ -472,6 +515,39 @@ export function MapExplorer({
 
   const suggestLabel = canAddDirectly ? t('page.add') : t('page.suggest')
 
+  const chosenCount = categories.length + operators.length + (source === 'all' ? 0 : 1)
+  const areaLabel = `${placeName ?? t('page.whereLabel')} · ${t('page.distanceOption', { km: radius })}`
+
+  // The chosen filters as tags, each removed with one click. Drawn beside the
+  // filter buttons on wide screens and in a row that scrolls on phones.
+  const tags = (
+    <>
+      {source !== 'all' && (
+        <FilterTag label={t(`page.source.${source}`)} onRemove={() => changeSource('all')} />
+      )}
+      {categories.map((category) => (
+        <FilterTag
+          key={category}
+          label={t(`categories.${category}.many`)}
+          category={category}
+          onRemove={() => toggleCategory(category)}
+        />
+      ))}
+      {operators.map((operator) => (
+        <FilterTag
+          key={operator}
+          label={t(`operators.${operator}`)}
+          onRemove={() => toggleOperator(operator)}
+        />
+      ))}
+    </>
+  )
+
+  // Town lookup: several matches, or none.
+  const whereFeedback = (hits || whereError) && (
+    <WhereFeedback hits={hits} error={whereError} onChoose={goToHit} />
+  )
+
   return (
     <div
       onKeyDown={(event) => {
@@ -489,10 +565,11 @@ export function MapExplorer({
       {/* ── Toolbar ─────────────────────────────────────────────────── */}
       <section
         aria-label={t('page.searchLabel')}
-        className="shrink-0 border-b border-border-subtle bg-bg-base px-4 pb-3 pt-4 sm:px-6"
+        className="shrink-0 border-b border-border-subtle bg-bg-base px-4 py-3 sm:px-6 md:py-4"
       >
-        <div className="flex flex-wrap items-center gap-3">
-          <div className={cn(FIELD, 'min-w-0 flex-[1_1_260px]')}>
+        {/* Row one: finding a place */}
+        <div className="flex items-center gap-3">
+          <div className={cn(FIELD, 'min-w-0 flex-1')}>
             <Search className="size-4 shrink-0 text-fg-tertiary" aria-hidden />
             <label htmlFor="map-q" className="sr-only">
               {t('page.searchLabel')}
@@ -507,31 +584,14 @@ export function MapExplorer({
               className={cn(FIELD_INPUT, 'flex-1')}
             />
           </div>
-
-          <form onSubmit={searchWhere} className={cn(FIELD, 'min-w-0 flex-[0_1_300px]')}>
-            <MapPin className="size-4 shrink-0 text-fg-tertiary" aria-hidden />
-            <label htmlFor="map-where" className="sr-only">
-              {t('page.whereLabel')}
-            </label>
-            <input
-              id="map-where"
-              type="text"
-              value={whereText}
-              onChange={(e) => setWhereText(e.target.value)}
-              placeholder={t('page.wherePlaceholder')}
-              autoComplete="off"
-              enterKeyHint="search"
-              className={cn(FIELD_INPUT, 'w-full flex-1')}
-            />
-            <button
-              type="submit"
-              disabled={searching}
-              aria-label={searching ? t('page.whereSearching') : t('page.whereSearch')}
-              title={t('page.whereSearch')}
-              className="flex size-7 shrink-0 items-center justify-center rounded-md text-fg-secondary transition-colors hover:bg-hover-overlay-strong hover:text-fg-primary"
-            >
-              {searching ? <Loader2 className="size-4 animate-spin" /> : <Search className="size-4" />}
-            </button>
+          <WhereField
+            id="map-where"
+            className="min-w-0 flex-[0_1_300px] max-md:hidden"
+            value={whereText}
+            onChange={setWhereText}
+            onSubmit={searchWhere}
+            searching={searching}
+          >
             <span className="h-5 w-px shrink-0 bg-border-default" aria-hidden />
             <label htmlFor="map-radius" className="sr-only">
               {t('page.distanceLabel')}
@@ -548,112 +608,179 @@ export function MapExplorer({
                 </option>
               ))}
             </select>
-          </form>
-
-          <div
-            role="group"
-            aria-label={t('page.showLabel')}
-            className="inline-flex rounded-lg border border-border-default bg-bg-surface p-[3px]"
-          >
-            {(['all', 'hero', 'indie'] as const).map((value) => (
-              <button
-                key={value}
-                type="button"
-                aria-pressed={source === value}
-                onClick={() => changeSource(value)}
-                className="cursor-pointer rounded-[3px] px-3 py-1.5 text-sm text-fg-secondary transition-colors hover:text-fg-primary aria-pressed:bg-bg-surface-3 aria-pressed:font-medium aria-pressed:text-fg-primary"
-              >
-                {t(`page.source.${value}`)}
-              </button>
-            ))}
-          </div>
-
-          <span className="hidden flex-1 xl:block" />
-          <Link href="/map/suggest" className={cn(BTN, BTN_SECONDARY)}>
+          </WhereField>
+          <Link href="/map/suggest" className={cn(BTN, BTN_SECONDARY, 'h-[42px] max-md:hidden')}>
             <Plus className="size-4" strokeWidth={2.5} aria-hidden />
             {suggestLabel}
           </Link>
         </div>
 
-        {/* Town lookup: several matches, or none */}
-        {(hits || whereError) && (
-          <div className="mt-3 text-sm" role="status">
-            {whereError && <p className="text-red-300">{whereError}</p>}
-            {hits && (
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="text-fg-secondary">{t('page.whereChoose')}</span>
-                {hits.map((hit) => (
-                  <button
-                    key={`${hit.lat},${hit.lng}`}
-                    type="button"
-                    onClick={() => goToHit(hit)}
-                    className={CHIP}
-                  >
-                    <span className="font-medium text-fg-primary">{hit.name}</span>
-                    {hit.context && <span>{hit.context}</span>}
-                  </button>
-                ))}
-              </div>
-            )}
+        {/* While the sheet is open it shows the town matches itself. */}
+        {!sheet && whereFeedback && <div className="mt-3">{whereFeedback}</div>}
+
+        {/* Row two on wide screens: the filter menus and the chosen filters */}
+        <div className="mt-3 flex flex-wrap items-center gap-2 max-md:hidden">
+          <FilterMenu
+            label={t('page.filters.show', { source: t(`page.source.${source}`) })}
+            active={source !== 'all'}
+            open={menu === 'source'}
+            onOpenChange={(open) => setMenu(open ? 'source' : null)}
+          >
+            <SourceOptions name="map-source" value={source} onChange={changeSource} size="sm" />
+          </FilterMenu>
+          <FilterMenu
+            label={t('fields.category')}
+            count={categories.length}
+            open={menu === 'category'}
+            onOpenChange={(open) => setMenu(open ? 'category' : null)}
+            wide
+            clearLabel={t('page.filters.clearCategories')}
+            onClear={() => toggleCategory(null)}
+          >
+            <CategoryOptions
+              name="map-category"
+              chosen={categories}
+              onToggle={toggleCategory}
+              size="sm"
+            />
+          </FilterMenu>
+          <FilterMenu
+            label={t('page.operatorsLabel')}
+            count={operators.length}
+            open={menu === 'operator'}
+            onOpenChange={(open) => setMenu(open ? 'operator' : null)}
+            clearLabel={t('page.filters.clear')}
+            onClear={() => toggleOperator(null)}
+          >
+            <OperatorOptions
+              name="map-operator"
+              chosen={operators}
+              onToggle={toggleOperator}
+              size="sm"
+            />
+          </FilterMenu>
+          {chosenCount > 0 && (
+            <>
+              <span className="mx-2 h-[22px] w-px bg-border-default" aria-hidden />
+              {tags}
+              <button type="button" onClick={clearChosen} className={cn(QUIET_BUTTON, 'h-[30px]')}>
+                {t('page.filters.clearAll')}
+              </button>
+            </>
+          )}
+        </div>
+
+        {/* Rows two and three on phones: the area, one Filters button, the tags */}
+        <div className="mt-2 grid grid-cols-[1fr_auto] gap-2 md:hidden">
+          <button
+            type="button"
+            onClick={() => setSheet('area')}
+            className={cn(FILTER_BUTTON, 'h-10 min-w-0 justify-start')}
+          >
+            <MapPin className="size-3.5 shrink-0 text-fg-tertiary" aria-hidden />
+            <span className="truncate">{areaLabel}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setSheet('filters')}
+            className={cn(FILTER_BUTTON, 'h-10', chosenCount > 0 && 'border-brand-accent')}
+          >
+            <ListFilter className="size-3.5 text-fg-tertiary" aria-hidden />
+            {t('page.filters.title')}
+            <FilterCount count={chosenCount} />
+          </button>
+        </div>
+        {chosenCount > 0 && (
+          <div className="mt-2 flex gap-2 overflow-x-auto pb-0.5 [scrollbar-width:none] md:hidden">
+            {tags}
           </div>
         )}
 
-        <div
-          role="group"
-          aria-label={t('page.categoriesLabel')}
-          className="mt-3 flex flex-wrap items-center gap-2"
-        >
-          <button
-            type="button"
-            aria-pressed={categories.length === 0}
-            onClick={() => toggleCategory(null)}
-            className={CHIP}
+        {/* The sheet: a modal dialog, so the browser keeps focus inside it,
+            closes it on Escape and hands focus back to the button. */}
+        {sheet && (
+          <dialog
+            ref={(el) => {
+              if (!el || el.open) return
+              el.showModal()
+              if (sheet === 'filters') el.querySelector('[data-sheet-filters]')?.scrollIntoView()
+            }}
+            aria-labelledby="map-sheet-title"
+            onClose={() => setSheet(null)}
+            onClick={(event) => {
+              // A tap on the dimmed page behind the sheet.
+              if (event.target === event.currentTarget) event.currentTarget.close()
+            }}
+            onKeyDown={(event) => {
+              // Escape closes only the sheet, not the details panel behind it.
+              if (event.key === 'Escape') event.stopPropagation()
+            }}
+            className="fixed inset-x-0 bottom-0 top-auto m-0 flex max-h-[92dvh] w-full max-w-none flex-col overflow-hidden rounded-t-[20px] border-t border-border-strong bg-bg-surface p-0 text-fg-primary backdrop:bg-bg-overlay"
           >
-            {t('page.allCategories')}
-          </button>
-          {PLACE_CATEGORIES.map((category) => (
-            <button
-              key={category}
-              type="button"
-              aria-pressed={categories.includes(category)}
-              onClick={() => toggleCategory(category)}
-              className={CHIP}
-            >
-              <CategoryIcon category={category} className="size-3.5" />
-              {t(`categories.${category}.many`)}
-            </button>
-          ))}
-        </div>
-
-        {/* Who runs the place. The visible label doubles as the group's name. */}
-        <div
-          role="group"
-          aria-labelledby="map-operators-label"
-          className="mt-2 flex flex-wrap items-center gap-2"
-        >
-          <span id="map-operators-label" className="text-sm text-fg-tertiary">
-            {t('page.operatorsLabel')}
-          </span>
-          <button
-            type="button"
-            aria-pressed={operators.length === 0}
-            onClick={() => toggleOperator(null)}
-            className={CHIP}
-          >
-            {t('page.allOperators')}
-          </button>
-          {PLACE_OPERATORS.map((operator) => (
-            <button
-              key={operator}
-              type="button"
-              aria-pressed={operators.includes(operator)}
-              onClick={() => toggleOperator(operator)}
-              className={CHIP}
-            >
-              {t(`operators.${operator}`)}
-            </button>
-          ))}
-        </div>
+            <div className="flex shrink-0 items-center justify-between px-4 pb-2 pt-4">
+              <h2 id="map-sheet-title" className="font-display text-xl">
+                {t('page.filters.title')}
+              </h2>
+              <button
+                type="button"
+                onClick={(event) => event.currentTarget.closest('dialog')?.close()}
+                aria-label={t('page.filters.close')}
+                className="flex size-9 cursor-pointer items-center justify-center rounded-full bg-bg-surface-2"
+              >
+                <X className="size-4" strokeWidth={2.5} aria-hidden />
+              </button>
+            </div>
+            {/* "relative" keeps the hidden labels inside this scrolling part. */}
+            <div className="relative min-h-0 flex-1 overflow-y-auto px-4 pb-4">
+              <h3 className={SHEET_HEADING}>{t('page.filters.area')}</h3>
+              <WhereField id="map-where-sheet" className="mb-3" value={whereText} onChange={setWhereText} onSubmit={searchWhere} searching={searching} />
+              {whereFeedback && <div className="mb-3">{whereFeedback}</div>}
+              <RadiusOptions name="map-sheet-radius" value={radius} onChange={changeRadius} />
+              <h3 data-sheet-filters className={SHEET_HEADING}>
+                {t('page.showLabel')}
+              </h3>
+              <SourceOptions
+                name="map-sheet-source"
+                value={source}
+                onChange={changeSource}
+                size="lg"
+              />
+              <h3 className={SHEET_HEADING}>{t('fields.category')}</h3>
+              <CategoryOptions
+                name="map-sheet-category"
+                chosen={categories}
+                onToggle={toggleCategory}
+                size="lg"
+              />
+              <h3 className={SHEET_HEADING}>{t('page.operatorsLabel')}</h3>
+              <OperatorOptions
+                name="map-sheet-operator"
+                chosen={operators}
+                onToggle={toggleOperator}
+                size="lg"
+              />
+            </div>
+            <div className="grid shrink-0 grid-cols-[auto_1fr] gap-3 border-t border-border-subtle px-4 pb-4 pt-3">
+              <button
+                type="button"
+                onClick={clearChosen}
+                className={cn(BTN, BTN_SECONDARY, 'h-12 cursor-pointer')}
+              >
+                {t('page.filters.clearAll')}
+              </button>
+              {/* Says how many results the choice gives before the sheet is closed. */}
+              <button
+                type="button"
+                onClick={(event) => event.currentTarget.closest('dialog')?.close()}
+                className={cn(BTN, BTN_PRIMARY, 'h-12 cursor-pointer')}
+              >
+                {visible.length > 0
+                  ? t('page.filters.showResults', { count: visible.length })
+                  : t('page.filters.noResults')}
+              </button>
+            </div>
+          </dialog>
+        )}
       </section>
 
       {/* ── List + map ──────────────────────────────────────────────── */}
@@ -818,7 +945,14 @@ export function MapExplorer({
           )}
 
           <p className="mt-auto shrink-0 border-t border-border-subtle px-4 py-3 text-xs leading-relaxed text-fg-tertiary sm:px-6">
-            {t('page.footnote')}
+            {t('page.footnote')}{' '}
+            {/* On a phone the bar above has no room for this link. */}
+            <Link
+              href="/map/suggest"
+              className="font-medium text-fg-secondary underline underline-offset-2 md:hidden"
+            >
+              {suggestLabel}
+            </Link>
           </p>
 
           {openSlug && (openDetail || openResult || loadingDetail || detailError) && (

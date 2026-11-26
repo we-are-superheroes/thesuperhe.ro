@@ -18,10 +18,26 @@
       "indie": "Независимые места"
     },
     "suggest": "Предложить место",
-    "categoriesLabel": "Категории",
-    "allCategories": "Все категории",
     "operatorsLabel": "Кто управляет",
-    "allOperators": "Все",
+    "filters": {
+      "show": "Показать: {source}",
+      "done": "Готово",
+      "clear": "Сбросить",
+      "clearCategories": "Сбросить категории",
+      "clearAll": "Сбросить всё",
+      "remove": "Убрать фильтр: {name}",
+      "title": "Фильтры",
+      "close": "Закрыть фильтры",
+      "area": "Район",
+      "showResults": "{count, plural, one {Показать # результат} few {Показать # результата} many {Показать # результатов} other {Показать # результата}}",
+      "noResults": "Нет результатов. Измените фильтры",
+      "groups": {
+        "food": "Еда",
+        "reuse": "Ремонт и повторное использование",
+        "community": "Природа и сообщество",
+        "other": "Всё остальное"
+      }
+    },
     "resultsLabel": "Результаты",
     "count": "{count, plural, =0 {Нет результатов} one {<strong># результат</strong>} few {<strong># результата</strong>} many {<strong># результатов</strong>} other {<strong># результата</strong>}} в пределах {km} км от города {place}",
     "countNearYou": "{count, plural, =0 {Нет результатов} one {<strong># результат</strong>} few {<strong># результата</strong>} many {<strong># результатов</strong>} other {<strong># результата</strong>}} в пределах {km} км от вас",
@@ -77,8 +93,8 @@
       "many": "Органика и развес"
     },
     "coop": {
-      "one": "Кооператив",
-      "many": "Кооперативы"
+      "one": "Кооперативный магазин",
+      "many": "Кооперативные магазины"
     },
     "nature": {
       "one": "Природа и дикие животные",
