@@ -36,8 +36,9 @@ export const CATEGORY_ICON_PATHS: Record<PlaceCategory, string> = {
   garden:
     'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4',
   learn: 'M4 19V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2 2 2 0 0 0 2 2h14',
-  // A service bell.
-  services: 'M3 18h18M5 18a7 7 0 0 1 14 0M12 11V8M10 8h4M4 21h16',
+  // A globe: IT, software and platforms.
+  services:
+    'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20',
   // Three dots in a circle.
   other: 'M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zM8 12h.01M12 12h.01M16 12h.01',
 }
