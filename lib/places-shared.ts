@@ -38,6 +38,19 @@ export const PLACE_CATEGORIES = [
 
 export type PlaceCategory = (typeof PLACE_CATEGORIES)[number]
 
+/**
+ * The categories as the map's filter menu shows them: four short lists
+ * instead of one long one. Headings live in the `map` catalog under
+ * `page.filters.groups.<key>`. Every category belongs to exactly one group
+ * (checked in tests/places.test.ts).
+ */
+export const PLACE_CATEGORY_GROUPS = [
+  { key: 'food', categories: ['farm', 'organic'] },
+  { key: 'reuse', categories: ['secondhand', 'mending', 'repair', 'bike', 'share'] },
+  { key: 'community', categories: ['nature', 'garden', 'learn'] },
+  { key: 'other', categories: ['coop', 'services', 'other'] },
+] as const satisfies readonly { key: string; categories: readonly PlaceCategory[] }[]
+
 export function isPlaceCategory(value: unknown): value is PlaceCategory {
   return typeof value === 'string' && (PLACE_CATEGORIES as readonly string[]).includes(value)
 }

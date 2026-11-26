@@ -163,6 +163,7 @@ async function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
+          <LocaleSwitcher compact className="text-neutral-300 hover:text-fg-primary sm:mr-1" />
           {isSignedIn ? (
             <>
               <Link
@@ -882,7 +883,6 @@ async function Footer() {
           <Link href="/terms" className="hover:text-fg-primary">
             {t('footer.terms')}
           </Link>
-          <LocaleSwitcher />
         </div>
         <div className="flex items-center gap-2">
           {t('footer.createdIn')}

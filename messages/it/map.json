@@ -18,10 +18,26 @@
       "indie": "Luoghi indipendenti"
     },
     "suggest": "Suggerisci un luogo",
-    "categoriesLabel": "Categorie",
-    "allCategories": "Tutte le categorie",
     "operatorsLabel": "Gestito da",
-    "allOperators": "Tutti",
+    "filters": {
+      "show": "Mostra: {source}",
+      "done": "Fatto",
+      "clear": "Cancella",
+      "clearCategories": "Cancella categorie",
+      "clearAll": "Cancella tutto",
+      "remove": "Rimuovi filtro: {name}",
+      "title": "Filtri",
+      "close": "Chiudi i filtri",
+      "area": "Zona",
+      "showResults": "{count, plural, one {Mostra # risultato} other {Mostra # risultati}}",
+      "noResults": "Nessun risultato. Cambia i filtri",
+      "groups": {
+        "food": "Alimentari",
+        "reuse": "Riparazione e riuso",
+        "community": "Natura e comunità",
+        "other": "Tutto il resto"
+      }
+    },
     "resultsLabel": "Risultati",
     "count": "{count, plural, =0 {Nessun risultato} one {<strong># risultato</strong>} other {<strong># risultati</strong>}} entro {km} km da {place}",
     "countNearYou": "{count, plural, =0 {Nessun risultato} one {<strong># risultato</strong>} other {<strong># risultati</strong>}} entro {km} km da te",
@@ -77,8 +93,8 @@
       "many": "Bio e sfuso"
     },
     "coop": {
-      "one": "Cooperativa",
-      "many": "Cooperative"
+      "one": "Negozio cooperativo",
+      "many": "Negozi cooperativi"
     },
     "nature": {
       "one": "Natura e fauna selvatica",

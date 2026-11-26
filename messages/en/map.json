@@ -18,10 +18,26 @@
       "indie": "Independent places"
     },
     "suggest": "Suggest a place",
-    "categoriesLabel": "Categories",
-    "allCategories": "All categories",
     "operatorsLabel": "Run by",
-    "allOperators": "Anyone",
+    "filters": {
+      "show": "Show: {source}",
+      "done": "Done",
+      "clear": "Clear",
+      "clearCategories": "Clear categories",
+      "clearAll": "Clear all",
+      "remove": "Remove filter: {name}",
+      "title": "Filters",
+      "close": "Close filters",
+      "area": "Area",
+      "showResults": "{count, plural, one {Show # result} other {Show # results}}",
+      "noResults": "No results. Change filters",
+      "groups": {
+        "food": "Food",
+        "reuse": "Repair and reuse",
+        "community": "Nature and community",
+        "other": "Everything else"
+      }
+    },
     "resultsLabel": "Results",
     "count": "{count, plural, =0 {No results} one {<strong># result</strong>} other {<strong># results</strong>}} within {km} km of {place}",
     "countNearYou": "{count, plural, =0 {No results} one {<strong># result</strong>} other {<strong># results</strong>}} within {km} km of you",
@@ -77,8 +93,8 @@
       "many": "Organic and bulk"
     },
     "coop": {
-      "one": "Cooperative",
-      "many": "Cooperatives"
+      "one": "Cooperative shop",
+      "many": "Cooperative shops"
     },
     "nature": {
       "one": "Nature and wildlife",

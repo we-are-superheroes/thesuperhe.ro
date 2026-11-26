@@ -29,6 +29,7 @@ import {
   validatePlaceInput,
   validateProposalNote,
   PLACE_CATEGORIES,
+  PLACE_CATEGORY_GROUPS,
   PLACE_LIMITS,
   PLACE_OPERATORS,
   type PlaceData,
@@ -142,7 +143,7 @@ describe('validatePlaceInput', () => {
     for (const category of ['secondhand', 'mending', 'repair', 'bike', 'share']) {
       expect(data({ category }).category).toBe(category)
     }
-    // The full list, in the order the filter shows it.
+    // The full list, in the order the place form shows it.
     expect([...PLACE_CATEGORIES]).toEqual([
       'farm',
       'organic',
@@ -158,6 +159,11 @@ describe('validatePlaceInput', () => {
       'services',
       'other',
     ])
+  })
+
+  it('puts every category in exactly one group of the filter menu', () => {
+    const grouped = PLACE_CATEGORY_GROUPS.flatMap((group) => [...group.categories])
+    expect([...grouped].sort()).toEqual([...PLACE_CATEGORIES].sort())
   })
 
   it('accepts who runs the place, or nothing', () => {
